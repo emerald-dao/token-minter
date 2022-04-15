@@ -1,4 +1,4 @@
-import { writable, get } from 'svelte/store';
+import { writable, get, derived } from 'svelte/store';
 
 export const user = writable(null);
 export const profile = writable(null);
@@ -7,18 +7,27 @@ export const transactionInProgress = writable(false);
 
 export const contractInfo = writable({
 	name: 'HelloWorld',
-	maxSupply: '10'
+	maxSupply: null,
+	payment: null
 })
 
-export const contractCode =
-	`
+export const contractCode = derived(
+	contractInfo,
+	$contractInfo => `
 	// This is an example implementation of a Flow Non-Fungible Token
 	// It is not part of the official standard but it assumed to be
 	// very similar to how many NFTs would implement the core functionality.
 	import NonFungibleToken from "./NonFungibleToken.cdc"
 	import MetadataViews from "./MetadataViews.cdc"
+	${$contractInfo.payment
+			?
+			`import FungibleToken from "./FungibleToken.cdc"
+	import FlowToken from "./FlowToken.cdc"
+	`
+			: ''
+		}
 	
-	pub contract ${get(contractInfo).name}: NonFungibleToken {
+	pub contract ${$contractInfo.name}: NonFungibleToken {
 	
 			pub var totalSupply: UInt64
 	
@@ -50,17 +59,17 @@ export const contractCode =
 							self.description = _description
 							self.thumbnail = _thumbnail
 	
-							${get(contractInfo).name}.totalSupply = ${get(contractInfo).name}.totalSupply + 1
-							${get(contractInfo).maxSupply
-		?
-		`
-							if (${get(contractInfo).name}.totalSupply > ${get(contractInfo).maxSupply}) {
+							${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
+							${$contractInfo.maxSupply
+			?
+			`
+							if (${$contractInfo.name}.totalSupply > ${$contractInfo.maxSupply}) {
 								panic("You cannot mint any more NFTs!")
 							}
 							`
-		:
-		''
-	}
+			:
+			''
+		}
 					}
 			
 					pub fun getViews(): [Type] {
@@ -112,7 +121,7 @@ export const contractCode =
 					// deposit takes a NFT and adds it to the collections dictionary
 					// and adds the ID to the id array
 					pub fun deposit(token: @NonFungibleToken.NFT) {
-							let token <- token as! @${get(contractInfo).name}.NFT
+							let token <- token as! @${$contractInfo.name}.NFT
 	
 							let id: UInt64 = token.id
 	
@@ -135,7 +144,7 @@ export const contractCode =
 	
 					pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
 							let token = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
-							let nft = token as! &${get(contractInfo).name}.NFT
+							let nft = token as! &${$contractInfo.name}.NFT
 							return nft as &AnyResource{MetadataViews.Resolver}
 					}
 	
@@ -160,12 +169,21 @@ export const contractCode =
 							recipient: &{NonFungibleToken.CollectionPublic},
 							name: String,
 							description: String,
-							thumbnail: String
+							thumbnail: String,
+							${$contractInfo.payment ? 'payment: @FlowToken.Vault' : ''}
 					) {
-	
+							${$contractInfo.payment
+							?
+			       `let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
+																				.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+
+						  paymentRecipient.deposit(vault: <- payment)
+							`
+						:	
+						''}
 							// create a new NFT
 							var newNFT <- create NFT(
-									_serial: ${get(contractInfo).name}.totalSupply,
+									_serial: ${$contractInfo.name}.totalSupply,
 									_name: name,
 									_description: description,
 									_thumbnail: thumbnail
@@ -181,16 +199,16 @@ export const contractCode =
 					self.totalSupply = 0
 	
 					// Set the named paths
-					self.CollectionStoragePath = /storage/${get(contractInfo).name}Collection
-					self.CollectionPublicPath = /public/${get(contractInfo).name}Collection
-					self.MinterStoragePath = /storage/${get(contractInfo).name}Minter
+					self.CollectionStoragePath = /storage/${$contractInfo.name}Collection
+					self.CollectionPublicPath = /public/${$contractInfo.name}Collection
+					self.MinterStoragePath = /storage/${$contractInfo.name}Minter
 	
 					// Create a Collection resource and save it to storage
 					let collection <- create Collection()
 					self.account.save(<-collection, to: self.CollectionStoragePath)
 	
 					// create a public capability for the collection
-					self.account.link<&${get(contractInfo).name}.Collection{NonFungibleToken.CollectionPublic, ${get(contractInfo).name}.NFTCollectionPublic, MetadataViews.ResolverCollection}>(
+					self.account.link<&${$contractInfo.name}.Collection{NonFungibleToken.CollectionPublic, ${$contractInfo.name}.NFTCollectionPublic, MetadataViews.ResolverCollection}>(
 							self.CollectionPublicPath,
 							target: self.CollectionStoragePath
 					)
@@ -202,4 +220,4 @@ export const contractCode =
 					emit ContractInitialized()
 			}
 	}
-  `;
+  `);

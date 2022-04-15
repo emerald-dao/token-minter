@@ -14,9 +14,11 @@
 
 <div class="left-side">
 	<input bind:value={$contractInfo.name} type="text" />
+	<input bind:value={$contractInfo.maxSupply} type="number" min="1" />
+	<input bind:value={$contractInfo.payment} type="number" min="1" />
 </div>
 
-<pre class="right-side"><code class="language-javascript">{contractCode}</code></pre> 
+<pre class="right-side"><code class="language-javascript">{$contractCode}</code></pre> 
 
 <style>
 	.right-side {

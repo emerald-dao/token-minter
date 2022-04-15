@@ -138,7 +138,6 @@ pub contract ExampleNFT: NonFungibleToken {
             description: String,
             thumbnail: String
         ) {
-
             // create a new NFT
             var newNFT <- create NFT(
                 _serial: ExampleNFT.totalSupply,
