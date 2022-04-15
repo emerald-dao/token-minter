@@ -174,7 +174,12 @@ export const contractCode = derived(
 					) {
 							${$contractInfo.payment
 							?
-			       `let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
+							`
+							pre {
+								payment.balance == ${$contractInfo.payment.toFixed(2)}: "You did not pass in the correct amount of FlowToken."
+							}
+
+			        let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
 																				.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 
 						  paymentRecipient.deposit(vault: <- payment)
