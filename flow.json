@@ -1,0 +1,26 @@
+{
+	"emulators": {
+		"default": {
+			"port": 3569,
+			"serviceAccount": "emulator-account"
+		}
+	},
+	"contracts": {
+		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
+		"MetadataViews": "./src/flow/cadence/MetadataViews.cdc",
+		"NonFungibleToken": "./src/flow/cadence/NonFungibleToken.cdc",
+		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc"
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
+		}
+	},
+	"deployments": {}
+}

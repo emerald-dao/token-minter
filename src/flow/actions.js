@@ -5,7 +5,7 @@ import * as fcl from "@samatech/onflow-fcl-esm";
 import "./config";
 import { user, profile, transactionStatus, transactionInProgress } from './stores';
 
-if(browser) {
+if (browser) {
   // set Svelte $user store to currentUser, 
   // so other components can access it
   fcl.currentUser.subscribe(user.set, [])

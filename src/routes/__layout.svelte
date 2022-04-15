@@ -3,13 +3,13 @@
   import "../app.css";
 </script>
 
-<Header />
+<!-- <Header /> -->
 
 <main class="container">
   <slot />
 </main>
 
-<footer>
+<!-- <footer>
   <p>
     visit <a href="https://docs.onflow.org">docs.onflow.org</a> to learn more.
   </p>
@@ -20,10 +20,10 @@
       </svg>        
     </a>
   </p>
-</footer>
+</footer> -->
 
 <style>
-  footer {
+  /* footer {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,5 +39,5 @@
     footer {
       padding: 40px 0;
     }
-  }
+  } */
 </style>
