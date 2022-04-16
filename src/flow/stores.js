@@ -1,5 +1,10 @@
 import { writable, get, derived } from 'svelte/store';
 
+const EMULATOR_ADDR = "0xf8d6e0586b0a20c7";
+const NONFUNGIBLETOKEN_ADDR = "0x631e88ae7f1d7c20";
+const FLOWTOKEN_ADDR = "0x7e60df042a9c0868";
+const FUNGIBLETOKEN_ADDR = "0x9a0766d93b6608b7";
+
 export const user = writable(null);
 export const profile = writable(null);
 export const transactionStatus = writable(null);
@@ -17,12 +22,12 @@ export const contractCode = derived(
 	// This is an example implementation of a Flow Non-Fungible Token
 	// It is not part of the official standard but it assumed to be
 	// very similar to how many NFTs would implement the core functionality.
-	import NonFungibleToken from "./NonFungibleToken.cdc"
-	import MetadataViews from "./MetadataViews.cdc"
+	import NonFungibleToken from ${NONFUNGIBLETOKEN_ADDR}
+	import MetadataViews from ${NONFUNGIBLETOKEN_ADDR}
 	${$contractInfo.payment
 			?
-			`import FungibleToken from "./FungibleToken.cdc"
-	import FlowToken from "./FlowToken.cdc"
+			`import FungibleToken from ${FUNGIBLETOKEN_ADDR}
+	import FlowToken from ${FLOWTOKEN_ADDR}
 	`
 			: ''
 		}
@@ -182,7 +187,7 @@ export const contractCode = derived(
 			        let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
 																				.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 
-						  paymentRecipient.deposit(vault: <- payment)
+						  paymentRecipient.deposit(from: <- payment)
 							`
 						:	
 						''}

@@ -4,6 +4,9 @@ node_modules
 /.svelte-kit
 /package
 .env
+.env.development
+.env.production
 .vercel
 .output
 package-lock.json
+.vercel_build_output

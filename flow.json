@@ -9,7 +9,8 @@
 		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
 		"MetadataViews": "./src/flow/cadence/MetadataViews.cdc",
 		"NonFungibleToken": "./src/flow/cadence/NonFungibleToken.cdc",
-		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc"
+		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc",
+		"FlowToken": "./src/flow/cadence/FlowToken.cdc"
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -22,5 +23,14 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		}
 	},
-	"deployments": {}
+	"deployments": {
+		"emulator": {
+			"emulator-account": [
+				"NonFungibleToken",
+				"FungibleToken",
+				"FlowToken",
+				"MetadataViews"
+			]
+		}
+	}
 }
