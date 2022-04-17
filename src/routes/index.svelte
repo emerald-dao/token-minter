@@ -44,6 +44,11 @@
 		on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
 		>Start Minting: {$contractInfo.startMinting}</button
 	>
+	<button
+		class="secondary"
+		on:click={() => ($contractInfo.manualMint = !$contractInfo.manualMint)}
+		>Manual Minting: {$contractInfo.manualMint}</button
+	>
 	<button on:click={deployContract}>Deploy Contract</button>
 </div>
 

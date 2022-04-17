@@ -15,7 +15,8 @@ export const contractInfo = writable({
 	maxSupply: null,
 	payment: null,
 	openMinting: true,
-	startMinting: true
+	startMinting: true,
+	manualMint: true,
 })
 
 export const contractCode = derived(
@@ -37,6 +38,7 @@ export const contractCode = derived(
 	
 			pub var totalSupply: UInt64
 			pub var minting: Bool
+			${$contractInfo.payment ? `pub var price: UFix64` : ''}
 	
 			pub event ContractInitialized()
 			pub event Withdraw(id: UInt64, from: Address?)
@@ -183,7 +185,7 @@ export const contractCode = derived(
 				?
 				`
 				pre {
-					payment.balance == ${$contractInfo.payment.toFixed(2)}: "You did not pass in the correct amount of FlowToken."
+					payment.balance == ${$contractInfo.name}.price: "You did not pass in the correct amount of FlowToken."
 				}
 
 				let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
@@ -206,6 +208,11 @@ export const contractCode = derived(
 			}
 			`
 			:
+			``
+		}
+
+			${$contractInfo.manualMint
+			?
 			`
 			// Resource that an admin or something similar would own to be
 			// able to mint new NFTs
@@ -218,23 +225,8 @@ export const contractCode = derived(
 						recipient: &{NonFungibleToken.CollectionPublic},
 						name: String,
 						description: String,
-						thumbnail: String,
-						${$contractInfo.payment ? 'payment: @FlowToken.Vault' : ''}
+						thumbnail: String
 				) {
-						${$contractInfo.payment
-				?
-				`
-						pre {
-							payment.balance == ${$contractInfo.payment.toFixed(2)}: "You did not pass in the correct amount of FlowToken."
-						}
-
-						let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
-																			.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-
-						paymentRecipient.deposit(from: <- payment)
-						`
-				:
-				''}
 						// create a new NFT
 						var newNFT <- create NFT(
 								_serial: ${$contractInfo.name}.totalSupply,
@@ -248,19 +240,20 @@ export const contractCode = derived(
 				}
 		}
 		`
-		}
+			:
+			''}
 
 			pub resource Administator {
-				${!$contractInfo.openMinting
-				?
-				`
+				${$contractInfo.manualMint
+			?
+			`
 				pub fun createMinter(): @NFTMinter {
 					return <- create NFTMinter()
 				}
 				`
-				:
-				''
-			}
+			:
+			''
+		}
 				pub fun toggleMinting(): Bool {
 					ExampleNFT.minting = !ExampleNFT.minting
 					return ExampleNFT.minting
@@ -271,6 +264,7 @@ export const contractCode = derived(
 				// Initialize the total supply
 				self.totalSupply = 0
 				self.minting = ${$contractInfo.startMinting}
+				${$contractInfo.payment ? `self.price = ${$contractInfo.payment.toFixed(2)}` : ''}
 
 				// Set the named paths
 				self.CollectionStoragePath = /storage/${$user?.addr}${$contractInfo.name}Collection
@@ -292,7 +286,7 @@ export const contractCode = derived(
 				let administrator <- create Administrator()
 				self.account.save(<- administator, to: self.AdministratorStoragePath)
 	
-					${!$contractInfo.openMinting
+					${$contractInfo.manualMint
 			?
 			`
 				// Create a Minter resource and save it to storage
