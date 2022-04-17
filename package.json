@@ -17,10 +17,8 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
-    "svelte": "^3.44.3"
+    "svelte": "^3.44.3",
+    "prismjs": "^1.28.0"
   },
-  "type": "module",
-  "dependencies": {
-    "prismjs": "^1.27.0"
-  }
+  "type": "module"
 }

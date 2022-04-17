@@ -2,17 +2,13 @@
 	import LibLoader from "$lib/components/LibLoader.svelte";
 	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
-	import Transaction from "../lib/Transaction.svelte";
+	import Transaction from "$lib/Transaction.svelte";
+  import PrismJS from '$lib/components/PrismJS.svelte';
 </script>
 
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
-
-<LibLoader
-	url="/prism.js"
-	uniqueId={+new Date()}
-/>
 
 <div class="left-side">
 	<button on:click={logIn}>Log In</button>
@@ -26,7 +22,7 @@
 
 <Transaction />
 
-<pre><code class="language-javascript">{$contractCode}</code></pre> 
+<PrismJS code={$contractCode}></PrismJS>
 
 <style>
 	/* .right-side {
