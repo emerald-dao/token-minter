@@ -15,6 +15,10 @@
     background-color: #f9f9f9;
     border-radius:0.2rem;
   }
+
+  code {
+    font-size: 12px;
+  }
 </style>
 
 <pre><code>{@html Prism.highlight(code, Prism.languages.swift, 'swift')}</code></pre>

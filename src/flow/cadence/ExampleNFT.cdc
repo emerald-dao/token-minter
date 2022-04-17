@@ -7,6 +7,7 @@ import MetadataViews from "./MetadataViews.cdc"
 pub contract ExampleNFT: NonFungibleToken {
 
     pub var totalSupply: UInt64
+    pub var minting: Bool
 
     pub event ContractInitialized()
     pub event Withdraw(id: UInt64, from: Address?)
@@ -125,6 +126,15 @@ pub contract ExampleNFT: NonFungibleToken {
         return <- create Collection()
     }
 
+    pub fun mintNFT(
+        recipient: &{NonFungibleToken.CollectionPublic},
+        name: String,
+        description: String,
+        thumbnail: String
+    ) {
+            
+    }
+
     // Resource that an admin or something similar would own to be
     // able to mint new NFTs
     //
@@ -151,9 +161,21 @@ pub contract ExampleNFT: NonFungibleToken {
         }
     }
 
+    pub resource Administator {
+        pub fun createMinter(): @NFTMinter {
+            return <- create NFTMinter()
+        }
+
+        pub fun toggleMinting(): Bool {
+            ExampleNFT.minting = !ExampleNFT.minting
+            return ExampleNFT.minting
+        }
+    }
+
     init() {
         // Initialize the total supply
         self.totalSupply = 0
+        self.minting = true
 
         // Set the named paths
         self.CollectionStoragePath = /storage/ExampleNFTCollection
