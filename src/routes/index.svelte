@@ -88,7 +88,7 @@
 	<PrismJS code={$contractCode} />
 {/if}
 
-<style>
+<style lang="scss">
 	/* .right-side {
 		position: absolute;
 		width: 50vw;
