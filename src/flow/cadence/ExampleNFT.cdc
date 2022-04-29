@@ -16,26 +16,31 @@ pub contract ExampleNFT: NonFungibleToken {
     pub let CollectionStoragePath: StoragePath
     pub let CollectionPublicPath: PublicPath
     pub let MinterStoragePath: StoragePath
+    pub let AdministratorStoragePath: StoragePath
+
+    pub var metaForNFT: {UInt64: Metadata}
+
+    pub struct Metadata {
+        pub let name: String
+        pub let description: String
+        pub let image: String
+        pub let favNum: UInt64
+
+        init(name: String, description: String, image: String, favNum: UInt64) {
+            self.name = name
+            self.description = description
+            self.image = image
+            self.favNum = favNum
+        }
+    }
 
     pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
         pub let id: UInt64
         pub let serial: UInt64
 
-        pub let name: String
-        pub let description: String
-        pub let thumbnail: String
-
-        init(
-            _serial: UInt64,
-            _name: String,
-            _description: String,
-            _thumbnail: String
-        ) {
+        init() {
             self.id = self.uuid
-            self.serial = _serial
-            self.name = _name
-            self.description = _description
-            self.thumbnail = _thumbnail
+            self.serial = ExampleNFT.totalSupply
 
             ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
         }
@@ -50,10 +55,10 @@ pub contract ExampleNFT: NonFungibleToken {
             switch view {
                 case Type<MetadataViews.Display>():
                     return MetadataViews.Display(
-                        name: self.name,
-                        description: self.description,
+                        name: "",
+                        description: "",
                         thumbnail: MetadataViews.IPFSFile(
-                            cid: self.thumbnail,
+                            cid: "",
                             path: nil
                         )
                     )
@@ -149,19 +154,14 @@ pub contract ExampleNFT: NonFungibleToken {
             thumbnail: String
         ) {
             // create a new NFT
-            var newNFT <- create NFT(
-                _serial: ExampleNFT.totalSupply,
-                _name: name,
-                _description: description,
-                _thumbnail: thumbnail
-            )
+            var newNFT <- create NFT()
 
             // deposit it in the recipient's account using their reference
             recipient.deposit(token: <- newNFT)
         }
     }
 
-    pub resource Administator {
+    pub resource Administrator {
         pub fun createMinter(): @NFTMinter {
             return <- create NFTMinter()
         }
@@ -170,21 +170,31 @@ pub contract ExampleNFT: NonFungibleToken {
             ExampleNFT.minting = !ExampleNFT.minting
             return ExampleNFT.minting
         }
+
+        pub fun addMetadata(metadata: {UInt64: Metadata}) {
+			ExampleNFT.metaForNFT = metadata
+		}
     }
 
     init() {
         // Initialize the total supply
         self.totalSupply = 0
+        self.metaForNFT = {}
         self.minting = true
 
         // Set the named paths
         self.CollectionStoragePath = /storage/ExampleNFTCollection
         self.CollectionPublicPath = /public/ExampleNFTCollection
         self.MinterStoragePath = /storage/ExampleNFTMinter
+        self.AdministratorStoragePath = /storage/ExampleNFTAdministrator
 
         // Create a Collection resource and save it to storage
         let collection <- create Collection()
         self.account.save(<-collection, to: self.CollectionStoragePath)
+        
+        // Create a Administrator resource and save it to storage
+        let administrator <- create Administrator()
+        self.account.save(<- administrator, to: self.AdministratorStoragePath)
 
         // create a public capability for the collection
         self.account.link<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic, ExampleNFT.ExampleNFTCollectionPublic, MetadataViews.ResolverCollection}>(

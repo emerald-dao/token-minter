@@ -76,6 +76,52 @@ export const deployContract = async () => {
   }
 }
 
+export const addMetadata = async () => {
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: `
+      import ExampleNFT from 0xe37a242dfff69bbc
+      transaction() {
+        prepare(signer: AuthAccount) {
+          let metadata: {UInt64: ExampleNFT.Metadata} = {}
+          var i: UInt64 = 0
+          while i < 1000 {
+            metadata[i] = ExampleNFT.Metadata(
+              name: "Jacob",
+              description: "",
+              image: "",
+              favNum: 0
+            )
+            i = i + 1
+          }
+          let admin: &ExampleNFT.Administrator = signer.borrow<&ExampleNFT.Administrator>(from: ExampleNFT.AdministratorStoragePath)!
+          admin.addMetadata(metadata: metadata)
+        }
+      }
+      `,
+      args: (arg, t) => [],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 7000
+    });
+    console.log({transactionId});
+    fcl.tx(transactionId).subscribe(res => {
+      console.log(res)
+      transactionStatus.set(res.status)
+      if(res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false),2000)
+      }
+    })
+  } catch(e) {
+    console.log(e);
+    transactionStatus.set(99)
+  }
+}
+
+
 function initTransactionState() {
   transactionInProgress.set(true);
   transactionStatus.set(-1);

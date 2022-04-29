@@ -55,22 +55,34 @@ export const contractCode = derived(
 		pub let MinterStoragePath: StoragePath
 		pub let AdministratorStoragePath: StoragePath
 
+		pub var metaForNFT: {UInt64: Metadata}
+
+		pub struct Metadata {
+			pub let name: String
+			pub let description: String
+			pub let image: String
+			pub let favNum: UInt64
+
+			init(name: String, description: String, image: String, favNum: UInt64) {
+				self.name = name
+				self.description = description
+				self.image = image
+				self.favNum = favNum
+			}
+		}
+
 		pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 			pub let id: UInt64
 			pub let serial: UInt64
-			pub let tokenURI: String
 			${$contractInfo.parameterFields}
 
-			init(
-				tokenURI: String,${$contractInfo.parameterInits}
-			) {
+			init() {
 				pre {
 					${$contractInfo.name}.minting: "Minting is currently closed by the Administrator!"
 					${$contractInfo.maxSupply ? `${$contractInfo.name}.totalSupply <= ${$contractInfo.maxSupply}: "You have reached max supply."` : ''}
 				}
 				self.id = self.uuid
-				self.serial = ${$contractInfo.name}.totalSupply,
-				self.tokenURI = tokenURI
+				self.serial = ${$contractInfo.name}.totalSupply
 				${$contractInfo.parameterSets}
 
 				${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
@@ -86,10 +98,10 @@ export const contractCode = derived(
 					switch view {
 						case Type<MetadataViews.Display>():
 								return MetadataViews.Display(
-									name: self.name,
-									description: self.description,
+									name: "",
+									description: "",
 									thumbnail: MetadataViews.IPFSFile(
-											cid: self.thumbnail,
+											cid: "",
 											path: nil
 									)
 								)
@@ -166,8 +178,7 @@ export const contractCode = derived(
 		?
 		`
 		pub fun mintNFT(
-			recipient: &{NonFungibleToken.CollectionPublic},
-			tokenURI: String,${$contractInfo.parameterInits}
+			recipient: &{NonFungibleToken.CollectionPublic}
 			${$contractInfo.payment ? 'payment: @FlowToken.Vault' : ''}
 		) {
 			${$contractInfo.payment
@@ -185,9 +196,7 @@ export const contractCode = derived(
 			:
 			''}
 			// create a new NFT
-			var newNFT <- create NFT(
-				tokenURI: tokenURI,${$contractInfo.parameterMatches}
-			)
+			var newNFT <- create NFT()
 
 			// deposit it in the recipient's account using their reference
 			recipient.deposit(token: <- newNFT)
@@ -208,13 +217,10 @@ export const contractCode = derived(
 			// mintNFT mints a new NFT with a new ID
 			// and deposit it in the recipients collection using their collection reference
 			pub fun mintNFT(
-				recipient: &{NonFungibleToken.CollectionPublic},
-				tokenUri: String,${$contractInfo.parameterInits}
+				recipient: &{NonFungibleToken.CollectionPublic}
 			) {
 				// create a new NFT
-				var newNFT <- create NFT(
-					tokenUri: tokenUri,${$contractInfo.parameterMatches}
-				)
+				var newNFT <- create NFT()
 
 				// deposit it in the recipient's account using their reference
 				recipient.deposit(token: <- newNFT)
@@ -224,7 +230,7 @@ export const contractCode = derived(
 		:
 		''}
 
-		pub resource Administator {
+		pub resource Administrator {
 			${$contractInfo.manualMint
 		?
 		`
@@ -239,19 +245,24 @@ export const contractCode = derived(
 				ExampleNFT.minting = !ExampleNFT.minting
 				return ExampleNFT.minting
 			}
+
+			pub fun addMetadata(metadata: {UInt64: Metadata}) {
+				ExampleNFT.metaForNFT = metadata
+			}
 		}
 
 		init() {
 			// Initialize the total supply
 			self.totalSupply = 0
+			self.metaForNFT = {}
 			self.minting = ${$contractInfo.startMinting}
 			${$contractInfo.payment ? `self.price = ${$contractInfo.payment.toFixed(2)}` : ''}
 
 			// Set the named paths
-			self.CollectionStoragePath = /storage/${$user?.addr}${$contractInfo.name}Collection
-			self.CollectionPublicPath = /public/${$user?.addr}${$contractInfo.name}Collection
-			self.MinterStoragePath = /storage/${$user?.addr}${$contractInfo.name}Minter
-			self.AdministratorStoragePath = /storage/${$user?.addr}${$contractInfo.name}Administrator
+			self.CollectionStoragePath = /storage/${$contractInfo.name}Collection${$user?.addr}
+			self.CollectionPublicPath = /public/${$contractInfo.name}Collection${$user?.addr}
+			self.MinterStoragePath = /storage/${$contractInfo.name}Minter${$user?.addr}
+			self.AdministratorStoragePath = /storage/${$contractInfo.name}Administrator${$user?.addr}
 
 			// Create a Collection resource and save it to storage
 			let collection <- create Collection()
@@ -265,7 +276,7 @@ export const contractCode = derived(
 
 			// Create a Administrator resource and save it to storage
 			let administrator <- create Administrator()
-			self.account.save(<- administator, to: self.AdministratorStoragePath)
+			self.account.save(<- administrator, to: self.AdministratorStoragePath)
 
 				${$contractInfo.manualMint
 		?

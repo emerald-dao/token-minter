@@ -1,6 +1,6 @@
 <script>
 	import LibLoader from "$lib/components/LibLoader.svelte";
-	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
+	import { deployContract, logIn, unauthenticate, addMetadata } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/Transaction.svelte";
 	import PrismJS from "$lib/components/PrismJS.svelte";
@@ -24,6 +24,7 @@
 </svelte:head>
 
 <div class="left-side">
+	<button on:click={addMetadata}>Add Metadata</button>
 	<button on:click={logIn}>Log In</button>
 	<button on:click={unauthenticate}>Log Out</button>
 	<h1>User: {$user?.addr}</h1>
