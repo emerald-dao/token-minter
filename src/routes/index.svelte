@@ -27,6 +27,8 @@
 	<button on:click={logIn}>Log In</button>
 	<button on:click={unauthenticate}>Log Out</button>
 	<h1>User: {$user?.addr}</h1>
+	<h2>hola</h2>
+	<h3>ho</h3>
 	<label for="contract-name">Contract Name</label>
 	<input
 		id="contract-name"
@@ -88,15 +90,16 @@
 	<PrismJS code={$contractCode} />
 {/if}
 
-<style lang="scss">
-	/* .right-side {
-		position: absolute;
-		width: 50vw;
-		height: 50vh;
-		left: 48vw;
-		top: 10px;
-		overflow-y: scroll;
-		border-radius: 20px;
-		font-size: 10px;
-	} */
+<style type="text/scss">	
+	h1 {
+		font-size: var(--fs-500);
+		color: var(--cr-primary-main);
+	}
+	h2 {
+		color: var(--cr-secondary-main);
+	}
+
+	h3 {
+		color: var(--cr-accent-main)
+	}
 </style>
