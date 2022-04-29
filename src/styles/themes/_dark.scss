@@ -3,8 +3,8 @@
 
 $dark: (
   primary: (
-    main: map-deep-get($colors, green, 400),
-    hover: map-deep-get($colors, green, 500),
+    main: map-deep-get($colors, green, 200),
+    hover: map-deep-get($colors, green, 100),
   ),
   secondary: (
     main: map-deep-get($colors, red, 400),

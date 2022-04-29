@@ -1,12 +1,9 @@
 <script>
+import Header from "$lib/components/sections/layout/Header.svelte";
+
 </script>
 
-<main class="container">
+<Header/>
+<main>
   <slot />
 </main>
-
-<style type="scss">
-	main {
-    background-color: var(--clr-background-primary);
-  }
-</style>
