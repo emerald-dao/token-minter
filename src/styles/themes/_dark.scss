@@ -15,11 +15,11 @@ $dark: (
     hover: map-deep-get($colors, blue, 500),
   ),
   background: (
-    primary: map-deep-get($colors, neutral, 800),
-    secondary: map-deep-get($colors, neutral, 900),
+    primary: map-deep-get($colors, neutral, 900),
+    secondary: map-deep-get($colors, neutral, 800),
   ),
-  text: (
-    headings: map-deep-get($colors, neutral, 100),
+  font: (
+    heading: map-deep-get($colors, neutral, 100),
     text: map-deep-get($colors, neutral, 200),
   ),
 );

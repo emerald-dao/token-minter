@@ -1,33 +1,35 @@
 @use '../abstracts' as *;
 @use '../themes' as *;
 
-:root {
-  @each $screen-size, $property in $type-scale {
-    @if $screen-size == small {
-      @each $prop, $value in $property {
-        --fs-#{$prop}: #{$value};
-      }
-    } @else {
-      @include mq(small) {
+:global {
+  :root {
+    @each $screen-size, $property in $type-scale {
+      @if $screen-size == small {
         @each $prop, $value in $property {
           --fs-#{$prop}: #{$value};
         }
+      } @else {
+        @include mq(small) {
+          @each $prop, $value in $property {
+            --fs-#{$prop}: #{$value};
+          }
+        }
       }
     }
-  }
 
-  @each $color, $role in $dark {
-    @include dark {
-      @each $prop, $value in $role {
-        --cr-#{$color}-#{$prop}: #{$value};
+    @each $color, $role in $dark {
+      @include dark {
+        @each $prop, $value in $role {
+          --clr-#{$color}-#{$prop}: #{$value};
+        }
       }
     }
-  }
 
-  @each $color, $role in $light {
-    @include light {
-      @each $prop, $value in $role {
-        --cr-#{$color}-#{$prop}: #{$value};
+    @each $color, $role in $light {
+      @include light {
+        @each $prop, $value in $role {
+          --clr-#{$color}-#{$prop}: #{$value};
+        }
       }
     }
   }

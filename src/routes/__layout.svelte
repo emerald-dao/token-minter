@@ -5,8 +5,8 @@
   <slot />
 </main>
 
-<style type="text/scss">
+<style type="scss">
 	main {
-    background-color: var(--cr-background-primary);
+    background-color: var(--clr-background-primary);
   }
 </style>

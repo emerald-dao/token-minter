@@ -4,6 +4,7 @@
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/Transaction.svelte";
 	import PrismJS from "$lib/components/PrismJS.svelte";
+	import { Button, Section, Container } from "$lib/components/atoms/index.js";
 
 	function addParameter(name, type) {
 		if (name && !$contractInfo.parameters.includes(name)) {
@@ -23,66 +24,67 @@
 	<title>Home</title>
 </svelte:head>
 
-<div class="left-side">
-	<button on:click={logIn}>Log In</button>
-	<button on:click={unauthenticate}>Log Out</button>
-	<h1>User: {$user?.addr}</h1>
-	<h2>hola</h2>
-	<h3>ho</h3>
-	<label for="contract-name">Contract Name</label>
-	<input
-		id="contract-name"
-		bind:value={$contractInfo.name}
-		type="text"
-		placeholder="ExampleNFT"
-	/>
+<Section>
+	<Container>
+		<Button on:click={logIn}>Log In</Button>
+		<Button on:click={unauthenticate}>Log Out</Button>
+		<h1>User: {$user?.addr}</h1>
 
-	<label for="max-supply">Max Supply</label>
-	<input
-		bind:value={$contractInfo.maxSupply}
-		type="number"
-		min="1"
-		placeholder="100"
-		id="max-supply"
-	/>
+		<label for="contract-name">Contract Name</label>
+		<input
+			id="contract-name"
+			bind:value={$contractInfo.name}
+			type="text"
+			placeholder="ExampleNFT"
+		/>
 
-	<label for="price">Price</label>
-	<input
-		bind:value={$contractInfo.payment}
-		type="number"
-		min="1"
-		placeholder="10"
-		id="price"
-	/>
-	<button
-		class="secondary"
-		on:click={() => ($contractInfo.openMinting = !$contractInfo.openMinting)}
-		>Open Minting: {$contractInfo.openMinting}</button
-	>
-	<button
-		class="secondary"
-		on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
-		>Start Minting: {$contractInfo.startMinting}</button
-	>
-	<button
-		class="secondary"
-		on:click={() => ($contractInfo.manualMint = !$contractInfo.manualMint)}
-		>Manual Minting: {$contractInfo.manualMint}</button
-	>
-	<button class="secondary" on:click={() => addParameter(fieldName, fieldType)}
-		>Add Parameter</button
-	>
-	<div class="grid">
-		<input bind:value={fieldName} type="text" />
-		<select bind:value={fieldType} name="types" id="types">
-			<option value="String">String</option>
-			<option value="UInt64">UInt64</option>
-			<option value="Bool">Bool</option>
-			<option value="Int">Int</option>
-		</select>
-	</div>
-	<button on:click={deployContract}>Deploy Contract</button>
-</div>
+		<label for="max-supply">Max Supply</label>
+		<input
+			bind:value={$contractInfo.maxSupply}
+			type="number"
+			min="1"
+			placeholder="100"
+			id="max-supply"
+		/>
+
+		<label for="price">Price</label>
+		<input
+			bind:value={$contractInfo.payment}
+			type="number"
+			min="1"
+			placeholder="10"
+			id="price"
+		/>
+		<Button
+			on:click={() => ($contractInfo.openMinting = !$contractInfo.openMinting)}
+		>
+			Open Minting: {$contractInfo.openMinting}
+		</Button>
+		<Button
+			on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
+		>
+			Start Minting: {$contractInfo.startMinting}
+		</Button>
+		<Button
+			on:click={() => ($contractInfo.manualMint = !$contractInfo.manualMint)}
+		>
+			Manual Minting: {$contractInfo.manualMint}
+		</Button>
+		<Button on:click={() => addParameter(fieldName, fieldType)}>
+			Add Parameter
+		</Button>
+		<div class="grid">
+			<input bind:value={fieldName} type="text" />
+			<select bind:value={fieldType} name="types" id="types">
+				<option value="String">String</option>
+				<option value="UInt64">UInt64</option>
+				<option value="Bool">Bool</option>
+				<option value="Int">Int</option>
+			</select>
+		</div>
+		<Button on:click={deployContract}>Deploy Contract</Button>
+	</Container>
+</Section>
 
 <Transaction />
 
@@ -90,16 +92,5 @@
 	<PrismJS code={$contractCode} />
 {/if}
 
-<style type="text/scss">	
-	h1 {
-		font-size: var(--fs-500);
-		color: var(--cr-primary-main);
-	}
-	h2 {
-		color: var(--cr-secondary-main);
-	}
-
-	h3 {
-		color: var(--cr-accent-main)
-	}
+<style type="scss">	
 </style>

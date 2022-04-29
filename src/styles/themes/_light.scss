@@ -18,8 +18,8 @@ $light: (
     primary: map-deep-get($colors, neutral, 200),
     secondary: map-deep-get($colors, neutral, 300),
   ),
-  text: (
-    headings: map-deep-get($colors, neutral, 900),
+  font: (
+    heading: map-deep-get($colors, neutral, 900),
     text: map-deep-get($colors, neutral, 800),
   ),
 );
