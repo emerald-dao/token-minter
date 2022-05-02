@@ -1,6 +1,6 @@
 /** @type {import('@sveltejs/kit').Config} */
 
-import preprocessor from 'svelte-preprocess';
+import preprocess from 'svelte-preprocess';
 import resolve from '@rollup/plugin-node-resolve';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
@@ -20,10 +20,11 @@ const config = {
   // Add process for other languages support
   preprocess: [
     mdsvex(mdsvexConfig),
-    preprocessor({
+    preprocess({
       scss: {
         prependData: "@import './src/styles/app.scss';",
       },
+      postcss: true,
     }),
   ],
 

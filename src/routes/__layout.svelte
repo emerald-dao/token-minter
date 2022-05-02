@@ -1,9 +1,9 @@
 <script>
-import Header from "$lib/components/sections/layout/Header.svelte";
-
+  import "../app.css";
+  import Header from "$lib/components/sections/layout/Header.svelte";
 </script>
 
-<Header/>
+<Header />
 <main>
   <slot />
 </main>
