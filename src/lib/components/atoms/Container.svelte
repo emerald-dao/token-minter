@@ -1,11 +1,10 @@
 <script>
   export let width = "medium"
-  export let direction = "column"
   export let gutterX = true
   export let gutterY = true
 </script>
 
-<div class={`${width} ${direction}`} class:gutter-x={gutterX} class:gutter-y={gutterY}>
+<div class={width} class:gutter-x={gutterX} class:gutter-y={gutterY}>
   <slot/>
 </div>
 
