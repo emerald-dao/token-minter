@@ -5,21 +5,30 @@ import resolve from '@rollup/plugin-node-resolve';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
 import vercel from '@sveltejs/adapter-vercel';
+import mdsvexConfig from './mdsvex.config.js';
+import { mdsvex } from 'mdsvex';
 
 const config = {
+  extensions: ['.svelte', '.md', '.svx'],
+
   // options passed to svelte.compile (https://svelte.dev/docs#svelte_compile)
   compilerOptions: null,
 
   // an array of file extensions that should be treated as Svelte components
-  extensions: ['.svelte'],
+  extensions: ['.svelte', ...mdsvexConfig.extensions],
 
-  // Add preprocessor for SASS compilation
-  preprocess: preprocessor({
-    scss: {
-      prependData: "@import './src/styles/app.scss';",
-    },
-  }),
+  // Add process for other languages support
+  preprocess: [
+    mdsvex(mdsvexConfig),
+    preprocessor({
+      scss: {
+        prependData: "@import './src/styles/app.scss';",
+      },
+    }),
+  ],
 
+  // SvelteKit uses vite-plugin-svelte. Its options can be provided directly here.
+  // See the available options at https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md
   kit: {
     adapter: vercel(), // change this to whatever build adapter you want to use (e.g. static)
     files: {
@@ -51,10 +60,6 @@ const config = {
       ],
     }),
   },
-
-  // SvelteKit uses vite-plugin-svelte. Its options can be provided directly here.
-
-  // See the available options at https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md
 };
 
 export default config;
