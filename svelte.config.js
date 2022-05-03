@@ -1,6 +1,6 @@
 /** @type {import('@sveltejs/kit').Config} */
 
-import preprocess from 'svelte-preprocess';
+import sveltePreprocess from 'svelte-preprocess';
 import resolve from '@rollup/plugin-node-resolve';
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
@@ -18,15 +18,7 @@ const config = {
   extensions: ['.svelte', ...mdsvexConfig.extensions],
 
   // Add process for other languages support
-  preprocess: [
-    mdsvex(mdsvexConfig),
-    preprocess({
-      scss: {
-        prependData: "@import './src/styles/app.scss';",
-      },
-      postcss: true,
-    }),
-  ],
+  preprocess: [mdsvex(mdsvexConfig), sveltePreprocess()],
 
   // SvelteKit uses vite-plugin-svelte. Its options can be provided directly here.
   // See the available options at https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md

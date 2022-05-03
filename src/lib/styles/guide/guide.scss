@@ -1,0 +1,29 @@
+article {
+  padding: 6rem;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 0.6em;
+  }
+
+  h2,
+  h3,
+  h4 {
+    margin-top: 1.6em;
+  }
+
+  h1 {
+    font-size: var(--fs-600);
+  }
+  h2 {
+    font-size: var(--fs-500);
+  }
+  h3 {
+    font-size: var(--fs-400);
+  }
+  h4 {
+    font-size: var(--fs-300);
+  }
+}

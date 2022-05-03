@@ -23,6 +23,8 @@
 </script>
 
 <script>
+  import '$lib/styles/guide/guide.scss'
+
   import GuideNav from "$lib/components/sections/guide/GuideNav.svelte";
   import TableOfContents from "$lib/components/sections/guide/TableOfContents.svelte";
 
@@ -62,7 +64,6 @@
   }
   
   article {
-    background-color: green;
     width: 100%;
   }
 
