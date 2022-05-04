@@ -1,14 +1,12 @@
 
 
 <script>
-  import * as Prism from 'prismjs';
-  import "prismjs/components/prism-swift.js";
-  let language = 'swift';
+  import Prism from './prism.js';
   export let code = '';
 </script>
 
 <div class="code">
-  <pre><code>{@html Prism.highlight(code, Prism.languages[language])}</code></pre>
+  <pre><code>{@html Prism.highlight(code, Prism.languages.swift)}</code></pre>
 </div>
 
 <svelte:head>
