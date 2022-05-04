@@ -1,5 +1,5 @@
 <script>
-	import PrismLL from "$lib/components/PrismLL.svelte";
+	import PrismJS from "$lib/components/PrismJS.svelte";
 	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/Transaction.svelte";
@@ -81,7 +81,7 @@
 
 {#if $user?.loggedIn}
 	<!-- <PrismJS code={$contractCode} /> -->
-  <PrismLL code={$contractCode} />
+  <PrismJS code={$contractCode} />
 {/if}
 
 <style>

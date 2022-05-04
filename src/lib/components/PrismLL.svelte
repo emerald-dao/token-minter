@@ -1,4 +1,5 @@
 <script>
+
   import LibLoader from './LibLoader.svelte'
   export let code; 
 
@@ -6,6 +7,7 @@
   function prismReady() {
     console.log('carrot s')
   }
+
 </script>
 
 <LibLoader
