@@ -1,8 +1,9 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
 
-import * as fcl from "@samatech/onflow-fcl-esm";
-import "./config";
+import * as fcl from "@onflow/fcl";
+import './config';
+
 import { user, profile, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
 
 if (browser) {
