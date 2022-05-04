@@ -1,7 +1,7 @@
 
 
 <script>
-  import Prism from './prism.js';
+  import Prism from './prism.cjs';
   export let code = '';
 </script>
 
