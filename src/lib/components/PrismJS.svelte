@@ -6,7 +6,7 @@
 </script>
 
 <div class="code">
-  <pre><code>{@html Prism.highlight(code, Prism.languages.swift)}</code></pre>
+  <pre><code>{@html Prism.highlight(code, Prism?.languages?.swift)}</code></pre>
 </div>
 
 <svelte:head>
