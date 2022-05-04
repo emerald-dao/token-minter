@@ -16,13 +16,12 @@ export const contractInfo = writable({
 	payment: null,
 	openMinting: true,
 	startMinting: true,
-	manualMint: true,
 	// These are all for setting custom parameters in the NFT
-	parameters: [],
-	parameterFields: "",
-	parameterInits: "",
-	parameterSets: "",
-	parameterMatches: ""
+	parameters: ["name", "description", "thumbnail"],
+	parameterFields: "\n			pub let name: String" + "\n			pub let description: String" + "\n			pub let thumbnail: String",
+	parameterInits: "\n				name: String," + "\n				description: String," + "\n				thumbnail: String,",
+	parameterSets: "\n				self.name = name" + "\n				self.description = description" + "\n				self.thumbnail = thumbnail",
+	parameterMatches: "\n				name: name" + "\n				description: description" + "\n				thumbnail: thumbnail"
 })
 
 export const contractCode = derived(
@@ -52,26 +51,31 @@ export const contractCode = derived(
 
 		pub let CollectionStoragePath: StoragePath
 		pub let CollectionPublicPath: PublicPath
-		pub let MinterStoragePath: StoragePath
 		pub let AdministratorStoragePath: StoragePath
 
-		pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
-			pub let id: UInt64
-			pub let serial: UInt64
-			pub let tokenURI: String
+		access(account) var templates: {UInt64: Template}
+
+		pub struct Template {
 			${$contractInfo.parameterFields}
 
-			init(
-				tokenURI: String,${$contractInfo.parameterInits}
-			) {
+			init(${$contractInfo.parameterInits}
+			) {${$contractInfo.parameterSets}
+			}
+		}
+
+		pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
+			// The 'id' is the same as the 'uuid'
+			pub let id: UInt64
+			// The 'serial' is what maps to its 'Template'
+			pub let serial: UInt64
+
+			init() {
 				pre {
 					${$contractInfo.name}.minting: "Minting is currently closed by the Administrator!"
 					${$contractInfo.maxSupply ? `${$contractInfo.name}.totalSupply <= ${$contractInfo.maxSupply}: "You have reached max supply."` : ''}
 				}
 				self.id = self.uuid
-				self.serial = ${$contractInfo.name}.totalSupply,
-				self.tokenURI = tokenURI
-				${$contractInfo.parameterSets}
+				self.serial = ${$contractInfo.name}.totalSupply
 
 				${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
 			}
@@ -83,25 +87,26 @@ export const contractCode = derived(
 			}
 
 			pub fun resolveView(_ view: Type): AnyStruct? {
-					switch view {
-						case Type<MetadataViews.Display>():
-								return MetadataViews.Display(
-									name: self.name,
-									description: self.description,
-									thumbnail: MetadataViews.IPFSFile(
-											cid: self.thumbnail,
-											path: nil
-									)
-								)
-					}
-					return nil
+				let template = ${$contractInfo.name}.getTemplate(self.serial) ?? panic("Template doesn't exist!")
+				switch view {
+					case Type<MetadataViews.Display>():
+						return MetadataViews.Display(
+							name: template.name,
+							description: template.description,
+							thumbnail: MetadataViews.IPFSFile(
+								cid: template.thumbnail,
+								path: nil
+							)
+						)
+				}
+				return nil
 			}
 		}
 
 		pub resource interface NFTCollectionPublic {
-				pub fun deposit(token: @NonFungibleToken.NFT)
-				pub fun getIDs(): [UInt64]
-				pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
+			pub fun deposit(token: @NonFungibleToken.NFT)
+			pub fun getIDs(): [UInt64]
+			pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
 		}
 
 		pub resource Collection: NFTCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
@@ -157,88 +162,68 @@ export const contractCode = derived(
 			}
 		}
 
-		// public function that anyone can call to create a new empty collection
-		pub fun createEmptyCollection(): @NonFungibleToken.Collection {
-			return <- create Collection()
-		}
-
 		${$contractInfo.openMinting
-		?
-		`
-		pub fun mintNFT(
-			recipient: &{NonFungibleToken.CollectionPublic},
-			tokenURI: String,${$contractInfo.parameterInits}
-			${$contractInfo.payment ? 'payment: @FlowToken.Vault' : ''}
-		) {
-			${$contractInfo.payment
 			?
 			`
+		// mintNFT mints a new NFT and deposits 
+		// it in the recipients collection
+		pub fun mintNFT(
+			recipient: &{NonFungibleToken.CollectionPublic}${$contractInfo.payment ? ',\n			payment: @FlowToken.Vault' : ''}
+		) {
+			${$contractInfo.payment
+				?
+				`
 			pre {
 				payment.balance == ${$contractInfo.name}.price: "You did not pass in the correct amount of FlowToken."
 			}
 
 			let paymentRecipient = ${$contractInfo.name}.account.getCapability(/public/flowTokenReceiver)
-																.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+										.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 
 			paymentRecipient.deposit(from: <- payment)
 			`
-			:
-			''}
-			// create a new NFT
-			var newNFT <- create NFT(
-				tokenURI: tokenURI,${$contractInfo.parameterMatches}
-			)
-
-			// deposit it in the recipient's account using their reference
-			recipient.deposit(token: <- newNFT)
+				: ''}
+			recipient.deposit(token: <- create NFT())
 		}
 		`
-		:
-		``
-	}
+			:
+			``
+		}
+		pub resource Administrator {
 
-		${$contractInfo.manualMint
-		?
-		`
-		// Resource that an admin or something similar would own to be
-		// able to mint new NFTs
-		//
-		pub resource NFTMinter {
-
-			// mintNFT mints a new NFT with a new ID
-			// and deposit it in the recipients collection using their collection reference
-			pub fun mintNFT(
-				recipient: &{NonFungibleToken.CollectionPublic},
-				tokenUri: String,${$contractInfo.parameterInits}
-			) {
-				// create a new NFT
-				var newNFT <- create NFT(
-					tokenUri: tokenUri,${$contractInfo.parameterMatches}
-				)
-
-				// deposit it in the recipient's account using their reference
-				recipient.deposit(token: <- newNFT)
+			// mintNFT mints a new NFT and deposits 
+			// it in the recipients collection
+			pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
+				recipient.deposit(token: <- create NFT())
 			}
-	}
-	`
-		:
-		''}
 
-		pub resource Administator {
-			${$contractInfo.manualMint
-		?
-		`
-			pub fun createMinter(): @NFTMinter {
-				return <- create NFTMinter()
-			}
-			`
-		:
-		''
-	}
+			// turn minting on/off
 			pub fun toggleMinting(): Bool {
 				ExampleNFT.minting = !ExampleNFT.minting
 				return ExampleNFT.minting
 			}
+
+			// create a new Administrator resource
+			pub fun createAdmin(): @Administrator {
+				return <- create Administrator()
+			}
+
+			${$contractInfo.payment
+				?
+				`pub fun changePrice(newPrice: UFix64) {
+				${$contractInfo.name}.price = newPrice
+			}`
+				: '' }
+		}
+
+		// public function that anyone can call to create a new empty collection
+		pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+			return <- create Collection()
+		}
+
+		// Get information about a Template
+		pub fun getTemplate(_ serial: UInt64): Template? {
+			return self.templates[serial]
 		}
 
 		init() {
@@ -246,12 +231,12 @@ export const contractCode = derived(
 			self.totalSupply = 0
 			self.minting = ${$contractInfo.startMinting}
 			${$contractInfo.payment ? `self.price = ${$contractInfo.payment.toFixed(2)}` : ''}
+			self.templates = {}
 
 			// Set the named paths
-			self.CollectionStoragePath = /storage/${$user?.addr}${$contractInfo.name}Collection
-			self.CollectionPublicPath = /public/${$user?.addr}${$contractInfo.name}Collection
-			self.MinterStoragePath = /storage/${$user?.addr}${$contractInfo.name}Minter
-			self.AdministratorStoragePath = /storage/${$user?.addr}${$contractInfo.name}Administrator
+			self.CollectionStoragePath = /storage/${$contractInfo.name}Collection${$user?.addr}
+			self.CollectionPublicPath = /public/${$contractInfo.name}Collection${$user?.addr}
+			self.AdministratorStoragePath = /storage/${$contractInfo.name}Administrator${$user?.addr}
 
 			// Create a Collection resource and save it to storage
 			let collection <- create Collection()
@@ -265,17 +250,8 @@ export const contractCode = derived(
 
 			// Create a Administrator resource and save it to storage
 			let administrator <- create Administrator()
-			self.account.save(<- administator, to: self.AdministratorStoragePath)
+			self.account.save(<- administrator, to: self.AdministratorStoragePath)
 
-				${$contractInfo.manualMint
-		?
-		`
-			// Create a Minter resource and save it to storage
-			let minter <- create NFTMinter()
-			self.account.save(<- minter, to: self.MinterStoragePath)
-		`
-		: ''
-	}
 			emit ContractInitialized()
 		}
 	}

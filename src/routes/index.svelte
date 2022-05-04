@@ -62,11 +62,6 @@
 		on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
 		>Start Minting: {$contractInfo.startMinting}</button
 	>
-	<button
-		class="secondary"
-		on:click={() => ($contractInfo.manualMint = !$contractInfo.manualMint)}
-		>Manual Minting: {$contractInfo.manualMint}</button
-	>
 	<button class="secondary" on:click={() => addParameter(fieldName, fieldType)}
 		>Add Parameter</button
 	>
