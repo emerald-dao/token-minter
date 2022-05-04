@@ -13,7 +13,9 @@ const config = {
   extensions: ['.svelte'],
   
   kit: {
-    adapter: vercel(), // change this to whatever build adapter you want to use (e.g. static)
+    adapter: vercel({
+      split: false
+    }), // change this to whatever build adapter you want to use (e.g. static)
     files: {
       assets: 'static',
       hooks: 'src/hooks',
@@ -41,6 +43,9 @@ const config = {
         }),
         globals(),
       ],
+      optimizeDeps : {
+        include : ['prismjs', 'Prism']
+      }
     }),
   },
   
