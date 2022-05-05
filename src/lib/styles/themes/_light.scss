@@ -20,6 +20,8 @@ $light: (
   ),
   font: (
     heading: map-deep-get($colors, neutral, 900),
+    text-strong: map-deep-get($colors, neutral, 900),
     text: map-deep-get($colors, neutral, 800),
+    text-soft: map-deep-get($colors, neutral, 700),
   ),
 );

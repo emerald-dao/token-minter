@@ -29,12 +29,14 @@
     <nav>
       <!-- Desktop menu -->
       <div id="desktop-menu">
+        <div>Logo</div>
         <Navigation/>
         <ThemeToggle/>
       </div>
 
       <!-- Mobile menu -->
       <div id="hamburger-button">
+        <div>Logo</div>
         <AnimatedHamburger {open} {onClick}/>
       </div>
       {#if open}

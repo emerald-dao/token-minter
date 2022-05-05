@@ -2,8 +2,9 @@
 title: Token Minter Guide
 author: Jacob Tucker
 chapter: 5
+path: token-minter
 ---
 
-## SECTION 4: Token Minter Guide
+# Token Minter Guide
 
 COMING SOON

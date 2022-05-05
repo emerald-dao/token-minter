@@ -4,7 +4,7 @@ author: Jacob Tucker
 chapter: 4
 ---
 
-# SECTION 3: Benefits of the Flow Blockchain
+# Benefits of the Flow Blockchain
 
 1. On Flow, users (like me and you) actually store NFTs in their _own accounts, and thus own their data_. This is very different from Blockchains like Ethereum where the smart contract actually stores your NFTs.
 2. Flow Blockchain has cheaper transaction fees when minting, selling or transferring NFTs and other digital assets (less than $0.01 on average) compared to Ethereum Blockchain (around $12 on average).

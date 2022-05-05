@@ -4,7 +4,7 @@ author: Jacob Tucker
 chapter: 1
 ---
 
-# NFT PLATFORM EDUCATIONAL CONTENTS OUTLINE FOR EMERALD DAO
+# NFT Platform Educational Contents Outline for EMERALD DAO
 
 ## Welcome to [insert platform name here]
 

@@ -1,28 +1,52 @@
 <script>
+  import { page } from '$app/stores';
+
+  $: url = $page.path
+  
   export let chapters;
+
+  const transformHref = (ref) => {
+    const newRef = (ref === "./index.md") ? "/guide" :
+    ref
+      .replace("./", "/guide/")
+      .replace(".md", "")
+      .replace(".svx", "")
+    return newRef;
+  }
 </script>
 
-<div>
+<nav>
   <ul>
-    {#each chapters as { path, metadata: { title } }}
+    {#each chapters as { path, metadata: { title, chapter } }}
       <li>
-        <a    
-          href={
-            (path === "./index.md") ? "/guide" :
-            path
-            .replace("./", "/guide/")
-            .replace(".md", "")
-            .replace(".svx", "")}
-          >
-          {title}  
+        <a   
+          class:current={url === transformHref(path)}
+          href={transformHref(path)}
+        >
+          {chapter}. {title}  
         </a>
       </li>
     {/each}
   </ul>
-</div>
+</nav>
 
 <style>
-  div {
-    background-color: blue;
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 1.4em;
+    font-family: var(--font-mono);
+    font-size: var(--fs-300);
+  }
+
+  a {
+    color: var(--clr-font-text-soft);
+    text-decoration: none;
+  }
+
+  .current {
+    color: var(--clr-primary-main);
   }
 </style>

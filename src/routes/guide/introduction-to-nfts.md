@@ -4,9 +4,9 @@ author: Jacob Tucker
 chapter: 2
 ---
 
-# SECTION 1: Introduction to Non-Fungible Tokens (NFTs)
+# Introduction to Non-Fungible Tokens (NFTs)
 
-## (1a) What is an NFT?
+## What is an NFT?
 
 Non-Fungible tokens (or “NFTs”) are digital assets that represent real-world objects like music, art, and video game items. In today’s world, you will see most NFTs taking the form of digital art and collectibles of various kinds (i.e. [NBA TopShot](https://nbatopshot.com/) and [Crypto Kitties](https://www.cryptokitties.co/)). However, there’s a common misconception that digital art equals NFTs. This is untrue. More broadly, NFTs are unique, cannot be replicated, and are stored in something called the Blockchain, which is a large storage network that is publicly accessible and controlled by things called smart contracts. Naturally, these features allow them to be used for things, such as:
 
@@ -24,6 +24,6 @@ To further understand the “uniqueness” attribute of an NFT, we should learn 
 
 DIagram 1.2 Difference between Fungible and non-Fungible items or tokens
 
-## EXAMPLE
+## Example
 
 ` `When you go to visit the Mona Lisa in Paris, have you ever wondered why the painting is so special? It’s because it was painted by Leonardo da Vinci himself. If you tried to duplicate the Mona Lisa and sell it, it would sell for _a lot less_ than the original. The former has history and was painted by Leonardo da Vinci, while the other one has none of those attributes. That is why art or digital collectibles are “non-fungible”; the value of the “same” art pieces significantly varies because they are intrinsically different (i.e. different artists, history varies).

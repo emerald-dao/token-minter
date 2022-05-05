@@ -1,3 +1,4 @@
+<!-- Get list of chapters to make navigation menu -->
 <script context="module">
   const allChapters = import.meta.glob("./*.md");
   
@@ -10,10 +11,14 @@
       })
     );
   }
-
+  
   export const load = async () => {
     const chapters = await Promise.all(body);
-
+    
+    chapters.sort((a, b) => {
+      return a.metadata.chapter - b.metadata.chapter;
+    });
+    
     return {
       props: {
         chapters,
@@ -26,59 +31,37 @@
   import '$lib/styles/guide/guide.scss'
 
   import GuideNav from "$lib/components/sections/guide/GuideNav.svelte";
-  import TableOfContents from "$lib/components/sections/guide/TableOfContents.svelte";
 
   export let chapters
 </script>
 
-<div id="main-container">
+<div class="main-wrapper">
   <nav>
     <GuideNav chapters={chapters}/>
   </nav>
-  <div id="content">
-    <article>
-      <slot/>
-    </article>
-    <div id="table-of-contents">
-      <TableOfContents/>
-    </div>
-  </div>
+  <slot/>
 </div>
 
 <style type="scss">
-  #main-container {
-    display: flex;
-    flex-direction: row;
+  .main-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
+    gap: 3rem;
+    grid-template-areas: "sidebar main toc";
+    padding-left: 1rem;
+    padding-right: 1rem;  
   }
 
   nav {
-    top: 7.25rem;
-    padding: 2rem 0px 4rem;
-    height: calc(100vh - 80px);
-    width: calc((100% - 1448px) / 2 + 298px);
-    min-width: 298px;
-    overflow-y: auto;
+    grid-area: sidebar;
+    align-self: start;
+    overflow: auto;
     position: sticky;
-    width: 300px;
-    background-color: pink;
-  }
-  
-  article {
-    width: 100%;
-  }
-
-  #content {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    align-content: stretch;
-    width: 100%;
-    height: 100%;
-  }
-
-  #table-of-contents {
-    width: 200px;
+    // TODO: Add top offset variable
+    top: 1rem;
+    max-height: 100vh;
+    background-color: var(--clr-background-secondary);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
   }
 </style>

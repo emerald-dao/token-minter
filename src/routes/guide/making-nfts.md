@@ -4,7 +4,7 @@ author: Jacob Tucker
 chapter: 3
 ---
 
-# SECTION 2: What goes into making an NFT?
+# What goes into making an NFT?
 
 In order to create an NFT, we must have the following components:
 
@@ -16,7 +16,7 @@ Prior to jumping in, let’s view a diagram that provides a birds-eye view of th
 
 Diagram 2.1 The end to end process of deploying an NFT
 
-## (2a) Smart Contracts
+## Smart Contracts
 
 ` `Smart contracts are pieces of code that act as “rulebooks” on the Blockchain. They govern what can and cannot be done by users interacting with them. In the context of NFTs, smart contracts define how NFTs get created, how NFTs keep track of their information, what you can do with them, and how people store them (just to name a few). Smart contracts allow us to create NFT Collections and “mint” (create) our NFTs.
 
@@ -26,7 +26,7 @@ The cool part is that because smart contracts live on the Blockchain, we have fu
 
 Diagram 2.2 An example smart contract written in Cadence
 
-## (2b) Metadata
+## Metadata
 
 Metadata is a term used to describe the details of the NFT or any asset. What does it look like (the difference between a Bored Ape and a CryptoPunk)? What attributes/traits are associated with it? What serial number is it? In the context of NFTs, Metadata represents what an NFT actually is. There are a bunch of fields like name, serial number, and description that personalise the NFT and make it unique. Across all NFTs, the only field they have in common is an “Id”, which is a unique identifier for each NFT. If two NFTs ever have the same Id, they become fungible. Here’s a list of common attributes:
 
@@ -43,7 +43,7 @@ Metadata is a term used to describe the details of the NFT or any asset. What do
 
 Diagram 2.3 List of Metadata on a Flunkz NFT
 
-## (2c) Asset Storage
+## Asset Storage
 
 ` `For smaller pieces of metadata like a name and description (which are just text), it is inexpensive to store it within the NFT itself. However, for things like images and videos, it becomes expensive very quickly to store on the Blockchain. To cope with this, we use other services like [IPFS](https://ipfs.io/), which is a decentralised storage network. We can upload our images to IPFS which will return to us a “CID” or “hash” (a bunch of random numbers and letters _ex. 89d89wy8989dwq89d9qwydqw89_) that references that data. Then, we can store that CID on the Blockchain in the NFT, which is super cheap, and retrieve the more expensive data using the CID whenever we want.
 

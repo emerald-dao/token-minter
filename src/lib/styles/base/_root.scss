@@ -2,6 +2,7 @@
 @use '../themes' as *;
 
 :root {
+  // Generate font-size variables
   @each $screen-size, $property in $type-scale {
     @if $screen-size == small {
       @each $prop, $value in $property {
@@ -16,6 +17,7 @@
     }
   }
 
+  // Generate color variables
   @each $color, $role in $dark {
     @include dark {
       @each $prop, $value in $role {
@@ -23,7 +25,6 @@
       }
     }
   }
-
   @each $color, $role in $light {
     @include light {
       @each $prop, $value in $role {
@@ -31,4 +32,9 @@
       }
     }
   }
+
+  // Font variables
+  // TODO: Make font variables in a separate scss file
+  --font-a: 'inter', sans-serif;
+  --font-mono: 'JetBrainsMono', monospace;
 }
