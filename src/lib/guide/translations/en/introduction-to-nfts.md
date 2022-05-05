@@ -2,6 +2,7 @@
 title: Introduction to NFTs
 author: Jacob Tucker
 chapter: 2
+language: en
 ---
 
 # Introduction to Non-Fungible Tokens (NFTs)

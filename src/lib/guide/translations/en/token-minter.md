@@ -2,7 +2,7 @@
 title: Token Minter Guide
 author: Jacob Tucker
 chapter: 5
-path: token-minter
+language: en
 ---
 
 # Token Minter Guide

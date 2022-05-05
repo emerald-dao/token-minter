@@ -2,6 +2,7 @@
 title: Flow Benefits
 author: Jacob Tucker
 chapter: 4
+language: en
 ---
 
 # Benefits of the Flow Blockchain

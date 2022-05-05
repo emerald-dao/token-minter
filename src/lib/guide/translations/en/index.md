@@ -2,6 +2,7 @@
 title: Welcome
 author: Jacob Tucker
 chapter: 1
+language: en
 ---
 
 # NFT Platform Educational Contents Outline for EMERALD DAO

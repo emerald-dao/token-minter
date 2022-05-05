@@ -2,6 +2,7 @@
 title: Making an NFT
 author: Jacob Tucker
 chapter: 3
+language: en
 ---
 
 # What goes into making an NFT?
