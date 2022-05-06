@@ -9,9 +9,9 @@
 		if (name && !$contractInfo.parameters.includes(name)) {
 			$contractInfo.parameters.push(name);
 			$contractInfo.parameterFields += "\n			pub let " + name + ": " + type;
-			$contractInfo.parameterInits += "\n				" + name + ": " + type + ",";
+			$contractInfo.parameterInits += ",\n				" + name + ": " + type;
 			$contractInfo.parameterSets += "\n				self." + name + " = " + name;
-			$contractInfo.parameterMatches += "\n				" + name + ": " + name;
+			$contractInfo.parameterMatches += ",\n					" + name + ": " + name;
 		}
 	}
 

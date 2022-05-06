@@ -9,9 +9,10 @@
 	
 pub contract ExampleNFT: NonFungibleToken {
 	
+		pub var nextTemplateId: UInt64
 		pub var totalSupply: UInt64
 		pub var minting: Bool
-		pub var price: UFix64
+		
 
 		pub event ContractInitialized()
 		pub event Withdraw(id: UInt64, from: Address?)
@@ -32,11 +33,12 @@ pub contract ExampleNFT: NonFungibleToken {
 			init(
 				name: String,
 				description: String,
-				thumbnail: String,
+				thumbnail: String
 			) {
 				self.name = name
 				self.description = description
 				self.thumbnail = thumbnail
+				ExampleNFT.nextTemplateId = ExampleNFT.nextTemplateId + 1
 			}
 		}
 
@@ -80,13 +82,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			}
 		}
 
-		pub resource interface NFTCollectionPublic {
-			pub fun deposit(token: @NonFungibleToken.NFT)
-			pub fun getIDs(): [UInt64]
-			pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-		}
-
-		pub resource Collection: NFTCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+		pub resource Collection: NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
 			// dictionary of NFT conforming tokens
 			// NFT is a resource type with an 'UInt64' ID field
 			pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -139,32 +135,29 @@ pub contract ExampleNFT: NonFungibleToken {
 			}
 		}
 
-		// public function that anyone can call to create a new empty collection
-		pub fun createEmptyCollection(): @NonFungibleToken.Collection {
-			return <- create Collection()
-		}
-
 		
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
 		pub fun mintNFT(
-			recipient: &{NonFungibleToken.CollectionPublic},
-			payment: @FlowToken.Vault
+			recipient: &{NonFungibleToken.CollectionPublic}
 		) {
-			
-			pre {
-				payment.balance == ExampleNFT.price: "You did not pass in the correct amount of FlowToken."
-			}
-
-			let paymentRecipient = ExampleNFT.account.getCapability(/public/flowTokenReceiver)
-																.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-
-			paymentRecipient.deposit(from: <- payment)
 			
 			recipient.deposit(token: <- create NFT())
 		}
 		
 		pub resource Administrator {
+
+			pub fun createTemplate(
+				name: String,
+				description: String,
+				thumbnail: String
+			) {
+				ExampleNFT.templates[ExampleNFT.nextTemplateId] = Template(
+					name: name,
+					description: description,
+					thumbnail: thumbnail
+				)
+			}
 
 			// mintNFT mints a new NFT and deposits 
 			// it in the recipients collection
@@ -183,9 +176,12 @@ pub contract ExampleNFT: NonFungibleToken {
 				return <- create Administrator()
 			}
 
-			pub fun changePrice(newPrice: UFix64) {
-				ExampleNFT.price = newPrice
-			}
+			
+		}
+
+		// public function that anyone can call to create a new empty collection
+		pub fun createEmptyCollection(): @NonFungibleToken.Collection {
+			return <- create Collection()
 		}
 
 		// Get information about a Template
@@ -195,9 +191,10 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		init() {
 			// Initialize the total supply
+			self.nextTemplateId = 0
 			self.totalSupply = 0
 			self.minting = true
-			self.price = 100.00
+			
 			self.templates = {}
 
 			// Set the named paths
@@ -210,7 +207,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.account.save(<-collection, to: self.CollectionStoragePath)
 
 			// create a public capability for the collection
-			self.account.link<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic, ExampleNFT.NFTCollectionPublic, MetadataViews.ResolverCollection}>(
+			self.account.link<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
 				self.CollectionPublicPath,
 				target: self.CollectionStoragePath
 			)
@@ -222,4 +219,3 @@ pub contract ExampleNFT: NonFungibleToken {
 			emit ContractInitialized()
 		}
 	}
-  

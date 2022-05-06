@@ -19,9 +19,9 @@ export const contractInfo = writable({
 	// These are all for setting custom parameters in the NFT
 	parameters: ["name", "description", "thumbnail"],
 	parameterFields: "\n			pub let name: String" + "\n			pub let description: String" + "\n			pub let thumbnail: String",
-	parameterInits: "\n				name: String," + "\n				description: String," + "\n				thumbnail: String,",
+	parameterInits: "\n				name: String," + "\n				description: String," + "\n				thumbnail: String",
 	parameterSets: "\n				self.name = name" + "\n				self.description = description" + "\n				self.thumbnail = thumbnail",
-	parameterMatches: "\n				name: name" + "\n				description: description" + "\n				thumbnail: thumbnail"
+	parameterMatches: "\n					name: name," + "\n					description: description," + "\n					thumbnail: thumbnail"
 })
 
 export const contractCode = derived(
@@ -41,6 +41,7 @@ export const contractCode = derived(
 	
 	pub contract ${$contractInfo.name}: NonFungibleToken {
 	
+		pub var nextTemplateId: UInt64
 		pub var totalSupply: UInt64
 		pub var minting: Bool
 		${$contractInfo.payment ? `pub var price: UFix64` : ''}
@@ -60,6 +61,7 @@ export const contractCode = derived(
 
 			init(${$contractInfo.parameterInits}
 			) {${$contractInfo.parameterSets}
+				${$contractInfo.name}.nextTemplateId = ${$contractInfo.name}.nextTemplateId + 1
 			}
 		}
 
@@ -103,13 +105,7 @@ export const contractCode = derived(
 			}
 		}
 
-		pub resource interface NFTCollectionPublic {
-			pub fun deposit(token: @NonFungibleToken.NFT)
-			pub fun getIDs(): [UInt64]
-			pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
-		}
-
-		pub resource Collection: NFTCollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+		pub resource Collection: NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
 			// dictionary of NFT conforming tokens
 			// NFT is a resource type with an 'UInt64' ID field
 			pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -191,6 +187,12 @@ export const contractCode = derived(
 		}
 		pub resource Administrator {
 
+			pub fun createTemplate(${$contractInfo.parameterInits}
+			) {
+				${$contractInfo.name}.templates[${$contractInfo.name}.nextTemplateId] = Template(${$contractInfo.parameterMatches}
+				)
+			}
+
 			// mintNFT mints a new NFT and deposits 
 			// it in the recipients collection
 			pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
@@ -228,6 +230,7 @@ export const contractCode = derived(
 
 		init() {
 			// Initialize the total supply
+			self.nextTemplateId = 0
 			self.totalSupply = 0
 			self.minting = ${$contractInfo.startMinting}
 			${$contractInfo.payment ? `self.price = ${$contractInfo.payment.toFixed(2)}` : ''}
@@ -243,7 +246,7 @@ export const contractCode = derived(
 			self.account.save(<-collection, to: self.CollectionStoragePath)
 
 			// create a public capability for the collection
-			self.account.link<&${$contractInfo.name}.Collection{NonFungibleToken.CollectionPublic, ${$contractInfo.name}.NFTCollectionPublic, MetadataViews.ResolverCollection}>(
+			self.account.link<&${$contractInfo.name}.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
 				self.CollectionPublicPath,
 				target: self.CollectionStoragePath
 			)
