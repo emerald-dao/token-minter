@@ -9,7 +9,7 @@ transaction(names: [String], descriptions: [String], thumbnails: [String]) {
 
   pre {
     names.length <= 500: 
-      "There must be less than or equal to 500 NFTs being added."
+      "There must be less than or equal to 500 Templates being added at a time."
     names.length == descriptions.length && descriptions.length == thumbnails.length:
       "You must pass in a same amount of each parameter."
   }
