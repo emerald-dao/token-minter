@@ -1,9 +1,8 @@
-import { config } from "@samatech/onflow-fcl-esm";
+import { config } from '@onflow/config';
 
 config({
-  "accessNode.api": import.meta.env.VITE_ACCESS_NODE_API,
-  "discovery.wallet": import.meta.env.VITE_DISCOVERY_WALLET,
-  // "0xNonFungibleToken": import.meta.env.NONFUNGIBLETOKEN_ADDRESS,
-  // "0xFungibleToken": import.meta.env.FUNGIBLETOKEN_ADDRESS,
-  // "0xFlowToken": import.meta.env.FLOWTOKEN_ADDRESS
+  "app.detail.title": "Token Minter", // Shows user what dapp is trying to connect
+  "app.detail.icon": "https://fcl-discovery.onflow.org/images/blocto.png", // shows image to the user to display your dapp brand
+  "accessNode.api": "https://access-mainnet-beta.onflow.org",
+  "discovery.wallet": "https://fcl-discovery.onflow.org/authn"
 })
