@@ -189,6 +189,10 @@ pub contract ExampleNFT: NonFungibleToken {
 			return self.templates[serial]
 		}
 
+		pub fun getTemplates(): {UInt64: Template} {
+			return self.templates
+		}
+
 		init() {
 			// Initialize the total supply
 			self.nextTemplateId = 0
