@@ -1,4 +1,5 @@
 <script>  
+  import { t } from '$lib/guide/translations'; 
 	import { onMount, tick } from 'svelte'
 
 	let elements = []
@@ -75,7 +76,7 @@
 <svelte:window on:scroll={trackScroll} />
 
 <section>
-  <h2>In this chapter</h2>
+  <h2>{$t('toc.tocTitle')}</h2>
   <ul>
     {#each toc as tocElement, i}
       <li class:active={active === i}>

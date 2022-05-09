@@ -10,17 +10,19 @@ const config = {
   loaders: [
     {
       locale: 'en',
-      key: 'layout',
-      loader: async () => (await import('./en/layout.json')).default,
+      key: 'toc',
+      loader: async () => (await import('./en/toc.json')).default,
     },
     {
       locale: 'es',
-      key: 'layout',
+      key: 'toc',
       routes: ['', '/'],
-      loader: async () => (await import('./es/layout.json')).default,
+      loader: async () => (await import('./es/toc.json')).default,
     },
   ],
 };
+
+console.log(config.translations.en);
 
 export const defaultLocale = 'en';
 

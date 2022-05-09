@@ -5,7 +5,7 @@
   $: lang = $page.params.lang
 
   const transformSlug = (ref) => {
-    const newSlug = `/guide/${lang}/${ref}`;
+    const newSlug = `/guide/${ref}`;
 
     return newSlug;
   }
