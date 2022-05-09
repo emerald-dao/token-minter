@@ -1,11 +1,13 @@
+
 <script>
+  import { locale } from '$lib/guide/translations';
+
   // Make the link of the active chapter active
   import { page } from '$app/stores';
   $: url = $page.url.pathname
-  $: lang = $page.params.lang
 
   const transformSlug = (ref) => {
-    const newSlug = `/guide/${ref}`;
+    const newSlug = `/${$locale}/guide/${ref}`;
 
     return newSlug;
   }

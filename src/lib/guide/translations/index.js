@@ -16,13 +16,10 @@ const config = {
     {
       locale: 'es',
       key: 'toc',
-      routes: ['', '/'],
       loader: async () => (await import('./es/toc.json')).default,
     },
   ],
 };
-
-console.log(config.translations.en);
 
 export const defaultLocale = 'en';
 
