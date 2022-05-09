@@ -1,12 +1,11 @@
 <script>
   // Make the link of the active chapter active
   import { page } from '$app/stores';
-  let url = $page.url.pathname
-  let lang = $page.params.lang
+  $: url = $page.url.pathname
+  $: lang = $page.params.lang
 
   const transformSlug = (ref) => {
-    const newSlug = (ref === "index") ? "/guide/${lang}" :
-      `/guide/${lang}/${ref}`;
+    const newSlug = `/guide/${lang}/${ref}`;
 
     return newSlug;
   }

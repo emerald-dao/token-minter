@@ -7,12 +7,10 @@
     if(toc.length > 0) {
       toc.forEach((tocElement) => {
         const el = document.getElementById(`${tocElement.path}`)
-        console.log(tocElement.path)
         if (el) {
           elements = [...elements, el]
         }
       })
-      console.log(elements)
       trackScroll()
     }
 	}
@@ -32,8 +30,6 @@
 				if (width === 0) grabElements() // fixes weird bug where rects are all 0
 				if (top < 300) {
 					active = i
-          console.log(element)
-          console.log(i)
 				}
 			})
 		}
@@ -59,7 +55,6 @@
 
   // The TOC data is all given as metadata from custom made rehype plugin.
   export let contentsArray;
-    console.log(contentsArray)
 
   const getToc = () => {
     contentsArray.forEach((content) => {
