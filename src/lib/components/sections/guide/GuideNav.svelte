@@ -1,27 +1,26 @@
 <script>
+  // Make the link of the active chapter active
   import { page } from '$app/stores';
+  let url = $page.url.pathname
+  let lang = $page.params.lang
 
-  $: url = $page.path
-  
-  export let chapters;
+  const transformSlug = (ref) => {
+    const newSlug = (ref === "index") ? "/guide/${lang}" :
+      `/guide/${lang}/${ref}`;
 
-  const transformHref = (ref) => {
-    const newRef = (ref === "./index.md") ? "/guide" :
-    ref
-      .replace("./", "/guide/")
-      .replace(".md", "")
-      .replace(".svx", "")
-    return newRef;
+    return newSlug;
   }
+
+  export let chapters;
 </script>
 
 <nav>
   <ul>
-    {#each chapters as { path, metadata: { title, chapter } }}
+    {#each chapters as { slug, title, chapter }}
       <li>
         <a   
-          class:current={url === transformHref(path)}
-          href={transformHref(path)}
+          class:current={url === transformSlug(slug)}
+          href={transformSlug(slug)}
         >
           {chapter}. {title}  
         </a>

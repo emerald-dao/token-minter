@@ -36,13 +36,13 @@ const config = {
       assets: '',
       base: '',
     },
-    // hydrate: false,
     prerender: {
       crawl: false,
       enabled: false,
     },
-    router: true,
-    ssr: true,
+    browser: {
+      router: true,
+    },
     vite: () => ({
       plugins: [
         builtins(),

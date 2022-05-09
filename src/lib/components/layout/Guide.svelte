@@ -13,7 +13,7 @@
   <slot/>
 </article>
 
-<style>
+<style type="scss">
   aside {
     background-color: var(--clr-background-secondary);
     grid-area: toc;
@@ -26,6 +26,7 @@
   }
 
   article {
+    grid-area: main;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;

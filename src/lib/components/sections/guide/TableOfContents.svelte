@@ -1,4 +1,4 @@
-<script>
+<script>  
 	import { onMount, tick } from 'svelte'
 
 	let elements = []
@@ -57,8 +57,10 @@
 
   // end frackit code
 
+  // The TOC data is all given as metadata from custom made rehype plugin.
   export let contentsArray;
-  
+    console.log(contentsArray)
+
   const getToc = () => {
     contentsArray.forEach((content) => {
       if (content.level === 2) {
@@ -72,7 +74,7 @@
     })
   }
 
-  $: toc = []
+  let toc = []
 </script>
 
 <svelte:window on:scroll={trackScroll} />

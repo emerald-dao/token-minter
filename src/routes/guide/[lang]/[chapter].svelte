@@ -1,12 +1,11 @@
-<script context="module">
-  export const load = async ({ page }) => {
+<!-- <script context="module">
+  export const load = async ({ params, url }) => {
     try {  
-      const chapter = await import(`../../../lib/guide/translations/${page.params.lang}/${page.params.chapter}.md`)
-
+      const chapter = await import(`../../../lib/guide/translations/${params.lang}/${params.chapter}.md`)
       return {
         props: {
           PostContent: chapter.default,
-          meta: { ...chapter.metadata, slug: page.path } 
+          meta: { ...chapter.metadata, slug: url.pathname } 
         }
       }
     } catch(error) {
@@ -16,13 +15,43 @@
       }
     }
   }
-</script>
+</script> -->
 
 <script>
-  export let PostContent
-  export let meta
+  import '$lib/styles/guide/guide.scss'
+  // import GuideNav from "$lib/components/sections/guide/GuideNav.svelte";
 
-  const { title, author, chapter } = meta
+  // export let chapters
+  export let chapterContent
 </script>
 
-<svelte:component this={PostContent} />
+<div class="main-wrapper">
+   <nav>
+     <!-- <GuideNav chapters={chapters}/> -->
+   </nav>
+  <svelte:component this={chapterContent}/>
+</div>
+
+<style type="scss">
+  .main-wrapper {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
+    gap: 3rem;
+    grid-template-areas: "sidebar main toc";
+    padding-left: 1rem;
+    padding-right: 1rem;  
+  }
+  
+  nav {
+    grid-area: sidebar;
+    align-self: start;
+    overflow: auto;
+    position: sticky;
+    // TODO: Add top offset variable
+    top: 1rem;
+    max-height: 100vh;
+    background-color: var(--clr-background-secondary);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+</style>
