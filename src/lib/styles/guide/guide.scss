@@ -1,0 +1,65 @@
+article {
+  padding: 6rem;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 0.4em;
+  }
+
+  h2,
+  h3,
+  h4 {
+    margin-top: 1.6em;
+  }
+
+  h1 {
+    font-size: var(--fs-600);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: var(--fs-400);
+    font-weight: 600;
+    margin-bottom: 1.2em;
+  }
+  h2::before,
+  .h2::before {
+    content: '';
+    width: 1.5em;
+    height: 0.255em;
+    background: var(--clr-primary-main);
+    display: block;
+    margin: 0 0 1em;
+  }
+
+  h3 {
+    font-size: var(--fs-400);
+  }
+
+  h4 {
+    font-size: var(--fs-300);
+  }
+
+  // Heading title links
+  :where(h2, h3, h4, h5, h6) {
+    .icon-link {
+      position: relative;
+
+      &::before {
+        content: '#';
+        position: absolute;
+        left: -1ch;
+        top: 0;
+        line-height: 1;
+        opacity: 0;
+        text-decoration: underline;
+      }
+    }
+    &:hover .icon-link::before {
+      opacity: 1;
+    }
+  }
+}
