@@ -1,16 +1,14 @@
 
 <script>
-  import { locale } from '$lib/guide/translations';
-
   // Make the link of the active chapter active
   import { page } from '$app/stores';
+
+  const pathname = $page.url.pathname;
+  const relativePathname = pathname.replace('/guide', '');
+  const lang = `${relativePathname.match(/[^/]+?(?=\/|$)/) || ''}`;
+  
   $: url = $page.url.pathname
 
-  const transformSlug = (ref) => {
-    const newSlug = `/${$locale}/guide/${ref}`;
-
-    return newSlug;
-  }
 
   export let chapters;
 </script>
@@ -18,10 +16,10 @@
 <nav>
   <ul>
     {#each chapters as { slug, title, chapter }}
-      <li>
-        <a   
-          class:current={url === transformSlug(slug)}
-          href={transformSlug(slug)}
+    <li>
+      <a   
+          class:current={url === `/guide/${lang}/${slug}`}
+          href={slug}
         >
           {chapter}. {title}  
         </a>

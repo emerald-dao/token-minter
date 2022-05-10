@@ -2,7 +2,6 @@ import { defaultLocale, locales } from '$lib/guide/translations';
 
 const routeRegex = new RegExp(/^\/[^.]*([?#].*)?$/);
 
-/** @type {import('@sveltejs/kit').Handle} */
 export const handle = async ({ event, resolve }) => {
   const { url, request } = event;
   const { pathname } = url;
@@ -12,13 +11,16 @@ export const handle = async ({ event, resolve }) => {
     // Get defined locales
     const supportedLocales = locales.get();
 
+    // Get relative pathname
+    const relativePathname = pathname.replace('/guide', '');
+
     // Try to get locale from `pathname`.
     let locale = supportedLocales.find(
-      (l) => `${l}`.toLowerCase() === `${pathname.match(/[^/]+?(?=\/|$)/)}`.toLowerCase()
+      (l) => `${l}`.toLowerCase() === `${relativePathname.match(/[^/]+?(?=\/|$)/)}`.toLowerCase()
     );
 
     // If route locale is not supported
-    if (!locale) {
+    if (!locale && pathname.startsWith('/guide')) {
       // Get user preferred locale
       locale = `${`${request.headers.get('accept-language')}`.match(/[a-zA-Z]+?(?=-|_|,|;)/)}`.toLowerCase();
 
@@ -26,7 +28,10 @@ export const handle = async ({ event, resolve }) => {
       if (!supportedLocales.includes(locale)) locale = defaultLocale;
 
       // 301 redirect
-      return new Response(undefined, { headers: { location: `/${locale}${pathname}` }, status: 301 });
+      return new Response(undefined, {
+        headers: { location: `/guide/${locale}${pathname.replace('/guide', '')}` },
+        status: 301,
+      });
     }
 
     // Add html `lang` attribute

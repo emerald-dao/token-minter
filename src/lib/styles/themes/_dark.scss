@@ -22,6 +22,6 @@ $dark: (
     heading: map-deep-get($colors, neutral, 100),
     text-strong: map-deep-get($colors, neutral, 100),
     text: map-deep-get($colors, neutral, 200),
-    text-soft: map-deep-get($colors, neutral, 900),
+    text-soft: map-deep-get($colors, neutral, 400),
   ),
 );

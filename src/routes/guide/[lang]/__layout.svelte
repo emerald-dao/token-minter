@@ -5,7 +5,8 @@
   export const load = async ({ fetch, params, url }) => {
     try {
       const { pathname } = url;
-      const lang = `${pathname.match(/[^/]+?(?=\/|$)/) || ''}`;
+      const relativePathname = pathname.replace('/guide', '');
+      const lang = `${relativePathname.match(/[^/]+?(?=\/|$)/) || ''}`;
 
       const route = pathname.replace(new RegExp(`^/${lang}`), '');
 
@@ -34,11 +35,10 @@
 
 <script>
   import { t, locales, locale } from '$lib/guide/translations';
-
   import { goto } from '$app/navigation';
-  import { page } from '$app/stores';
 
   import '$lib/styles/guide/guide.scss';
+  
   import GuideNav from "$lib/components/sections/guide/GuideNav.svelte";
 
   export let chapters
@@ -48,7 +48,7 @@
 
 <div class="main-wrapper">
   <nav>
-    <select on:change="{({ target }) => goto(`${target.value}/guide/index`)}">
+    <select on:change="{({ target }) => goto(`/guide${target.value}/index`)}">
       {#each $locales as lc}
         <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
       {/each}
