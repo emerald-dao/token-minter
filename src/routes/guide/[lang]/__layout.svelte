@@ -48,7 +48,7 @@
 
 <div class="main-wrapper">
   <nav>
-    <select on:change="{({ target }) => goto(`/guide${target.value}/index`)}">
+    <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
       {#each $locales as lc}
         <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
       {/each}

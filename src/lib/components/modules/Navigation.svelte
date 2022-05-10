@@ -6,7 +6,7 @@
     <a href="/collection-generator" sveltekit:prefetch>Collection Generator</a>
   </li>
   <li>
-    <a href="/guide/index" sveltekit:prefetch>Guide</a>
+    <a href="/guide/welcome" sveltekit:prefetch>Guide</a>
   </li>
   <li>
     <a href="https://discord.com/invite/emeraldcity" target="_blank">Emerald City</a>

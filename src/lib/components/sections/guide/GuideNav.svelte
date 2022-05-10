@@ -1,14 +1,11 @@
-
 <script>
   // Make the link of the active chapter active
   import { page } from '$app/stores';
 
-  const pathname = $page.url.pathname;
-  const relativePathname = pathname.replace('/guide', '');
-  const lang = `${relativePathname.match(/[^/]+?(?=\/|$)/) || ''}`;
-  
+  $: pathname = $page.url.pathname;
+  $: relativePathname = pathname.replace('/guide', '');
+  $: lang = `${relativePathname.match(/[^/]+?(?=\/|$)/) || ''}`; 
   $: url = $page.url.pathname
-
 
   export let chapters;
 </script>
