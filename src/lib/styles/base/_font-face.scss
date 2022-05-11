@@ -6,9 +6,17 @@
   src: url('/fonts/inter/inter.ttf') format('truetype');
 }
 
+//*	ROBOTO FLEX  -  Variable Font (wght)
+@font-face {
+  font-family: 'roboto-flex';
+  font-weight: 100 900;
+  font-style: normal;
+  src: url('/fonts/roboto-flex/RobotoFlex.ttf') format('truetype');
+}
+
 //*	JETBRAINS MONO  -  Variable Font (wght)
 @font-face {
-  font-family: 'inter';
+  font-family: 'jet-brains-mono';
   font-weight: 100 900;
   font-style: normal;
   src: url('/fonts/jetbrains-mono/JetBrainsMono.ttf') format('truetype');

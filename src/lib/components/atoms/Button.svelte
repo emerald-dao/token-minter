@@ -2,7 +2,6 @@
   let buttonProps = {
     class:[$$restProps.class]
   }
-  // export let disabled = false
   export let href;
 </script>
 
@@ -34,11 +33,11 @@
 <style type="scss">
   button, a {
     width: fit-content;
-    background: var(--clr-primary-main);
-    color: black;
-    /* font-family: var(--font-accent); */
-    padding: 0.5em 1.4em;
-    border-radius: 5em;
+    background: linear-gradient(to left, var(--clr-primary-main), var(--clr-accent-main));
+    color: var(--clr-font-text-button);
+    font-family: var(--font-mono);
+    padding: 0.3em 1.5em;
+    border-radius: .5em;
     display: flex;
     flex-direction: row;
     align-items: center;

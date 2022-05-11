@@ -1,5 +1,5 @@
 <script>
-	import { Section, Container } from "$lib/components/atoms/index";
+	import { Section, Container, Button } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/PrismJS.svelte";
 	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
@@ -27,8 +27,8 @@
 <Section>
 	<Container>
 		<div class="left-side">
-			<button on:click={logIn}>Log In</button>
-			<button on:click={unauthenticate}>Log Out</button>
+			<Button class="small" on:click={logIn}>Log In</Button>
+			<Button class="small" on:click={unauthenticate}>Log Out</Button>
 			<h1>User: {$user?.addr}</h1>
 			<label for="contract-name">Contract Name</label>
 			<input
@@ -55,18 +55,18 @@
 				placeholder="10"
 				id="price"
 			/>
-			<button
-				class="secondary"
+			<Button
+				class="small"
 				on:click={() => ($contractInfo.openMinting = !$contractInfo.openMinting)}
-				>Open Minting: {$contractInfo.openMinting}</button
+				>Open Minting: {$contractInfo.openMinting}</Button
 			>
-			<button
-				class="secondary"
+			<Button
+				class="small"
 				on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
-				>Start Minting: {$contractInfo.startMinting}</button
+				>Start Minting: {$contractInfo.startMinting}</Button
 			>
-			<button class="secondary" on:click={() => addParameter(fieldName, fieldType)}
-				>Add Parameter</button
+			<Button class="small" on:click={() => addParameter(fieldName, fieldType)}
+				>Add Parameter</Button
 			>
 			<div class="grid">
 				<input bind:value={fieldName} type="text" />
@@ -77,7 +77,7 @@
 					<option value="Int">Int</option>
 				</select>
 			</div>
-			<button on:click={deployContract}>Deploy Contract</button>
+			<Button class="small" on:click={deployContract}>Deploy Contract</Button>
 		</div>
 
 		<Transaction /> 

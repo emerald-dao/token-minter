@@ -18,7 +18,7 @@
   }
   
   .large {
-    width: min(90%, 80rem)
+    width: min(90%, 90rem)
   }
 
   .medium {

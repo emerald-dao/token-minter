@@ -1,7 +1,14 @@
 article {
-  padding: 6rem;
+  * {
+    font-size: var(--fs-300);
+  }
 
-  h1,
+  p:not([class]),
+  ul:not([class]),
+  li:not([class]) {
+    max-width: 100%;
+  }
+
   h2,
   h3,
   h4 {
@@ -15,14 +22,15 @@ article {
   }
 
   h1 {
-    font-size: var(--fs-600);
-    font-weight: 600;
+    font-size: var(--fs-500);
+    font-weight: 500;
     text-transform: uppercase;
+    margin-bottom: 1.3em;
   }
 
   h2 {
     font-size: var(--fs-400);
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 1.2em;
   }
   h2::before,

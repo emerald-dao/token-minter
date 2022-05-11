@@ -34,29 +34,32 @@
 </script>
 
 <script>
+  import '$lib/styles/base/guide.scss';
+
+  import { Section, Container } from "$lib/components/atoms/index";
   import { t, locales, locale } from '$lib/guide/translations';
   import { goto } from '$app/navigation';
-
-  import '$lib/styles/guide/guide.scss';
   
-  import GuideNav from "$lib/components/sections/guide/GuideNav.svelte";
+  import GuideSidebarNav from "$lib/components/sections/guide/GuideSidebarNav.svelte";
 
   export let chapters
 </script>
 
 
-
-<div class="main-wrapper">
-  <nav>
-    <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
-      {#each $locales as lc}
-        <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
-      {/each}
-    </select>
-   <GuideNav chapters={chapters}/>
-  </nav>
-   <slot/>
-</div>
+<Section padding="small">
+  <Container width="large">
+    <div class="main-wrapper">
+      <nav>
+        <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+          {#each $locales as lc}
+            <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
+          {/each}
+        </select>
+      <GuideSidebarNav chapters={chapters}/>
+      </nav>
+      <slot/>
+  </Container>
+</Section>
 
 <style type="scss">
   .main-wrapper {
@@ -73,11 +76,21 @@
     align-self: start;
     overflow: auto;
     position: sticky;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
     // TODO: Add top offset variable
-    top: 1rem;
+    top: 4rem;
     max-height: 100vh;
-    background-color: var(--clr-background-secondary);
-    padding-top: 3rem;
-    padding-bottom: 3rem;
+    border-right: 0.5px solid var(--clr-font-text-soft);
+    padding-bottom: 2em;
+  }
+
+  select {
+    margin-bottom: 1em;
   }
 </style>
+
+  
+ 
