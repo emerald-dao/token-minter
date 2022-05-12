@@ -1,7 +1,7 @@
 ---
 title: Token Minter Guide
 author: Jacob Tucker
-chapter: 5
+index: 5
 language: en
 ---
 

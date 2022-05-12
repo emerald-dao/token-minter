@@ -3,12 +3,10 @@
 
 $dark: (
   primary: (
+    soft: map-deep-get($colors, green, 500),
     main: map-deep-get($colors, green, 200),
+    hard: map-deep-get($colors, green, 100),
     hover: map-deep-get($colors, green, 100),
-  ),
-  secondary: (
-    main: map-deep-get($colors, red, 400),
-    hover: map-deep-get($colors, red, 500),
   ),
   accent: (
     main: map-deep-get($colors, blue, 400),
@@ -23,5 +21,10 @@ $dark: (
     text-strong: map-deep-get($colors, neutral, 100),
     text: map-deep-get($colors, neutral, 200),
     text-soft: map-deep-get($colors, neutral, 400),
+    text-button: map-deep-get($colors, neutral, 800),
+  ),
+  gradient: (
+    primary: map-deep-get($colors, green, transparent),
+    secondary: map-deep-get($colors, blue, transparent),
   ),
 );

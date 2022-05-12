@@ -8,9 +8,9 @@ $blue: (
   saturation: 100%,
 );
 
-$red: (
-  hue: 40,
-  saturation: 100%,
+$neutral: (
+  hue: 0,
+  saturation: 9%,
 );
 
 $colors: (
@@ -20,6 +20,7 @@ $colors: (
     300: hsl(map-get($green, 'hue'), map-get($green, 'saturation'), 60%),
     400: hsl(map-get($green, 'hue'), map-get($green, 'saturation'), 37%),
     500: hsl(map-get($green, 'hue'), map-get($green, 'saturation'), 20%),
+    transparent: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 20%, 0.5),
   ),
   blue: (
     100: hsl(map-get($blue, 'hue'), map-get($blue, 'saturation'), 80%),
@@ -27,24 +28,17 @@ $colors: (
     300: hsl(map-get($blue, 'hue'), map-get($blue, 'saturation'), 60%),
     400: hsl(map-get($blue, 'hue'), map-get($blue, 'saturation'), 43%),
     500: hsl(map-get($blue, 'hue'), map-get($blue, 'saturation'), 20%),
-  ),
-  red: (
-    100: hsl(map-get($red, 'hue'), map-get($red, 'saturation'), 80%),
-    200: hsl(map-get($red, 'hue'), map-get($red, 'saturation'), 70%),
-    300: hsl(map-get($red, 'hue'), map-get($red, 'saturation'), 60%),
-    400: hsl(map-get($red, 'hue'), map-get($red, 'saturation'), 43%),
-    500: hsl(map-get($red, 'hue'), map-get($red, 'saturation'), 20%),
+    transparent: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 30%, 0.6),
   ),
   neutral: (
-    100: hsl(0, 0%, 100%),
-    200: hsl(0, 0%, 87%),
-    300: hsl(0, 0%, 80%),
-    400: hsl(0, 0%, 70%),
-    500: hsl(0, 0%, 60%),
-    600: hsl(0, 0%, 50%),
-    700: hsl(0, 0%, 40%),
-    800: hsl(0, 0%, 30%),
-    900: hsl(0, 0%, 15%),
-    1000: hsl(0, 0%, 0%),
+    100: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 100%),
+    200: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 90%),
+    300: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 78%),
+    400: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 67%),
+    500: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 54%),
+    600: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 39%),
+    700: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 27%),
+    800: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 14%),
+    900: hsl(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 0%),
   ),
 );

@@ -1,6 +1,6 @@
 <script>
 
-  import LibLoader from './LibLoader.svelte'
+  import LibLoader from './prism/LibLoader.svelte'
   export let code; 
 
 

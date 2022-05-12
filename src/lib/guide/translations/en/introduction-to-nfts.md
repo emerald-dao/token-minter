@@ -1,7 +1,7 @@
 ---
 title: Introduction to NFTs
 author: Jacob Tucker
-chapter: 2
+index: 2
 language: en
 ---
 

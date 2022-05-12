@@ -36,24 +36,6 @@
 		}
 	}
 
-	// let timer = null
-
-	// function handleClick(i) {
-	// 	if (timer) clearTimeout(timer)
-	// 	disableTracker = true
-	// 	active = i
-	// 	timer = setTimeout(() => {
-	// 		disableTracker = false
-	// 		grabElements()
-	// 	}, 600)
-	// 	if (menuOpen) menuOpen = false
-	// 	const here = document.location.toString().split('#')[0]
-	// 	document.location = here + '#' + [paths[i]]
-	// }
-	// let menuOpen = false
-
-  // end frackit code
-
   // The TOC data is all given as metadata from custom made rehype plugin.
   export let contentsArray;
 
@@ -104,10 +86,11 @@
   ul {
     list-style: none;
     padding: 0;
-  }
-
-  li {
-    margin-bottom: 0.5em;
+    border-left: 0.2px solid var(--clr-font-text-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding-block: 0.6em;
   }
 
   .link-wrapper {
@@ -115,18 +98,22 @@
     flex-direction: row;
     align-items: center;
   }
+  
   a {
     font-size: var(--fs-300);
     text-decoration: none;
     color: var(--clr-font-text-soft);
   }
+
   a::before {
     content: '•';
     position: relative;
-    left: -0.5ch;
-    font-size: var(--fs-500);
+    left: -0.45ch;
+    padding-right: 0.5em;
+    font-size: var(--fs-400);
     vertical-align: middle;
   }
+
   a:hover::before {
     color: var(--clr-primary-main);
   }
@@ -134,5 +121,4 @@
 	.active a::before{
 		color: var(--clr-primary-main);
 	}
-
 </style>

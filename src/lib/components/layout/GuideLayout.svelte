@@ -15,16 +15,15 @@
 
 <style type="scss">
   aside {
-    background-color: var(--clr-background-secondary);
     grid-area: toc;
     align-self: start;
     overflow: auto;
     position: sticky;
     /* TODO: Add top offset variable */
-    top: 1rem;
+    top: 12rem;
     max-height: 100vh;
   }
-
+  
   article {
     grid-area: main;
     display: flex;
@@ -33,7 +32,8 @@
     justify-content: space-between;
     align-items: stretch;
     align-content: stretch;
-    width: 100%;
+    padding: 0;
+    max-width: 60ch;
     height: 100%;
   }
 </style>

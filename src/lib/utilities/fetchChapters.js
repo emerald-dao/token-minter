@@ -7,7 +7,7 @@ const fetchChapters = async ({ lang } = {}) => {
     })
   );
 
-  let sortedChapters = chapters.sort((a, b) => a.chapter - b.chapter);
+  let sortedChapters = chapters.sort((a, b) => a.index - b.index);
 
   if (lang) {
     sortedChapters = sortedChapters.filter((chapter) => chapter.language.includes(lang));
@@ -17,7 +17,7 @@ const fetchChapters = async ({ lang } = {}) => {
     title: chapter.title,
     slug: chapter.slug,
     author: chapter.author,
-    chapter: chapter.chapter,
+    index: chapter.index,
     language: chapter.language,
   }));
 

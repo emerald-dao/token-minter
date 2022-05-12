@@ -1,6 +1,6 @@
 <script context="module">
   export const load = async ({ params }) => {
-    try {  
+    try {
       const chapter = await import(`../../../lib/guide/translations/${params.lang}/${params.chapter}.md`)
       return {
         props: {
