@@ -10,13 +10,13 @@
 </script>
 
 <ul>
-  {#each chapters as { slug, title, chapter }}
+  {#each chapters as { slug, title, index }}
   <li>
     <a   
         class:current={pathname === `/guide/${lang}/${slug}`}
         href={slug}
       >
-        {chapter}. {title}  
+        {index}. {title}  
       </a>
     </li>
   {/each}

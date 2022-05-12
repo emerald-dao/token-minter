@@ -1,5 +1,4 @@
 <script>
-  import GuideFooterNav from "../sections/guide/GuideFooterNav.svelte";
   import TableOfContents from "../sections/guide/TableOfContents.svelte";
 
   export let headings;
@@ -12,7 +11,6 @@
 {/if}
 <article>
   <slot/>
-  <GuideFooterNav/>
 </article>
 
 <style type="scss">

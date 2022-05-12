@@ -41,10 +41,10 @@
   import { goto } from '$app/navigation';
   
   import GuideSidebarNav from "$lib/components/sections/guide/GuideSidebarNav.svelte";
+  import GuideFooterNav from "$lib/components/sections/guide/GuideFooterNav.svelte";
 
   export let chapters
 </script>
-
 
 <Section padding="small">
   <Container width="large">
@@ -55,9 +55,13 @@
             <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
           {/each}
         </select>
-      <GuideSidebarNav chapters={chapters}/>
+        <GuideSidebarNav chapters={chapters}/>
       </nav>
       <slot/>
+      <div class="footer-nav">
+        <GuideFooterNav chapters={chapters}/>
+      </div>
+    </div>
   </Container>
 </Section>
 
@@ -65,8 +69,10 @@
   .main-wrapper {
     display: grid;
     grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
+    grid-template-rows: repeat(2, auto);
     gap: 3rem;
-    grid-template-areas: "sidebar main toc";
+    grid-template-areas: "sidebar main toc" 
+                          ". footer-nav .";
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -85,6 +91,10 @@
     max-height: 100vh;
     border-right: 0.5px solid var(--clr-font-text-soft);
     padding-bottom: 2em;
+  }
+  
+  .footer-nav {
+    grid-area: footer-nav;
   }
 
   select {

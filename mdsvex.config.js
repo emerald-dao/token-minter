@@ -30,7 +30,7 @@ const mdsvexConfig = {
   smartypants: {
     dashes: 'oldschool',
   },
-  layout: 'src/lib/components/layout/Guide.svelte',
+  layout: 'src/lib/components/layout/GuideLayout.svelte',
   rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
   remarkPlugins: [headings],
 };

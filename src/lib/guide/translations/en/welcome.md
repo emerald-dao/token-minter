@@ -1,7 +1,7 @@
 ---
 title: Welcome
 author: Jacob Tucker
-chapter: 1
+index: 1
 language: en
 ---
 

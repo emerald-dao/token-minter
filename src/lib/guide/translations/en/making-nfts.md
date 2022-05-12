@@ -1,7 +1,7 @@
 ---
 title: Making an NFT
 author: Jacob Tucker
-chapter: 3
+index: 3
 language: en
 ---
 
