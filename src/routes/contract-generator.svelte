@@ -1,6 +1,6 @@
 <script>
 	import { Section, Container, Button } from "$lib/components/atoms/index";
-	import PrismJS from "$lib/components/PrismJS.svelte";
+	import PrismJS from "$lib/components/prism/PrismJS.svelte";
 	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/components/flow/Transaction.svelte";
