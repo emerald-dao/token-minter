@@ -10,24 +10,24 @@
 
 <style type="scss">
   .padding-top.small {
-    padding-top: 3rem;
-  }
-  .padding-top.medium {
     padding-top: 3.5rem;
   }
-  .padding-top.large {
+  .padding-top.medium {
     padding-top: 4rem;
+  }
+  .padding-top.large {
+    padding-top: 4.5rem;
   }
 
   .padding-bottom.small {
-    padding-bottom: 3rem;
-  }
-
-  .padding-bottom.medium {
     padding-bottom: 3.5rem;
   }
 
-  .padding-bottom.large {
+  .padding-bottom.medium {
     padding-bottom: 4rem;
+  }
+
+  .padding-bottom.large {
+    padding-bottom: 4.5rem;
   }
 </style>
