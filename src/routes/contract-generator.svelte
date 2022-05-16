@@ -4,6 +4,10 @@
 	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/components/flow/Transaction.svelte";
+	import { createForm } from 'felte';
+
+  const { form } = createForm({
+  })
 
 	function addParameter(name, type) {
 		if (name && !$contractInfo.parameters.includes(name)) {
@@ -17,7 +21,6 @@
 
 	let fieldName;
 	let fieldType;
-
 </script>
 
 <svelte:head>
