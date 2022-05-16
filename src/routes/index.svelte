@@ -132,17 +132,18 @@
 
 	h1 {
 		font-size: var(--fs-700);
-		font-weight: 500;
-		text-shadow: 3px 3px 0 var(--clr-accent-main);
+		font-weight: 600;
+		text-shadow: 3px 3px 0 var(--clr-accent-hover);
 
 		span {
 			color: var(--clr-primary-main);
-			text-shadow: 3px 3px 0 var(--clr-accent-main);
+			text-shadow: 3px 3px 0 var(--clr-accent-hover);
 		}
 	}
 
 	h2 {
-		text-shadow: 3px 3px 0 var(--clr-accent-main);
+		font-weight: 600;
+		text-shadow: 3px 3px 0 var(--clr-accent-hover);
 	}
 
 	.flex {

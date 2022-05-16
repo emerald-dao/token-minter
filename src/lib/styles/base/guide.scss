@@ -22,10 +22,11 @@ article {
   }
 
   h1 {
-    font-size: var(--fs-500);
-    font-weight: 500;
+    font-size: var(--fs-600);
+    font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 1.3em;
+    text-shadow: 2.6px 2.6px 0 var(--clr-accent-hover);
   }
 
   h2 {

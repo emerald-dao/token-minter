@@ -9,8 +9,8 @@ $dark: (
     hover: map-deep-get($colors, green, 100),
   ),
   accent: (
-    main: map-deep-get($colors, blue, 400),
-    hover: map-deep-get($colors, blue, 500),
+    main: map-deep-get($colors, blue, 200),
+    hover: map-deep-get($colors, blue, 400),
   ),
   background: (
     primary: map-deep-get($colors, neutral, 900),
