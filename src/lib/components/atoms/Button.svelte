@@ -65,7 +65,7 @@
   }
 
   button:hover {
-    box-shadow: var(--clr-accent-hover) -5px 5px;
-    transition: 0.2s;
+    box-shadow: var(--clr-accent-hover) 4px 4px, var(--clr-accent-soft) 8px 8px;
+    transition: 0.4s;
   }
 </style>

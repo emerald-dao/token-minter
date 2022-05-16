@@ -24,9 +24,9 @@ article {
   h1 {
     font-size: var(--fs-600);
     font-weight: 700;
-    text-transform: uppercase;
     margin-bottom: 1.3em;
-    text-shadow: 2.6px 2.6px 0 var(--clr-accent-hover);
+    color: var(--clr-primary-main);
+    text-shadow: 3px 3px 0 var(--clr-accent-hover);
   }
 
   h2 {

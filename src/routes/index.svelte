@@ -96,7 +96,7 @@
 </Section>
 <Section padding="large">
 	<Container>
-		<div class="flex">
+		<div class="flex invitation">
 			<span class="tagline">EMERALD CITY</span>
 			<h2>Join the community</h2>
 			<p>
@@ -137,7 +137,6 @@
 
 		span {
 			color: var(--clr-primary-main);
-			text-shadow: 3px 3px 0 var(--clr-accent-hover);
 		}
 	}
 
@@ -178,6 +177,21 @@
 		p {
 			font-size: var(--fs-300);
 			max-width: 45ch;
+		}
+	}
+
+	.invitation {
+		background-color: var(--clr-primary-main);
+		border-radius: 0.4rem;
+		padding: 3rem;
+		box-shadow: var(--clr-accent-hover) 8px 8px, var(--clr-accent-soft) 16px 16px;
+
+		h2 {
+			color: var(--clr-font-heading-inverse);
+		}
+
+		p {
+			color: var(--clr-font-text-inverse);
 		}
 	}
 </style>
