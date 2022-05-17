@@ -3,6 +3,16 @@
   export let repeat = 2;
 </script>
 
+<div class="wrapper">
+  <div class="content">
+    {#each Array(repeat) as _, i}
+      <div class="animation center" style="animation-duration: {duration}s">
+        <slot/>
+      </div>
+    {/each}
+  </div>
+</div>
+
 <style>
   .wrapper {
     overflow: hidden; 
@@ -32,13 +42,3 @@
     }
   }
 </style>
-
-<div class="wrapper">
-  <div class="content">
-    {#each Array(repeat) as _, i}
-      <div class="animation center" style="animation-duration: {duration}s">
-        <slot/>
-      </div>
-    {/each}
-  </div>
-</div>

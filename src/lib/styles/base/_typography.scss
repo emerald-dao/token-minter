@@ -19,12 +19,13 @@ h4 {
   font-stretch: 100%;
   line-height: 1.1;
   color: var(--clr-font-heading);
+  text-shadow: 3px 3px 0 var(--clr-accent-hover);
 }
 
 h1 {
   --font-weight: 800;
-
   color: var(--clr-font-heading);
+  text-shadow: 4px 4px 0 var(--clr-accent-hover);
 }
 
 time + p {
