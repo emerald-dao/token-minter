@@ -1,12 +1,13 @@
 <script>
 	import { Section, Container, Button } from "$lib/components/atoms/index";
+	import Marquee from "$lib/components/atoms/Marquee.svelte";
 </script>
 
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
 
-<Section padding="large">
+<Section>
 	<Container width="large">
 		<div class="grid-wrapper">
 			<div class="grid-child">
@@ -23,6 +24,7 @@
 		</div>
 	</Container>
 </Section>
+<Marquee repeat="{10}">CRAFTED BY EMERALD CITY DAO</Marquee>
 <Section padding="large">
 	<Container>
 		<div class="flex">
