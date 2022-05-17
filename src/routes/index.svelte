@@ -1,4 +1,5 @@
 <script>
+	import Icon from "@iconify/svelte";
 	import { Section, Container, Button } from "$lib/components/atoms/index";
 	import Marquee from "$lib/components/atoms/Marquee.svelte";
 </script>
@@ -24,7 +25,14 @@
 		</div>
 	</Container>
 </Section>
-<Marquee repeat="{10}">CRAFTED BY EMERALD CITY DAO</Marquee>
+<Marquee repeat="{10}">
+		<div class="marquee-element">
+			CRAFTED BY EMERALD CITY DAO
+		</div>
+		<div class="marquee-element emerald-wrapper">
+			<Icon icon="ion:diamond-outline"/>
+		</div>
+</Marquee>
 <Section>
 	<Container>
 		<div class="flex">
@@ -183,17 +191,29 @@
 	}
 
 	.invitation {
-		background-color: var(--clr-primary-main);
+		background-color: var(--clr-accent-soft);
 		border-radius: 0.4rem;
-		padding: 3rem;
-		box-shadow: var(--clr-accent-hover) 8px 8px, var(--clr-accent-soft) 16px 16px;
+		padding: 4rem;
+		box-shadow: var(--clr-accent-main) 8px 8px, var(--clr-accent-hover) 16px 16px;
 
 		h2 {
-			color: var(--clr-font-heading-inverse);
+			color: var(--clr-font-heading);
 		}
 
 		p {
-			color: var(--clr-font-text-inverse);
+			color: var(--clr-font-text);
 		}
+
+	}
+
+	.marquee-element {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+		margin-inline: 3rem
+  }
+
+	.emerald-wrapper {
+		margin-top: -0.3rem;
 	}
 </style>
