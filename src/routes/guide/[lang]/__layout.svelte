@@ -47,7 +47,7 @@
 </script>
 
 <Section padding="small">
-  <Container width="large">
+  <Container class="width-large">
     <div class="main-wrapper">
       <nav>
         <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">

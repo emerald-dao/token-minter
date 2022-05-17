@@ -7,8 +7,8 @@
 	<title>Home</title>
 </svelte:head>
 
-<Section>
-	<Container width="large">
+<Section class="padding-top-small">
+	<Container class="width-large">
 		<div class="grid-wrapper">
 			<div class="grid-child">
 				<h1>Tools for creating 
@@ -25,7 +25,7 @@
 	</Container>
 </Section>
 <Marquee repeat="{10}">CRAFTED BY EMERALD CITY DAO</Marquee>
-<Section padding="large">
+<Section>
 	<Container>
 		<div class="flex">
 			<!-- TODO: ADD 3D SHAPE -->
@@ -39,7 +39,7 @@
 		</div>
 	</Container>
 </Section>
-<Section padding="large">
+<Section>
 	<Container>
 		<div class="flex">
 			<h2>Create Your NFT Collection in Seconds</h2>
@@ -65,7 +65,7 @@
 		</div>
 	</Container>
 </Section>
-<Section padding="large">
+<Section>
 	<Container width="large">
 		<div class="grid-wrapper">
 			<div class="grid-child sticky">
@@ -96,7 +96,7 @@
 		</div>
 	</Container>
 </Section>
-<Section padding="large">
+<Section>
 	<Container>
 		<div class="flex invitation">
 			<span class="tagline">EMERALD CITY</span>
