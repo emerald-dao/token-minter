@@ -1,33 +1,37 @@
 <script>
-  export let paddingTop = true
-  export let paddingBottom = true
-  export let padding = "medium"
+  let sectionProps = {
+    class:[$$restProps.class]
+  }
 </script>
 
-<section class={padding} class:padding-top={paddingTop} class:padding-bottom={paddingBottom}>
+<section {...sectionProps}>
   <slot/>
 </section>
 
 <style type="scss">
-  .padding-top.small {
-    padding-top: 3rem;
+  section {
+    padding-block: 6rem;
   }
-  .padding-top.medium {
-    padding-top: 3.5rem;
+  .padding-top {
+    &-small {
+      padding-top: 3.5rem;
+    }
+    &-large {
+      padding-top: 8rem;
+    }
+    &-none {
+      padding-top: 0;
+    }
   }
-  .padding-top.large {
-    padding-top: 4rem;
-  }
-
-  .padding-bottom.small {
-    padding-bottom: 3rem;
-  }
-
-  .padding-bottom.medium {
-    padding-bottom: 3.5rem;
-  }
-
-  .padding-bottom.large {
-    padding-bottom: 4rem;
+  .padding-bottom {
+    &-small {
+      padding-bottom: 3.5rem;
+    }
+    &-large {
+      padding-bottom: 7rem;
+    }
+    &-none {
+      padding-bottom: 0;
+    }
   }
 </style>

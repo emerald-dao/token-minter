@@ -1,35 +1,35 @@
 <script>
-  export let width = "medium"
-  export let gutterX = true
-  export let gutterY = true
+  let containerProps = {
+    class:[$$restProps.class]
+  }
 </script>
 
-<div class={width} class:gutter-x={gutterX} class:gutter-y={gutterY}>
+<div {...containerProps}>
   <slot/>
 </div>
 
-<style>
+<style type="scss">
   div {
     margin-inline: auto;
+    width: min(90%, 65rem);
+    padding-block: 1.5rem;
   }
 
-  .full {
-    width: 90%;
-  }
-  
-  .large {
-    width: min(90%, 90rem)
-  }
-
-  .medium {
-    width: min(90%, 60rem)
-  }
-  
-  .small {
-    width: min(90%, 40rem)
+  .width {
+    &-full {
+      width: 90%;
+    }
+    &-large {
+      width: min(90%, 75rem);
+    }
+    &-small {
+      width: min(90%, 50rem);
+    }
   }
 
   .gutter-y {
-    padding-block: 1.5rem;
+    &-none {
+      padding-block: 0;
+    }
   }
 </style>

@@ -37,7 +37,7 @@
     color: var(--clr-font-text-button);
     font-family: var(--font-mono);
     padding: 0.3em 1.5em;
-    border-radius: .5em;
+    border-radius: 0.2em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -48,19 +48,24 @@
 
   .ghost {
     background: transparent;
-    border: 2px solid var(--clr-primary-main);
-    color: var(--clr-primary-main);
+    border: 2px solid var(--clr-accent-main);
+    color: var(--clr-accent-main);
   }
 
   .small {
-    font-size: var(--fs-300);
+    font-size: var(--fs-200);
   }
 
   .medium {
-    font-size: var(--fs-400);
+    font-size: var(--fs-300);
   }
 
   .large {
-    font-size: var(--fs-500);
+    font-size: var(--fs-400);
+  }
+
+  button:hover {
+    box-shadow: var(--clr-accent-hover) 4px 4px, var(--clr-accent-soft) 8px 8px;
+    transition: 0.4s;
   }
 </style>

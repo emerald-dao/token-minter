@@ -25,7 +25,7 @@
 </script>
 
 <header>
-  <Container width="large" >
+  <Container class="width-large">
     <nav>
       <!-- Desktop menu -->
       <div id="desktop-menu">
@@ -49,7 +49,6 @@
         </div>
       {/if}
     </nav>
-
   </Container>
 </header>
 
