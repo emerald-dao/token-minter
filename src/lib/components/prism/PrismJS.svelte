@@ -17,10 +17,11 @@
 <style>
   pre {
     padding: 1rem;
-    background-color: #f9f9f9;
+    background-color: hsla(0, 0%, 0%, 0.2);
     border-radius:0.2rem;
+    overflow: auto;
   }
-  
+
   code {
     white-space: pre-wrap;
     font-size: 12px;
