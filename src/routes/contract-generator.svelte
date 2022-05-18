@@ -6,8 +6,7 @@
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
 
-  const { form } = createForm({
-  })
+  const { form } = createForm({})
 
 	function addParameter(name, type) {
 		if (name && !$contractInfo.parameters.includes(name)) {
@@ -24,14 +23,12 @@
 </script>
 
 <svelte:head>
-	<title>Home</title>
+	<title>Contract Generatord</title>
 </svelte:head>
 
 <Section>
 	<Container>
 		<div class="left-side">
-			<Button class="small" on:click={logIn}>Log In</Button>
-			<Button class="small" on:click={unauthenticate}>Log Out</Button>
 			<h1>User: {$user?.addr}</h1>
 			<label for="contract-name">Contract Name</label>
 			<input
