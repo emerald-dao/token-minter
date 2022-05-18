@@ -1,12 +1,12 @@
 <script>
-	import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
+	import { Section, Container, Button, Stack, Tagline } from "$lib/components/atoms/index";
 </script>
 
 <Section>
 	<Container>
 		<Stack>
 			<!-- TODO: ADD 3D SHAPE -->
-			<span class="tagline">CRATE YOUR COLLECTION</span>
+			<Tagline>CRATE YOUR COLLECTION</Tagline>
 			<h2>Token Minter</h2>
 			<p>Deploy collections and contract without code.</p>
 			<div class="buttons-group">

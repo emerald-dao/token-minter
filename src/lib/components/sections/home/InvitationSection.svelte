@@ -1,12 +1,12 @@
 <script>
-	import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
+	import { Section, Container, Button, Stack, Tagline } from "$lib/components/atoms/index";
 </script>
 
 <Section>
 	<Container>
 		<div class="invitation">
 			<Stack>
-				<span class="tagline">EMERALD CITY</span>
+				<Tagline>Emerald City DAO</Tagline>
 				<h2>Join the community</h2>
 				<p>
 					We are the first DAO on the Flow Blockchain 
@@ -31,6 +31,7 @@
 		}
 
 		p {
+			text-align: center;
 			color: var(--clr-font-text);
 		}
 	}

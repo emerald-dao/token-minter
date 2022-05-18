@@ -16,19 +16,19 @@
 			</div>
 			<Stack>
 				<div>
-					<h5>STEP 1</h5>
+					<h4>STEP 1</h4>
 					<p>Aliquip est Lorem velit incididunt aute. Et nostrud reprehenderit dolore culpa sint enim. Nulla culpa labore sunt id aliquip ea dolore pariatur laborum do sint.</p>
 				</div>
 				<div>
-					<h5>STEP 2</h5>
+					<h4>STEP 2</h4>
 					<p>Aliquip est Lorem velit incididunt aute. Et nostrud reprehenderit dolore culpa sint enim. Nulla culpa labore sunt id aliquip ea dolore pariatur laborum do sint.</p>
 				</div>
 				<div>
-					<h5>STEP 3</h5>
+					<h4>STEP 3</h4>
 					<p>Aliquip est Lorem velit incididunt aute. Et nostrud reprehenderit dolore culpa sint enim. Nulla culpa labore sunt id aliquip ea dolore pariatur laborum do sint.</p>
 				</div>
 				<div>
-					<h5>STEP 4</h5>
+					<h4>STEP 4</h4>
 					<p>Aliquip est Lorem velit incididunt aute. Et nostrud reprehenderit dolore culpa sint enim. Nulla culpa labore sunt id aliquip ea dolore pariatur laborum do sint.</p>
 				</div>
 			</Stack>
@@ -37,10 +37,10 @@
 </Section>
 
 <style type="scss">
-	h5 {
-		font-family: var(--font-mono);
-		font-weight: 200;
-		color: var(--clr-primary-main)
+	h4 {
+		font-size: var(--fs-400);
+		margin-bottom: 1em;
+		margin-top: 2em;
 	}
 	.sticky {
 		position: sticky;
