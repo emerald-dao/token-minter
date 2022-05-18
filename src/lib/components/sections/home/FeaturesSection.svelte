@@ -1,10 +1,10 @@
 <script>
-	import { Section, Container, AdaptableGrid } from "$lib/components/atoms/index";
+	import { Section, Container, Stack, AdaptableGrid } from "$lib/components/atoms/index";
 </script>
 
 <Section>
 	<Container>
-		<div class="flex">
+		<Stack align="center" gap="4rem">
 			<h2>Create Your NFT Collection in Seconds</h2>
 			<!-- TODO: ADD GENERATOR PREVIEW -->
 			<AdaptableGrid>
@@ -25,16 +25,12 @@
 					<p>Aliquip est Lorem velit incididunt aute. Et nostrud reprehenderit dolore culpa sint enim. Nulla culpa labore sunt id aliquip ea dolore pariatur laborum do sint.</p>
 				</div>
 			</AdaptableGrid>
-		</div>
+		</Stack>
 	</Container>
 </Section>
 
 <style type="scss">
-  .flex {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 2rem;
+  h2 {
 		text-align: center;
 	}
 

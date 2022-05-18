@@ -1,10 +1,10 @@
 <script>
-	import { Section, Container, Button, VStack } from "$lib/components/atoms/index";
+	import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
 </script>
 
 <Section>
 	<Container>
-		<VStack align="flex-start">
+		<Stack>
 			<!-- TODO: ADD 3D SHAPE -->
 			<span class="tagline">CRATE YOUR COLLECTION</span>
 			<h2>Token Minter</h2>
@@ -13,7 +13,7 @@
 				<Button class="small ghost">Contract Generator</Button>
 				<Button class="small">Collection Generator</Button>
 			</div>
-		</VStack>
+		</Stack>
 	</Container>
 </Section>
 

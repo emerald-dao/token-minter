@@ -1,18 +1,20 @@
 <script>
-	import { Section, Container, Button } from "$lib/components/atoms/index";
+	import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
 </script>
 
 <Section>
 	<Container>
-		<div class="flex invitation">
-			<span class="tagline">EMERALD CITY</span>
-			<h2>Join the community</h2>
-			<p>
-				We are the first DAO on the Flow Blockchain 
-				<br/>
-				<b>Educate, build and goverm</b>
-			</p>
-			<Button>Join Discord</Button>
+		<div class="invitation">
+			<Stack>
+				<span class="tagline">EMERALD CITY</span>
+				<h2>Join the community</h2>
+				<p>
+					We are the first DAO on the Flow Blockchain 
+					<br/>
+					<b>Educate, build and goverm</b>
+				</p>
+				<Button>Join Discord</Button>
+			</Stack>
 		</div>
 	</Container>
 </Section>

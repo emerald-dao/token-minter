@@ -1,19 +1,19 @@
 <script>
 	import Icon from "@iconify/svelte";
-	import { Section, Container, Button, AdaptableGrid, Marquee, VStack } from "$lib/components/atoms/index";
+	import { Section, Container, Button, AdaptableGrid, Marquee, Stack } from "$lib/components/atoms/index";
 </script>
 
 <Section class="padding-top-small">
 	<Container class="width-large">
 		<AdaptableGrid>
-			<VStack>
+			<Stack align="start">
 				<h1>Tools for creating 
 					<span>NFT Collections and Contracts</span> 
 					in the Flow Blockchain
 				</h1>
 				<p>Cupidatat amet irure adipisicing ut. Esse incididunt aliquip ex enim nostrud magna ea nostrud id mollit occaecat. Duis id voluptate veniam tempor velit id fugiat ut.</p>
 				<Button>Start</Button>
-			</VStack>
+			</Stack>
 			<div class="grid-child">
 				<!-- TODO: ADD 3D SHAPE -->
 			<div/>

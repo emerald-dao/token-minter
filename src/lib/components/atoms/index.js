@@ -5,4 +5,4 @@ export { default as ThemeToggle } from './ThemeToggle.svelte';
 export { default as AnimatedHamburger } from './AnimatedHamburger.svelte';
 export { default as AdaptableGrid } from './AdaptableGrid.svelte';
 export { default as Marquee } from './Marquee.svelte';
-export { default as VStack } from './VStack.svelte';
+export { default as Stack } from './Stack.svelte';
