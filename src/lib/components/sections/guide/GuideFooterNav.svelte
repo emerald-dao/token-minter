@@ -47,12 +47,17 @@
     flex-direction: column;
     gap: 0.3em;
     border: 1px solid var(--clr-primary-soft);
-    border-radius: 1.5em;
+    border-radius: 0.4em;
     padding: 1em;
     width: 100%;
     font-family: var(--font-mono);
     font-size: var(--fs-300);
     text-decoration: none;
+  }
+
+  .card:hover {
+    box-shadow: var(--clr-primary-main) -5px 5px;
+    transition: 0.4s;
   }
 
   .card-direction {

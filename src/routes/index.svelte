@@ -1,13 +1,19 @@
 <script>
-	import { Section, Container } from "$lib/components/atoms/index";
+	import { 
+		HeroSection, 
+		CreateCollectionSection, 
+		FeaturesSection, 
+		LearnSection, 
+		InvitationSection 
+	} from "$lib/components/sections/home/index";
 </script>
 
 <svelte:head>
 	<title>Home</title>
 </svelte:head>
 
-<Section>
-	<Container>
-		<h1>Home</h1>
-	</Container>
-</Section>
+<HeroSection/>
+<CreateCollectionSection/>
+<FeaturesSection/>
+<LearnSection/>
+<InvitationSection/>

@@ -8,6 +8,7 @@
     "preview": "svelte-kit preview"
   },
   "devDependencies": {
+    "@iconify/svelte": "^2.2.1",
     "@jsdevtools/rehype-toc": "^3.0.2",
     "@onflow/fcl": "^1.0.0-alpha.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
