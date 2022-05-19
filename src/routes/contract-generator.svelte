@@ -8,7 +8,7 @@
 
   const { form } = createForm({
 		onSubmit(values, context) {
-			alert('success');
+			deployContract();
 		},
 	})
 
@@ -70,24 +70,33 @@
 						bind:value={$contractInfo.payment}
 					/>
 
-					<Button
-						class="small"
-						on:click={() => ($contractInfo.openMinting = !$contractInfo.openMinting)}
-					>
-						Open Minting: {$contractInfo.openMinting}
-					</Button>
-					
-					<Button
-						class="small"
-						on:click={() => ($contractInfo.startMinting = !$contractInfo.startMinting)}
-					>
-						Start Minting: {$contractInfo.startMinting}
-					</Button>
+					<fieldset>
+						<legend>Minting Options</legend>
+						
+						<input 
+							name="open-minting" 
+							id="open-minting" 
+							type="checkbox"
+							bind:checked={$contractInfo.openMinting}
+						>
+						<label for="open-minting">Open Minting</label>
 
-					<Button class="small" on:click={() => addParameter(fieldName, fieldType)}>
+						<input 
+							name="start-minting" 
+							id="start-minting" 
+							type="checkbox"
+							bind:checked={$contractInfo.startMinting}
+						>
+						<label for="start-minting">Start Minting</label>
+					</fieldset>
+					
+					<button 
+						type="button" 
+						on:click={() => addParameter(fieldName, fieldType)}
+					>
 						Add Parameter
-					</Button>
-					<div class="grid">
+					</button>
+					<div>
 						<input bind:value={fieldName} type="text" />
 						<select bind:value={fieldType} name="types" id="types">
 							<option value="String">String</option>
