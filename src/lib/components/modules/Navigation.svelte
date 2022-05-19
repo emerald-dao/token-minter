@@ -21,6 +21,8 @@
     list-style-type: none;
     gap: 2em;
     padding: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-200);
   }
 
   a {
