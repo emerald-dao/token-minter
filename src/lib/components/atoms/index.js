@@ -8,3 +8,4 @@ export { default as Stack } from './Stack.svelte';
 export { default as Tagline } from './Tagline.svelte';
 export { default as ThemeToggle } from './ThemeToggle.svelte';
 export { default as FlowConnect } from './FlowConnect.svelte';
+export { default as Logo } from './Logo.svelte';

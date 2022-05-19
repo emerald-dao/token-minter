@@ -2,7 +2,7 @@
   import { fly } from 'svelte/transition'
   import { navigating } from '$app/stores';
 
-  import { Container, Button, ThemeToggle, AnimatedHamburger, FlowConnect} from "$lib/components/atoms/index.js";
+  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect} from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
 
   export let open = false
@@ -29,7 +29,7 @@
     <nav>
       <!-- Desktop menu -->
       <div id="desktop-menu">
-        <div>Logo</div>
+        <Logo/>
         <Navigation/>
         <ThemeToggle/>
         <FlowConnect/>
