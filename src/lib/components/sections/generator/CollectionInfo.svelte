@@ -5,6 +5,7 @@
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
+
   
 	function addParameter(name, type) {
     if (name && !$contractInfo.parameters.includes(name)) {
@@ -16,11 +17,14 @@
 		}
 	}
   
-  export let onSubmit;
+	export let initialValues;
+  export let onSubmit = deployContract();
 	let fieldName;
+  export let onBack;
 	let fieldType;
 
-  const { form } = createForm({ onSubmit });
+  
+  const { form, data } = createForm({ onSubmit });
 </script>
 
 <svelte:head>
@@ -103,6 +107,9 @@
 						</select>
 					</div>
 
+					<Button type="button" on:click="{() => onBack($data)}">
+    				Previous page
+					</Button>
 					<Button type="submit" class="small">Deploy Contract</Button>
 				</form>
 			</Stack>
@@ -123,6 +130,7 @@
 		font-size: var(--fs-600);
 		margin-bottom: 1rem;
 	}
+  
 	h2 {
 		font-size: var(--fs-500)
 	}

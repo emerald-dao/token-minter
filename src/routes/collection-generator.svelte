@@ -1,47 +1,45 @@
 <script>
-  // We import our page components (similar to the one above).
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
 
-  const pages = [CollectionInfo, Upload];
+  const sections = [CollectionInfo, Upload];
 
-  // The current page of our form.
-  let page = 0;
+  // The current section of our form.
+  let section = 0;
 
-  // The state of all of our pages
-  let pagesState = [];
+  // The state of all of our section
+  let sectionState = [];
 
   // Our handlers
   function onSubmit(values) {
-    if (page === pages.length - 1) {
-      // On our final page we POST our data somewhere
+    if (section === section.length - 1) {
+      // On our final section we POST our data somewhere
       return fetch('https://example.com/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pagesState),
+        body: JSON.stringify(sectionState),
       }).then(response => {
         // We handle the response
       });
     } else {
-      // If we're not on the last page, store our data and increase a step
-      pagesState[page] = values;
-      pagesState = pagesState; // Triggering update
-      page +=1;
+      // If we're not on the last section, store our data and increase a step
+      sectionState[section] = values;
+      sectionState = sectionState; // Triggering update
+      section +=1;
     }
   }
 
   function onBack(values) {
-    if (page === 0) return;
-    pagesState[page] = values;
-    pagesState = pagesState; // Triggering update
-    page -= 1;
+    if (section === 0) return;
+    sectionState[section] = values;
+    sectionState = sectionState; // Triggering update
+    section -= 1;
   }
 </script>
 
-<!-- We display the current step here -->
 <svelte:component
-  this={pages[page]}
+  this={sections[section]}
   {onSubmit}
   {onBack}
-  initialValues={pagesState[page]}
+  initialValues={sectionState[section]}
 />
