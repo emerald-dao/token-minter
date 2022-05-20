@@ -1,11 +1,11 @@
 import Papa from 'papaparse'; // CSV parser
 import { NFTStorage } from 'nft.storage';
 import { packToBlob } from 'ipfs-car/pack/blob';
-import { unpack } from 'ipfs-car/unpack';
+// import { unpack } from 'ipfs-car/unpack';
 import { MemoryBlockStore } from 'ipfs-car/blockstore/memory';
 import { TreewalkCarSplitter } from 'carbites/treewalk';
 import * as fcl from '@onflow/fcl';
-import * as t from '@onflow/types';
+// import * as t from '@onflow/types';
 
 const OK = 1; // status: image file linked with metadata
 const NOK = 2; // status: image file not linked with metadata
@@ -115,6 +115,7 @@ async function processMetadataFile(path, file, metadata) {
     reader.readAsText(file);
   })
     .then(() => {
+      console.log(metadata);
       return metadata;
     })
     .catch((e) => {
@@ -145,7 +146,8 @@ async function uploadCar(car) {
   return result_cid;
 }
 
-async function handleAssetFolderDrop(e) {
+export async function handleAssetFolderDrop(e) {
+  console.log(e);
   e.stopPropagation();
   e.preventDefault();
 
@@ -159,6 +161,7 @@ async function handleAssetFolderDrop(e) {
   //     we use processItems()
   //     the first item will be the assets folder itself (directory)
   for (const item of e.dataTransfer.items) {
+    console.log('item ' + item.name + ' ' + item.kind);
     if (item.kind === 'file') {
       // kind will be 'file' for files or directory
       const fshandle = await item.getAsFileSystemHandle();
@@ -214,22 +217,16 @@ async function handleAssetFolderDrop(e) {
   }
 }
 
-function handleDragOver(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'copy';
-}
+// async function make_div() {
+//   const div = document.createElement('div');
+//   let htm = `<p>Drop assets folder here.  Include "metadata.csv" and NFT image files</p><div id='drop_zone' class='dropDiv' style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'></div>`;
+//   let flowhello = await hello_from_flow();
+//   htm += `<p>${flowhello}</p>`;
+//   div.innerHTML = htm;
+//   document.body.appendChild(div);
+//   var dropZone = document.getElementById('drop_zone');
+//   dropZone.addEventListener('dragover', handleDragOver, false);
+//   dropZone.addEventListener('drop', handleAssetFolderDrop, false);
+// }
 
-async function make_div() {
-  const div = document.createElement('div');
-  let htm = `<p>Drop assets folder here.  Include "metadata.csv" and NFT image files</p><div id='drop_zone' class='dropDiv' style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'></div>`;
-  let flowhello = await hello_from_flow();
-  htm += `<p>${flowhello}</p>`;
-  div.innerHTML = htm;
-  document.body.appendChild(div);
-  var dropZone = document.getElementById('drop_zone');
-  dropZone.addEventListener('dragover', handleDragOver, false);
-  dropZone.addEventListener('drop', handleAssetFolderDrop, false);
-}
-
-make_div();
+// make_div();

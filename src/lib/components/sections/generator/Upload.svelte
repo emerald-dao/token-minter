@@ -3,6 +3,7 @@
   import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
   import { filedrop } from "filedrop-svelte";
   import { createForm } from 'felte';
+  import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
   export let initialValues;
   export let onSubmit;
@@ -12,16 +13,21 @@
 	let files;
 
   const { form, data } = createForm({ onSubmit });
+
+  // Drop files handling
+  function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy';
+  }
+  
 </script>
 
 <Section>
   <Container>
     <form use:form>
-      <div use:filedrop={options} on:filedrop={(e) => {files = e.detail.files}}>
-        <input type="file">
-        <Icon icon="ion:cloud-upload-outline"/>
-        Drop Files
-      </div>
+      <!-- TODO: Handle drop-zone styles -->
+      <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop} style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'/>
     </form>
     <Button type="button" on:click="{() => onBack($data)}">
       Previous page
