@@ -1,45 +1,61 @@
+<!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
+  import { user } from "../flow/stores.js";
+  import { Section, Container, FlowConnect, Stack } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
+  import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
+  import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
+  
+  const steps = [CollectionInfo, Upload, CollectionPreview, ContractInfo];
 
-  const sections = [CollectionInfo, Upload];
+  // The current step of our process.
+  let step = 0;
 
-  // The current section of our form.
-  let section = 0;
-
-  // The state of all of our section
-  let sectionState = [];
+  // The state of all of our step
+  let stepState = [];
 
   // Our handlers
-  function onSubmit(values) {
-    if (section === section.length - 1) {
-      // On our final section we POST our data somewhere
+  function onNext(values) {
+    if (step === step.length - 1) {
+      // On our final step we POST our data somewhere
       return fetch('https://example.com/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sectionState),
+        body: JSON.stringify(stepState),
       }).then(response => {
         // We handle the response
       });
     } else {
-      // If we're not on the last section, store our data and increase a step
-      sectionState[section] = values;
-      sectionState = sectionState; // Triggering update
-      section +=1;
+      // If we're not on the last step, store our data and increase a step
+      stepState[step] = values;
+      stepState = stepState; // Triggering update
+      step +=1;
     }
   }
 
   function onBack(values) {
-    if (section === 0) return;
-    sectionState[section] = values;
-    sectionState = sectionState; // Triggering update
-    section -= 1;
+    if (step === 0) return;
+    stepState[step] = values;
+    stepState = stepState; // Triggering update
+    step -= 1;
   }
 </script>
 
-<svelte:component
-  this={sections[section]}
-  {onSubmit}
-  {onBack}
-  initialValues={sectionState[section]}
-/>
+{#if $user?.loggedIn}
+  <svelte:component
+    this={steps[step]}
+    {onNext}
+    {onBack}
+    initialValues={stepState[step]}
+  />
+{:else}
+  <Section>
+    <Container>
+      <Stack>
+        <p>Connect your Flow wallet to generate your collection</p>
+        <FlowConnect/>
+      </Stack>
+    </Container>
+  </Section>
+{/if}

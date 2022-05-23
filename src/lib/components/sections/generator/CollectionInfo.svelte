@@ -1,34 +1,16 @@
 <script>
 	import { Section, Container, Button, Stack, AdaptableGrid } from "$lib/components/atoms/index";
-	import PrismJS from "$lib/components/prism/PrismJS.svelte";
-	import { deployContract } from "../../../../flow/actions.js";
-	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
-	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
+	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 
-  
-	function addParameter(name, type) {
-    if (name && !$contractInfo.parameters.includes(name)) {
-      $contractInfo.parameters.push(name);
-			$contractInfo.parameterFields += "\n			pub let " + name + ": " + type;
-			$contractInfo.parameterInits += ",\n				" + name + ": " + type;
-			$contractInfo.parameterSets += "\n				self." + name + " = " + name;
-			$contractInfo.parameterMatches += ",\n					" + name + ": " + name;
-		}
-	}
-  
-	export let initialValues;
-  export let onSubmit = deployContract();
-	let fieldName;
-  export let onBack;
-	let fieldType;
 
-  
-  const { form, data } = createForm({ onSubmit });
+  export let onNext = console.log("submit");
+
+  const { form, data } = createForm({ onNext });
 </script>
 
 <svelte:head>
-	<title>Contract Generatord</title>
+	<title>Collection Information</title>
 </svelte:head>
 
 <Section class="padding-top-none">
@@ -36,91 +18,38 @@
 		<h1>Contract Generator</h1>
 		<AdaptableGrid>
 			<Stack align="start">
-				{#if $user?.addr}
-					<h2>User: {$user?.addr}</h2>
-				{:else}
-					<h2>Connect Flow Account</h2>
-				{/if}
 				<form use:form>
-					<label for="contract-name">Contract Name</label>
+
+					<label for="collection-name">Collection Name</label>
 					<input
-						name="contract-name"
-						id="contract-name"
+						name="collection-name"
+						id="collection-name"
 						type="text"
-						placeholder="ExampleNFT"
+						placeholder="Your Awesome Collection"
 						bind:value={$contractInfo.name}
 					/>
-					
-					<label for="max-supply">Max Supply</label>
-					<input
-						name="max-supply"
-						id="max-supply"
-						type="number"
-						min="1"
-						placeholder="100"
-						bind:value={$contractInfo.maxSupply}
-					/>
-					
+
 					<label for="price">Price</label>
+          <span class="helper-text">Define the price of each NFT.</span>
 					<input
 						name="price"
 						id="price"
 						type="number"
-						min="1"
-						placeholder="10"
 						bind:value={$contractInfo.payment}
 					/>
 
-					<fieldset>
-						<legend>Minting Options</legend>
-						
-						<input 
-							name="open-minting" 
-							id="open-minting" 
-							type="checkbox"
-							bind:checked={$contractInfo.openMinting}
-						>
-						<label for="open-minting">Open Minting</label>
+					<label for="max-supply">Max Supply</label>
+          <span class="helper-text">Define the maximum of NFTs that will be in your collection</span>
+					<input
+						name="max-supply"
+						id="max-supply"
+						type="number"
+						bind:value={$contractInfo.maxSupply}
+					/>
 
-						<input 
-							name="start-minting" 
-							id="start-minting" 
-							type="checkbox"
-							bind:checked={$contractInfo.startMinting}
-						>
-						<label for="start-minting">Start Minting</label>
-					</fieldset>
-					
-					<button 
-						type="button" 
-						on:click={() => addParameter(fieldName, fieldType)}
-					>
-						Add Parameter
-					</button>
-					<div>
-						<input bind:value={fieldName} type="text" />
-						<select bind:value={fieldType} name="types" id="types">
-							<option value="String">String</option>
-							<option value="UInt64">UInt64</option>
-							<option value="Bool">Bool</option>
-							<option value="Int">Int</option>
-						</select>
-					</div>
-
-					<Button type="button" on:click="{() => onBack($data)}">
-    				Previous page
-					</Button>
-					<Button type="submit" class="small">Deploy Contract</Button>
+					<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
 				</form>
 			</Stack>
-	
-			<Transaction /> 
-				
-			{#if $user?.loggedIn}
-				<PrismJS code={$contractCode} />
-			{:else}
-				<p>Please connect Flow Account to see the code</p>
-			{/if}
 		</AdaptableGrid>
 	</Container>
 </Section>
@@ -130,10 +59,7 @@
 		font-size: var(--fs-600);
 		margin-bottom: 1rem;
 	}
-  
-	h2 {
-		font-size: var(--fs-500)
-	}
+
 	form {
 		display: flex;
 		flex-direction: column;
@@ -143,4 +69,10 @@
 	input {
 		margin-bottom: 2rem;
 	}
+
+  .helper-text {
+    font-size: var(--fs-200);
+    color: var(--clr-font-text-soft);
+    margin-bottom: 0.6em;
+  }
 </style>

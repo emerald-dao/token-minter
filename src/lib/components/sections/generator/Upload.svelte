@@ -1,18 +1,17 @@
 <script>
   import Icon from "@iconify/svelte";
   import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
-  import { filedrop } from "filedrop-svelte";
   import { createForm } from 'felte';
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
   export let initialValues;
-  export let onSubmit;
+  export let onNext = console.log("submit");
   export let onBack;
 
 	let options = {};
 	let files;
 
-  const { form, data } = createForm({ onSubmit });
+  const { form, data } = createForm({ onNext });
 
   // Drop files handling
   function handleDragOver(evt) {
@@ -28,11 +27,11 @@
     <form use:form>
       <!-- TODO: Handle drop-zone styles -->
       <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop} style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'/>
+      <Button type="button" on:click="{() => onBack($data)}">
+        Previous page
+      </Button>
+      <Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
     </form>
-    <Button type="button" on:click="{() => onBack($data)}">
-      Previous page
-		</Button>
-    <Button type="submit" class="small">Upload Files to IPFS</Button>
   </Container>
 </Section>
 
