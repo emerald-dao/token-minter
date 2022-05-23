@@ -25,7 +25,7 @@
 			placeholder="Your Awesome Collection"
 			bind:value={$contractInfo.name}
 		/>
-
+		
 		<label for="price">Price</label>
 		<span class="helper-text">Define the price of each NFT.</span>
 		<input
@@ -49,24 +49,21 @@
 </Stack>
 
 <style type="scss">
-	h1 {
-		font-size: var(--fs-600);
-		margin-bottom: 1rem;
-	}
 
 	form {
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-	}
+		width: 100%;
+		
+		input {
+			margin-bottom: 2rem;
+		}
 
-	input {
-		margin-bottom: 2rem;
+		.helper-text {
+			font-size: var(--fs-200);
+			color: var(--clr-font-text-soft);
+			margin-bottom: 0.6em;
+		}
 	}
-
-  .helper-text {
-    font-size: var(--fs-200);
-    color: var(--clr-font-text-soft);
-    margin-bottom: 0.6em;
-  }
 </style>

@@ -2,9 +2,10 @@ input {
   color: var(--clr-font-text);
   font-size: var(--fs-300);
   background-color: transparent;
-  border: 1px var(--clr-primary-main) solid;
-  border-radius: 2em;
+  border: 0.6px var(--clr-primary-main) solid;
+  border-radius: 0.3rem;
   padding: 0.5em 1em;
+  width: 100%;
 }
 
 select {

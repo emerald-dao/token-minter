@@ -12,18 +12,22 @@
     {
       title: "Collection Information",
       component: CollectionInfo,
+      description: "Define some general information around your collection."
     }, 
     {
       title: "Upload",
-      component: Upload
+      component: Upload,
+      description: ""
     }, 
     {
       title: "Collection Preview",
-      component: CollectionPreview
+      component: CollectionPreview,
+      description: ""
     },
     {
       title: "Contract Information",
-      component: ContractInfo
+      component: ContractInfo,
+      description: ""
     } 
   ];
 
@@ -60,27 +64,62 @@
   }
 </script>
 
-{#if $user?.loggedIn}
-  <Section class="padding-top-none">
-    <Container class="width-large">
-      <GeneratorNav bind:step={step} steps={steps}/>
-      <AdaptableGrid>
-        <svelte:component
-          this={steps[step].component}
-          {onNext}
-          {onBack}
-          initialValues={stepState[step]}
-        />
-      </AdaptableGrid>
-    </Container>
-  </Section>
-{:else}
-  <Section>
-    <Container>
-      <Stack>
-        <p>Connect your Flow wallet to generate your collection</p>
-        <FlowConnect/>
-      </Stack>
-    </Container>
-  </Section>
-{/if}
+<Section class="padding-top-none padding-bottom-none">
+  <div class="main-wrapper">
+    {#if $user?.loggedIn}
+      <Container class="width-large gutter-y-none">
+        <div class="grid-layout">
+          <div class="sidebar-container">
+            <GeneratorNav bind:step={step} steps={steps}/>
+          </div>
+          <div class="component-container">
+              <svelte:component
+                this={steps[step].component}
+                {onNext}
+                {onBack}
+                initialValues={stepState[step]}
+              />
+          </div>
+        </div>
+      </Container>
+    {:else}
+      <Container>
+        <Stack>
+          <p>Connect your Flow wallet to generate your collection</p>
+          <FlowConnect/>
+        </Stack>
+      </Container>
+    {/if}
+  </div>
+</Section>
+
+<style type="scss">
+  .main-wrapper {
+    // background-color: blue;
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .grid-layout {
+    display: grid; 
+    grid-template-columns: 250px 1fr;
+    gap: 1rem;
+    grid-template-areas: 
+      "sidebar component";
+    
+    .sidebar-container { 
+      grid-area: sidebar; 
+    }
+    .component-container { 
+      grid-area: component;
+      padding: 3rem;
+      border: solid 2px var(--clr-gradient-primary);
+      border-radius: 1rem;
+      height: 70vh;
+      overflow: hidden;
+    }
+    
+  }
+</style>

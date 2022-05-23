@@ -1,8 +1,5 @@
 <ul>
   <li>
-    <a href="/contract-generator" sveltekit:prefetch>Contract Generator</a>
-  </li>
-  <li>
     <a href="/collection-generator" sveltekit:prefetch>Collection Generator</a>
   </li>
   <li>

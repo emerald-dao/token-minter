@@ -13,18 +13,23 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.min.css" rel="stylesheet" />
 </svelte:head>
 
+<style type="scss">
+  .code {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 60vh;
+    width: 100%;
 
-<style>
-  pre {
-    padding: 1rem;
-    background-color: hsla(0, 0%, 0%, 0.2);
-    border-radius:0.2rem;
-    overflow: auto;
-  }
-
-  code {
-    white-space: pre-wrap;
-    font-size: 12px;
+    pre {
+      padding: 1rem;
+      background-color: hsla(0, 0%, 0%, 0.2);
+      border-radius:0.2rem;
+    }
+    
+    code {
+      white-space: pre-wrap;
+      font-size: 12px;
+    }
   }
 </style>
 

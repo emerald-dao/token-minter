@@ -24,7 +24,12 @@
 
 <form use:form>
   <!-- TODO: Handle drop-zone styles -->
-  <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop} style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'/>
+  <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop}>
+    <Icon icon=ion:cloud-upload-outline/>
+    <p>
+      Drop your folder here
+    </p>    
+  </div>
   <Stack direction="row">
     <Button type="button" class="small ghost" on:click="{() => onBack($data)}">
     Previous page
@@ -35,11 +40,15 @@
 
 <style type="scss">
   div {
+    width: 100%;
+    height: 400px;
     display: flex;
+    flex-direction: column;
+    gap: 0.5em;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--clr-primary-main);
+    border: solid 1px var(--clr-primary-main);
     border-radius: 5rem;
-    padding-block: 10rem;
+    margin-bottom: 2rem;
   }
 </style>
