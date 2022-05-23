@@ -30,98 +30,95 @@
 	<title>Contract Generatord</title>
 </svelte:head>
 
-<Section class="padding-top-none">
-	<Container class="width-large">
-		<h1>Contract Generator</h1>
-		<AdaptableGrid>
-			<Stack align="start">
-				{#if $user?.addr}
-					<h2>User: {$user?.addr}</h2>
-				{:else}
-					<h2>Connect Flow Account</h2>
-				{/if}
-				<form use:form>
-					<label for="contract-name">Contract Name</label>
-					<input
-						name="contract-name"
-						id="contract-name"
-						type="text"
-						placeholder="ExampleNFT"
-						bind:value={$contractInfo.name}
-					/>
-					
-					<label for="max-supply">Max Supply</label>
-					<input
-						name="max-supply"
-						id="max-supply"
-						type="number"
-						min="1"
-						placeholder="100"
-						bind:value={$contractInfo.maxSupply}
-					/>
-					
-					<label for="price">Price</label>
-					<input
-						name="price"
-						id="price"
-						type="number"
-						min="1"
-						placeholder="10"
-						bind:value={$contractInfo.payment}
-					/>
-
-	
-						
-						<input 
-							name="open-minting" 
-							id="open-minting" 
-							type="checkbox"
-							bind:checked={$contractInfo.openMinting}
-						>
-						<label for="open-minting">Open Minting</label>
-
-						<input 
-							name="start-minting" 
-							id="start-minting" 
-							type="checkbox"
-							bind:checked={$contractInfo.startMinting}
-						>
-						<label for="start-minting">Start Minting</label>
-		
-					
-					<!-- <button 
-						type="button" 
-						on:click={() => addParameter(fieldName, fieldType)}
-					>
-						Add Parameter
-					</button>
-					<div>
-						<input bind:value={fieldName} type="text" />
-						<select bind:value={fieldType} name="types" id="types">
-							<option value="String">String</option>
-							<option value="UInt64">UInt64</option>
-							<option value="Bool">Bool</option>
-							<option value="Int">Int</option>
-						</select>
-					</div> -->
-
-					<Button type="button" on:click="{() => onBack($data)}">
-    				Previous page
-					</Button>
-					<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
-				</form>
-			</Stack>
-	
-			<Transaction /> 
-				
-			{#if $user?.loggedIn}
-				<PrismJS code={$contractCode} />
+<div>
+	<AdaptableGrid>
+		<Stack align="start">
+			{#if $user?.addr}
+				<h2>User: {$user?.addr}</h2>
 			{:else}
-				<p>Please connect Flow Account to see the code</p>
+				<h2>Connect Flow Account</h2>
 			{/if}
-		</AdaptableGrid>
-	</Container>
-</Section>
+			<form use:form>
+				<label for="contract-name">Contract Name</label>
+				<input
+					name="contract-name"
+					id="contract-name"
+					type="text"
+					placeholder="ExampleNFT"
+					bind:value={$contractInfo.name}
+				/>
+				
+				<label for="max-supply">Max Supply</label>
+				<input
+					name="max-supply"
+					id="max-supply"
+					type="number"
+					min="1"
+					placeholder="100"
+					bind:value={$contractInfo.maxSupply}
+				/>
+				
+				<label for="price">Price</label>
+				<input
+					name="price"
+					id="price"
+					type="number"
+					min="1"
+					placeholder="10"
+					bind:value={$contractInfo.payment}
+				/>
+	
+	
+					
+					<input 
+						name="open-minting" 
+						id="open-minting" 
+						type="checkbox"
+						bind:checked={$contractInfo.openMinting}
+					>
+					<label for="open-minting">Open Minting</label>
+	
+					<input 
+						name="start-minting" 
+						id="start-minting" 
+						type="checkbox"
+						bind:checked={$contractInfo.startMinting}
+					>
+					<label for="start-minting">Start Minting</label>
+	
+				
+				<!-- <button 
+					type="button" 
+					on:click={() => addParameter(fieldName, fieldType)}
+				>
+					Add Parameter
+				</button>
+				<div>
+					<input bind:value={fieldName} type="text" />
+					<select bind:value={fieldType} name="types" id="types">
+						<option value="String">String</option>
+						<option value="UInt64">UInt64</option>
+						<option value="Bool">Bool</option>
+						<option value="Int">Int</option>
+					</select>
+				</div> -->
+	
+				<Button type="button" on:click="{() => onBack($data)}">
+					Previous page
+				</Button>
+				<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+			</form>
+		</Stack>
+	
+		<Transaction /> 
+			
+		{#if $user?.loggedIn}
+			<PrismJS code={$contractCode} />
+		{:else}
+			<p>Please connect Flow Account to see the code</p>
+		{/if}
+	</AdaptableGrid>
+</div>
 
 <style type="scss">
 	h1 {

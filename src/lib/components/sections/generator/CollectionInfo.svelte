@@ -13,46 +13,40 @@
 	<title>Collection Information</title>
 </svelte:head>
 
-<Section class="padding-top-none">
-	<Container class="width-large">
-		<h1>Contract Generator</h1>
-		<AdaptableGrid>
-			<Stack align="start">
-				<form use:form>
 
-					<label for="collection-name">Collection Name</label>
-					<input
-						name="collection-name"
-						id="collection-name"
-						type="text"
-						placeholder="Your Awesome Collection"
-						bind:value={$contractInfo.name}
-					/>
+<Stack align="start">
+	<form use:form>
 
-					<label for="price">Price</label>
-          <span class="helper-text">Define the price of each NFT.</span>
-					<input
-						name="price"
-						id="price"
-						type="number"
-						bind:value={$contractInfo.payment}
-					/>
+		<label for="collection-name">Collection Name</label>
+		<input
+			name="collection-name"
+			id="collection-name"
+			type="text"
+			placeholder="Your Awesome Collection"
+			bind:value={$contractInfo.name}
+		/>
 
-					<label for="max-supply">Max Supply</label>
-          <span class="helper-text">Define the maximum of NFTs that will be in your collection</span>
-					<input
-						name="max-supply"
-						id="max-supply"
-						type="number"
-						bind:value={$contractInfo.maxSupply}
-					/>
+		<label for="price">Price</label>
+		<span class="helper-text">Define the price of each NFT.</span>
+		<input
+			name="price"
+			id="price"
+			type="number"
+			bind:value={$contractInfo.payment}
+		/>
 
-					<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
-				</form>
-			</Stack>
-		</AdaptableGrid>
-	</Container>
-</Section>
+		<label for="max-supply">Max Supply</label>
+		<span class="helper-text">Define the maximum of NFTs that will be in your collection</span>
+		<input
+			name="max-supply"
+			id="max-supply"
+			type="number"
+			bind:value={$contractInfo.maxSupply}
+		/>
+
+		<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+	</form>
+</Stack>
 
 <style type="scss">
 	h1 {

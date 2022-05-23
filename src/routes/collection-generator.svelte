@@ -1,13 +1,31 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "../flow/stores.js";
-  import { Section, Container, FlowConnect, Stack } from "$lib/components/atoms/index";
+  import { Section, Container, FlowConnect, Stack, AdaptableGrid } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
+  import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   
-  const steps = [CollectionInfo, Upload, CollectionPreview, ContractInfo];
+  const steps = [
+    {
+      title: "Collection Information",
+      component: CollectionInfo,
+    }, 
+    {
+      title: "Upload",
+      component: Upload
+    }, 
+    {
+      title: "Collection Preview",
+      component: CollectionPreview
+    },
+    {
+      title: "Contract Information",
+      component: ContractInfo
+    } 
+  ];
 
   // The current step of our process.
   let step = 0;
@@ -43,12 +61,19 @@
 </script>
 
 {#if $user?.loggedIn}
-  <svelte:component
-    this={steps[step]}
-    {onNext}
-    {onBack}
-    initialValues={stepState[step]}
-  />
+  <Section>
+    <Container class="width-large">
+      <GeneratorNav bind:step={step} steps={steps}/>
+      <AdaptableGrid>
+        <svelte:component
+          this={steps[step].component}
+          {onNext}
+          {onBack}
+          initialValues={stepState[step]}
+        />
+      </AdaptableGrid>
+    </Container>
+  </Section>
 {:else}
   <Section>
     <Container>

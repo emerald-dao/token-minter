@@ -14,15 +14,12 @@
   const { form, data } = createForm({ onNext });
 </script>
 
-<Section>
-  <Container>
-    <div>Collection Preview</div>
-    <Button type="button" on:click="{() => onBack($data)}">
-        Previous page
-    </Button>
-    <Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
-  </Container>
-</Section>
+<div>
+  <Button type="button" on:click="{() => onBack($data)}">
+      Previous page
+  </Button>
+  <Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+</div>
 
 <style type="scss">
 
