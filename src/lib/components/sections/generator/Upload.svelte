@@ -1,6 +1,6 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { Section, Container, Button, Stack } from "$lib/components/atoms/index";
+  import { Button, Stack } from "$lib/components/atoms/index";
   import { createForm } from 'felte';
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
@@ -25,10 +25,12 @@
 <form use:form>
   <!-- TODO: Handle drop-zone styles -->
   <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop} style='border: 1px solid; height: 200px; width: 50%; background-color: powderblue;'/>
-  <Button type="button" on:click="{() => onBack($data)}">
+  <Stack direction="row">
+    <Button type="button" class="small ghost" on:click="{() => onBack($data)}">
     Previous page
-  </Button>
-  <Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+    </Button>
+    <Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+  </Stack>
 </form>
 
 <style type="scss">

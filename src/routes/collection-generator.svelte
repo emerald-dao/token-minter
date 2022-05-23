@@ -61,7 +61,7 @@
 </script>
 
 {#if $user?.loggedIn}
-  <Section>
+  <Section class="padding-top-none">
     <Container class="width-large">
       <GeneratorNav bind:step={step} steps={steps}/>
       <AdaptableGrid>

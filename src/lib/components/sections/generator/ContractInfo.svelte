@@ -1,5 +1,5 @@
 <script>
-	import { Section, Container, Button, Stack, AdaptableGrid } from "$lib/components/atoms/index";
+	import { Button, Stack, AdaptableGrid } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/prism/PrismJS.svelte";
 	import { deployContract } from "../../../../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
@@ -102,11 +102,13 @@
 						<option value="Int">Int</option>
 					</select>
 				</div> -->
-	
-				<Button type="button" on:click="{() => onBack($data)}">
-					Previous page
-				</Button>
-				<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+				
+				<Stack direction="row">
+					<Button type="button" class="small ghost" on:click="{() => onBack($data)}">
+						Previous page
+					</Button>
+					<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
+				</Stack>
 			</form>
 		</Stack>
 	

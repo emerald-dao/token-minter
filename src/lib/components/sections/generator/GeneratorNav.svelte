@@ -13,15 +13,19 @@
 </div>
 
 <style type="scss">
-  h1 {
-    font-size: var(--fs-600);
-  }
+  div {
+    padding-bottom: 3rem;
 
-  ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    flex-direction: row;
-    gap: 2em
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      gap: 2em
+    }
+    
+    h1 {
+      font-size: var(--fs-600);
+    }
   }
 </style>
