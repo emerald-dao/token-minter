@@ -70,8 +70,4 @@
       color: var(--clr-primary-main);
     }
   }
-  
-  h1 {
-    font-size: var(--fs-400);
-  }
 </style>

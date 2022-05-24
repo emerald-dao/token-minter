@@ -16,9 +16,8 @@
 	// 	}
 	// }
   
-	export let initialValues;
+	// export let initialValues;
   export let onNext = deployContract();
-  export let onBack;
 	// let fieldName;
 	// let fieldType;
 
@@ -61,26 +60,23 @@
 				placeholder="10"
 				bind:value={$contractInfo.payment}
 			/>
-
-
 				
-				<input 
-					name="open-minting" 
-					id="open-minting" 
-					type="checkbox"
-					bind:checked={$contractInfo.openMinting}
-				>
-				<label for="open-minting">Open Minting</label>
+			<input 
+				name="open-minting" 
+				id="open-minting" 
+				type="checkbox"
+				bind:checked={$contractInfo.openMinting}
+			>
+			<label for="open-minting">Open Minting</label>
 
-				<input 
-					name="start-minting" 
-					id="start-minting" 
-					type="checkbox"
-					bind:checked={$contractInfo.startMinting}
-				>
-				<label for="start-minting">Start Minting</label>
+			<input 
+				name="start-minting" 
+				id="start-minting" 
+				type="checkbox"
+				bind:checked={$contractInfo.startMinting}
+			>
+			<label for="start-minting">Start Minting</label>
 
-			
 			<!-- <button 
 				type="button" 
 				on:click={() => addParameter(fieldName, fieldType)}
@@ -96,13 +92,6 @@
 					<option value="Int">Int</option>
 				</select>
 			</div> -->
-			
-			<Stack direction="row">
-				<Button type="button" class="small ghost" on:click="{() => onBack($data)}">
-					Previous page
-				</Button>
-				<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
-			</Stack>
 		</form>
 	</Stack>
 

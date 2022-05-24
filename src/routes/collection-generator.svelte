@@ -1,7 +1,7 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "../flow/stores.js";
-  import { Section, Container, FlowConnect, Stack } from "$lib/components/atoms/index";
+  import { Section, Container, FlowConnect, Stack, Button } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
@@ -68,13 +68,19 @@
           <div class="sidebar-container">
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
-          <div class="component-container">
-            <svelte:component
-              this={steps[step].component}
-              {onNext}
-              {onBack}
-              initialValues={stepState[step]}
-            />
+          <div class="main-container">
+            <div class="component-container">
+              <svelte:component
+                this={steps[step].component}
+                {onNext}
+                {onBack}
+                initialValues={stepState[step]}
+              />
+            </div>
+            <Stack direction="row" justify="flex-end">
+              <Button class="small ghost" on:click={onBack}>Back</Button>
+              <Button class="small" on:click={onNext}>Next</Button>
+            </Stack>
           </div>
         </div>
       </Container>
@@ -103,19 +109,24 @@
     grid-template-columns: 250px 1fr;
     gap: 1rem;
     grid-template-areas: 
-      "sidebar component";
+      "sidebar main";
     
     .sidebar-container { 
       grid-area: sidebar; 
     }
-    .component-container { 
-      grid-area: component;
-      padding: 3rem;
-      border: solid 2px var(--clr-gradient-primary);
-      border-radius: 1rem;
-      height: 70vh;
-      overflow: auto;
+    .main-container { 
+      grid-area: main;      
+      .component-container {
+        padding: 3rem;
+        border: solid 2px var(--clr-gradient-primary);
+        border-radius: 1rem;
+        height: 70vh;
+        overflow: auto;
+        margin-bottom: 1rem;
+      }
+      .buttons {
+
+      }
     }
-    
   }
 </style>

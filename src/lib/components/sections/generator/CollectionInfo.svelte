@@ -3,10 +3,7 @@
 	import { createForm } from 'felte';
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 
-
-  export let onNext = console.log("submit");
-
-  const { form, data } = createForm({ onNext });
+  const { form, data } = createForm();
 </script>
 
 <svelte:head>
@@ -43,8 +40,6 @@
 			type="number"
 			bind:value={$contractInfo.maxSupply}
 		/>
-
-		<Button type="submit" class="small" on:click="{() => onNext()}">Next</Button>
 	</form>
 </Stack>
 
