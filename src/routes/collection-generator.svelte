@@ -118,7 +118,7 @@
       border: solid 2px var(--clr-gradient-primary);
       border-radius: 1rem;
       height: 70vh;
-      overflow: hidden;
+      overflow: auto;
     }
     
   }

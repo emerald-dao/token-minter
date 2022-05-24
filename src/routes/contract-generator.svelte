@@ -6,11 +6,11 @@
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
 
-  const { form } = createForm({
-		onSubmit(values, context) {
-			deployContract();
-		},
-	})
+  // const { form } = createForm({
+	// 	onSubmit(values, context) {
+	// 		deployContract();
+	// 	},
+	// })
 
 	function addParameter(name, type) {
 		if (name && !$contractInfo.parameters.includes(name)) {
@@ -32,27 +32,28 @@
 
 <Section>
 	<Container>
-		<div class="left-side">
-			<Button class="small" on:click={logIn}>Log In</Button>
-			<Button class="small" on:click={unauthenticate}>Log Out</Button>
-			<h1>User: {$user?.addr}</h1>
+		<Stack>
 			<button on:click={getTemplates}>GET TEMPLATES</button>
-			<label for="contract-name">Contract Name</label>
-			<input
-				id="contract-name"
-				bind:value={$contractInfo.name}
-				type="text"
-				placeholder="ExampleNFT"
-			/>
+			<!-- <form > -->
+			<Button class="small" on:click={logIn}>Log In</Button>
+				<Button class="small" on:click={unauthenticate}>Log Out</Button>
+				<h1>User: {$user?.addr}</h1>
+					<label for="contract-name">Contract Name</label>
+					<input
+						id="contract-name"
+						bind:value={$contractInfo.name}
+						type="text"
+						placeholder="ExampleNFT"
+					/>
 
-			<label for="max-supply">Max Supply</label>
-			<input
-				bind:value={$contractInfo.maxSupply}
-				type="number"
-				min="1"
-				placeholder="100"
-				id="max-supply"
-			/>
+					<label for="max-supply">Max Supply</label>
+					<input
+						bind:value={$contractInfo.maxSupply}
+						type="number"
+						min="1"
+						placeholder="100"
+						id="max-supply"
+					/>
 
 					<fieldset>
 						<legend>Minting Options</legend>
@@ -91,7 +92,7 @@
 					</div>
 
 					<Button type="submit" class="small">Deploy Contract</Button>
-				</form>
+				<!-- </form> -->
 			</Stack>
 	
 			<Transaction /> 
@@ -101,7 +102,6 @@
 			{:else}
 				<p>Please connect Flow Account to see the code</p>
 			{/if}
-		</AdaptableGrid>
 	</Container>
 </Section>
 

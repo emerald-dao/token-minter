@@ -1,21 +1,21 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
 
-import * as fcl from "@onflow/fcl";
+import * as fcl from '@onflow/fcl';
 import './config';
 
 import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
 
 if (browser) {
-  // set Svelte $user store to currentUser, 
+  // set Svelte $user store to currentUser,
   // so other components can access it
-  fcl.currentUser.subscribe(user.set, [])
+  fcl.currentUser.subscribe(user.set, []);
 }
 
 // Lifecycle FCL Auth functions
-export const unauthenticate = () => fcl.unauthenticate()
-export const logIn = () => fcl.logIn()
-export const signUp = () => fcl.signUp()
+export const unauthenticate = () => fcl.unauthenticate();
+export const logIn = () => fcl.logIn();
+export const signUp = () => fcl.signUp();
 
 // send a transaction to get a user's profile
 export const getTemplates = async () => {
@@ -28,14 +28,14 @@ export const getTemplates = async () => {
           return ExampleNFT.getTemplates()
         }
       `,
-      args: (arg, t) => []
+      args: (arg, t) => [],
     });
     console.log(response);
     return response;
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
-}
+};
 
 export const deployContract = async () => {
   initTransactionState();
@@ -51,27 +51,24 @@ export const deployContract = async () => {
         }
       }
       `,
-      args: (arg, t) => [
-        arg(get(contractInfo).name, t.String),
-        arg(hexCode, t.String)
-      ],
+      args: (arg, t) => [arg(get(contractInfo).name, t.String), arg(hexCode, t.String)],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
-      limit: 9999
+      limit: 9999,
     });
-    console.log({transactionId});
-    fcl.tx(transactionId).subscribe(res => {
-      transactionStatus.set(res.status)
-      if(res.status === 4) {
-        setTimeout(() => transactionInProgress.set(false), 2000)
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
       }
-    })
-  } catch(e) {
+    });
+  } catch (e) {
     console.log(e);
-    transactionStatus.set(99)
+    transactionStatus.set(99);
   }
-}
+};
 
 function initTransactionState() {
   transactionInProgress.set(true);
