@@ -7,8 +7,18 @@
 	},
 	"contracts": {
 		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
-		"MetadataViews": "./src/flow/cadence/MetadataViews.cdc",
-		"NonFungibleToken": "./src/flow/cadence/NonFungibleToken.cdc",
+		"MetadataViews": {
+			"source": "./src/flow/cadence/MetadataViews.cdc",
+			"aliases": {
+				"testnet": "0x631e88ae7f1d7c20"
+			}
+		},
+		"NonFungibleToken": {
+			"source": "./src/flow/cadence/NonFungibleToken.cdc",
+			"aliases": {
+				"testnet": "0x631e88ae7f1d7c20"
+			}
+		},
 		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc",
 		"FlowToken": "./src/flow/cadence/FlowToken.cdc"
 	},
@@ -21,6 +31,16 @@
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
+		},
+		"testnet-account": {
+			"address": "0x86d486feb7683e02",
+			"key": {
+				"type": "hex",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_P256",
+				"hashAlgorithm": "SHA3_256",
+				"privateKey": "cbe6a1294d6706fd7931c5ef1f1e730332e5a8c2661998847da6ea8b9f5a2052"
+			}
 		}
 	},
 	"deployments": {
@@ -30,6 +50,11 @@
 				"FungibleToken",
 				"FlowToken",
 				"MetadataViews"
+			]
+		},
+		"testnet": {
+			"testnet-account": [
+				"ExampleNFT"
 			]
 		}
 	}

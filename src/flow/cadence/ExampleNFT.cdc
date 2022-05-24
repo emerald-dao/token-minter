@@ -1,19 +1,17 @@
 // This is an example implementation of a Flow Non-Fungible Token
-	// It is not part of the official standard but it assumed to be
-	// very similar to how many NFTs would implement the core functionality.
-	import NonFungibleToken from "./NonFungibleToken.cdc"
-	import MetadataViews from "./MetadataViews.cdc"
-    import FungibleToken from "./FungibleToken.cdc"
-    import FlowToken from "./FlowToken.cdc"
-	
+// It is not part of the official standard but it assumed to be
+// very similar to how many NFTs would implement the core functionality.
+import NonFungibleToken from "./NonFungibleToken.cdc"
+import MetadataViews from "./MetadataViews.cdc"
 	
 pub contract ExampleNFT: NonFungibleToken {
 	
-		pub var nextTemplateId: UInt64
+		// the amount of NFTs minted
 		pub var totalSupply: UInt64
+		// The key that maps to a Template in `templates`
+		pub var nextTemplateId: UInt64
 		pub var minting: Bool
 		
-
 		pub event ContractInitialized()
 		pub event Withdraw(id: UInt64, from: Address?)
 		pub event Deposit(id: UInt64, to: Address?)
@@ -22,6 +20,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let CollectionPublicPath: PublicPath
 		pub let AdministratorStoragePath: StoragePath
 
+		// maps templateId to Template
 		access(account) var templates: {UInt64: Template}
 
 		pub struct Template {
@@ -51,7 +50,6 @@ pub contract ExampleNFT: NonFungibleToken {
 			init() {
 				pre {
 					ExampleNFT.minting: "Minting is currently closed by the Administrator!"
-					
 				}
 				self.id = self.uuid
 				self.serial = ExampleNFT.totalSupply
@@ -120,10 +118,10 @@ pub contract ExampleNFT: NonFungibleToken {
 				return &self.ownedNFTs[id] as &NonFungibleToken.NFT
 			}
 
-			pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
+			pub fun borrowViewResolver(id: UInt64): &{MetadataViews.Resolver} {
 				let token = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
 				let nft = token as! &ExampleNFT.NFT
-				return nft as &AnyResource{MetadataViews.Resolver}
+				return nft as &{MetadataViews.Resolver}
 			}
 
 			init () {
@@ -133,16 +131,6 @@ pub contract ExampleNFT: NonFungibleToken {
 			destroy() {
 				destroy self.ownedNFTs
 			}
-		}
-
-		
-		// mintNFT mints a new NFT and deposits 
-		// it in the recipients collection
-		pub fun mintNFT(
-			recipient: &{NonFungibleToken.CollectionPublic}
-		) {
-			
-			recipient.deposit(token: <- create NFT())
 		}
 		
 		pub resource Administrator {
@@ -202,9 +190,9 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.templates = {}
 
 			// Set the named paths
-			self.CollectionStoragePath = /storage/ExampleNFTCollection0xe37a242dfff69bbc
-			self.CollectionPublicPath = /public/ExampleNFTCollection0xe37a242dfff69bbc
-			self.AdministratorStoragePath = /storage/ExampleNFTAdministrator0xe37a242dfff69bbc
+			self.CollectionStoragePath = /storage/ExampleNFTCollection0x86d486feb7683e02
+			self.CollectionPublicPath = /public/ExampleNFTCollection0x86d486feb7683e02
+			self.AdministratorStoragePath = /storage/ExampleNFTAdministrator0x86d486feb7683e02
 
 			// Create a Collection resource and save it to storage
 			let collection <- create Collection()

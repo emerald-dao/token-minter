@@ -1,7 +1,7 @@
 <script>
 	import { Section, Container, Button } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/prism/PrismJS.svelte";
-	import { deployContract, logIn, unauthenticate } from "../flow/actions.js";
+	import { deployContract, getTemplates, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 
@@ -30,6 +30,7 @@
 			<Button class="small" on:click={logIn}>Log In</Button>
 			<Button class="small" on:click={unauthenticate}>Log Out</Button>
 			<h1>User: {$user?.addr}</h1>
+			<button on:click={getTemplates}>GET TEMPLATES</button>
 			<label for="contract-name">Contract Name</label>
 			<input
 				id="contract-name"
