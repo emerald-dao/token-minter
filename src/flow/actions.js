@@ -4,7 +4,7 @@ import { get } from 'svelte/store';
 import * as fcl from "@onflow/fcl";
 import './config';
 
-import { user, profile, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
 
 if (browser) {
   // set Svelte $user store to currentUser, 
@@ -18,23 +18,20 @@ export const logIn = () => fcl.logIn()
 export const signUp = () => fcl.signUp()
 
 // send a transaction to get a user's profile
-export const sendQuery = async (addr) => {
-  let profileQueryResult = false;
-
+export const getTemplates = async () => {
   try {
-    profileQueryResult = await fcl.query({
+    const response = await fcl.query({
       cadence: `
-        import Profile from 0xProfile
-  
-        pub fun main(address: Address): Profile.ReadOnly? {
-          return Profile.read(address)
+        import ExampleNFT from 0xExampleNFT
+
+        pub fun main(): {UInt64: ExampleNFT.Template} {
+          return ExampleNFT.getTemplates()
         }
       `,
-      args: (arg, t) => [arg(addr, t.Address)]
-    })
-    console.log(profileQueryResult)
-    profile.set(profileQueryResult);
-
+      args: (arg, t) => []
+    });
+    console.log(response);
+    return response;
   } catch(e) {
     console.log(e);
   }
@@ -65,10 +62,9 @@ export const deployContract = async () => {
     });
     console.log({transactionId});
     fcl.tx(transactionId).subscribe(res => {
-      console.log(res)
       transactionStatus.set(res.status)
       if(res.status === 4) {
-        setTimeout(() => transactionInProgress.set(false),2000)
+        setTimeout(() => transactionInProgress.set(false), 2000)
       }
     })
   } catch(e) {
