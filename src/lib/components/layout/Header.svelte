@@ -2,8 +2,9 @@
   import { fly } from 'svelte/transition'
   import { navigating } from '$app/stores';
 
-  import { Container, ThemeToggle, AnimatedHamburger} from "$lib/components/atoms/index.js";
+  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect} from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
+import Stack from '../atoms/Stack.svelte';
 
   export let open = false
   export let onClick = () => {
@@ -28,21 +29,24 @@
   <Container class="width-large">
     <nav>
       <!-- Desktop menu -->
-      <div id="desktop-menu">
-        <div>Logo</div>
+      <div class="desktop-menu">
+        <Logo/>
         <Navigation/>
-        <ThemeToggle/>
+        <Stack direction="row">
+          <ThemeToggle/>
+          <FlowConnect/>
+        </Stack>
       </div>
 
       <!-- Mobile menu -->
-      <div id="hamburger-button">
-        <div>Logo</div>
+      <div class="hamburger-button">
+        <Logo/>
         <AnimatedHamburger {open} {onClick}/>
       </div>
       {#if open}
-        <div id="mobile-menu" transition:fly={{ y: -200, duration: 400 }}>
+        <div class="mobile-menu" transition:fly={{ y: -200, duration: 400 }}>
           <Navigation>
-            <div id="close-button">
+            <div class="close-button">
               <AnimatedHamburger {open} {onClick}/>
             </div>
           </Navigation>
@@ -66,7 +70,7 @@
     border-bottom: 1px solid var(--primary);
   }
 
-  #mobile-menu {
+  .mobile-menu {
     position: fixed;
     top: 0;
     left: 0;
@@ -81,11 +85,11 @@
     z-index: 1;
   }
 
-  #desktop-menu {
+  .desktop-menu {
     display: none;
   }
 
-  #close-button {
+  .close-button {
     position: absolute;
     top: 0;
     right: 0;
@@ -93,11 +97,11 @@
   }
 
   @media (min-width: 60em) {
-    #hamburger-button {
+    .hamburger-button {
       display: none;
     }
 
-    #desktop-menu {
+    .desktop-menu {
       display: flex;
       flex-direction: row;
       gap: 30px;
