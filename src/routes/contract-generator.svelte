@@ -1,7 +1,7 @@
 <script>
 	import { Section, Container, Button, Stack, AdaptableGrid } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/prism/PrismJS.svelte";
-	import { deployContract } from "../flow/actions.js";
+	import { deployContract, getTemplates, logIn, unauthenticate } from "../flow/actions.js";
 	import { contractCode, contractInfo, user } from "../flow/stores.js";
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
@@ -30,45 +30,29 @@
 	<title>Contract Generatord</title>
 </svelte:head>
 
-<Section class="padding-top-none">
-	<Container class="width-large">
-		<h1>Contract Generator</h1>
-		<AdaptableGrid>
-			<Stack align="start">
-				{#if $user?.addr}
-					<h2>User: {$user?.addr}</h2>
-				{:else}
-					<h2>Connect Flow Account</h2>
-				{/if}
-				<form use:form>
-					<label for="contract-name">Contract Name</label>
-					<input
-						name="contract-name"
-						id="contract-name"
-						type="text"
-						placeholder="ExampleNFT"
-						bind:value={$contractInfo.name}
-					/>
-					
-					<label for="max-supply">Max Supply</label>
-					<input
-						name="max-supply"
-						id="max-supply"
-						type="number"
-						min="1"
-						placeholder="100"
-						bind:value={$contractInfo.maxSupply}
-					/>
-					
-					<label for="price">Price</label>
-					<input
-						name="price"
-						id="price"
-						type="number"
-						min="1"
-						placeholder="10"
-						bind:value={$contractInfo.payment}
-					/>
+<Section>
+	<Container>
+		<div class="left-side">
+			<Button class="small" on:click={logIn}>Log In</Button>
+			<Button class="small" on:click={unauthenticate}>Log Out</Button>
+			<h1>User: {$user?.addr}</h1>
+			<button on:click={getTemplates}>GET TEMPLATES</button>
+			<label for="contract-name">Contract Name</label>
+			<input
+				id="contract-name"
+				bind:value={$contractInfo.name}
+				type="text"
+				placeholder="ExampleNFT"
+			/>
+
+			<label for="max-supply">Max Supply</label>
+			<input
+				bind:value={$contractInfo.maxSupply}
+				type="number"
+				min="1"
+				placeholder="100"
+				id="max-supply"
+			/>
 
 					<fieldset>
 						<legend>Minting Options</legend>
