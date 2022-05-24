@@ -17,7 +17,7 @@ export const unauthenticate = () => fcl.unauthenticate()
 export const logIn = () => fcl.logIn()
 export const signUp = () => fcl.signUp()
 
-// send a transaction to get a user's profile
+// get all the templates inside the ExampleNFT contract
 export const getTemplates = async () => {
   try {
     const response = await fcl.query({
