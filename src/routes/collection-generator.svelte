@@ -1,7 +1,7 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "../flow/stores.js";
-  import { Section, Container, FlowConnect, Stack, AdaptableGrid } from "$lib/components/atoms/index";
+  import { Section, Container, FlowConnect, Stack } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
@@ -17,7 +17,7 @@
     {
       title: "Upload",
       component: Upload,
-      description: ""
+      description: "Upload your collection assets"
     }, 
     {
       title: "Collection Preview",
@@ -27,7 +27,7 @@
     {
       title: "Contract Information",
       component: ContractInfo,
-      description: ""
+      description: "Define some general information around your contract."
     } 
   ];
 
@@ -40,14 +40,10 @@
   // Our handlers
   function onNext(values) {
     if (step === step.length - 1) {
-      // On our final step we POST our data somewhere
-      return fetch('https://example.com/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(stepState),
-      }).then(response => {
-        // We handle the response
-      });
+      // On our final step we go TODO: What happens here?
+      stepState[step] = values;
+      stepState = stepState; // Triggering update
+      step = 0;
     } else {
       // If we're not on the last step, store our data and increase a step
       stepState[step] = values;
@@ -73,12 +69,12 @@
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
           <div class="component-container">
-              <svelte:component
-                this={steps[step].component}
-                {onNext}
-                {onBack}
-                initialValues={stepState[step]}
-              />
+            <svelte:component
+              this={steps[step].component}
+              {onNext}
+              {onBack}
+              initialValues={stepState[step]}
+            />
           </div>
         </div>
       </Container>
