@@ -1,5 +1,18 @@
 import ExampleNFT from "../ExampleNFT.cdc"
 
+// Put a batch of up to 500 NFT Metadatas inside the contract
+// Example names: `["Education", "Building", "Governance"]`
+// Example descriptions: `[
+//  "This is the logo of the Education Guild", 
+//  "This is the logo of the Building Guild", 
+//  "This is the logo of the Governance Guild"
+// ]`
+// Example thumbnails: `[
+//  "QmYVKNWdm2961QtHz721tdA8dvBT116eT2DtATsX53Kt28",
+//  "QmPkJbnJSt3ZkHuGAnHyHCAhWVrneRrK6VHMjgu5oPGnoq",
+//  "QmcpmzEDmZtP37csyNaYaxzhoMQmmUrQsihE3x2XGKsg1Z"
+// ]`
+
 transaction(names: [String], descriptions: [String], thumbnails: [String]) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
