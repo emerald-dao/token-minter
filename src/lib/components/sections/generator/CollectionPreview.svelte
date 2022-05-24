@@ -19,6 +19,8 @@
         <NFTCard name={NFT.name} description={NFT.description} thumbnailURL={`https://ipfs.infura.io/ipfs/${NFT.thumbnail}`}/>
       {/each}
     </div>  
+  {:catch error}
+	  <p style="color: red">"We couldn't connect with the Flow Blockchain"</p>
   {/await}
   <Stack direction="row">
     <Button type="button" class="small ghost" on:click="{() => onBack()}">
