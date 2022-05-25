@@ -6,7 +6,7 @@
 	import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { createForm } from 'felte';
 
-	import contractOptions from '$lib/data/contractOptions.js'
+	import contractOptions from '$lib/config/contractOptions.js'
 import { each } from "svelte/internal";
   
 	// function addParameter(name, type) {
