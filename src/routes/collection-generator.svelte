@@ -77,9 +77,17 @@
                 initialValues={stepState[step]}
               />
             </div>
-            <Stack direction="row" justify="flex-end">
-              <Button class="small ghost" on:click={onBack}>Back</Button>
-              <Button class="small" on:click={onNext}>Next</Button>
+            <Stack direction="row" justify="flex-end" gap="1em">
+              {#if step > 0}
+                <Button class="ghost" on:click={onBack}>Back</Button>
+              {/if}
+              <Button on:click={onNext}>
+                {#if step === steps.length - 1}
+                  Deploy Collection
+                {:else}
+                  Next
+                {/if}
+              </Button>
             </Stack>
           </div>
         </div>

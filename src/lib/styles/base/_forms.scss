@@ -14,6 +14,7 @@ input {
   display: grid;
   grid-template-columns: 1em auto;
   gap: 1.2em;
+  margin-bottom: 1.2em;
 }
 .checkbox-label-with-number {
   line-height: 1.1;
@@ -21,6 +22,7 @@ input {
   display: grid;
   grid-template-columns: 1em auto 4em;
   gap: 1.2em;
+  margin-bottom: 1em;
 
   input[type='number'] {
     // Hide arrows

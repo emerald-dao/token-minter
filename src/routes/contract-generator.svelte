@@ -118,8 +118,4 @@
 		flex-direction: column;
 		align-items: start;
 	}
-
-	input {
-		margin-bottom: 2rem;
-	}
 </style>

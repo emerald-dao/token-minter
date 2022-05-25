@@ -34,7 +34,11 @@
 	<Stack align="start">
 		<form use:form>
 			{#each contractOptions as option}	
-				<label class={ option.withNumber ? "checkbox-label-with-number" : "checkbox-label"} for={option.bindValue}>
+				<label 
+					class="checkbox-label" 
+					class:checkbox-label-with-number="{option.withNumber}"
+					for={option.bindValue}
+				>
 					<input 
 						name={option.bindValue}
 						id={option.bindValue}
@@ -93,9 +97,5 @@
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-	}
-
-	input {
-		margin-bottom: 2rem;
 	}
 </style>
