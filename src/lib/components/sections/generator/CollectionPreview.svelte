@@ -24,7 +24,7 @@
 <style type="scss">
   .nfts-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2em;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1em;
   }
 </style>

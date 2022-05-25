@@ -4,33 +4,36 @@
   export let description;
 </script>
 
-<div>
+<div class="card">
   <img src={thumbnailURL} alt={`${name} image`}>
-  <h4>{name}</h4>
-  <p>{description}</p>
+  <div class="content">
+    <h4>{name}</h4>
+    <p>{description}</p>
+  </div>
 </div>
 
 <style type="scss">
-  div {
+  .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    border: solid 0.5px var(--clr-font-text);
+    text-align: left;
+    background-color: hsla(0, 0%, 50%, 0.3);
     border-radius: 1rem;
-    padding: 1.4rem;
+    padding: 0.8em;
 
     img {
-      margin-bottom: 1.4em;
+      margin-bottom: 1.2em;
+      border-radius: 0.4rem;
     }
     h4 {
-      font-size: var(--fs-400);
+      font-size: var(--fs-300);
       text-shadow: none;
-      margin-bottom: 0.6em;
+      margin-bottom: 0.4em;
     }
     p {
-      font-size: var(--fs-300);
+      font-size: var(--fs-200);
     }
   }
 </style>

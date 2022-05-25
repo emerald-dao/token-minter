@@ -124,9 +124,6 @@
         overflow: auto;
         margin-bottom: 1rem;
       }
-      .buttons {
-
-      }
     }
   }
 </style>
