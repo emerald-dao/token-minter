@@ -8,45 +8,47 @@ input {
   width: 100%;
 }
 
-select {
-  /* Reset Select */
+.checkbox-label {
+  line-height: 1.1;
+  font-size: var(--fs-200);
+  display: grid;
+  grid-template-columns: 1em auto;
+  gap: 1.2em;
+}
+
+input[type='checkbox'] {
+  /* Remove most all native input styles */
   appearance: none;
-  outline: 0;
-  border: 0;
-  box-shadow: none;
-  /* Personalize */
-  flex: 1;
-  padding: 0 1em;
-  color: #fff;
-  background-color: var(--darkgray);
-  background-image: none;
-  cursor: pointer;
+  /* For iOS < 15 */
+  background-color: transparent;
+  /* Not removed via appearance */
+  margin: 0;
+  padding: 0;
+
+  font: inherit;
+  color: var(--clr-primary-main);
+  width: 1.4em;
+  aspect-ratio: 1/1;
+  border: 0.6px solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.28em);
+
+  display: grid;
+  place-content: center;
 }
-/* Remove IE arrow */
-select::-ms-expand {
-  display: none;
+
+input[type='checkbox']::before {
+  content: '';
+  width: 0.6em;
+  height: 0.6em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transform: scale(0);
+  transform-origin: bottom left;
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--clr-primary-main);
+  background-color: var(--clr-primary-main);
 }
-/* Custom Select wrapper */
-.select {
-  position: relative;
-  display: flex;
-  width: 20em;
-  height: 3em;
-  border-radius: 0.25em;
-  overflow: hidden;
-}
-/* Arrow */
-.select::after {
-  content: '\25BC';
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 1em;
-  background-color: #34495e;
-  transition: 0.25s all ease;
-  pointer-events: none;
-}
-/* Transition */
-.select:hover::after {
-  color: #f39c12;
+
+input[type='checkbox']:checked::before {
+  transform: scale(1);
 }
