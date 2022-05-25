@@ -15,6 +15,32 @@ input {
   grid-template-columns: 1em auto;
   gap: 1.2em;
 }
+.checkbox-label-with-number {
+  line-height: 1.1;
+  font-size: var(--fs-200);
+  display: grid;
+  grid-template-columns: 1em auto 4em;
+  gap: 1.2em;
+
+  input[type='number'] {
+    // Hide arrows
+    -moz-appearance: textfield;
+
+    font-size: var(--fs-200);
+    text-align: center;
+    transform: translateY(-0.34em);
+    height: 1.8em;
+  }
+  input[type='number']:disabled {
+    border-color: gray;
+  }
+  // Hide arrows
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
 
 input[type='checkbox'] {
   /* Remove most all native input styles */

@@ -7,7 +7,6 @@
 	import { createForm } from 'felte';
 
 	import contractOptions from '$lib/config/contractOptions.js'
-import { each } from "svelte/internal";
   
 	// function addParameter(name, type) {
   //   if (name && !$contractInfo.parameters.includes(name)) {
@@ -24,9 +23,6 @@ import { each } from "svelte/internal";
 	// let fieldName;
 	// let fieldType;
 
-
-
-  
   const { form, data } = createForm({ onNext });
 </script>
 
@@ -38,7 +34,7 @@ import { each } from "svelte/internal";
 	<Stack align="start">
 		<form use:form>
 			{#each contractOptions as option}	
-				<label class="checkbox-label" for={option.bindValue}>
+				<label class={ option.withNumber ? "checkbox-label-with-number" : "checkbox-label"} for={option.bindValue}>
 					<input 
 						name={option.bindValue}
 						id={option.bindValue}
@@ -46,6 +42,16 @@ import { each } from "svelte/internal";
 						bind:checked={$contractInfo[option.bindValue]}
 					>
 					{option.name}
+					{#if option.withNumber}
+						<input 
+							name={option.bindValue + 'Number'}
+							id={option.bindValue + 'Number'}
+							type="number"
+							disabled={$contractInfo[option.bindValue] ? !$contractInfo[option.bindValue] : true}
+							placeholder="Number"
+							bind:value={$contractInfo[option.bindValue + 'Number']}
+						>
+					{/if}
 				</label>
 			{/each}
 
