@@ -2,7 +2,6 @@
 	import { Stack } from "$lib/components/atoms/index";
 	import { createForm } from 'felte';
 	import { contractInfo } from "../../../../flow/stores.js";
-	import { onMount } from "svelte";
 	import collectionOptions from "$lib/config/collectionOptions.js";
 
   const { form } = createForm();
@@ -28,22 +27,3 @@
 
 	</form>
 </Stack>
-
-<style type="scss">
-	form {
-		display: flex;
-		flex-direction: column;
-		align-items: start;
-		width: 100%;
-		
-		input {
-			margin-bottom: 2rem;
-		}
-
-		.helper-text {
-			font-size: var(--fs-200);
-			color: var(--clr-font-text-soft);
-			margin-bottom: 0.6em;
-		}
-	}
-</style>

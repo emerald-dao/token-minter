@@ -75,9 +75,9 @@
               </div>
               <Stack direction="row" justify="flex-end" gap="1em">
                 {#if step > 0}
-                  <Button class="ghost" on:click={onBack}>Back</Button>
+                  <Button class="small ghost" on:click={onBack}>Back</Button>
                 {/if}
-                <Button on:click={onNext}>
+                <Button class="small" on:click={onNext}>
                   {#if step === steps.length - 1}
                     Deploy Collection
                   {:else}
@@ -114,7 +114,7 @@
   .grid-layout {
     display: grid; 
     grid-template-columns: 250px 1fr;
-    gap: 1rem;
+    gap: 2rem;
     grid-template-areas: 
       "sidebar main";
     
@@ -125,11 +125,12 @@
       grid-area: main;      
       .component-container {
         padding: 3rem;
-        border: solid 2px var(--clr-gradient-primary);
+        border: 0.6px var(--clr-font-text) solid;
         border-radius: 1rem;
         height: 70vh;
         overflow: auto;
         margin-bottom: 1rem;
+        background-color: hsla(0, 0%, 100%, 0.02);
       }
     }
   }

@@ -19,8 +19,11 @@
 </script>
 
 <form use:form>
-  <!-- TODO: Handle drop-zone styles -->
-  <div id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop}>
+  <label for="drop_zone">
+    CSV File + Images
+  </label>
+  <span class="helper-text">Drop a folder containing a CSV file + a images folder</span>
+  <div name='drop_zone' id='drop_zone' class='dropDiv' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop}>
     <Icon icon=ion:cloud-upload-outline/>
     <p>
       Drop your folder here
@@ -38,7 +41,7 @@
     align-items: center;
     justify-content: center;
     border: solid 1px var(--clr-primary-main);
-    border-radius: 5rem;
+    border-radius: 3rem;
     margin-bottom: 2rem;
   }
 </style>
