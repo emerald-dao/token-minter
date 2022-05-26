@@ -51,6 +51,7 @@
     li {
       cursor: pointer;
       margin-block: 0.3em;
+      transition: 0.5s;
     }
 
     .step-number {

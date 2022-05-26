@@ -7,6 +7,8 @@
   import Upload from '$lib/components/sections/generator/Upload.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
+  import { deployContract } from "../flow/actions.js";
+
   
   const steps = [
     {
@@ -34,34 +36,27 @@
   // The current step of our process.
   let step = 0;
 
-  // The state of all of our step
-  let stepState = [];
-
   // Our handlers
-  function onNext(values) {
-    if (step === step.length - 1) {
+  function onNext() {
+    if (step === steps.length - 1) {
       // On our final step we go TODO: What happens here?
-      stepState[step] = values;
-      stepState = stepState; // Triggering update
-      step = 0;
+      alert('deploy contract');
+      deployContract();
     } else {
-      // If we're not on the last step, store our data and increase a step
-      stepState[step] = values;
-      stepState = stepState; // Triggering update
       step +=1;
     }
   }
 
-  function onBack(values) {
+  function onBack() {
     if (step === 0) return;
-    stepState[step] = values;
-    stepState = stepState; // Triggering update
     step -= 1;
   }
 </script>
 
 <Section class="padding-top-none padding-bottom-none">
   <div class="main-wrapper">
+
+    <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
       <Container class="width-large gutter-y-none">
         <div class="grid-layout">
@@ -72,9 +67,6 @@
             <div class="component-container">
               <svelte:component
                 this={steps[step].component}
-                {onNext}
-                {onBack}
-                initialValues={stepState[step]}
               />
             </div>
             <Stack direction="row" justify="flex-end" gap="1em">
@@ -92,6 +84,8 @@
           </div>
         </div>
       </Container>
+
+    <!-- If not connected, ask to connect wallet -->
     {:else}
       <Container>
         <Stack>
@@ -100,12 +94,12 @@
         </Stack>
       </Container>
     {/if}
+
   </div>
 </Section>
 
 <style type="scss">
   .main-wrapper {
-    // background-color: blue;
     height: 75vh;
     display: flex;
     flex-direction: column;

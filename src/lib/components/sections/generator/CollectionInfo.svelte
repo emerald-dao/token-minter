@@ -1,15 +1,10 @@
 <script>
-	import { Section, Container, Button, Stack, AdaptableGrid } from "$lib/components/atoms/index";
+	import { Stack } from "$lib/components/atoms/index";
 	import { createForm } from 'felte';
-	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
+	import { contractInfo } from "../../../../flow/stores.js";
 
-  const { form, data } = createForm();
+  const { form } = createForm();
 </script>
-
-<svelte:head>
-	<title>Collection Information</title>
-</svelte:head>
-
 
 <Stack align="start">
 	<form use:form>
@@ -40,11 +35,11 @@
 			type="number"
 			bind:value={$contractInfo.maxSupply}
 		/>
+
 	</form>
 </Stack>
 
 <style type="scss">
-
 	form {
 		display: flex;
 		flex-direction: column;
