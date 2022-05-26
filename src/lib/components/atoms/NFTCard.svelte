@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: center;
     text-align: left;
-    background-color: hsla(0, 0%, 50%, 0.3);
+    background-color: hsla(0, 0%, 50%, 0.1);
     border-radius: 1rem;
     padding: 0.8em;
 

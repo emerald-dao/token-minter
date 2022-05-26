@@ -19,18 +19,16 @@
     height: 55vh;
     width: 100%;
     border-radius: 0.2em;
-    border: 1px solid black;
 
     .code-header {
-      background-color: var(--clr-background-primary);
-      padding: 0.4em 2em;
+      background-color: hsla(0, 0%, 0%, 0.8);
+      padding: 0.6em 2em;
       margin: 0;
       position: sticky;
       top: 0;
-      color: var(--clr-primary-soft);
+      color: var(--clr-primary-main);
       font-family: var(--font-mono);
-      font-size: 0.7rem;
-      border-bottom: 0.5px solid var(--clr-primary-soft);
+      font-size: 0.8rem;
     }
     
     pre {

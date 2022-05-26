@@ -242,7 +242,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.nextTemplateId = 0
 		self.totalSupply = 0
 		self.minting = ${$contractInfo.startMinting}
-		${$contractInfo.payment ? `self.price = ${$contractInfo.payment.toFixed(2)}` : ''}
+		TODO: view if type number is needed
+		${$contractInfo.payment ? `self.price = ${Number($contractInfo.payment).toFixed(2)}` : ''}
 		self.templates = {}
 
 		// Set the named paths

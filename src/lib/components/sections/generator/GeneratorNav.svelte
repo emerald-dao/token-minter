@@ -5,7 +5,7 @@
   export let steps
 </script>
 
-<Stack align="flex-start">
+<div class="main-wrapper">
   <ul>
     {#each steps as _step, i}
     <Stack direction="row" gap="0.5rem">
@@ -30,67 +30,81 @@
     <h5>Description</h5>
     <p>{steps[step].description}</p>
   </div>
-</Stack>
+</div>
 
 <style type="scss">
-  ul {
-    list-style: none;
-    padding: 0;
+  .main-wrapper {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    height: 100%;
+  }
+
+  ul {
+    background-color: hsla(0, 0%, 100%, 0.03);
+    border-radius: 1rem;
+    padding: 1.8rem 1.2rem;
+    margin-top: 0;
+    font-weight: 300;
+    width: 100%;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-size: var(--fs-200);
     color: var(--clr-font-text-soft);
+    height: auto;
     
     li {
       cursor: pointer;
-      margin-block: 0.3em;
-      transition: 0.5s;
+      margin-block: 0.8em;
+      font-size: var(--fs-300);
+      font-weight: 400;
+      transition: 0.6s;
     }
 
     .step-number {
-      background: var(--clr-font-text-soft);
-      color: var(--clr-font-text-inverse);
-      width: 1.2rem;
-      height: 1.2rem;
+      color: var(--clr-font-text-soft);
+      border: 1px var(--clr-font-text-soft) solid;
+      width: 1rem;
+      height: 1rem;
       aspect-ratio: 1/1;
       border-radius: 99px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 0.5em;
+      padding: 1em;
       font-weight: 600;
+      transition: 0.5s;
       cursor: pointer;
     }
     .step-number-passed {
-      background: var(--clr-primary-main);
-      width: 1.2rem;
-      height: 1.2rem;
+      color: var(--clr-primary-main);
+      border: 1px var(--clr-primary-main) solid;
       cursor: pointer;
     }
     .step-number-active {
-      background: transparent;
-      border: 1px var(--clr-primary-main) solid;
-      color: var(--clr-primary-main);
-      width: 2rem;
-      height: 2rem;
+      background: var(--clr-primary-main);
+      color: var(--clr-font-text-inverse);
+      border: none;
+      margin-left: 0.3rem;
     }
     .step-title-active {
-      font-size: var(--fs-500);
       line-height: 1em;
-      font-weight: 500;
-      color: var(--clr-font-text);
-    }
-    .step-title-passed {
-      color: var(--clr-font-text);
+      color: var(--clr-primary-main);
+      transition: 0.6s;
     }
   }
 
   .description {
-    background-color: hsla(0, 0%, 100%, 0.04);
+    background-color: hsla(0, 0%, 0%, 0.08);
     border-radius: 1rem;
-    padding: 1.8rem 1.2rem;
+    padding: 1.5rem 1.2rem;
     font-weight: 300;
     width: 100%;
+    height: 100%;
+    transition: 0.5s;
 
     h5 {
       font-size: var(--fs-300);
@@ -101,7 +115,7 @@
     }
    
     p {
-      font-size: var(--fs-300);
+      font-size: var(--fs-200);
     }
   }
 </style>

@@ -21,12 +21,12 @@
     {
       title: "Upload",
       component: Upload,
-      description: "Upload your collection assets"
+      description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images."
     }, 
     {
       title: "Collection Preview",
       component: CollectionPreview,
-      description: ""
+      description: "Looks like everything is in order. Let's see what you've got."
     },
     {
       title: "Contract Information",
@@ -73,19 +73,21 @@
                   this={steps[step].component}
                 />
               </div>
-              <Stack direction="row" justify="flex-end" gap="1em">
-                {#if step > 0}
-                  <Button class="small ghost" on:click={onBack}>Back</Button>
-                {/if}
-                <Button class="small" on:click={onNext}>
-                  {#if step === steps.length - 1}
-                    Deploy Collection
-                  {:else}
-                    Next
-                  {/if}
-                </Button>
-              </Stack>
             </div>
+          </div>
+          <div class="buttons-nav">
+            <Stack direction="row" justify="flex-end" gap="1em">
+              {#if step > 0}
+                <Button class="small ghost" on:click={onBack}>Back</Button>
+              {/if}
+              <Button class="small" on:click={onNext}>
+                {#if step === steps.length - 1}
+                  Deploy Collection
+                {:else}
+                  Next
+                {/if}
+              </Button>
+            </Stack>
           </div>
         </Container>
       {/if}
@@ -110,11 +112,15 @@
     flex-direction: column;
     align-items: center;
   }
+  .buttons-nav {
+    width: 100%;
+  }
 
   .grid-layout {
     display: grid; 
     grid-template-columns: 250px 1fr;
     gap: 2rem;
+    margin-bottom: 1rem;
     grid-template-areas: 
       "sidebar main";
     
@@ -124,14 +130,14 @@
     .main-container { 
       grid-area: main;      
       .component-container {
-        padding: 3rem;
-        border: 0.6px var(--clr-font-text) solid;
+        // border: 0.5px var(--clr-font-text) solid;
+        padding: 2.5rem;
         border-radius: 1rem;
         height: 70vh;
         overflow: auto;
-        margin-bottom: 1rem;
-        background-color: hsla(0, 0%, 100%, 0.02);
+        background-color: hsla(0, 0%, 0%, 0.1);
       }
     }
+
   }
 </style>

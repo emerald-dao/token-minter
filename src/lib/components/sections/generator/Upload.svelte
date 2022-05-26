@@ -34,7 +34,7 @@
 <style type="scss">
   div {
     width: 100%;
-    height: 400px;
+    height: 350px;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
