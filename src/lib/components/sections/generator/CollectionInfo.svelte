@@ -2,6 +2,8 @@
 	import { Stack } from "$lib/components/atoms/index";
 	import { createForm } from 'felte';
 	import { contractInfo } from "../../../../flow/stores.js";
+	import { onMount } from "svelte";
+	import collectionOptions from "$lib/config/collectionOptions.js";
 
   const { form } = createForm();
 </script>
@@ -9,32 +11,20 @@
 <Stack align="start">
 	<form use:form>
 
-		<label for="collection-name">Collection Name</label>
-		<input
-			name="collection-name"
-			id="collection-name"
-			type="text"
-			placeholder="Your Awesome Collection"
-			bind:value={$contractInfo.name}
-		/>
-		
-		<label for="price">Price</label>
-		<span class="helper-text">Define the price of each NFT.</span>
-		<input
-			name="price"
-			id="price"
-			type="number"
-			bind:value={$contractInfo.payment}
-		/>
-
-		<label for="max-supply">Max Supply</label>
-		<span class="helper-text">Define the maximum of NFTs that will be in your collection</span>
-		<input
-			name="max-supply"
-			id="max-supply"
-			type="number"
-			bind:value={$contractInfo.maxSupply}
-		/>
+		<!-- Generate input values from the collectionOptions object -->
+		{#each collectionOptions as option }
+			<label for={option.bindValue}>{option.name}</label>
+			{#if option.helperText}
+				<span class="helper-text">{option.helperText}</span>
+			{/if}
+			<input 
+				name={option.bindValue}
+				id={option.bindValue}
+				placeholder={option.placheholder}
+				{...{ type: option.type }}
+				bind:value={$contractInfo[option.bindValue]} 
+			/>
+		{/each}
 
 	</form>
 </Stack>
