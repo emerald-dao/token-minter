@@ -130,12 +130,11 @@
     .main-container { 
       grid-area: main;      
       .component-container {
-        // border: 0.5px var(--clr-font-text) solid;
         padding: 2.5rem;
         border-radius: 1rem;
         height: 70vh;
         overflow: auto;
-        background-color: hsla(0, 0%, 0%, 0.1);
+        background-color: hsla(0, 0%, 100%, 0.02);
       }
     }
 

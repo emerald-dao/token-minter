@@ -18,10 +18,10 @@
     overflow-x: hidden;
     height: 55vh;
     width: 100%;
-    border-radius: 0.2em;
+    border-radius: 0.4em;
 
     .code-header {
-      background-color: hsla(0, 0%, 0%, 0.8);
+      background-color: hsla(0, 0%, 0%, 1);
       padding: 0.6em 2em;
       margin: 0;
       position: sticky;
@@ -34,14 +34,15 @@
     pre {
       padding: 0;
       margin: 0;
-      background-color: hsla(0, 0%, 0%, 0.2);
+      background-color: hsla(0, 0%, 0%, 0.1);
       white-space: pre-wrap;
       tab-size: 1em;
       padding-inline: 2em;
     }
     
     code {
-      font-size: 11px;
+      font-size: 12px;
+      font-family: var(--font-mono);
     }
   }
 </style>

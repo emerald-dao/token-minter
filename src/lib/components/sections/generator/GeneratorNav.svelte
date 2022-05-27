@@ -1,6 +1,4 @@
 <script>
-  import { Stack } from "$lib/components/atoms/index";
-
   export let step
   export let steps
 </script>
@@ -8,22 +6,19 @@
 <div class="main-wrapper">
   <ul>
     {#each steps as _step, i}
-    <Stack direction="row" gap="0.5rem">
-      <div 
-        class="step-number" 
-        class:step-number-active={i === step} 
-        class:step-number-passed={i < step}
-      >
-        {i + 1}
-      </div>
       <li 
-        class:step-title-active={i === step} 
-        class:step-title-passed={i < step}
+        class:li-active={i === step} 
         on:click={() => step=i}
       >
+        <div 
+          class="step-number" 
+          class:step-number-active={i === step} 
+          class:step-number-passed={i < step}
+        >
+          {i + 1}
+        </div>
         {_step.title}
       </li>
-    </Stack>
     {/each}
   </ul>
   <div class="description">
@@ -42,11 +37,11 @@
   }
 
   ul {
+    // TODO: Apply dynamic colors
     background-color: hsla(0, 0%, 100%, 0.03);
     border-radius: 1rem;
     padding: 1.8rem 1.2rem;
     margin-top: 0;
-    font-weight: 300;
     width: 100%;
     list-style: none;
     display: flex;
@@ -54,27 +49,37 @@
     justify-content: center;
     font-size: var(--fs-200);
     color: var(--clr-font-text-soft);
-    height: auto;
     
     li {
       cursor: pointer;
-      margin-block: 0.8em;
       font-size: var(--fs-300);
       font-weight: 400;
       transition: 0.6s;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5em;
+      border-radius: 0.5em;
+      padding-block: 0.4em;
+      margin-block: 0.2em;
+      transition: 0.4s;
     }
 
+    .li-active {
+      line-height: 1em;
+      color: var(--clr-accent-main);
+      transition: 0.6s;
+      background-color: #0163da44;
+    }
     .step-number {
       color: var(--clr-font-text-soft);
       border: 1px var(--clr-font-text-soft) solid;
-      width: 1rem;
-      height: 1rem;
-      aspect-ratio: 1/1;
+      width: 2rem;
+      height: 2rem;
       border-radius: 99px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 1em;
       font-weight: 600;
       transition: 0.5s;
       cursor: pointer;
@@ -85,35 +90,27 @@
       cursor: pointer;
     }
     .step-number-active {
-      background: var(--clr-primary-main);
-      color: var(--clr-font-text-inverse);
+      background-color: var(--clr-accent-soft);
+      color: var(--clr-font-text);
       border: none;
       margin-left: 0.3rem;
-    }
-    .step-title-active {
-      line-height: 1em;
-      color: var(--clr-primary-main);
-      transition: 0.6s;
     }
   }
 
   .description {
-    background-color: hsla(0, 0%, 0%, 0.08);
+    background-color: #0163da7f;
     border-radius: 1rem;
     padding: 1.5rem 1.2rem;
     font-weight: 300;
     width: 100%;
     height: 100%;
     transition: 0.5s;
-
     h5 {
-      font-size: var(--fs-300);
+      font-size: var(--fs-400);
       margin-top: 0;
       margin-bottom: 1em;
       font-weight: 500;
-      color: var(--clr-primary-main);
     }
-   
     p {
       font-size: var(--fs-200);
     }
