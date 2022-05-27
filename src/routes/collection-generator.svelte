@@ -9,9 +9,6 @@
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
   import { deployContract } from "../flow/actions.js";
-  import Transaction from "$lib/components/flow/Transaction.svelte";
-	import { transactionInProgress } from "../flow/stores";
-
   
   const steps = [
     {
@@ -70,38 +67,34 @@
 
     <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
-      {#if $transactionInProgress}
-        <Transaction />
-      {:else}
-        <Container class="width-large gutter-y-none">
-          <div class="grid-layout">
-            <div class="sidebar-container">
-              <GeneratorNav bind:step={step} steps={steps}/>
-            </div>
-            <div class="main-container">
-              <div class="component-container">
-                <svelte:component
-                  this={steps[step].component}
-                />
-              </div>
+      <Container class="width-large gutter-y-none">
+        <div class="grid-layout">
+          <div class="sidebar-container">
+            <GeneratorNav bind:step={step} steps={steps}/>
+          </div>
+          <div class="main-container">
+            <div class="component-container">
+              <svelte:component
+                this={steps[step].component}
+              />
             </div>
           </div>
-          <div class="buttons-nav">
-            <Stack direction="row" justify="flex-end" gap="1em">
-              {#if step > 0}
-                <Button class="small ghost" on:click={onBack}>Back</Button>
+        </div>
+        <div class="buttons-nav">
+          <Stack direction="row" justify="flex-end" gap="1em">
+            {#if step > 0}
+              <Button class="small ghost" on:click={onBack}>Back</Button>
+            {/if}
+            <Button class="small" on:click={onNext}>
+              {#if step === steps.length - 1}
+                Deploy to Mainnet
+              {:else}
+                Next
               {/if}
-              <Button class="small" on:click={onNext}>
-                {#if step === steps.length - 1}
-                  Deploy to Mainnet
-                {:else}
-                  Next
-                {/if}
-              </Button>
-            </Stack>
-          </div>
-        </Container>
-      {/if}
+            </Button>
+          </Stack>
+        </div>
+      </Container>
 
     <!-- If not connected, ask to connect wallet -->
     {:else}
