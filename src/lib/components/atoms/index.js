@@ -10,3 +10,4 @@ export { default as ThemeToggle } from './ThemeToggle.svelte';
 export { default as FlowConnect } from './FlowConnect.svelte';
 export { default as Logo } from './Logo.svelte';
 export { default as NFTCard } from './NFTCard.svelte';
+export { default as StepDescription } from './StepDescription.svelte';
