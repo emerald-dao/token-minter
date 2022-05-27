@@ -1,6 +1,8 @@
 <script>
   export let step
   export let steps
+
+  let stepNumber
 </script>
 
 <div class="main-wrapper">
@@ -11,12 +13,16 @@
         on:click={() => step=i}
       >
         <div 
+          bind:this={stepNumber}
           class="step-number" 
           class:step-number-active={i === step} 
           class:step-number-passed={i < step}
         >
           {i + 1}
         </div>
+        {#if i === step}
+          {_step.emoji}
+        {/if}
         {_step.title}
       </li>
     {/each}

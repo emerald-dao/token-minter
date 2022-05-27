@@ -7,6 +7,7 @@
   import Upload from '$lib/components/sections/generator/Upload.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
+  import Deploy from '$lib/components/sections/generator/Deploy.svelte';
   import { deployContract } from "../flow/actions.js";
   import Transaction from "$lib/components/flow/Transaction.svelte";
 	import { transactionInProgress } from "../flow/stores";
@@ -16,23 +17,33 @@
     {
       title: "Collection Information",
       component: CollectionInfo,
+      emoji: "ℹ️",
       description: "Define some general information around your collection."
     }, 
     {
       title: "Upload",
       component: Upload,
+      emoji: "🗂",
       description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images."
     }, 
     {
       title: "Collection Preview",
       component: CollectionPreview,
+      emoji: "🖼",
       description: "Looks like everything is in order. Let's see what you've got."
     },
     {
       title: "Contract Information",
       component: ContractInfo,
+      emoji: "📜",
       description: "Define some general information around your contract."
-    } 
+    }, 
+    {
+      title: "Deploy",
+      component: Deploy,
+      emoji: "🚀",
+      description: "Deploy your contract to the blockchain."
+    }
   ];
 
   // The current step of our process.
@@ -82,7 +93,7 @@
               {/if}
               <Button class="small" on:click={onNext}>
                 {#if step === steps.length - 1}
-                  Deploy Collection
+                  Deploy to Mainnet
                 {:else}
                   Next
                 {/if}
@@ -118,7 +129,7 @@
 
   .grid-layout {
     display: grid; 
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 270px 1fr;
     gap: 2rem;
     margin-bottom: 1rem;
     grid-template-areas: 
