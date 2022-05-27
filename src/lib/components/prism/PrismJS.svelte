@@ -1,34 +1,48 @@
-
-
 <script>
   import Prism from './prism.js';
   export let code = '';
 </script>
 
-<div class="code">
+<div class="wrapper">
+  <div class="code-header">Your Smart Contract</div>
   <pre><code>{@html Prism.highlight(code, Prism?.languages?.swift)}</code></pre>
 </div>
 
-<svelte:head>
+<!-- <svelte:head>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.22.0/themes/prism.min.css" rel="stylesheet" />
-</svelte:head>
+</svelte:head> -->
 
 <style type="scss">
-  .code {
+  .wrapper {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 60vh;
+    height: 55vh;
     width: 100%;
+    border-radius: 0.4em;
 
+    .code-header {
+      background-color: hsla(0, 0%, 0%, 1);
+      padding: 0.6em 2em;
+      margin: 0;
+      position: sticky;
+      top: 0;
+      color: var(--clr-primary-main);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+    
     pre {
-      padding: 1rem;
-      background-color: hsla(0, 0%, 0%, 0.2);
-      border-radius:0.2rem;
+      padding: 0;
+      margin: 0;
+      background-color: hsla(0, 0%, 0%, 0.1);
+      white-space: pre-wrap;
+      tab-size: 1em;
+      padding-inline: 2em;
     }
     
     code {
-      white-space: pre-wrap;
       font-size: 12px;
+      font-family: var(--font-mono);
     }
   }
 </style>

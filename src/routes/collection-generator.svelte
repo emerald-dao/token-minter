@@ -7,83 +7,103 @@
   import Upload from '$lib/components/sections/generator/Upload.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
+  import Deploy from '$lib/components/sections/generator/Deploy.svelte';
+  import { deployContract } from "../flow/actions.js";
+  import Transaction from "$lib/components/flow/Transaction.svelte";
+	import { transactionInProgress } from "../flow/stores";
+
   
   const steps = [
     {
       title: "Collection Information",
       component: CollectionInfo,
+      emoji: "ℹ️",
       description: "Define some general information around your collection."
     }, 
     {
       title: "Upload",
       component: Upload,
-      description: "Upload your collection assets"
+      emoji: "🗂",
+      description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images."
     }, 
     {
       title: "Collection Preview",
       component: CollectionPreview,
-      description: ""
+      emoji: "🖼",
+      description: "Looks like everything is in order. Let's see what you've got."
     },
     {
       title: "Contract Information",
       component: ContractInfo,
+      emoji: "📜",
       description: "Define some general information around your contract."
-    } 
+    }, 
+    {
+      title: "Deploy",
+      component: Deploy,
+      emoji: "🚀",
+      description: "Deploy your contract to the blockchain."
+    }
   ];
 
   // The current step of our process.
   let step = 0;
 
-  // The state of all of our step
-  let stepState = [];
-
   // Our handlers
-  function onNext(values) {
-    if (step === step.length - 1) {
-      // On our final step we go TODO: What happens here?
-      stepState[step] = values;
-      stepState = stepState; // Triggering update
-      step = 0;
+  function onNext() {
+    if (step === steps.length - 1) {
+      // On our final step
+      deployContract();
     } else {
-      // If we're not on the last step, store our data and increase a step
-      stepState[step] = values;
-      stepState = stepState; // Triggering update
       step +=1;
     }
   }
 
-  function onBack(values) {
+  function onBack() {
     if (step === 0) return;
-    stepState[step] = values;
-    stepState = stepState; // Triggering update
     step -= 1;
   }
 </script>
 
 <Section class="padding-top-none padding-bottom-none">
   <div class="main-wrapper">
+
+    <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
-      <Container class="width-large gutter-y-none">
-        <div class="grid-layout">
-          <div class="sidebar-container">
-            <GeneratorNav bind:step={step} steps={steps}/>
-          </div>
-          <div class="main-container">
-            <div class="component-container">
-              <svelte:component
-                this={steps[step].component}
-                {onNext}
-                {onBack}
-                initialValues={stepState[step]}
-              />
+      {#if $transactionInProgress}
+        <Transaction />
+      {:else}
+        <Container class="width-large gutter-y-none">
+          <div class="grid-layout">
+            <div class="sidebar-container">
+              <GeneratorNav bind:step={step} steps={steps}/>
             </div>
-            <Stack direction="row" justify="flex-end">
-              <Button class="small ghost" on:click={onBack}>Back</Button>
-              <Button class="small" on:click={onNext}>Next</Button>
+            <div class="main-container">
+              <div class="component-container">
+                <svelte:component
+                  this={steps[step].component}
+                />
+              </div>
+            </div>
+          </div>
+          <div class="buttons-nav">
+            <Stack direction="row" justify="flex-end" gap="1em">
+              {#if step > 0}
+                <Button class="small ghost" on:click={onBack}>Back</Button>
+              {/if}
+              <Button class="small" on:click={onNext}>
+                {#if step === steps.length - 1}
+                  Deploy to Mainnet
+                {:else}
+                  Next
+                {/if}
+              </Button>
             </Stack>
           </div>
-        </div>
-      </Container>
+        </Container>
+      {/if}
+
+    <!-- If not connected, ask to connect wallet -->
     {:else}
       <Container>
         <Stack>
@@ -92,22 +112,26 @@
         </Stack>
       </Container>
     {/if}
+
   </div>
 </Section>
 
 <style type="scss">
   .main-wrapper {
-    // background-color: blue;
     height: 75vh;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
+  .buttons-nav {
+    width: 100%;
+  }
 
   .grid-layout {
     display: grid; 
-    grid-template-columns: 250px 1fr;
-    gap: 1rem;
+    grid-template-columns: 270px 1fr;
+    gap: 2rem;
+    margin-bottom: 1rem;
     grid-template-areas: 
       "sidebar main";
     
@@ -117,13 +141,13 @@
     .main-container { 
       grid-area: main;      
       .component-container {
-        padding: 3rem;
-        border: solid 2px var(--clr-gradient-primary);
+        padding: 2.5rem;
         border-radius: 1rem;
         height: 70vh;
         overflow: auto;
-        margin-bottom: 1rem;
+        background-color: hsla(0, 0%, 100%, 0.02);
       }
     }
+
   }
 </style>
