@@ -1,5 +1,5 @@
 <script>
-  import { Button, Stack, NFTCard } from "$lib/components/atoms/index";
+  import { NFTCard } from "$lib/components/atoms/index";
   import { createForm } from 'felte';
   import { getTemplates } from "../../../../flow/actions.js";
 
