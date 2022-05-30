@@ -71,7 +71,8 @@
       line-height: 1em;
       color: var(--clr-accent-main);
       transition: 0.6s;
-      background-color: #0163da44;
+      // TODO: Apply dynamic colors
+      background-color: hsla(234, 67%, 40%, 0.5);
     }
     .step-number {
       color: var(--clr-font-text-soft);
@@ -92,7 +93,7 @@
       cursor: pointer;
     }
     .step-number-active {
-      background-color: var(--clr-accent-soft);
+      background-color: var(--clr-accent-main);
       color: var(--clr-font-text);
       border: none;
       margin-left: 0.3rem;

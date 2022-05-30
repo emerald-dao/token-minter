@@ -9,7 +9,8 @@
 
 <style type="scss">
   .description {
-    background-color: #0163da7f;
+    // TODO: Apply dynamic colors
+    background-color: hsla(234, 67%, 40%, 0.5);
     border-radius: 1rem;
     padding: 1.5rem 1.2rem;
     font-weight: 300;
