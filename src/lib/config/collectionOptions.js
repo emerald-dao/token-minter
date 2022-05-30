@@ -4,6 +4,7 @@ let collectionOptions = [
     type: 'text',
     bindValue: 'name',
     placeholder: 'Your Awesome Collection',
+    // validation: [string(), required()],
     helperText: '',
   },
   {
@@ -15,7 +16,7 @@ let collectionOptions = [
   {
     name: 'Max Supply',
     type: 'number',
-    bindValue: 'max-supply',
+    bindValue: 'maxSupply',
     helperText: 'Define the maximum of NFTs that can be minted in your collection',
   },
 ];
