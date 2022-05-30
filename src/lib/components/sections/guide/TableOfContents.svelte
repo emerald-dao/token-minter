@@ -82,6 +82,7 @@
   }
   h2 {
     font-size: var(--fs-400);
+    text-shadow: none;
   }
   ul {
     list-style: none;
