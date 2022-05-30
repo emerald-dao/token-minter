@@ -1,10 +1,13 @@
 <script>
-	import { Stack, Button } from "$lib/components/atoms/index";
+	import { Stack, Button, StepsButtons} from "$lib/components/atoms/index";
 	import { createForm } from 'felte';
 	import { contractInfo } from "../../../../flow/stores.js";
 	import collectionOptions from "$lib/config/collectionOptions.js";
 	import { object, string, number } from 'yup';
 	import { validator } from '@felte/validator-yup';
+
+	export let onSubmitAction;
+  export let onSubmitText;
 
 	const schema = object({
 		name: string().required(),
@@ -22,7 +25,7 @@
 
   const { form, errors } = createForm({
 		onSubmit() {
-      alert('a')
+      onSubmitAction();
     },
 		extend: [
 			validator({ schema }),
@@ -31,10 +34,11 @@
 	});
 </script>
 
-<Stack align="start">
-	<form use:form>
 
-		<!-- Generate input values from the collectionOptions object -->
+<form use:form>
+
+	<!-- Generate input values from the collectionOptions object -->
+	<div class="inputs-wrapper">
 		{#each collectionOptions as option }
 			<label for={option.bindValue}>{option.name}</label>
 			{#if option.helperText}
@@ -53,16 +57,23 @@
 				<span class="error">{$errors[option.bindValue]}</span>
 			{/if}
 		{/each}
+	</div>
 
-		<!-- Make submit button active if there are no form errors -->
-		{#if Object.values($errors).every(element => element === null)}
-			<Button type="submit">
-				Next
-			</Button>
-		{:else}
-			<Button type="submit" disabled class="disabled">
-				Next
-			</Button>	
-		{/if}
-	</form>
-</Stack>
+	<StepsButtons onSubmitText={onSubmitText} submit errors={$errors}/>
+</form>
+
+<style type="scss">
+	form {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: flex-end;
+
+		.inputs-wrapper {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+	}
+</style>

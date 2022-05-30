@@ -1,10 +1,11 @@
 <script>
   import Prism from './prism.js';
+  export let title = 'Code'
   export let code = '';
 </script>
 
 <div class="wrapper">
-  <div class="code-header">Your Smart Contract</div>
+  <div class="code-header">{title}</div>
   <pre><code>{@html Prism.highlight(code, Prism?.languages?.swift)}</code></pre>
 </div>
 
@@ -16,7 +17,7 @@
   .wrapper {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 55vh;
+    height: 100%;
     width: 100%;
     border-radius: 0.4em;
 

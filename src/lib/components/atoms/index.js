@@ -11,3 +11,5 @@ export { default as FlowConnect } from './FlowConnect.svelte';
 export { default as Logo } from './Logo.svelte';
 export { default as NFTCard } from './NFTCard.svelte';
 export { default as StepDescription } from './StepDescription.svelte';
+export { default as StepsButtons } from './StepsButtons.svelte';
+export { default as DeploymentButton } from './DeploymentButton.svelte';

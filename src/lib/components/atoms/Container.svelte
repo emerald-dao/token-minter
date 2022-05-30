@@ -2,9 +2,11 @@
   let containerProps = {
     class:[$$restProps.class]
   }
+
+  export let height = "auto";
 </script>
 
-<div {...containerProps}>
+<div {...containerProps} style="height: {height};">
   <slot/>
 </div>
 

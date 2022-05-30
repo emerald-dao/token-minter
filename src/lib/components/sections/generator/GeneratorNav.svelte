@@ -1,8 +1,8 @@
 <script>
   import { StepDescription } from "$lib/components/atoms/index"
 
-  export let step
-  export let steps
+  export let step;
+  export let steps;
 </script>
 
 <div class="main-wrapper">

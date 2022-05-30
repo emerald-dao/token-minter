@@ -22,7 +22,7 @@ input {
   border: 1px red solid;
 }
 
-label {
+input + label {
   margin-top: 2rem;
 }
 
@@ -43,15 +43,12 @@ label {
   display: grid;
   grid-template-columns: 1em auto;
   gap: 1.2em;
-  margin-bottom: 1.2em;
+}
+.checkbox-label + .checkbox-label {
+  margin-top: 1em;
 }
 .checkbox-label-with-number {
-  line-height: 1.1;
-  font-size: var(--fs-200);
-  display: grid;
   grid-template-columns: 1em auto 4em;
-  gap: 1.2em;
-  margin-bottom: 1em;
 
   input[type='number'] {
     // Hide arrows
