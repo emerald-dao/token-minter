@@ -47,6 +47,7 @@
 				{...{ type: option.type }}
 				bind:value={$contractInfo[option.bindValue]}
 				class:input-error="{$errors[option.bindValue]}"
+				class:input-ok="{!$errors[option.bindValue]}"
 			/>
 			{#if $errors[option.bindValue]}
 				<span class="error">{$errors[option.bindValue]}</span>
