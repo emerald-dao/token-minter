@@ -10,7 +10,7 @@
 <style type="scss">
   .description {
     // TODO: Apply dynamic colors
-    background-color: hsla(234, 67%, 40%, 0.5);
+    background-color: hsla(234, 67%, 40%, 0.8);
     border-radius: 1rem;
     padding: 1.5rem 1.2rem;
     font-weight: 300;

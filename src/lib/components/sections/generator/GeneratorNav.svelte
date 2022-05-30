@@ -93,7 +93,7 @@
       cursor: pointer;
     }
     .step-number-active {
-      background-color: var(--clr-accent-main);
+      background-color: var(--clr-accent-hover);
       color: var(--clr-font-text);
       border: none;
       margin-left: 0.3rem;
