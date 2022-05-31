@@ -1,15 +1,37 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { StepsButtons, Stack } from "$lib/components/atoms/index";
+  import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { createForm } from 'felte';
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
+  import { object, mixed } from 'yup';
+	import { validator } from '@felte/validator-yup';
 
 	let options = {};
 	let files;
   export let onSubmitText;
   export let onSubmitAction;
 
-  const { form, data } = createForm();
+  const schema = object().shape({
+    file: mixed()
+					.test("required", "You need to provide a file", (file) => {
+					// return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
+						if (file) return true;
+						return false;
+					})
+					.test("fileSize", "The file is too large", (file) => {
+						//if u want to allow only certain file sizes
+						return file && file.size <= 200000000000;
+					})
+		});
+
+  const { form, errors } = createForm({
+		onSubmit() {
+      onSubmitAction();
+    },
+		// extend: [
+		// 	validator({ schema }),
+		// ],
+	});
 
   // Drop files handling
   function handleDragOver(evt) {
@@ -22,10 +44,14 @@
 
 <form use:form>
   <div class="inputs-wrapper">
+    <DropZone/>
     <label for="drop_zone">
       CSV File + Images
     </label>
     <span class="helper-text">Drop a folder containing a CSV file + a images folder</span>
+    {#if $errors.file}
+      <span class="error">{$errors.file}</span>
+    {/if}
     <div name='drop_zone' id='drop_zone' class='drop-zone' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop}>
       <Icon icon=ion:cloud-upload-outline/>
       <p>
@@ -34,7 +60,7 @@
     </div>
   </div>
 
-  <StepsButtons onSubmitText={onSubmitText} onSubmitAction={onSubmitAction}/>
+  <StepsButtons onSubmitText={onSubmitText} submit errors={$errors}/>
 </form>
 
 <style type="scss">

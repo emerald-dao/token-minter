@@ -1,5 +1,5 @@
 <script>
-	import { Stack, Button, StepsButtons} from "$lib/components/atoms/index";
+	import { StepsButtons} from "$lib/components/atoms/index";
 	import { createForm } from 'felte';
 	import { contractInfo } from "../../../../flow/stores.js";
 	import collectionOptions from "$lib/config/collectionOptions.js";
@@ -9,19 +9,12 @@
 	export let onSubmitAction;
   export let onSubmitText;
 
+	// TODO: Make dynamic schema
 	const schema = object({
 		name: string().required(),
 		payment: number().required().positive(),
 		maxSupply: number().required().positive(),
 	})
-
-	const warnSchema = object({
-		name: 
-			string()
-			.test('is long enough', 'name must have more than two letters', (value) =>
-				value ? value.length > 2 : true
-			),
-	});
 
   const { form, errors } = createForm({
 		onSubmit() {
@@ -29,11 +22,9 @@
     },
 		extend: [
 			validator({ schema }),
-			validator({ schema: warnSchema, level: 'warning' }),
 		],
 	});
 </script>
-
 
 <form use:form>
 

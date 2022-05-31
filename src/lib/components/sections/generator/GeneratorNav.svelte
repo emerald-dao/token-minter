@@ -3,6 +3,11 @@
 
   export let step;
   export let steps;
+
+  const goToStep = (i) => {
+    // Allow navigation only to previous steps
+    if (i < step) step = i;
+  };
 </script>
 
 <div class="main-wrapper">
@@ -10,7 +15,8 @@
     {#each steps as _step, i}
       <li 
         class:li-active={i === step} 
-        on:click={() => step=i}
+        class:li-clickable={i < step}
+        on:click={() => goToStep(i)}
       >
         <div 
           class="step-number" 
@@ -53,7 +59,6 @@
     color: var(--clr-font-text-soft);
     
     li {
-      cursor: pointer;
       font-size: var(--fs-300);
       font-weight: 400;
       transition: 0.6s;
@@ -73,6 +78,9 @@
       transition: 0.6s;
       // TODO: Apply dynamic colors
       background-color: hsla(234, 67%, 40%, 0.5);
+    }
+    .li-clickable {
+      cursor: pointer;
     }
     .step-number {
       color: var(--clr-font-text-soft);
