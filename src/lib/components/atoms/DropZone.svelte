@@ -2,18 +2,21 @@
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index' 
 
+  // Handle file input when loaded through a file input
   const handleFileInput = (e) => {
     e.preventDefault();
-    updateDropZoneFiles(e.target.files[0]);
-    console.log(inputElement.files)
+    // Fix re-render bug
+    inputElement = inputElement
   }
   
+  // Handle file input when loaded through a file drop
   const handleFileDrop = (e) => {
     e.preventDefault();
     dragOver = false;
+    console.log(e.dataTransfer.files)
 
     if (fileType) {
-      if (fileType != e.dataTransfer.files[0].type) {
+      if (!e.dataTransfer.files[0].type.includes(fileType.replace('*', ''))) {
         alert("Wrong file type");
         return;
       }
@@ -26,20 +29,11 @@
       }
     }
 
-    updateDropZoneFiles(e.dataTransfer.files[0]);
     inputElement.files = e.dataTransfer.files;
-    console.log(inputElement.files)
-  }
-
-  const updateDropZoneFiles = (file) => {
-    if (maxAmountOfFiles > 1) {
-      dropZoneFiles = [...dropZoneFiles, file]
-    } else dropZoneFiles = [file]
   }
 
   let inputElement;
   let dragOver = false;
-  let dropZoneFiles = [];
 
   export let name;
   export let promptText = "Drop file here or click to upload";
@@ -57,22 +51,26 @@
   on:drop={handleFileDrop}
   ondragover="return false"
 >
-  {#if dropZoneFiles.length}
-    {#each dropZoneFiles as file}
-      <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
-    {/each}
-  {:else}
-    <Icon icon=ion:cloud-upload-outline/>
-    <span class="prompt">{promptText}</span>
-  {/if}
   <input 
     type="file" 
     name={name}
     id={name}
     accept={fileType}
+    multiple = {maxAmountOfFiles > 1}
     on:input={handleFileInput}
     bind:this={inputElement}
   />
+
+  {#if typeof inputElement === "object"}
+    {#if inputElement.files.length > 0}
+      {#each inputElement.files as file}
+        <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
+      {/each}
+    {:else}
+      <Icon icon=ion:cloud-upload-outline/>
+      <span class="prompt">{promptText}</span>
+    {/if}
+  {/if}
 </div>
 
 <style type="scss">
@@ -95,7 +93,6 @@
     .prompt {
       font-size: var(--fs-300)
     }
-
   }
 
   input {

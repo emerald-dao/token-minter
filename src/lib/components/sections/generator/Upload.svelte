@@ -55,7 +55,7 @@
       {#if $errors.file}
       <span class="error">{$errors.file}</span>
       {/if}
-      <DropZone promptText="Drop Images folder" name="drop-zone-images"/>
+      <DropZone promptText="Drop Images folder" fileType="image/*" name="drop-zone-images" maxAmountOfFiles={500}/>
     </div>
   </div>
 
