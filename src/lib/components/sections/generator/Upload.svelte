@@ -18,7 +18,7 @@
     dropZoneImages: mixed()
 					.test("required", "You need to provide a file", (file) => {
 					// return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
-						if (file) return true;
+						if (file.length > 0) return true;
 						return false;
 					})
 		});
