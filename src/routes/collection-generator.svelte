@@ -9,57 +9,66 @@
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
   import { deployContract } from "../flow/actions.js";
-  
-  const steps = [
-    {
-      title: "Collection Information",
-      component: CollectionInfo,
-      emoji: "ℹ️",
-      description: "Define some general information around your collection."
-    }, 
-    {
-      title: "Upload",
-      component: Upload,
-      emoji: "🗂",
-      description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images."
-    }, 
-    {
-      title: "Collection Preview",
-      component: CollectionPreview,
-      emoji: "🖼",
-      description: "Looks like everything is in order. Let's see what you've got."
-    },
-    {
-      title: "Contract Information",
-      component: ContractInfo,
-      emoji: "📜",
-      description: "Define some general information around your contract."
-    }, 
-    {
-      title: "Deploy",
-      component: Deploy,
-      emoji: "🚀",
-      description: "Deploy your contract to the blockchain."
-    }
-  ];
 
   // The current step of our process.
   let step = 0;
 
   // Our handlers
   function onNext() {
-    if (step === steps.length - 1) {
-      // On our final step
-      deployContract();
-    } else {
-      step +=1;
-    }
+    step += 1;
   }
 
   function onBack() {
-    if (step === 0) return;
     step -= 1;
   }
+
+  function uploadAssets (assets) {
+    console.log(assets);
+    step += 1;
+  }
+  
+  const steps = [
+    {
+      title: "Collection Information",
+      component: CollectionInfo,
+      emoji: "ℹ️",
+      description: "Define some general information around your collection.",
+      onSubmitAction: onNext,
+      onSubmitText: "Next",
+    }, 
+    {
+      title: "Upload",
+      component: Upload,
+      emoji: "🗂",
+      description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
+      onSubmitAction: uploadAssets,
+      onSubmitText: "Next",
+    }, 
+    {
+      title: "Collection Preview",
+      component: CollectionPreview,
+      emoji: "🖼",
+      description: "Looks like everything is in order. Let's see what you've got.",
+      onSubmitAction: onNext,
+      onSubmitText: "Next",
+    },
+    {
+      title: "Contract Information",
+      component: ContractInfo,
+      emoji: "📜",
+      description: "Define some general information around your contract.",
+      onSubmitAction: onNext,
+      onSubmitText: "Next",
+    }, 
+    {
+      title: "Deploy",
+      component: Deploy,
+      emoji: "🚀",
+      description: "Deploy your contract to the blockchain.",
+      onSubmitAction: deployContract,
+      onSubmitText: "Deploy",
+    }
+  ];
 </script>
 
 <Section class="padding-top-none padding-bottom-none">
@@ -67,32 +76,18 @@
 
     <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
-      <Container class="width-large gutter-y-none">
+      <Container class="width-large gutter-y-none" height="100%">
         <div class="grid-layout">
           <div class="sidebar-container">
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
           <div class="main-container">
-            <div class="component-container">
-              <svelte:component
-                this={steps[step].component}
-              />
-            </div>
+            <svelte:component
+              this={steps[step].component}
+              onSubmitAction={steps[step].onSubmitAction}
+              onSubmitText={steps[step].onSubmitText}
+            />
           </div>
-        </div>
-        <div class="buttons-nav">
-          <Stack direction="row" justify="flex-end" gap="1em">
-            {#if step > 0}
-              <Button class="small ghost" on:click={onBack}>Back</Button>
-            {/if}
-            <Button class="small" on:click={onNext}>
-              {#if step === steps.length - 1}
-                Deploy to Mainnet
-              {:else}
-                Next
-              {/if}
-            </Button>
-          </Stack>
         </div>
       </Container>
 
@@ -111,13 +106,10 @@
 
 <style type="scss">
   .main-wrapper {
-    height: 75vh;
+    height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-  .buttons-nav {
-    width: 100%;
   }
 
   .grid-layout {
@@ -125,21 +117,21 @@
     grid-template-columns: 270px 1fr;
     gap: 2rem;
     margin-bottom: 1rem;
+    height: 100%;
     grid-template-areas: 
       "sidebar main";
     
     .sidebar-container { 
-      grid-area: sidebar; 
+      grid-area: sidebar;
+      height: 100%;
     }
     .main-container { 
-      grid-area: main;      
-      .component-container {
-        padding: 2.5rem;
-        border-radius: 1rem;
-        height: 70vh;
-        overflow: auto;
-        background-color: hsla(0, 0%, 100%, 0.02);
-      }
+      grid-area: main;
+      height: 100%;
+      overflow-x: auto;      
+      padding: 2.5rem;
+      border-radius: 1rem;
+      background-color: hsla(0, 0%, 100%, 0.02);
     }
 
   }

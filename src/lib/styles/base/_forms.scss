@@ -9,11 +9,21 @@ input {
   color: var(--clr-font-text);
   font-size: var(--fs-300);
   background-color: transparent;
-  margin-bottom: 2rem;
-  border: 1px var(--clr-primary-main) solid;
+  border: 1px var(--clr-font-text) solid;
   border-radius: 0.3rem;
   padding: 0.5em 1em;
   width: 100%;
+}
+
+.input-ok {
+  border: 1px var(--clr-primary-main) solid;
+}
+.input-error {
+  border: 1px red solid;
+}
+
+input + label {
+  margin-top: 2rem;
 }
 
 .helper-text {
@@ -22,21 +32,23 @@ input {
   margin-bottom: 0.6em;
 }
 
+.error {
+  color: red;
+  font-size: var(--fs-200);
+}
+
 .checkbox-label {
   line-height: 1.1;
   font-size: var(--fs-200);
   display: grid;
   grid-template-columns: 1em auto;
   gap: 1.2em;
-  margin-bottom: 1.2em;
+}
+.checkbox-label + .checkbox-label {
+  margin-top: 1em;
 }
 .checkbox-label-with-number {
-  line-height: 1.1;
-  font-size: var(--fs-200);
-  display: grid;
   grid-template-columns: 1em auto 4em;
-  gap: 1.2em;
-  margin-bottom: 1em;
 
   input[type='number'] {
     // Hide arrows

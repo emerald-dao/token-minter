@@ -21,10 +21,10 @@
 
 <style type="scss">
   .invitation {
-		background-color: var(--clr-accent-soft);
+		background-color: var(--clr-accent-hover);
     border-radius: 0.4rem;
 		padding: 4rem;
-		box-shadow: var(--clr-accent-main) 8px 8px, var(--clr-accent-hover) 16px 16px;
+		box-shadow: var(--clr-accent-main) 8px 8px, var(--clr-accent-soft) 16px 16px;
 
 		h2 {
 			color: var(--clr-font-heading);

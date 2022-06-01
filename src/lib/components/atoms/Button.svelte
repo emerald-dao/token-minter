@@ -3,6 +3,7 @@
     class:[$$restProps.class]
   }
   export let href;
+  export let disabled = false;
 </script>
 
 {#if href}
@@ -13,6 +14,7 @@
     on:focus
     on:mouseenter
     on:mouseleave
+    disabled={disabled}
     {...buttonProps}
   >
     <slot/>
@@ -24,6 +26,7 @@
     on:focus
     on:mouseenter
     on:mouseleave
+    disabled={disabled}
     {...buttonProps}
   >
     <slot/>
@@ -62,6 +65,14 @@
 
   .large {
     font-size: var(--fs-400);
+  }
+
+  .disabled {
+    background: gray;
+    cursor: not-allowed;
+  }
+  .disabled:hover {
+    box-shadow: none;
   }
 
   button:hover {

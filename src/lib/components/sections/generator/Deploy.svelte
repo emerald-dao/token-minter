@@ -1,17 +1,47 @@
 <script>
-  import { Button } from "$lib/components/atoms/index";
+  import { Button, DeploymentButton } from "$lib/components/atoms/index";
   import DeploymentTransaction from '$lib/components/sections/generator/DeploymentTransaction.svelte';
   import { deployContract } from "../../../../flow/actions.js";
 	import { transactionInProgress } from "../../../../flow/stores";
+
+  let deploymentOptions = [
+    {
+      title: "Deploy to Testnet",
+      emoji: "🧪",
+      description: "Deploy your collection to the Flow test blockchain.",
+      onClickAction: () => alert("test"),
+      accent: false
+    },
+    {
+      title: "Deploy to Mainnet",
+      emoji: "🚀",
+      description: "Deploy your collection to the Flow mainnet blockchain.",
+      onClickAction: deployContract,
+      accent: true
+    },
+    {
+      title: "Download Code",
+      emoji: "🔽",
+      description: "Download the Cadence contract to your machine.",
+      onClickAction: () => alert("download"),
+      accent: false
+    },
+  ];
 </script>
 
 <div>
   {#if $transactionInProgress}
     <DeploymentTransaction/>
   {:else}
-    <Button class="small ghost">Download your Code</Button>
-    <Button on:click={deployContract} class="small">Deploy to Flow Mainnet</Button>
-    <Button class="small ghost">Deploy to Flow Testnet</Button>
+    {#each deploymentOptions as option}
+      <DeploymentButton
+        title={option.title}
+        emoji={option.emoji}
+        description={option.description}
+        onClickAction={option.onClickAction}
+        accent={option.accent}
+      />
+    {/each}
   {/if}
 </div>
 

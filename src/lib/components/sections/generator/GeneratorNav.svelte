@@ -1,6 +1,13 @@
 <script>
-  export let step
-  export let steps
+  import { StepDescription } from "$lib/components/atoms/index"
+
+  export let step;
+  export let steps;
+
+  const goToStep = (i) => {
+    // Allow navigation only to previous steps
+    if (i < step) step = i;
+  };
 </script>
 
 <div class="main-wrapper">
@@ -8,7 +15,8 @@
     {#each steps as _step, i}
       <li 
         class:li-active={i === step} 
-        on:click={() => step=i}
+        class:li-clickable={i < step}
+        on:click={() => goToStep(i)}
       >
         <div 
           class="step-number" 
@@ -24,10 +32,7 @@
       </li>
     {/each}
   </ul>
-  <div class="description">
-    <h5>Description</h5>
-    <p>{steps[step].description}</p>
-  </div>
+  <StepDescription description={steps[step].description} />
 </div>
 
 <style type="scss">
@@ -54,7 +59,6 @@
     color: var(--clr-font-text-soft);
     
     li {
-      cursor: pointer;
       font-size: var(--fs-300);
       font-weight: 400;
       transition: 0.6s;
@@ -72,7 +76,11 @@
       line-height: 1em;
       color: var(--clr-accent-main);
       transition: 0.6s;
-      background-color: #0163da44;
+      // TODO: Apply dynamic colors
+      background-color: hsla(234, 67%, 40%, 0.5);
+    }
+    .li-clickable {
+      cursor: pointer;
     }
     .step-number {
       color: var(--clr-font-text-soft);
@@ -93,29 +101,10 @@
       cursor: pointer;
     }
     .step-number-active {
-      background-color: var(--clr-accent-soft);
+      background-color: var(--clr-accent-hover);
       color: var(--clr-font-text);
       border: none;
       margin-left: 0.3rem;
-    }
-  }
-
-  .description {
-    background-color: #0163da7f;
-    border-radius: 1rem;
-    padding: 1.5rem 1.2rem;
-    font-weight: 300;
-    width: 100%;
-    height: 100%;
-    transition: 0.5s;
-    h5 {
-      font-size: var(--fs-400);
-      margin-top: 0;
-      margin-bottom: 1em;
-      font-weight: 500;
-    }
-    p {
-      font-size: var(--fs-200);
     }
   }
 </style>
