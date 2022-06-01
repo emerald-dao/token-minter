@@ -1,5 +1,4 @@
 <script>
-  import Icon from "@iconify/svelte";
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { createForm } from 'felte';
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
@@ -26,38 +25,37 @@
 
   const { form, errors, data } = createForm({
 		onSubmit() {
-      console.log(data)
       onSubmitAction();
+      console.log(data)
     },
 		// extend: [
 		// 	validator({ schema }),
 		// ],
 	});
-
-  // Drop files handling
-  function handleDragOver(evt) {
-    evt.stopPropagation();
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'copy';
-  }
-  
 </script>
 
 <form use:form>
-  <div class="inputs-wrapper">
-    <DropZone/>
-    <label for="drop_zone">
-      CSV File + Images
-    </label>
-    <span class="helper-text">Drop a folder containing a CSV file + a images folder</span>
-    {#if $errors.file}
+  <div class="main-wrapper">
+    <div class="input-wrapper">
+      <label for="drop-zone-csv">
+        Collection Data
+      </label>
+      <span class="helper-text">Drop a CSV file containing all your collection metadata.</span>
+      {#if $errors.file}
+        <span class="error">{$errors.file}</span>
+      {/if}
+      <DropZone promptText="Drop CSV file" fileType="text/csv" name="drop-zone-csv"/>
+    </div>
+    
+    <div class="input-wrapper">
+      <label for="drop-zone-images">
+        Collection Images
+      </label>
+      <span class="helper-text">Drop a folder containing all your collection images.</span>
+      {#if $errors.file}
       <span class="error">{$errors.file}</span>
-    {/if}
-    <div name='drop_zone' id='drop_zone' class='drop-zone' on:dragover={handleDragOver} on:drop={handleAssetFolderDrop}>
-      <Icon icon=ion:cloud-upload-outline/>
-      <p>
-        Drop your folder here
-      </p>    
+      {/if}
+      <DropZone promptText="Drop Images folder" name="drop-zone-images"/>
     </div>
   </div>
 
@@ -72,23 +70,16 @@
 		justify-content: space-between;
 		align-items: flex-end;
 
-    .inputs-wrapper {
+    .main-wrapper {
       display: flex;
 			flex-direction: column;
 			width: 100%;
       height: 100%;
+      gap: 2rem;
 
-      .drop-zone {
-        width: 100%;
-        height: 100%;
+      .input-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 0.5em;
-        align-items: center;
-        justify-content: center;
-        border: solid 1px var(--clr-primary-main);
-        border-radius: 3rem;
-        margin-bottom: 2rem;
       }
     }
   }

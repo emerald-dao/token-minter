@@ -22,7 +22,7 @@
     direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0.3rem 2rem;
+    padding-inline: 2rem;
     width: 100%;
     border-radius: 0.6rem;
     overflow: hidden;

@@ -1,26 +1,50 @@
 <script>
-  import { DropZoneFile } from '$lib/components/atoms/index'
+  import Icon from "@iconify/svelte";
+  import { DropZoneFile } from '$lib/components/atoms/index' 
 
-  const handleFileInput = () => {
-    console.log(inputElement.files);
+  const handleFileInput = (e) => {
+    e.preventDefault();
+    updateDropZoneFiles(e.target.files[0]);
+    console.log(inputElement.files)
   }
-
+  
   const handleFileDrop = (e) => {
     e.preventDefault();
-    console.log(e)
-    console.log(e.dataTransfer.files)
-    inputElement.files = e.dataTransfer.files
     dragOver = false;
-    updateThumbnail(dropZoneFiles, e.dataTransfer.files[0])
+
+    if (fileType) {
+      if (fileType != e.dataTransfer.files[0].type) {
+        alert("Wrong file type");
+        return;
+      }
+    }
+
+    if (maxAmountOfFiles) {
+      if (e.dataTransfer.files.length > maxAmountOfFiles) {
+        alert("Too many files");
+        return;
+      }
+    }
+
+    updateDropZoneFiles(e.dataTransfer.files[0]);
+    inputElement.files = e.dataTransfer.files;
+    console.log(inputElement.files)
   }
 
-  const updateThumbnail = (arrayOfFiles, file) => {
-    arrayOfFiles.push(file);
+  const updateDropZoneFiles = (file) => {
+    if (maxAmountOfFiles > 1) {
+      dropZoneFiles = [...dropZoneFiles, file]
+    } else dropZoneFiles = [file]
   }
 
   let inputElement;
   let dragOver = false;
-  $: dropZoneFiles = [];
+  let dropZoneFiles = [];
+
+  export let name;
+  export let promptText = "Drop file here or click to upload";
+  export let fileType;
+  export let maxAmountOfFiles = 1;
 </script>
 
 <div 
@@ -38,12 +62,14 @@
       <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
     {/each}
   {:else}
-     <span class="prompt">Drop file here or click to upload</span>
+    <Icon icon=ion:cloud-upload-outline/>
+    <span class="prompt">{promptText}</span>
   {/if}
   <input 
     type="file" 
-    name="drop-zone" 
-    id="drop-zone" 
+    name={name}
+    id={name}
+    accept={fileType}
     on:input={handleFileInput}
     bind:this={inputElement}
   />
@@ -52,27 +78,32 @@
 <style type="scss">
   .drop-zone {
     width: 100%;
-    height: 50vh;
+    min-height: 150px;
     padding: 25px;
     display: flex;
+    flex-direction: column;
+    gap: 1rem;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-weight: 500;
-    font-size: 20px;
     cursor: pointer;
     color: var(--clr-font-text);
     border: 1px solid var(--clr-primary-main);
     border-radius: 10px;
     transition: 1s;
+
+    .prompt {
+      font-size: var(--fs-300)
+    }
+
+  }
+
+  input {
+    display: none;
   }
 
   .drop-zone-over {
     border-style: solid;
     background-color: var(--clr-primary-main);
-  }
-
-  input {
-    display: none;
   }
 </style>
