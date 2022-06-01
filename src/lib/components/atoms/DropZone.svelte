@@ -1,36 +1,26 @@
 <script>
+  import { DropZoneFile } from '$lib/components/atoms/index'
+
   const handleFileInput = () => {
     console.log(inputElement.files);
   }
 
   const handleFileDrop = (e) => {
     e.preventDefault();
+    console.log(e)
+    console.log(e.dataTransfer.files)
     inputElement.files = e.dataTransfer.files
     dragOver = false;
-    updateThumbnail(dropZone, e.dataTransfer.files[0])
+    updateThumbnail(dropZoneFiles, e.dataTransfer.files[0])
   }
 
-  const updateThumbnail = (dropZoneElement, file) => {
-    // Create and append thumbnail element
-    const thumbnailElement = document.createElement('div');
-    dropZone.removeChild(prompt);
-    thumbnailElement.classList.add('drop-zone-thumbnail');
-    thumbnailElement.textContent = file.name;
-    dropZoneElement.appendChild(thumbnailElement);
-
-    // Create and append icon element
-    if (file.type === "text/csv") {
-      const csvIcon = document.createElement('span');
-      csvIcon.classList.add('icon', 'icon-csv');
-      csvIcon.textContent = '📄';
-      thumbnailElement.appendChild(csvIcon);
-    }
+  const updateThumbnail = (arrayOfFiles, file) => {
+    arrayOfFiles.push(file);
   }
 
   let inputElement;
-  let dropZone;
-  let prompt;
   let dragOver = false;
+  $: dropZoneFiles = [];
 </script>
 
 <div 
@@ -41,13 +31,19 @@
   on:dragleave={() => dragOver = false}
   on:dragend={() => dragOver = false}
   on:drop={handleFileDrop}
-  bind:this={dropZone}
   ondragover="return false"
 >
-  <span class="prompt" bind:this={prompt}>Drop file here or click to upload</span>
+  {#if dropZoneFiles.length}
+    {#each dropZoneFiles as file}
+      <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
+    {/each}
+  {:else}
+     <span class="prompt">Drop file here or click to upload</span>
+  {/if}
   <input 
     type="file" 
-    name="myFile" 
+    name="drop-zone" 
+    id="drop-zone" 
     on:input={handleFileInput}
     bind:this={inputElement}
   />
@@ -55,14 +51,13 @@
 
 <style type="scss">
   .drop-zone {
-    max-width: 200px;
-    height: 200px;
+    width: 100%;
+    height: 50vh;
     padding: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    font-family: "Quicksand", sans-serif;
     font-weight: 500;
     font-size: 20px;
     cursor: pointer;
@@ -79,15 +74,5 @@
 
   input {
     display: none;
-  }
-
-  :global(.drop-zone-thumbnail) {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-    background-color: #cccccc;
-    background-size: cover;
-    position: relative;
   }
 </style>

@@ -14,3 +14,4 @@ export { default as StepDescription } from './StepDescription.svelte';
 export { default as StepsButtons } from './StepsButtons.svelte';
 export { default as DeploymentButton } from './DeploymentButton.svelte';
 export { default as DropZone } from './DropZone.svelte';
+export { default as DropZoneFile } from './DropZoneFile.svelte';

@@ -24,8 +24,9 @@
 					})
 		});
 
-  const { form, errors } = createForm({
+  const { form, errors, data } = createForm({
 		onSubmit() {
+      console.log(data)
       onSubmitAction();
     },
 		// extend: [
