@@ -5,57 +5,62 @@
   import { object, mixed } from 'yup';
 	import { validator } from '@felte/validator-yup';
 
-	let options = {};
-	let files;
   export let onSubmitText;
   export let onSubmitAction;
 
   const schema = object().shape({
-    file: mixed()
+    dropZoneCsv: mixed()
+					.test("required", "You need to provide a file", (file) => {
+					// return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
+						if (file) return true;
+						return false;
+					}),
+    dropZoneImages: mixed()
 					.test("required", "You need to provide a file", (file) => {
 					// return file && file.size <-- u can use this if you don't want to allow empty files to be uploaded;
 						if (file) return true;
 						return false;
 					})
-					.test("fileSize", "The file is too large", (file) => {
-						//if u want to allow only certain file sizes
-						return file && file.size <= 200000000000;
-					})
 		});
 
   const { form, errors, data } = createForm({
 		onSubmit() {
-      onSubmitAction();
-      console.log(data)
+      onSubmitAction($data);
     },
-		// extend: [
-		// 	validator({ schema }),
-		// ],
+		extend: [
+			validator({ schema }),
+		],
 	});
 </script>
 
 <form use:form>
   <div class="main-wrapper">
     <div class="input-wrapper">
-      <label for="drop-zone-csv">
+      <label for="dropZoneCsv">
         Collection Data
       </label>
       <span class="helper-text">Drop a CSV file containing all your collection metadata.</span>
       {#if $errors.file}
         <span class="error">{$errors.file}</span>
       {/if}
-      <DropZone promptText="Drop CSV file" fileType="text/csv" name="drop-zone-csv"/>
+      <DropZone promptText="Drop CSV file" fileType="text/csv" name="dropZoneCsv"/>
+      {#if $errors.dropZoneCsv}
+				<span class="error">{$errors.dropZoneCsv}</span>
+			{/if}
     </div>
     
     <div class="input-wrapper">
-      <label for="drop-zone-images">
+      <label for="dropZoneImages">
         Collection Images
       </label>
       <span class="helper-text">Drop a folder containing all your collection images.</span>
       {#if $errors.file}
-      <span class="error">{$errors.file}</span>
+        <span class="error">{$errors.file}</span>
       {/if}
-      <DropZone promptText="Drop Images folder" fileType="image/*" name="drop-zone-images" maxAmountOfFiles={500}/>
+      <DropZone promptText="Drop Images folder" fileType="image/*" name="dropZoneImages" maxAmountOfFiles={500}/>
+      {#if $errors.dropZoneImages}
+				<span class="error">{$errors.dropZoneImages}</span>
+			{/if}
     </div>
   </div>
 

@@ -15,11 +15,16 @@
 
   // Our handlers
   function onNext() {
-    step +=1;
+    step += 1;
   }
 
   function onBack() {
     step -= 1;
+  }
+
+  function uploadAssets (assets) {
+    console.log(assets);
+    step += 1;
   }
   
   const steps = [
@@ -36,7 +41,7 @@
       component: Upload,
       emoji: "🗂",
       description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
-      onSubmitAction: onNext,
+      onSubmitAction: uploadAssets,
       onSubmitText: "Next",
     }, 
     {

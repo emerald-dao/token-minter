@@ -1,19 +1,14 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { DropZoneFile } from '$lib/components/atoms/index' 
+  import { DropZoneFile } from '$lib/components/atoms/index'
 
-  // Handle file input when loaded through a file input
-  const handleFileInput = (e) => {
-    e.preventDefault();
-    // Fix re-render bug
-    inputElement = inputElement
-  }
-  
+  // Variable containing our files
+  let files
+
   // Handle file input when loaded through a file drop
   const handleFileDrop = (e) => {
     e.preventDefault();
     dragOver = false;
-    console.log(e.dataTransfer.files)
 
     if (fileType) {
       if (!e.dataTransfer.files[0].type.includes(fileType.replace('*', ''))) {
@@ -29,7 +24,10 @@
       }
     }
 
-    inputElement.files = e.dataTransfer.files;
+    inputElement.files = e.dataTransfer.files
+    
+    // Dispatch change event to make felte aware of the change
+    inputElement.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   let inputElement;
@@ -41,8 +39,8 @@
   export let maxAmountOfFiles = 1;
 </script>
 
-<div 
-  class="drop-zone" 
+<div
+  class="drop-zone"
   class:drop-zone-over={dragOver}
   on:click={inputElement.click()}
   on:dragover={() => dragOver = true}
@@ -51,25 +49,23 @@
   on:drop={handleFileDrop}
   ondragover="return false"
 >
-  <input 
-    type="file" 
+  <input
+    type="file"
     name={name}
     id={name}
     accept={fileType}
     multiple = {maxAmountOfFiles > 1}
-    on:input={handleFileInput}
+    bind:files
     bind:this={inputElement}
   />
 
-  {#if typeof inputElement === "object"}
-    {#if inputElement.files.length > 0}
-      {#each inputElement.files as file}
-        <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
-      {/each}
-    {:else}
-      <Icon icon=ion:cloud-upload-outline/>
-      <span class="prompt">{promptText}</span>
-    {/if}
+  {#if files}
+    {#each files as file}
+      <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
+    {/each}
+  {:else}
+    <Icon icon=ion:cloud-upload-outline/>
+    <span class="prompt">{promptText}</span>
   {/if}
 </div>
 
