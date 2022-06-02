@@ -1,42 +1,49 @@
 <script>
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index'
-
-  // Variable containing our files
-  let files
-
+  import { createEventDispatcher } from 'svelte';
+  
   // Handle file input when loaded through a file drop
   const handleFileDrop = (e) => {
     e.preventDefault();
     dragOver = false;
-
+    
+    // Some validations
     if (fileType) {
       if (!e.dataTransfer.files[0].type.includes(fileType.replace('*', ''))) {
         alert("Wrong file type");
         return;
       }
     }
-
     if (maxAmountOfFiles) {
       if (e.dataTransfer.files.length > maxAmountOfFiles) {
         alert("Too many files");
         return;
       }
     }
-
+    
+    // Load file to input element
     inputElement.files = e.dataTransfer.files
     
-    // Dispatch change event to make felte aware of the change
+    // Dispatch change event to make Felte aware of the change
     inputElement.dispatchEvent(new Event('change', { bubbles: true }));
   }
-
-  let inputElement;
-  let dragOver = false;
-
-  export let name;
+  
+  // When files change, dipatch event so parent component can handle files
+  let dispatch = createEventDispatcher();
+  $: if (files) {    
+		dispatch('changeFiles', files);
+	}
+  
+  let inputElement; // Reference to the input element
+  let dragOver = false; // Flag to check if we are dragging over the dropzone
+  
+  export let fileStore; // Reference to the file store
+  export let name; // Name of the input element
   export let promptText = "Drop file here or click to upload";
-  export let fileType;
+  export let fileType; // File type to accept
   export let maxAmountOfFiles = 1;
+  let files = fileStore; // Get initial files from the store
 </script>
 
 <div

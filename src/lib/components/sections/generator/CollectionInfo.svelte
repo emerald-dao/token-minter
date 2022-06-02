@@ -16,7 +16,7 @@
 		maxSupply: number().required().positive(),
 	})
 
-  const { form, errors, data } = createForm({
+  const { form, errors } = createForm({
 		onSubmit() {
       onSubmitAction();
     },

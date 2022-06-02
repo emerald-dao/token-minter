@@ -1,12 +1,17 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { createForm } from 'felte';
+  import { imagesFiles, csvFiles } from "$lib/stores/CollectionFilesStore";
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
   import { object, mixed } from 'yup';
 	import { validator } from '@felte/validator-yup';
 
   export let onSubmitText;
   export let onSubmitAction;
+
+  const saveFilesInStore = (event, store) => {
+    store.set(event.detail);
+  };
 
   const schema = object().shape({
     dropZoneCsv: mixed()
@@ -23,9 +28,9 @@
 					})
 		});
 
-  const { form, errors, data } = createForm({
+  const { form, errors } = createForm({
 		onSubmit() {
-      onSubmitAction($data);
+      onSubmitAction();
     },
 		extend: [
 			validator({ schema }),
@@ -35,6 +40,8 @@
 
 <form use:form>
   <div class="main-wrapper">
+
+    <!-- CSV DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneCsv">
         Collection Data
@@ -43,12 +50,19 @@
       {#if $errors.file}
         <span class="error">{$errors.file}</span>
       {/if}
-      <DropZone promptText="Drop CSV file" fileType="text/csv" name="dropZoneCsv"/>
+      <DropZone 
+        promptText="Drop CSV file" 
+        fileType="text/csv" 
+        name="dropZoneCsv" 
+        fileStore={$csvFiles}
+        on:changeFiles={(e) => saveFilesInStore(e, csvFiles)}
+      />
       {#if $errors.dropZoneCsv}
 				<span class="error">{$errors.dropZoneCsv}</span>
 			{/if}
     </div>
     
+    <!-- Images DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneImages">
         Collection Images
@@ -57,13 +71,20 @@
       {#if $errors.file}
         <span class="error">{$errors.file}</span>
       {/if}
-      <DropZone promptText="Drop Images folder" fileType="image/*" name="dropZoneImages" maxAmountOfFiles={500}/>
+      <DropZone 
+        promptText="Drop Images folder" 
+        fileType="image/*" 
+        name="dropZoneImages" 
+        maxAmountOfFiles={500} 
+        fileStore={$imagesFiles}
+        on:changeFiles={(e) => saveFilesInStore(e, imagesFiles)}
+      />
       {#if $errors.dropZoneImages}
 				<span class="error">{$errors.dropZoneImages}</span>
 			{/if}
     </div>
-  </div>
 
+  </div>
   <StepsButtons onSubmitText={onSubmitText} submit errors={$errors}/>
 </form>
 
