@@ -2,6 +2,7 @@
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index'
   import { createEventDispatcher } from 'svelte';
+import { logIn } from "@onflow/fcl";
   
   // Handle file input when loaded through a file drop
   const handleFileDrop = (e) => {
@@ -66,9 +67,17 @@
     bind:this={inputElement}
   />
 
-  {#if files}
-    {#each files as file}
-      <DropZoneFile fileName={file.name} fileSize={file.size} uploaded={true}/>
+  {#if files && files.length > 0}
+    {#each files as file, index}
+      <DropZoneFile 
+        file={file} 
+        on:deleteFile={() => {
+          // Turn the FileList to an array => then slice it
+          const fileListArr = [...files]
+          fileListArr.splice(index, 1);
+          files = fileListArr;
+        }}
+      />
     {/each}
   {:else}
     <Icon icon=ion:cloud-upload-outline/>
@@ -91,7 +100,7 @@
     color: var(--clr-font-text);
     border: 1px solid var(--clr-primary-main);
     border-radius: 10px;
-    transition: 1s;
+    transition: 0.5s;
 
     .prompt {
       font-size: var(--fs-300)
@@ -101,9 +110,9 @@
   input {
     display: none;
   }
-
+  
   .drop-zone-over {
-    border-style: solid;
+    color: var(--clr-font-text-inverse);
     background-color: var(--clr-primary-main);
   }
 </style>
