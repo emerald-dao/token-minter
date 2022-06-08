@@ -22,8 +22,9 @@
     step -= 1;
   }
 
-  function uploadAssets (assets) {
-    console.log(assets);
+  function uploadAssets () {
+    // TODO: Upload assets to IPFS
+    console.log("Uploading assets to IPFS");
     step += 1;
   }
   
@@ -42,7 +43,7 @@
       emoji: "🗂",
       description: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
       onSubmitAction: uploadAssets,
-      onSubmitText: "Next",
+      onSubmitText: "Upload to IPFS",
     }, 
     {
       title: "Collection Preview",

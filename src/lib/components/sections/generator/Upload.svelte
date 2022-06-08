@@ -3,7 +3,12 @@
   import { imagesFiles, csvFile } from "$lib/stores/CollectionFilesStore";
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
+  // Flags for knowing if the correct files are uploaded
+  let csvUploaded = false;
+  let imagesUploaded = false;
+
   export let onSubmitAction;
+  export let onSubmitText;
 </script>
 
 <div class="main-wrapper">
@@ -15,8 +20,11 @@
         Collection Data
       </label>
       <span class="helper-text">Drop a CSV file containing all your collection metadata.</span>
+      <!-- TODO: Add CSV validation function -->
       <DropZone 
         promptText="Drop CSV file" 
+        validateDrop={() => { return true }}
+        on:uploaded-files={() => csvUploaded = true}
         bind:files={$csvFile}
       />
     </div>
@@ -27,13 +35,16 @@
         Collection Images
       </label>
       <span class="helper-text">Drop a folder containing all your collection images.</span>
+      <!-- TODO: Add images validation function -->
       <DropZone 
-        promptText="Drop Images folder"   
+        promptText="Drop Images folder"
+        validateDrop={() => { return true }}
+        on:uploaded-files={() => imagesUploaded = true}
         bind:files={$imagesFiles}
       />
     </div>
   </div>
-  <StepsButtons onSubmitAction={onSubmitAction}/>
+  <StepsButtons onSubmitAction={onSubmitAction} onSubmitText={onSubmitText} disabled={!csvUploaded || !imagesUploaded}/>
 </div>
 
 <style type="scss">

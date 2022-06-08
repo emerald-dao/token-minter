@@ -2,18 +2,29 @@
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index';
   import { getFilesAsync } from '$lib/utilities/handleFileDrop';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   // Handle drop
   const handleFileDrop = async (e) => {
     e.preventDefault();
     dragOver = false;
 
-    files = await getFilesAsync(e.dataTransfer)
+    if (validateDrop(e.dataTransfer)) {
+      
+      files = await getFilesAsync(e.dataTransfer);
+
+      // Dispatch an event to make parent component aware of correct file upload
+      dispatch('uploaded-files');
+
+    } else return validateDrop(e.dataTransfer).erros;
   }
 
   let dragOver = false; // Flag to check if we are dragging over the dropzone
   
   export let files;
+  export let validateDrop;
   export let promptText = "Drop file here or click to upload";
 </script>
 
