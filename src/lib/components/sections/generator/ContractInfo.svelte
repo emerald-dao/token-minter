@@ -81,6 +81,7 @@
 				font-weight: 200;
 			}
 			.inputs {
+				margin-top: 0.5rem;
 				padding: 1.5rem;
 				border: 1px var(--clr-primary-main) solid;
 				border-radius: 1rem;
