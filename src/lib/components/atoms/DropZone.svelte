@@ -11,7 +11,7 @@
     e.preventDefault();
     dragOver = false;
 
-    if (validateDrop(e.dataTransfer)) {
+    if (await validateDrop(e.dataTransfer) === true) {
       
       files = await getFilesAsync(e.dataTransfer);
       errorOnUpload = false;
