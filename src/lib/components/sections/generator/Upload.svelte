@@ -1,6 +1,7 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { imagesFiles, csvFile } from "$lib/stores/CollectionFilesStore";
+  import { validateCSV, validateImages } from "$lib/validation/fileDropValidation"; 
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
   // Flags for knowing if the correct files are uploaded
@@ -20,11 +21,11 @@
         Collection Data
       </label>
       <span class="helper-text">Drop a CSV file containing all your collection metadata.</span>
-      <!-- TODO: Add CSV validation function -->
       <DropZone 
         promptText="Drop CSV file" 
-        validateDrop={() => { return true }}
+        validateDrop={validateCSV}
         on:uploaded-files={() => csvUploaded = true}
+        on:invalid-file={() => csvUploaded = false}
         bind:files={$csvFile}
       />
     </div>
@@ -35,11 +36,11 @@
         Collection Images
       </label>
       <span class="helper-text">Drop a folder containing all your collection images.</span>
-      <!-- TODO: Add images validation function -->
       <DropZone 
         promptText="Drop Images folder"
-        validateDrop={() => { return true }}
+        validateDrop={validateImages}
         on:uploaded-files={() => imagesUploaded = true}
+        on:invalid-file={() => imagesUploaded = false}
         bind:files={$imagesFiles}
       />
     </div>

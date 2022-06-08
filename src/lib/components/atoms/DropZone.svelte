@@ -14,15 +14,17 @@
     if (validateDrop(e.dataTransfer)) {
       
       files = await getFilesAsync(e.dataTransfer);
-
-      // Dispatch an event to make parent component aware of correct file upload
+      errorOnUpload = false;
       dispatch('uploaded-files');
 
-    } else return validateDrop(e.dataTransfer).erros;
+    } else {
+      errorOnUpload = true;
+    }
   }
 
   let dragOver = false; // Flag to check if we are dragging over the dropzone
   
+  let errorOnUpload = false;
   export let files;
   export let validateDrop;
   export let promptText = "Drop file here or click to upload";
@@ -31,6 +33,7 @@
 <div
   class="drop-zone"
   class:drop-zone-over={dragOver}
+  class:drop-zone-error={errorOnUpload}
   on:dragover={() => dragOver = true}
   on:dragleave={() => dragOver = false}
   on:dragend={() => dragOver = false}
@@ -50,6 +53,9 @@
   {:else}
     <Icon icon=ion:cloud-upload-outline/>
     <span class="prompt">{promptText}</span>
+    {#if errorOnUpload}
+      <span class="error">Invalid file</span>
+    {/if}
   {/if}
 </div>
 
@@ -80,5 +86,8 @@
   .drop-zone-over {
     color: var(--clr-font-text-inverse);
     background-color: var(--clr-primary-main);
+  }
+  .drop-zone-error {
+    border-color: red;
   }
 </style>
