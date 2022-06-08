@@ -5,6 +5,7 @@
   export let onSubmitAction
   export let errors;
   export let submit = false;
+  export let disabled = false;
 </script>
 
 <div>
@@ -29,8 +30,14 @@
     {/if}
   <!-- Buttons that do not submit forms -->
   {:else}
-    <Button on:click={onSubmitAction}>
-      {onSubmitText}
-    </Button>
+    {#if disabled}
+      <Button on:click={onSubmitAction} disabled class="disabled">
+        {onSubmitText}
+      </Button>
+    {:else}
+      <Button on:click={onSubmitAction}>
+        {onSubmitText}
+      </Button>
+    {/if}
   {/if}
 </div>

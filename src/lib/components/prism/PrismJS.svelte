@@ -17,7 +17,7 @@
   .wrapper {
     overflow-y: auto;
     overflow-x: hidden;
-    height: 100%;
+    height: auto;
     width: 100%;
     border-radius: 0.4em;
 

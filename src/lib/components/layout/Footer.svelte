@@ -3,16 +3,16 @@
   import Navigation from '$lib/components/modules/Navigation.svelte';
 </script>
 
-<header>
+<footer>
   <Container class="width-large">
     <nav>
       <div>Logo</div>
       <Navigation/>
   </Container>
-</header>
+</footer>
 
 <style type="scss">
-  header {
+  footer {
     padding: 0;
   }
 
