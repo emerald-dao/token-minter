@@ -111,7 +111,7 @@
     flex-direction: column;
     align-items: center;
   }
-
+  
   .grid-layout {
     display: grid; 
     grid-template-columns: 270px 1fr;
@@ -119,19 +119,19 @@
     margin-bottom: 1rem;
     height: 100%;
     grid-template-areas: 
-      "sidebar main";
+    "sidebar main";
     
     .sidebar-container { 
       grid-area: sidebar;
       height: 100%;
     }
     .main-container { 
+      overflow-x: auto;
       grid-area: main;
       height: 100%;   
       padding: 2.5rem;
       border-radius: 1rem;
       background-color: hsla(0, 0%, 100%, 0.02);
     }
-
   }
 </style>

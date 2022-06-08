@@ -44,17 +44,18 @@
     justify-content: space-between;
     width: 100%;
     height: 100%;
+    gap: 2rem;
 
     .drop-zones-wrapper {
       display: flex;
       flex-direction: column;
       width: 100%;
       gap: 1.5rem;
-    }
-
-    .input-wrapper {
-      display: flex;
-      flex-direction: column;
+      
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+      }
     }
   }
 </style>
