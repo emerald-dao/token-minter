@@ -8,20 +8,20 @@
 	});
 
   const displayThumbnail = (file) => {
-    if (!file.type.includes("image")) return
+    
+    // TODO: include conditional rendering for image
     const reader = new FileReader();
     reader.readAsDataURL(file); // base 64 format
     
     reader.onload = () => {
       thumbnailElement.style.backgroundImage = `url('${reader.result}')`; /*asynchronous call. This function runs once reader is done reading file. reader.result is the base 64 format*/
-      thumbnailElement.style.height = "3.5rem";
+      thumbnailElement.style.minHeight = "3.5rem";
       thumbnailElement.style.aspectRatio = "1/1";
       thumbnailElement.style.backgroundSize = "cover";
       thumbnailElement.style.display = "flex";
       thumbnailElement.style.borderRadius = "0.2rem";
     };
   };
-      
 
   let dispatch = createEventDispatcher();
 
@@ -45,7 +45,7 @@
 <style type="scss">
   .drop-zone-file {
     display: flex;
-    direction: row;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 0.8rem 1.5rem;
@@ -57,6 +57,7 @@
     font-size: var(--fs-200);
     background-size: cover;
     position: relative;
+    height: auto;
 
     .thumbnailElement {
       display: none;

@@ -127,8 +127,7 @@
     }
     .main-container { 
       grid-area: main;
-      height: 100%;
-      overflow-x: auto;      
+      height: 100%;   
       padding: 2.5rem;
       border-radius: 1rem;
       background-color: hsla(0, 0%, 100%, 0.02);
