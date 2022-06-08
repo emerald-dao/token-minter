@@ -69,7 +69,7 @@
     flex-direction: column;
     gap: 1rem;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     text-align: center;
     cursor: pointer;
     color: var(--clr-font-text);
