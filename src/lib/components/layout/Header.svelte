@@ -4,7 +4,7 @@
 
   import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect} from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
-import Stack from '../atoms/Stack.svelte';
+  import Stack from '../atoms/Stack.svelte';
 
   export let open = false
   export let onClick = () => {
@@ -39,12 +39,12 @@ import Stack from '../atoms/Stack.svelte';
       </div>
 
       <!-- Mobile menu -->
-      <div class="hamburger-button">
+      <div class="mobile-menu">
         <Logo/>
         <AnimatedHamburger {open} {onClick}/>
       </div>
       {#if open}
-        <div class="mobile-menu" transition:fly={{ y: -200, duration: 400 }}>
+        <div class="hamburger-navigation" transition:fly={{ y: -200, duration: 400 }}>
           <Navigation>
             <div class="close-button">
               <AnimatedHamburger {open} {onClick}/>
@@ -57,20 +57,13 @@ import Stack from '../atoms/Stack.svelte';
 </header>
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   header {
     padding: 0;
   }
 
-  nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--primary);
-  }
-
-  .mobile-menu {
+  .hamburger-navigation {
     position: fixed;
     top: 0;
     left: 0;
@@ -96,25 +89,28 @@ import Stack from '../atoms/Stack.svelte';
     padding: 10px;
   }
 
-  @media (min-width: 60em) {
-    .hamburger-button {
-      display: none;
+  .mobile-menu {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    @include mq(medium) {
+      display: none;    
     }
+  }
 
-    .desktop-menu {
+  .desktop-menu {
+    display: none;    
+
+    @include mq(medium) {
       display: flex;
       flex-direction: row;
       gap: 30px;
       justify-content: space-between;
       align-items: center;
       width: 100%;
-    }
-  }
-
-  @media (max-width: 20em) {
-    nav {
-      flex-direction: column;
-      gap: 1em;
     }
   }
 </style>

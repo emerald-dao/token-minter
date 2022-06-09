@@ -14,7 +14,7 @@
   }
   .padding-top {
     &-small {
-      padding-top: 3.5rem;
+      padding-top: 2.5rem;
     }
     &-large {
       padding-top: 8rem;
@@ -25,7 +25,7 @@
   }
   .padding-bottom {
     &-small {
-      padding-bottom: 3.5rem;
+      padding-bottom: 2.5rem;
     }
     &-large {
       padding-bottom: 7rem;

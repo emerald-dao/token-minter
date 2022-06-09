@@ -11,13 +11,13 @@
 
 <ul>
   {#each chapters as { slug, title, index }}
-  <li>
+  <li> 
     <a   
-        class:current={pathname === `/guide/${lang}/${slug}`}
-        href={slug}
-      >
-        {index}. {title}  
-      </a>
+      class:current={pathname === `/guide/${lang}/${slug}`}
+      href={slug}
+    >
+      {index}. {title}  
+    </a>
     </li>
   {/each}
 </ul>
