@@ -34,8 +34,10 @@
 {/if}
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   button, a {
-    width: fit-content;
+    width: 100%;
     background: linear-gradient(to left, var(--clr-primary-main), var(--clr-accent-main));
     color: var(--clr-font-text-button);
     font-family: var(--font-mono);
@@ -47,6 +49,10 @@
     justify-content: center;
     gap: 0.6em;
     border: none;
+
+    @include mq(small) {
+      width: fit-content;
+    }
   }
 
   .ghost {

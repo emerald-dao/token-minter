@@ -58,22 +58,33 @@
 </form>
 
 <style type="scss">
+	@use "../../../styles/abstracts" as *;
+
 	form {
-		display: grid;
-		grid-template-columns: 0.6fr 1fr;
-		grid-template-rows: auto auto;
-		grid-template-areas: 
-			"inputs-wrapper code"
-			"buttons buttons";
-		gap: 3rem;
-		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		@include mq(medium) {
+			display: grid;
+			grid-template-columns: 0.6fr 1fr;
+			grid-template-rows: auto auto;
+			grid-template-areas: 
+				"inputs-wrapper code"
+				"buttons buttons";
+			gap: 3rem;
+			height: 100%;
+		}
 		
 		.inputs-wrapper {
-			grid-area: inputs-wrapper;
 			display: flex;
 			flex-direction: column;
-			height: 100%;
-			overflow-x: auto;
+			width: 100%;
+
+			@include mq(medium) {
+				grid-area: inputs-wrapper;
+				height: 100%;
+				overflow-x: auto;
+			}
 
 			h4 {
 				margin-bottom: 0.2rem;
@@ -87,16 +98,25 @@
 				border-radius: 1rem;
 			}
 		}
+
 		.code {
-			height: 100%;
-			overflow-x: auto;
-			grid-area: code;
+			@include mq(medium) {
+				display: flex;
+				height: 100%;
+				overflow-x: auto;
+				grid-area: code;
+			}
+			display: none;
 		}
+
 		.buttons {
-			grid-area: buttons;
-			width: 100%;
 			display: flex;
+			width: 100%;
 			justify-content: flex-end;
+			
+			@include mq(medium) {
+				grid-area: buttons;
+			}
 		}
 	}
 </style>

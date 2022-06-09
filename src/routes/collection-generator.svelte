@@ -78,7 +78,7 @@
     <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
       <Container class="width-large gutter-y-none" height="100%">
-        <div class="grid-layout">
+        <div class="main-layout">
           <div class="sidebar-container">
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
@@ -106,33 +106,50 @@
 </Section>
 
 <style type="scss">
+  @use "../lib/styles/abstracts" as *;
+  
   .main-wrapper {
     height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 1rem;
   }
   
-  .grid-layout {
-    display: grid; 
-    grid-template-columns: 270px 1fr;
-    gap: 2rem;
-    margin-bottom: 1rem;
-    height: 100%;
-    grid-template-areas: 
-    "sidebar main";
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @include mq(medium) {
+      display: grid; 
+      grid-template-columns: 270px 1fr;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      height: 100%;
+      grid-template-areas: 
+      "sidebar main";
+    }
     
     .sidebar-container { 
-      grid-area: sidebar;
       height: 100%;
+      
+      @include mq(medium) {
+        grid-area: sidebar;
+      }
     }
+    
     .main-container { 
       overflow-x: auto;
       grid-area: main;
       height: 100%;   
-      padding: 2.5rem;
       border-radius: 1rem;
+      padding: 1rem;
       background-color: hsla(0, 0%, 100%, 0.02);
+      
+      @include mq(medium) {
+        padding: 2.5rem;
+      }
     }
   }
 </style>

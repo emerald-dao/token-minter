@@ -41,3 +41,23 @@
     {/if}
   {/if}
 </div>
+
+<style type="scss">
+  @use "../../styles/abstracts" as *;
+  
+  div {
+    margin-top: 2rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    @include mq(small) {
+      position: static;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      width: 100%;
+    }
+  }
+</style>

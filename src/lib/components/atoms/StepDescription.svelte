@@ -8,15 +8,23 @@
 </div>
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   .description {
-    // TODO: Apply dynamic colors
-    background-color: hsla(234, 67%, 40%, 0.8);
-    border-radius: 1rem;
-    padding: 1.5rem 1.2rem;
-    font-weight: 300;
-    width: 100%;
-    height: 100%;
-    transition: 0.5s;
+    display: none;
+
+    @include mq(medium) {
+      display: block;
+      // TODO: Apply dynamic colors
+      background-color: hsla(234, 67%, 40%, 0.8);
+      border-radius: 1rem;
+      padding: 1.5rem 1.2rem;
+      font-weight: 300;
+      width: 100%;
+      height: 100%;
+      transition: 0.5s;
+    }
+
     h5 {
       font-size: var(--fs-400);
       margin-top: 0;

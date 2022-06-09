@@ -17,13 +17,19 @@
 </Button>
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   div {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    height: 20rem;
+    padding: 0.5rem;
+
+    @include mq(small) {
+      height: 20rem;
+    }
     
     span {
       font-size: var(--fs-500)
@@ -39,7 +45,9 @@
   }
 
   .accent {
-    height: 22rem;
+    @include mq(small) {
+      height: 22rem;
+    }
 
     h4 {
       color: var(--clr-font-text-inverse);

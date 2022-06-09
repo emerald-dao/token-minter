@@ -36,19 +36,20 @@
 </div>
 
 <style type="scss">
+  @use "../../../styles/abstracts" as *;
+
   .main-wrapper {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
     height: 100%;
+    
   }
 
   ul {
     // TODO: Apply dynamic colors
-    background-color: hsla(0, 0%, 100%, 0.03);
+    background-color: hsla(234, 67%, 40%, 0.5);
     border-radius: 1rem;
-    padding: 1.8rem 1.2rem;
     margin-top: 0;
     width: 100%;
     list-style: none;
@@ -57,12 +58,19 @@
     justify-content: center;
     font-size: var(--fs-200);
     color: var(--clr-font-text-soft);
+    padding-inline: 1rem;
+    
+    @include mq(medium) {
+      padding: 1.8rem 1.2rem;
+      // TODO: Apply dynamic colors
+      background-color: hsla(0, 0%, 100%, 0.03);
+    }
     
     li {
-      font-size: var(--fs-300);
+      display: none;
+      font-size: var(--fs-400);
       font-weight: 400;
       transition: 0.6s;
-      display: flex;
       flex-direction: row;
       align-items: center;
       gap: 0.5em;
@@ -70,14 +78,23 @@
       padding-block: 0.4em;
       margin-block: 0.2em;
       transition: 0.4s;
+      
+      @include mq(medium) {
+        display: flex;
+        font-size: var(--fs-300);
+      }
     }
 
     .li-active {
-      line-height: 1em;
+      display: flex;
       color: var(--clr-accent-main);
-      transition: 0.6s;
-      // TODO: Apply dynamic colors
-      background-color: hsla(234, 67%, 40%, 0.5);
+      
+      @include mq(medium) {
+        line-height: 1em;
+        transition: 0.6s;
+        // TODO: Apply dynamic colors
+        background-color: hsla(234, 67%, 40%, 0.5);
+      }
     }
     .li-clickable {
       cursor: pointer;

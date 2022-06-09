@@ -22,7 +22,7 @@
   {/each}
 </ul>
 
-<style>
+<style type="scss">
   ul {
     font-family: var(--font-mono);
     font-size: var(--fs-200);
