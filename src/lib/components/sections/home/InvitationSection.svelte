@@ -28,6 +28,7 @@
 
 		h2 {
 			color: var(--clr-font-heading);
+			text-align: center;
 		}
 
 		p {
