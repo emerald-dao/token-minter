@@ -1,9 +1,6 @@
 <script>
-  import { page } from '$app/stores';
-  console.log($page.url.pathname)
-
   import { fly } from 'svelte/transition'
-  import { navigating } from '$app/stores';
+  import { navigating, page } from '$app/stores';
 
   import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select} from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
