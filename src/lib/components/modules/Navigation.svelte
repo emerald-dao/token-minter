@@ -22,6 +22,8 @@
     padding: 0;
     font-family: var(--font-mono);
     text-align: center;
+    justify-content: center;
+    align-items: center;
   }
 
   li {

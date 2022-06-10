@@ -49,7 +49,10 @@
       <!-- Mobile menu -->
       <div class="mobile-menu">
         <Logo/>
-        <AnimatedHamburger {open} {onClick}/>
+        <div class="mobile-options">
+          <ThemeToggle/>
+          <AnimatedHamburger {open} {onClick}/>
+        </div>
       </div>
       {#if open}
         <div class="hamburger-navigation" transition:fly={{ y: -200, duration: 400 }}>
@@ -57,6 +60,14 @@
             <div class="close-button">
               <AnimatedHamburger {open} {onClick}/>
             </div>
+            {#if $page.url.pathname.includes("guide") }
+              <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+                {#each $locales as lc}
+                  <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}.flag`)}</option>
+                {/each}
+              </Select>
+            {/if}
+            <FlowConnect/>
           </Navigation>
         </div>
       {/if}
@@ -82,6 +93,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
     padding: 10px;
     z-index: 1;
   }
@@ -106,6 +118,11 @@
     
     @include mq(medium) {
       display: none;    
+    }
+
+    .mobile-options {
+      display: flex;
+      flex-direction: row;
     }
   }
 
