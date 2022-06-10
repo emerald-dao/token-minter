@@ -5,6 +5,7 @@ const config = {
   translations: {
     en: { lang },
     es: { lang },
+    ru: { lang },
   },
   loaders: [
     {
@@ -14,6 +15,11 @@ const config = {
     },
     {
       locale: 'es',
+      key: 'toc',
+      loader: async () => (await import('./es/toc.json')).default,
+    },
+    {
+      locale: 'ru',
       key: 'toc',
       loader: async () => (await import('./es/toc.json')).default,
     },

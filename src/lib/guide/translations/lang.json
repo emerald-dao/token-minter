@@ -6,5 +6,9 @@
   "es": {
     "name": "Spanish",
     "flag": "🇪🇸"
+  },
+  "ru": {
+    "name": "Russian",
+    "flag": "🇷🇺"
   }
 }

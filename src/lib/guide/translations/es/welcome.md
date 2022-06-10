@@ -1,12 +1,8 @@
 ---
-title: Hola Niery
+title: Bienvenidos
 author: Jacob Tucker
 index: 1
 language: es
 ---
 
-# Hola Niery
-
-## Hola
-
-## Como estas?
+# Bienvenidos

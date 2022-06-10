@@ -1,10 +1,14 @@
 <script>
+  import { page } from '$app/stores';
+  console.log($page.url.pathname)
+
   import { fly } from 'svelte/transition'
   import { navigating } from '$app/stores';
 
-  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect} from "$lib/components/atoms/index.js";
+  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select} from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
-  import Stack from '../atoms/Stack.svelte';
+  import { t, locales, locale } from '$lib/guide/translations';
+  import { goto } from '$app/navigation';
 
   export let open = false
   export let onClick = () => {
@@ -34,6 +38,13 @@
         <Navigation/>
         <Stack direction="row">
           <ThemeToggle/>
+          {#if $page.url.pathname.includes("guide") }
+            <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+              {#each $locales as lc}
+                <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}.flag`)}</option>
+              {/each}
+            </Select>
+          {/if}
           <FlowConnect/>
         </Stack>
       </div>
