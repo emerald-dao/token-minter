@@ -36,7 +36,7 @@
 <script>
   import '$lib/styles/base/guide.scss';
 
-  import { Section, Container } from "$lib/components/atoms/index";
+  import { Section, Container, Select } from "$lib/components/atoms/index";
   import { t, locales, locale } from '$lib/guide/translations';
   import { goto } from '$app/navigation';
   
@@ -50,11 +50,11 @@
   <Container class="width-large">
     <div class="main-wrapper">
       <nav>
-        <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+        <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
           {#each $locales as lc}
-            <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
+            <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}.flag`)}</option>
           {/each}
-        </select>
+        </Select>
         <GuideSidebarNav chapters={chapters}/>
       </nav>
       <slot/>
@@ -106,10 +106,6 @@
     @include mq(medium) {
       grid-area: footer-nav;
     }
-  }
-
-  select {
-    margin-bottom: 1em;
   }
 </style>
 
