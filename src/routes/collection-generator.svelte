@@ -96,12 +96,16 @@
 
     <!-- If not connected, ask to connect wallet -->
     {:else}
-      <Container>
-        <Stack>
-          <p>Connect your Flow wallet to generate your collection</p>
-          <FlowConnect/>
-        </Stack>
-      </Container>
+      <div class="connection-wrapper">
+        <Container>
+          <TransparentCard accent={true} padding="4rem">
+            <Stack>
+              <p>Connect your Flow wallet to generate your collection</p>
+              <FlowConnect/>
+            </Stack>
+          </TransparentCard>
+        </Container>
+      </div>
     {/if}
 
   </div>
@@ -144,6 +148,18 @@
     .main-container { 
       grid-area: main;
       max-height: 100%;
+    }
+  }
+
+  .connection-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      text-align: center;
     }
   }
 </style>
