@@ -7,7 +7,14 @@
   $: pathname = $page.url.pathname;
   $: relativePathname = pathname.replace('/guide', '');
   $: lang = `${relativePathname.match(/[^/]+?(?=\/|$)/) || ''}`;
+  
+  let selectedChapter;
 
+  const changeChapter = (path, i) => {
+    selectedChapter = i;
+    goto(path);
+  }
+  
   export let chapters;
 </script>
 
@@ -19,9 +26,9 @@
             <NavigationStep 
               active={pathname === `/guide/${lang}/${slug}`} 
               clickable={true} 
-              passed={true}
+              passed={selectedChapter > index}
               number={index}
-              on:click={() => goto(slug)}
+              on:click={() => changeChapter(slug, index)}
             >
               {title}  
             </NavigationStep>
