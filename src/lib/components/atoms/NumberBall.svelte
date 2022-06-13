@@ -22,8 +22,8 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    transition: 0.5s;
     cursor: pointer;
+    transition: 1.2s;
   }
   .step-number-passed {
     color: var(--clr-primary-main);

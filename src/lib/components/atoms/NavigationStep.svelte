@@ -36,6 +36,7 @@
     width: 100%;
     color: var(--clr-accent-hard);
     padding-block: 0.6em;
+    transition: 1s;
     
     @include mq(medium) {
       display: flex;
