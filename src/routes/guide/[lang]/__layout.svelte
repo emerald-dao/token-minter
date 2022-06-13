@@ -83,6 +83,7 @@
       align-self: start;
       overflow: auto;
       position: sticky;
+      width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
