@@ -14,29 +14,28 @@
 </script>
 
 <nav>
-  <div class="left-col">
-    {#if previousChapter}
+  {#if previousChapter}
+    <div class="left">
       <a href={previousChapter.slug} class="card">
         <div class="card-direction">{`< Previous`}</div>
         {previousChapter.title}
       </a>
-    {/if}
-  </div>
-  <div class="right-col">
-    {#if nextChapter}
+    </div>
+  {/if}
+  {#if nextChapter}
+    <div class="right">
       <a href={nextChapter.slug} class="card">
         <div class="card-direction">{`Next >`}</div>
         {nextChapter.title}
       </a>
-    {/if}
-  </div>
+    </div>
+  {/if}
 </nav>
 
 <style type="scss">
   nav {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
-    grid-template-areas: "left right";
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
     width: 100%;
     gap: 2em;
     margin-top: 6rem;
@@ -53,6 +52,7 @@
     font-family: var(--font-mono);
     font-size: var(--fs-300);
     text-decoration: none;
+    align-items: flex-start;
   }
 
   .card:hover {
@@ -64,17 +64,12 @@
     color: var(--clr-font-text)
   }
 
-  .left-col {
-    grid-area: "left";
-    
+  .left {
     .card {
-      align-items: flex-start;
+      justify-content: flex-start;
     }
   }
-
-  .right-col {
-    grid-area: "right";
-
+  .right {
     .card {
       align-items: flex-end;
     }

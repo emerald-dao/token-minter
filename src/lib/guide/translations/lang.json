@@ -1,4 +1,14 @@
 {
-  "en": "English",
-  "es": "Spanish"
+  "en": {
+    "name": "English",
+    "flag": "🇬🇧"
+  },
+  "es": {
+    "name": "Spanish",
+    "flag": "🇪🇸"
+  },
+  "ru": {
+    "name": "Russian",
+    "flag": "🇷🇺"
+  }
 }

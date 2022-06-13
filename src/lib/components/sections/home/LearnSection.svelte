@@ -37,14 +37,18 @@
 </Section>
 
 <style type="scss">
+	@use "../../../styles/abstracts" as *;
+
 	h4 {
 		font-size: var(--fs-400);
 		margin-bottom: 1em;
 		margin-top: 2em;
 	}
 	.sticky {
-		position: sticky;
-		top: 4rem;
-		height: fit-content;
+		@include mq(medium) {
+			position: sticky;
+			top: 4rem;
+			height: fit-content;
+		}
 	}
 </style>

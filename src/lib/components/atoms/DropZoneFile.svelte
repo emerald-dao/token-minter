@@ -40,9 +40,11 @@
 </div>
 
 <style type="scss">
-  .drop-zone-file {
+  @use "../../styles/abstracts" as *;
+
+  .drop-zone-file { 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     padding: 0.7rem 1.4rem;
@@ -54,6 +56,10 @@
     background-color: hsla(234, 67%, 40%, 0.4);
     font-size: var(--fs-200);
     position: relative;
+
+    @include mq(small) {
+      flex-direction: row;
+    }
 
     .thumbnailElement {
       display: none;

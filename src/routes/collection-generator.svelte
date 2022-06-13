@@ -1,7 +1,7 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "../flow/stores.js";
-  import { Section, Container, FlowConnect, Stack, Button } from "$lib/components/atoms/index";
+  import { Section, Container, FlowConnect, Stack, TransparentCard } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
@@ -78,61 +78,88 @@
     <!-- Display generator if user has loggedIn with wallet -->
     {#if $user?.loggedIn}
       <Container class="width-large gutter-y-none" height="100%">
-        <div class="grid-layout">
+        <div class="main-layout">
           <div class="sidebar-container">
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
           <div class="main-container">
-            <svelte:component
-              this={steps[step].component}
-              onSubmitAction={steps[step].onSubmitAction}
-              onSubmitText={steps[step].onSubmitText}
-            />
-          </div>
+            <TransparentCard padding="2.5rem" height="100%">
+              <svelte:component
+                this={steps[step].component}
+                onSubmitAction={steps[step].onSubmitAction}
+                onSubmitText={steps[step].onSubmitText}
+              />
+            </TransparentCard>
+            </div>
         </div>
       </Container>
 
     <!-- If not connected, ask to connect wallet -->
     {:else}
-      <Container>
-        <Stack>
-          <p>Connect your Flow wallet to generate your collection</p>
-          <FlowConnect/>
-        </Stack>
-      </Container>
+      <div class="connection-wrapper">
+        <Container>
+          <TransparentCard accent={true} padding="4rem">
+            <Stack>
+              <p>Connect your Flow wallet to generate your collection</p>
+              <FlowConnect/>
+            </Stack>
+          </TransparentCard>
+        </Container>
+      </div>
     {/if}
 
   </div>
 </Section>
 
 <style type="scss">
+  @use "../lib/styles/abstracts" as *;
+  
   .main-wrapper {
     height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-bottom: 1rem;
   }
   
-  .grid-layout {
-    display: grid; 
-    grid-template-columns: 270px 1fr;
-    gap: 2rem;
-    margin-bottom: 1rem;
-    height: 100%;
-    grid-template-areas: 
-    "sidebar main";
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    @include mq(medium) {
+      display: grid; 
+      grid-template-columns: 270px 1fr;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      height: 100%;
+      grid-template-areas: 
+      "sidebar main";
+    }
     
     .sidebar-container { 
-      grid-area: sidebar;
       height: 100%;
+      
+      @include mq(medium) {
+        grid-area: sidebar;
+      }
     }
+    
     .main-container { 
-      overflow-x: auto;
       grid-area: main;
-      height: 100%;   
-      padding: 2.5rem;
-      border-radius: 1rem;
-      background-color: hsla(0, 0%, 100%, 0.02);
+      max-height: 100%;
+    }
+  }
+
+  .connection-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      text-align: center;
     }
   }
 </style>

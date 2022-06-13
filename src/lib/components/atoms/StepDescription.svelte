@@ -1,22 +1,27 @@
 <script>
+  import { TransparentCard } from '$lib/components/atoms/index';
   export let description;
 </script>
 
 <div class="description">
-  <h5>Description</h5>
-  <p>{description}</p>
+  <TransparentCard>
+    <h5>Description</h5>
+    <p>{description}</p>
+  </TransparentCard>
 </div>
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   .description {
-    // TODO: Apply dynamic colors
-    background-color: hsla(234, 67%, 40%, 0.8);
-    border-radius: 1rem;
-    padding: 1.5rem 1.2rem;
-    font-weight: 300;
-    width: 100%;
+    display: none;
     height: 100%;
-    transition: 0.5s;
+
+    @include mq(medium) {
+      display: block;
+      transition: 0.5s;
+    }
+
     h5 {
       font-size: var(--fs-400);
       margin-top: 0;

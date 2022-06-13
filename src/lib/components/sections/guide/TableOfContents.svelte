@@ -1,6 +1,7 @@
 <script>  
   import { t } from '$lib/guide/translations'; 
 	import { onMount, tick } from 'svelte'
+  import { TransparentCard } from '$lib/components/atoms/index'
 
 	let elements = []
 	function grabElements() {
@@ -58,40 +59,52 @@
 <svelte:window on:scroll={trackScroll} />
 
 <section>
-  <h2>{$t('toc.tocTitle')}</h2>
-  <ul>
-    {#each toc as tocElement, i}
-      <li class:active={active === i}>
-        <div class="link-wrapper">
-          <a
-            href={'#' + tocElement.path}
-          >
-            {tocElement.title}
-          </a>
-        </div>
-      </li>
-    {/each}
-  </ul>
+  <TransparentCard>
+    <h2>{$t('toc.tocTitle')}</h2>
+    <ul>
+      {#each toc as tocElement, i}
+        <li class:active={active === i}>
+          <div class="link-wrapper">
+            <a
+              href={'#' + tocElement.path}
+            >
+              {tocElement.title}
+            </a>
+          </div>
+        </li>
+      {/each}
+    </ul>
+  </TransparentCard>
 </section>
 
 <style type="scss">
+  @use "../../../styles/abstracts" as *;
+
   section {
-    display: flex;
-    flex-direction: column;
-    padding: 1em;
+    margin-bottom: 2em;
+
+    
+    @include mq(medium) {
+      margin-bottom: 0;
+    }
   }
+
   h2 {
     font-size: var(--fs-400);
     text-shadow: none;
   }
+
   ul {
     list-style: none;
     padding: 0;
-    border-left: 0.2px solid var(--clr-font-text-soft);
     display: flex;
     flex-direction: column;
     gap: 1em;
-    padding-block: 0.6em;
+    padding-block: 0.4em;
+    
+    @include mq(medium) {
+      border-left: 0.2px solid var(--clr-font-text-soft);
+    }
   }
 
   .link-wrapper {
@@ -106,14 +119,17 @@
     color: var(--clr-font-text-soft);
   }
 
-  a::before {
-    content: '•';
-    position: relative;
-    left: -0.45ch;
-    padding-right: 0.5em;
-    font-size: var(--fs-400);
-    vertical-align: middle;
-  }
+
+  @include mq(medium) {
+    a::before {
+      content: '•';
+      position: relative;
+      left: -0.45ch;
+      padding-right: 0.5em;
+      font-size: var(--fs-400);
+      vertical-align: middle;
+    }
+   }
 
   a:hover::before {
     color: var(--clr-primary-main);

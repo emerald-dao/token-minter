@@ -12,7 +12,7 @@
     class:open
     viewBox="0 0 100 100"
     fill="none"
-    stroke="currentColor"
+    stroke="var(--clr-primary-main)"
     stroke-width="5"
     {width}
   >

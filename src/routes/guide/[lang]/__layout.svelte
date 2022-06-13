@@ -37,8 +37,6 @@
   import '$lib/styles/base/guide.scss';
 
   import { Section, Container } from "$lib/components/atoms/index";
-  import { t, locales, locale } from '$lib/guide/translations';
-  import { goto } from '$app/navigation';
   
   import GuideSidebarNav from "$lib/components/sections/guide/GuideSidebarNav.svelte";
   import GuideFooterNav from "$lib/components/sections/guide/GuideFooterNav.svelte";
@@ -46,15 +44,10 @@
   export let chapters
 </script>
 
-<Section padding="small">
+<Section class="padding-top-small padding-bottom-none">
   <Container class="width-large">
     <div class="main-wrapper">
       <nav>
-        <select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
-          {#each $locales as lc}
-            <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}`)}</option>
-          {/each}
-        </select>
         <GuideSidebarNav chapters={chapters}/>
       </nav>
       <slot/>
@@ -66,39 +59,46 @@
 </Section>
 
 <style type="scss">
+  @use "../../../lib/styles/abstracts" as *;
+
   .main-wrapper {
-    display: grid;
-    grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
-    grid-template-rows: repeat(2, auto);
-    gap: 3rem;
-    grid-template-areas: "sidebar main toc" 
-                          ". footer-nav .";
-    padding-left: 1rem;
-    padding-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    
+    @include mq(medium) {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
+      grid-template-rows: repeat(2, auto);
+      gap: 3rem;
+      grid-template-areas: "sidebar main toc" 
+                            ". footer-nav .";
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 
   nav {
-    grid-area: sidebar;
-    align-self: start;
-    overflow: auto;
-    position: sticky;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    // TODO: Add top offset variable
-    top: 4rem;
-    max-height: 100vh;
-    border-right: 0.5px solid var(--clr-font-text-soft);
-    padding-bottom: 2em;
+    @include mq(medium) {
+      grid-area: sidebar;
+      align-self: start;
+      overflow: auto;
+      position: sticky;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      // TODO: Add top offset variable
+      top: 5rem;
+      max-height: 100vh;
+      padding-bottom: 2em;
+    }
   }
   
   .footer-nav {
-    grid-area: footer-nav;
-  }
-
-  select {
-    margin-bottom: 1em;
+    @include mq(medium) {
+      grid-area: footer-nav;
+    }
   }
 </style>
 

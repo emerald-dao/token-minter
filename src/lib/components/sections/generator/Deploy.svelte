@@ -46,12 +46,20 @@
 </div>
 
 <style type="scss">
+  @use "../../../styles/abstracts" as *;
+
   div {
     display: flex;
-    flex-direction: row;
-    gap: 1em;
+    flex-direction: column;
+    gap: 1.5rem;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    width: 100%;
+    
+    @include mq(small) {
+      flex-direction: row;
+      gap: 1em;
+      height: 100%;
+    }
   }
 </style>

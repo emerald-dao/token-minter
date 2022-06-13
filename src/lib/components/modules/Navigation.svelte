@@ -11,7 +11,9 @@
   <slot/>
 </ul>
 
-<style>
+<style type="scss">
+  @use "../../styles/abstracts" as *;
+
   ul {
     display: flex;
     flex-direction: inherit;
@@ -19,9 +21,19 @@
     gap: 2em;
     padding: 0;
     font-family: var(--font-mono);
-    font-size: var(--fs-200);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
   }
 
+  li {
+    font-size: var(--fs-400);
+    
+    @include mq(medium) {
+      font-size: var(--fs-300);
+    }
+  }
+  
   a {
     text-decoration: none;
   }

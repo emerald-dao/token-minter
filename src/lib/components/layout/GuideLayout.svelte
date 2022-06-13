@@ -14,14 +14,17 @@
 </article>
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   aside {
-    grid-area: toc;
-    align-self: start;
-    overflow: auto;
-    position: sticky;
-    /* TODO: Add top offset variable */
-    top: 12rem;
-    max-height: 100vh;
+    @include mq(medium) {
+      grid-area: toc;
+      align-self: start;
+      position: sticky;
+      /* TODO: Add top offset variable */
+      top: 6rem;
+      max-height: 100vh;
+    }
   }
   
   article {

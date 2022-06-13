@@ -1,4 +1,4 @@
-import Papa from "papaparse";
+import Papa from 'papaparse';
 
 // TODO: Add validation for file drop
 export const validateCSV = async (dataTransfer) => {
@@ -9,8 +9,8 @@ export const validateCSV = async (dataTransfer) => {
         const file = item.getAsFile();
         if (file && file.type === 'text/csv') {
           const metadata = {
-            attributes: []
-          }
+            attributes: [],
+          };
           return new Promise((resolve, reject) => {
             var reader = new FileReader();
             reader.onload = function () {
@@ -25,7 +25,7 @@ export const validateCSV = async (dataTransfer) => {
               console.log('Metadata', metadata);
               return true;
             }
-          })
+          });
         }
       }
     }

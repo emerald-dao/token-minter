@@ -15,3 +15,7 @@ export { default as StepsButtons } from './StepsButtons.svelte';
 export { default as DeploymentButton } from './DeploymentButton.svelte';
 export { default as DropZone } from './DropZone.svelte';
 export { default as DropZoneFile } from './DropZoneFile.svelte';
+export { default as Select } from './Select.svelte';
+export { default as NumberBall } from './NumberBall.svelte';
+export { default as NavigationStep } from './NavigationStep.svelte';
+export { default as TransparentCard } from './TransparentCard.svelte';
