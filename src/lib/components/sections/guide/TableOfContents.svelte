@@ -75,23 +75,38 @@
 </section>
 
 <style type="scss">
+  @use "../../../styles/abstracts" as *;
+
   section {
     display: flex;
     flex-direction: column;
-    padding: 1em;
+    // TODO: make dynamic color
+    background-color: hsla(0, 0%, 100%, 0.02);
+    padding: 1.5em;
+    margin-bottom: 2em;
+    border-radius: 0.6em;
+    
+    @include mq(medium) {
+      margin-bottom: 0;
+    }
   }
+
   h2 {
     font-size: var(--fs-400);
     text-shadow: none;
   }
+
   ul {
     list-style: none;
     padding: 0;
-    border-left: 0.2px solid var(--clr-font-text-soft);
     display: flex;
     flex-direction: column;
     gap: 1em;
     padding-block: 0.6em;
+    
+    @include mq(medium) {
+      border-left: 0.2px solid var(--clr-font-text-soft);
+    }
   }
 
   .link-wrapper {
@@ -106,14 +121,17 @@
     color: var(--clr-font-text-soft);
   }
 
-  a::before {
-    content: '•';
-    position: relative;
-    left: -0.45ch;
-    padding-right: 0.5em;
-    font-size: var(--fs-400);
-    vertical-align: middle;
-  }
+
+  @include mq(medium) {
+    a::before {
+      content: '•';
+      position: relative;
+      left: -0.45ch;
+      padding-right: 0.5em;
+      font-size: var(--fs-400);
+      vertical-align: middle;
+    }
+   }
 
   a:hover::before {
     color: var(--clr-primary-main);

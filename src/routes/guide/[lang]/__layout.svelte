@@ -88,9 +88,8 @@
       justify-content: flex-start;
       align-items: flex-start;
       // TODO: Add top offset variable
-      top: 4rem;
+      top: 5rem;
       max-height: 100vh;
-      border-right: 0.5px solid var(--clr-font-text-soft);
       padding-bottom: 2em;
     }
   }

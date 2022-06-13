@@ -17,6 +17,7 @@
     font-size: inherit;
     cursor: inherit;
     line-height: inherit;
+    color: var(--clr-primary-main);
 
     // Stack above custom arrow
     z-index: 1;

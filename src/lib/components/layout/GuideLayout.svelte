@@ -23,7 +23,7 @@
       overflow: auto;
       position: sticky;
       /* TODO: Add top offset variable */
-      top: 12rem;
+      top: 6rem;
       max-height: 100vh;
     }
   }
