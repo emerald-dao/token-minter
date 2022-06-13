@@ -1,5 +1,5 @@
 <script>
-  import { Select } from '$lib/components/atoms/index'
+  import { Select, NavigationStep } from '$lib/components/atoms/index'
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   
@@ -13,14 +13,15 @@
 
 <ul>
   {#each chapters as { slug, title, index }}
-    <li> 
-      <a   
-        class:current={pathname === `/guide/${lang}/${slug}`}
-        href={slug}
+      <NavigationStep 
+        active={pathname === `/guide/${lang}/${slug}`} 
+        clickable={true} 
+        passed={true}
+        number={index}
+        on:click={() => goto(slug)}
       >
-        {index}. {title}  
-      </a>
-    </li>
+        {title}  
+      </NavigationStep>
   {/each}
 </ul>
 <div class="mobile-nav">
@@ -36,33 +37,7 @@
 
 <style type="scss">
   @use "../../../styles/abstracts" as *;
-
-  ul {
-    display: none;
-    
-    @include mq(medium) {
-      // TODO: Apply dynamic colors
-      background-color: hsla(234, 67%, 40%, 0.2);
-      padding: 1.5em;
-      border-radius: 0.6em;
-      display: flex;
-      font-family: var(--font-mono);
-      font-size: var(--fs-200);
-      list-style: none;
-      flex-direction: column;
-      gap: 2em;
-    }
-  }
-
-  a {
-    color: var(--clr-font-text-soft);
-    text-decoration: none;
-  }
-
-  .current {
-    color: var(--clr-primary-main);
-  }
-
+  
   .mobile-nav {
     margin-bottom: 4rem;
 
