@@ -63,6 +63,8 @@
 	form {
 		display: flex;
 		flex-direction: column;
+		overflow-y: hidden;
+		height: 100%;
 
 		@include mq(medium) {
 			display: grid;
@@ -72,7 +74,6 @@
 				"inputs-wrapper code"
 				"buttons buttons";
 			gap: 3rem;
-			height: 100%;
 		}
 		
 		.inputs-wrapper {
@@ -102,8 +103,8 @@
 		.code {
 			@include mq(medium) {
 				display: flex;
-				height: 100%;
-				overflow-x: auto;
+				max-height: 60vh;
+				overflow-y: auto;
 				grid-area: code;
 			}
 			display: none;

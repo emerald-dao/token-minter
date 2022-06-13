@@ -13,8 +13,8 @@
 
 <style type="scss">
   .step-number {
-    color: var(--clr-font-text-soft);
-    border: 1px var(--clr-font-text-soft) solid;
+    color: var(--clr-accent-hard);
+    border: 1px var(--clr-accent-hard) solid;
     width: 2rem;
     height: 2rem;
     border-radius: 99px;
@@ -31,9 +31,8 @@
     cursor: pointer;
   }
   .step-number-active {
-    background-color: var(--clr-accent-hover);
-    color: var(--clr-font-text);
+    background-color: var(--clr-primary-main);
+    color: var(--clr-font-text-inverse);
     border: none;
-    margin-left: 0.3rem;
   }
 </style>

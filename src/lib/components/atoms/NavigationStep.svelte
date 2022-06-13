@@ -33,6 +33,9 @@
     padding-block: 0.4em;
     margin-block: 0.2em;
     transition: 0.4s;
+    width: 100%;
+    color: var(--clr-accent-hard);
+    padding-block: 0.6em;
     
     @include mq(medium) {
       display: flex;
@@ -42,13 +45,11 @@
 
   .li-active {
     display: flex;
-    color: var(--clr-accent-main);
+    color: var(--clr-primary-main);
     
     @include mq(medium) {
       line-height: 1em;
       transition: 0.6s;
-      // TODO: Apply dynamic colors
-      background-color: hsla(234, 67%, 40%, 0.5);
     }
   }
   .li-clickable {

@@ -20,7 +20,7 @@
     justify-content: center;
     text-align: left;
     background-color: hsla(0, 0%, 50%, 0.1);
-    border-radius: 1rem;
+    // border-radius: 1rem;
     padding: 0.8em;
 
     img {

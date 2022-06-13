@@ -1,7 +1,7 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "../flow/stores.js";
-  import { Section, Container, FlowConnect, Stack, Button } from "$lib/components/atoms/index";
+  import { Section, Container, FlowConnect, Stack, TransparentCard } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
   import Upload from '$lib/components/sections/generator/Upload.svelte';
@@ -83,12 +83,14 @@
             <GeneratorNav bind:step={step} steps={steps}/>
           </div>
           <div class="main-container">
-            <svelte:component
-              this={steps[step].component}
-              onSubmitAction={steps[step].onSubmitAction}
-              onSubmitText={steps[step].onSubmitText}
-            />
-          </div>
+            <TransparentCard padding="2.5rem" height="100%">
+              <svelte:component
+                this={steps[step].component}
+                onSubmitAction={steps[step].onSubmitAction}
+                onSubmitText={steps[step].onSubmitText}
+              />
+            </TransparentCard>
+            </div>
         </div>
       </Container>
 
@@ -140,16 +142,8 @@
     }
     
     .main-container { 
-      overflow-x: auto;
       grid-area: main;
-      height: 100%;   
-      border-radius: 1rem;
-      padding: 1rem;
-      background-color: hsla(0, 0%, 100%, 0.02);
-      
-      @include mq(medium) {
-        padding: 2.5rem;
-      }
+      max-height: 100%;
     }
   }
 </style>

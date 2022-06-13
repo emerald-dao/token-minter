@@ -20,7 +20,6 @@
     @include mq(medium) {
       grid-area: toc;
       align-self: start;
-      overflow: auto;
       position: sticky;
       /* TODO: Add top offset variable */
       top: 6rem;

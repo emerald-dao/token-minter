@@ -18,3 +18,4 @@ export { default as DropZoneFile } from './DropZoneFile.svelte';
 export { default as Select } from './Select.svelte';
 export { default as NumberBall } from './NumberBall.svelte';
 export { default as NavigationStep } from './NavigationStep.svelte';
+export { default as TransparentCard } from './TransparentCard.svelte';
