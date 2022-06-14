@@ -1,15 +1,19 @@
 <script>
-  import { Container, Logo } from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
+  import { Container, Logo } from "$lib/components/atoms/index.js";
+
+  import { page } from '$app/stores';
 </script>
 
-<footer>
-  <Container class="width-large">
-    <nav>
-      <Logo/>
-      <Navigation/>
-  </Container>
-</footer>
+{#if !$page.url.pathname.includes("collection-generator") }             
+  <footer>
+    <Container class="width-large">
+      <nav>
+        <Logo/>
+        <Navigation/>
+    </Container>
+  </footer>
+{/if}
 
 <style type="scss">
   footer {
