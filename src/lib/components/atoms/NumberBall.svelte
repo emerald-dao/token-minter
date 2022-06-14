@@ -13,8 +13,8 @@
 
 <style type="scss">
   .step-number {
-    color: var(--clr-accent-hard);
-    border: 1px var(--clr-accent-hard) solid;
+    color: var(--clr-accent-strong);
+    border: 1px var(--clr-accent-strong) solid;
     width: 2rem;
     height: 2rem;
     border-radius: 99px;
@@ -23,7 +23,7 @@
     align-items: center;
     font-weight: 600;
     cursor: pointer;
-    transition: 1.2s;
+    transition: 0.8s;
   }
   .step-number-passed {
     color: var(--clr-primary-main);

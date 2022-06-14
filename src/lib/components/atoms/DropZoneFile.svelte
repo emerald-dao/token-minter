@@ -52,8 +52,8 @@
     min-height: 5rem;
     width: 100%;
     border-radius: 0.6rem;
-    // TODO: Apply dynamic colors
-    background-color: hsla(234, 67%, 40%, 0.4);
+    background-color: var(--clr-accent-soft-t9);
+    border: 0.5px var(--clr-accent-soft-t4) solid;
     font-size: var(--fs-200);
     position: relative;
 

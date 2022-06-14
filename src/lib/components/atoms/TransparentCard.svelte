@@ -10,9 +10,8 @@
 
 <style type="scss">
   div {
-    // TODO: make dynamic color
-    background-color: hsla(0, 0%, 100%, 0.01);
-    border: 0.5px hsla(0, 0%, 100%, 0.04) solid;
+    background-color: var(--clr-neutral-300-t9);
+    border: 0.5px var(--clr-neutral-700-t8) solid;
     border-radius: 1rem;
     padding: 1.4rem;
     width: 100%;
@@ -20,8 +19,7 @@
   }
   
   .accent {
-    // TODO: make dynamic color
-    background-color: hsla(234, 67%, 40%, 0.3);
-    border: 0.5px hsla(234, 67%, 40%, 0.5) solid;
+    background-color: var(--clr-accent-soft-t8);
+    border: 0.5px var(--clr-accent-main-t5) solid;
   }
 </style>

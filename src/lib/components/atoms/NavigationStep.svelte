@@ -34,7 +34,7 @@
     margin-block: 0.2em;
     transition: 0.4s;
     width: 100%;
-    color: var(--clr-accent-hard);
+    color: var(--clr-accent-strong);
     padding-block: 0.6em;
     transition: 1s;
     

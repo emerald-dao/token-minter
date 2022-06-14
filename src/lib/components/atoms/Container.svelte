@@ -21,6 +21,9 @@
     &-full {
       width: 90%;
     }
+    &-x-large {
+      width: min(90%, 85rem);
+    }
     &-large {
       width: min(90%, 75rem);
     }
