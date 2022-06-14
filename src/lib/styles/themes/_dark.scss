@@ -33,6 +33,9 @@ $dark: (
     text-strong: map-deep-get($colors, neutral, 100),
     text: map-deep-get($colors, neutral, 200),
     text-soft: map-deep-get($colors, neutral, 400),
+    text-strong-inverse: map-deep-get($colors, neutral, 900),
+    text-inverse: map-deep-get($colors, neutral, 800),
+    text-soft-inverse: map-deep-get($colors, neutral, 600),
     text-button: map-deep-get($colors, neutral, 800),
   ),
 );
