@@ -7,15 +7,19 @@ export const siteAuthor = 'Emerald DAO';
 // Edit this to alter the main nav menu. (Also used by the footer and mobile nav.)
 export const navItems = [
   {
-    title: 'Blog',
-    route: '/blog',
+    title: 'Collection Generator',
+    route: '/collection-generator',
+    prefetch: true,
   },
   {
-    title: 'About',
-    route: '/about',
+    title: 'Guide',
+    route: '/guide/welcome',
+    prefetch: true,
   },
   {
-    title: 'Contact',
-    route: '/contact',
+    title: 'Emerald City',
+    route: 'https://discord.com/invite/emeraldcity',
+    prefetch: false,
+    target: '_blank',
   },
 ];
