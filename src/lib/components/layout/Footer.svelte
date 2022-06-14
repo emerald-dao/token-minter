@@ -1,12 +1,12 @@
 <script>
-  import { Container} from "$lib/components/atoms/index.js";
+  import { Container, Logo } from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
 </script>
 
 <footer>
   <Container class="width-large">
     <nav>
-      <div>Logo</div>
+      <Logo/>
       <Navigation/>
   </Container>
 </footer>
