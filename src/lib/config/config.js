@@ -1,8 +1,8 @@
-export const siteTitle = 'NFT Minter';
-export const siteDescription = 'Pending';
-export const siteURL = 'pending.com';
-export const siteLink = 'pending';
-export const siteAuthor = 'Emerald DAO';
+export const dappTitle = 'NFT Minter';
+export const dappDescription = 'Pending';
+export const dappURL = 'pending.com';
+export const dappLink = 'pending';
+export const dappAuthor = 'Emerald City DAO';
 
 // Edit this to alter the main nav menu. (Also used by the footer and mobile nav.)
 export const navItems = [
