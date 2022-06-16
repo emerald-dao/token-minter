@@ -7,6 +7,7 @@
   // Flags for knowing if the correct files are uploaded
   let csvUploaded = false;
   let imagesUploaded = false;
+  let crossedCheked = false;
 
   export let onSubmitAction;
   export let onSubmitText;

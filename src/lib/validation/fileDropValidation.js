@@ -35,3 +35,7 @@ export const validateCSV = async (dataTransfer) => {
 export const validateImages = (dataTransfer) => {
   return true;
 };
+
+export const crossCheckValidation = (csvFile, imagesFiles) => {
+  return true;
+};
