@@ -1,1 +1,1 @@
-export async function uploadToIPFS(csvFile, assets) {}
+export async function uploadToIPFS(csvFile, assets, IPFSToken) {}
