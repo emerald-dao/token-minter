@@ -6,75 +6,7 @@ language: en
 ---
 
 <script>
-  import { NFTGuideGrid, Diagram } from "$lib/components/atoms/index";
-  
-  let flowNFTs = [{
-      name: "CryptoKitties",
-      thumbnailURL: "/images/guide/crypto-kittie.png",
-      backgroundColor: "#DFDFFA"
-    },
-    {
-      name: "Flunks",
-      thumbnailURL: "/images/guide/flunks.jpeg"
-    },
-    {
-      name: "FLOAT",
-      thumbnailURL: "/images/guide/float.png",
-      backgroundColor: "#016775"
-    },
-    {
-      name: "Ballerz",
-      thumbnailURL: "/images/guide/ballerz.png"
-    }
-  ];
-
-  let ethereumNFTs = [{
-      name: "Bored Ape Yacht Club",
-      thumbnailURL: "/images/guide/bored-ape.png"
-    },
-    {
-      name: "Royal.io Music NFT",
-      thumbnailURL: "/images/guide/royal-nft.jpg"
-    },
-    {
-      name: "Poap NFT",
-      thumbnailURL: "/images/guide/poap.png"
-    },
-    {
-      name: "Sandbox Digital Land",
-      thumbnailURL: "/images/guide/sandbox.jpeg"
-    }
-  ];
-
-  let fungibleTokens = [{
-      name: "Money",
-      thumbnailURL: "/images/guide/money.jpeg"
-    },
-    {
-      name: "Gold",
-      thumbnailURL: "/images/guide/gold.jpeg"
-    },
-    {
-      name: "Bitcoin",
-      thumbnailURL: "/images/guide/bitcoin.jpeg"
-    },
-  ];
-
-  let nonFungibleTokens = [{
-      name: "Car",
-      thumbnailURL: "/images/guide/car.jpeg",
-      backgroundColor: "#DFDFFA"
-    },
-    {
-      name: "Artwork",
-      thumbnailURL: "/images/guide/artwork.jpg"
-    },
-    {
-      name: "NFT",
-      thumbnailURL: "/images/guide/crypto-kittie.png",
-      backgroundColor: "#DFDFFA"
-    },
-  ];
+  import { PopularNFTs, Diagram, TokenTypes } from "$lib/components/guide-diagrams/index"
 </script>
 
 # Introduction to Non-Fungible Tokens (NFTs)
@@ -90,18 +22,7 @@ Non-Fungible tokens (or “NFTs”) are digital assets that represent real-world
 - **Proof-Of-Attendance & Event Tickets** ([FLOAT](https://floats.city))
 
 <Diagram name="List of popular NFTs" number="1.1">
-  <NFTGuideGrid
-    blockchain="Flow"
-    logo="/images/guide/flow-logo.png"
-    text="NFTs stored in the Flow Blockchain"
-    NFTs={flowNFTs}
-  />
-  <NFTGuideGrid
-    blockchain="Ethereum"
-    logo="/images/guide/ethereum-logo.png"
-    text="NFTs stored in the Ethereum Blockchain"
-    NFTs={ethereumNFTs}
-  />
+  <PopularNFTs/>
 </Diagram>
 
 ## Fungible vs. Non-Fungible
@@ -109,16 +30,7 @@ Non-Fungible tokens (or “NFTs”) are digital assets that represent real-world
 To further understand the “uniqueness” attribute of an NFT, we should learn what Fungible Tokens are. Fungible Tokens are assets that can be replaced by others of the same kind. For example, if I asked you to give me a $1 bill in exchange for one of my $1 bills, you wouldn’t care, because they represent the same thing. Most often, Fungible Tokens take the form of cryptocurrency, a digital currency that lives on the Blockchain (i.e [ETH](https://www.coindesk.com/price/ethereum/) and [FLOW](https://coinmarketcap.com/currencies/flow/)).
 
 <Diagram name="Difference between Fungible and non-Fungible items or tokens" number="1.2">
-  <NFTGuideGrid
-    text="Fungible Items"
-    description="They can be exchanged like for like. They have the same value."
-    NFTs={fungibleTokens}
-  />
-  <NFTGuideGrid
-    text="Non-Fungible Tokens"
-    description="They cannot be exchanged like for like. They have unique value."
-    NFTs={nonFungibleTokens}
-  />
+  <TokenTypes/>
 </Diagram>
 
 ## Example
