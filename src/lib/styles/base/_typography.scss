@@ -23,13 +23,13 @@ h4 {
 
 h2,
 h3 {
-  text-shadow: 3px 3px 0 var(--clr-accent-hover);
+  text-shadow: 3px 3px 0 var(--clr-accent-soft);
 }
 
 h1 {
   --font-weight: 800;
   color: var(--clr-font-heading);
-  text-shadow: 4px 4px 0 var(--clr-accent-hover);
+  text-shadow: 4px 4px 0 var(--clr-accent-soft);
 }
 
 time + p {

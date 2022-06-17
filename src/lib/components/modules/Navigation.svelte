@@ -1,13 +1,19 @@
+<script>
+  import { navItems } from '$lib/config/config'
+</script>
+
 <ul>
-  <li>
-    <a href="/collection-generator" sveltekit:prefetch>Collection Generator</a>
-  </li>
-  <li>
-    <a href="/guide/welcome" sveltekit:prefetch>Guide</a>
-  </li>
-  <li>
-    <a href="https://discord.com/invite/emeraldcity" target="_blank">Emerald City</a>
-  </li>
+  {#each navItems as navItem }
+    <li>
+      <a 
+        href={navItem.route} 
+        sveltekit:prefetch={navItem.prefetch}
+        target={navItem.target}
+      >
+        {navItem.title}
+      </a>
+    </li>
+  {/each}
   <slot/>
 </ul>
 

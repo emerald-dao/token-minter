@@ -33,10 +33,11 @@
   h1 {
 		font-size: var(--fs-700);
 		font-weight: 600;
-		text-shadow: 3px 3px 0 var(--clr-accent-hover);
-
+		text-shadow: none;
+		
 		span {
 			color: var(--clr-primary-main);
+			text-shadow: 3px 3px 0 var(--clr-accent-soft);
 		}
 	}
 

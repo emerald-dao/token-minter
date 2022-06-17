@@ -22,6 +22,10 @@
     @include dark {
       @each $prop, $value in $role {
         --clr-#{$color}-#{$prop}: #{$value};
+        // Generate transparent variables
+        @for $i from 1 through 9 {
+          --clr-#{$color}-#{$prop}-t#{$i}: #{transparentize($value, $i * 0.1)};
+        }
       }
     }
   }
@@ -29,6 +33,10 @@
     @include light {
       @each $prop, $value in $role {
         --clr-#{$color}-#{$prop}: #{$value};
+        // Generate transparent variables
+        @for $i from 1 through 9 {
+          --clr-#{$color}-#{$prop}-t#{$i}: #{transparentize($value, $i * 0.1)};
+        }
       }
     }
   }

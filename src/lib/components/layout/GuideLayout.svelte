@@ -23,7 +23,7 @@
       position: sticky;
       /* TODO: Add top offset variable */
       top: 6rem;
-      max-height: 100vh;
+      max-height: 80vh;
     }
   }
   
@@ -32,11 +32,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: stretch;
-    align-content: stretch;
     padding: 0;
     max-width: 60ch;
-    height: 100%;
   }
 </style>

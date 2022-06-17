@@ -4,8 +4,8 @@
 <style>  
   .background-gradient {
     background: 
-      radial-gradient(ellipse at right, var(--clr-gradient-primary), transparent),
-      radial-gradient(ellipse at bottom, var(--clr-gradient-secondary), transparent);
+      radial-gradient(ellipse at right, var(--clr-primary-soft-t9), transparent),
+      radial-gradient(ellipse at bottom, var(--clr-accent-soft-t7), transparent);
     backdrop-filter: blur(200px);
     height: 100%;
     width: 100%;

@@ -1,6 +1,7 @@
 <script>
 	import Icon from "@iconify/svelte";
 	import { Stack } from "$lib/components/atoms/index";
+  import { dappTitle  } from '$lib/config/config';
 
   export let link = true
 </script>
@@ -9,7 +10,7 @@
   <a href="/">
     <Stack direction="row" gap="15px">
       <Icon icon="ion:diamond-outline"/>
-      <span>TOKEN MINTER</span>
+      <span>{dappTitle}</span>
     </Stack>
   </a>
 {:else}

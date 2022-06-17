@@ -27,7 +27,7 @@
 </script>
 
 <header>
-  <Container class="width-large">
+  <Container class="width-x-large">
     <nav>
       <!-- Desktop menu -->
       <div class="desktop-menu">

@@ -3,26 +3,39 @@
 
 $light: (
   primary: (
+    soft: map-deep-get($colors, green, 100),
     main: map-deep-get($colors, green, 400),
-    hover: map-deep-get($colors, green, 500),
+    strong: map-deep-get($colors, green, 500),
   ),
   accent: (
+    soft: map-deep-get($colors, blue, 100),
     main: map-deep-get($colors, blue, 200),
-    hover: map-deep-get($colors, blue, 300),
+    strong: map-deep-get($colors, blue, 400),
   ),
   background: (
-    primary: map-deep-get($colors, neutral, 200),
-    secondary: map-deep-get($colors, neutral, 300),
+    primary: map-deep-get($colors, neutral, 100),
+    secondary: map-deep-get($colors, neutral, 200),
+  ),
+  neutral: (
+    100: map-deep-get($colors, neutral, 100),
+    200: map-deep-get($colors, neutral, 200),
+    300: map-deep-get($colors, neutral, 300),
+    400: map-deep-get($colors, neutral, 400),
+    500: map-deep-get($colors, neutral, 500),
+    600: map-deep-get($colors, neutral, 600),
+    700: map-deep-get($colors, neutral, 700),
+    800: map-deep-get($colors, neutral, 800),
+    900: map-deep-get($colors, neutral, 900),
   ),
   font: (
     heading: map-deep-get($colors, neutral, 800),
+    heading-inverse: map-deep-get($colors, neutral, 100),
     text-strong: map-deep-get($colors, neutral, 900),
     text: map-deep-get($colors, neutral, 800),
     text-soft: map-deep-get($colors, neutral, 600),
+    text-strong-inverse: map-deep-get($colors, neutral, 100),
+    text-inverse: map-deep-get($colors, neutral, 200),
+    text-soft-inverse: map-deep-get($colors, neutral, 400),
     text-button: map-deep-get($colors, neutral, 800),
-  ),
-  gradient: (
-    primary: map-deep-get($colors, blue, transparent),
-    secondary: map-deep-get($colors, blue, transparent),
   ),
 );
