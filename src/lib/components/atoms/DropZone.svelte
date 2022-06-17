@@ -6,55 +6,70 @@
 
   const dispatch = createEventDispatcher();
 
-  // Handle drop
   const handleFileDrop = async (e) => {
     e.preventDefault();
     dragOver = false;
-
-    if (await validateDrop(e.dataTransfer) === true) {
-      
-      files = await getFilesAsync(e.dataTransfer);
-      errorOnUpload = false;
-      dispatch('uploaded-files');
-
-    } else {
-      errorOnUpload = true;
-    }
+    dropHandlingFunction(e.dataTransfer);
+    // if (validation === true) {
+    //   if (needsParsing) {
+    //     filesBeforeParsing = await getFilesAsync(e.dataTransfer);
+    //     // TODO: parse files
+    //     fileStore.update((s) => ({
+    //       ...s, 
+    //       files: filesBeforeParsing,
+    //       uploadState: 'uploaded'
+    //     }));
+    //   } else {
+    //     fileStore.update((s) => ({
+    //       ...s, 
+    //       files: filesBeforeParsing,
+    //       uploadState: 'uploaded'
+    //     }));
+    //   }
+    // } else {
+    //   fileStore.update((s) => ({
+    //     ...s, 
+    //     errorMessages: validation,
+    //     uploadState: 'invalid'
+    //   }));
+    // }
   }
 
   let dragOver = false; // Flag to check if we are dragging over the dropzone
   
-  let errorOnUpload = false;
-  export let files;
-  export let validateDrop;
+  export let fileStore;
+  export let fileState;
+  export let dropHandlingFunction; // Function containing validation logic + parsing logic + storing logic
   export let promptText = "Drop file here or click to upload";
 </script>
 
 <div
   class="drop-zone"
   class:drop-zone-over={dragOver}
-  class:drop-zone-error={errorOnUpload}
+  class:drop-zone-error={fileState.errorMessages.length > 0}
   on:dragover={() => dragOver = true}
   on:dragleave={() => dragOver = false}
   on:dragend={() => dragOver = false}
   on:drop={handleFileDrop}
   ondragover="return false"
 >
-  {#if files && files.length > 0}
-    {#each files as file, index}
+  {#if fileStore && fileStore.length > 0}
+    {#each fileStore as file, index}
       <DropZoneFile 
         file = {file}
         on:deleteFile={() => {
-          files.splice(index, 1);
-          files = files
+          fileStore.splice(index, 1);
+          fileStore = fileStore;
         }}
       />
     {/each}
   {:else}
     <Icon icon=ion:cloud-upload-outline/>
     <span class="prompt">{promptText}</span>
-    {#if errorOnUpload}
-      <span class="error">Invalid file</span>
+    {#if fileState.errorMessages.length > 0}
+      {#each fileState.errorMessages as error}
+        <p class="error">{error}</p>
+      {/each}
     {/if}
   {/if}
 </div>
