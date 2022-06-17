@@ -1,13 +1,16 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { imagesFiles, csvFile } from "$lib/stores/CollectionFilesStore";
-  import { validateCSV, validateImages } from "$lib/validation/fileDropValidation"; 
+  import { validateCSV, validateImages, crossCheckValidation } from "$lib/validation/fileDropValidation"; 
   import { handleAssetFolderDrop } from '$lib/utilities/handleAssets.js';
 
   // Flags for knowing if the correct files are uploaded
   let csvUploaded = false;
   let imagesUploaded = false;
-  let crossedCheked = false;
+  let crossedChecked = false;
+
+  // When CSV and images are uploaded run the cross check validation
+  $: if(csvUploaded && imagesUploaded) crossedChecked = crossCheckValidation($csvFile, $imagesFiles);
 
   export let onSubmitAction;
   export let onSubmitText;
@@ -46,7 +49,7 @@
       />
     </div>
   </div>
-  <StepsButtons onSubmitAction={onSubmitAction} onSubmitText={onSubmitText} disabled={!csvUploaded || !imagesUploaded}/>
+  <StepsButtons onSubmitAction={onSubmitAction} onSubmitText={onSubmitText} disabled={!csvUploaded || !imagesUploaded || !crossedChecked}/>
 </div>
 
 <style type="scss">
