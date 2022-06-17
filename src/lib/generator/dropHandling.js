@@ -8,9 +8,9 @@ export const csvDropHandling = (dataTransfer) => {
 
   if (beforeParseValidationResult === true) {
     // If the file is a CSV file, we parse the file and run a second validation
-    console.log('parse csv');
+    // TODO: Parse CSV
     // If the validation is successful, we add the file to the store + set state to 'uploaded'
-    validateCsvAfterParse;
+    // TODO: Run validation after parse function
     // If validation is invalid => set state to 'invalid' and add error messages
   } else {
     // If validation is invalid => set state to 'invalid' and add error messages

@@ -24,8 +24,9 @@ export const validateCsvBeforeParse = (dataTransfer) => {
   }
 };
 
-// The final validation occurs before the file is parsed.
+// The final validation occurs after the file is parsed.
 export const validateCsvAfterParse = async (parsedCsv) => {
+  // TODO: edit this file to recieve already parsed CSV
   const metadata = {
     attributes: [],
   };
