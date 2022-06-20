@@ -5,9 +5,13 @@ index: 1
 language: es
 ---
 
-# NFT Platform Educational Contents Outline for EMERALD DAO
+<script>
+	import { dappTitle } from "$lib/config/config";
 
-## ¡Bienvenid@ a [inserta el nombre de la plataforma aquí]!
+	const titulo = dappTitle
+</script>
+
+# ¡Bienvenid@ a { titulo }!
 
 Esta herramienta fue creada para aquell@s con poco o ningún conocimiento acerca del desarrollo de contratos inteligentes. Esta plataforma te permite construir tus propios contratos inteligentes para tu propia colección NFT en el Blockchain de Flow sin programación o código alguno.
 
