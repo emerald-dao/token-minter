@@ -1,6 +1,6 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
-  import { csvState, imagesState, imagesFiles, csvFiles } from "$lib/generator/CollectionFilesStore";
+  import { csvState, imagesState, imagesFiles, csvFiles, userIPFSToken } from "$lib/generator/CollectionFilesStore";
   import { csvDropHandling, imagesDropHandling } from "$lib/generator/dropHandling"
   // When CSV and images are uploaded run the cross check validation
   // $: if(csvUploaded && imagesUploaded) crossedChecked = crossCheckValidation($csv.files, $images.files);
@@ -25,7 +25,7 @@
         fileState={$csvState}
       />
     </div>
-    
+
     <!-- Images DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneImages">
@@ -33,23 +33,35 @@
       </label>
       <span class="helper-text">Drop a folder containing all your collection images.</span>
       <DropZone 
-        promptText="Drop Images folder"
-        dropHandlingFunction={imagesDropHandling}
-        bind:fileStore={$imagesFiles}
-        fileState={$imagesState}
+      promptText="Drop Images folder"
+      dropHandlingFunction={imagesDropHandling}
+      bind:fileStore={$imagesFiles}
+      fileState={$imagesState}
       />
     </div>
   </div>
+  
+  <div class="form">
+    <label for="ipfs-token">IPFS Token</label>
+    <!-- TODO: Add tutorial on how to get an IPFS token  -->
+    <span class="helper-text">Follow this tutorial on how to get your IPFS Token.</span>
+    <input 
+      name="ipfs-token"
+      id="ipfs-token"
+      placeholder="Your IPFS Token"
+      type="text"
+      bind:value={$userIPFSToken}
+    />
+  </div>
+  
+
   <StepsButtons 
     onSubmitAction={onSubmitAction} 
     onSubmitText={onSubmitText} 
-    disabled={!$csvState.uploadState === 'success' || !imagesState.uploadState === "success"}
+    disabled={!($csvState.uploadState === 'success') || !(imagesState.uploadState === "success")}
   />
 
-  <div>
-    {$csvState.uploadState}
-    {$imagesState.uploadState}
-  </div>
+
 </div>
 
 <style type="scss">
