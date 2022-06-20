@@ -1,42 +1,55 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvFiles, imagesFiles, csvState, imagesState } from '$lib/generator/CollectionFilesStore';
+import { csvFiles, csvState } from '$lib/generator/stores/CsvStore';
+import { imagesFiles, imagesState } from '$lib/generator/stores/ImagesStore';
+import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/generator/stores/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
+import Papa from 'papaparse';
 
 export const csvDropHandling = (dataTransfer) => {
-  // Run a first, fast validation, to see if the file is a CSV file
+  // Run a first validation to see if the file is a CSV file
   let beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
 
   if (beforeParseValidationResult === true) {
-    // If the file is a CSV file, we parse the file and run a second validation
-    // TODO: Parse CSV
-    // If the validation is successful, we add the file to the store + set state to 'uploaded'
-    // TODO: Run validation after parse function
-    // If validation is invalid => set state to 'invalid' and add error messages
+    // If the file is a CSV file: we parse the file and run a second validation
+    const file = dataTransfer.items[0].getAsFile();
+    let parsedCSV;
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = function () {
+        const pt = Papa.parse(reader.result);
+        parsedCSV = pt.data;
+        resolve();
+      };
+      reader.readAsBinaryString(file);
+    }).then(() => {
+      // After parse, we run second validation
+      let afterParseValidationResult = validateCsvAfterParse(parsedCSV);
+
+      if (afterParseValidationResult === true) {
+        // If the validation successful: we add the file to the store + set state to 'uploaded'
+        saveFileInStore(csvFiles, parsedCSV);
+        setValidationSuccess(csvState);
+      } else {
+        // If the validation failed: we set the error message and set state to 'invalid'
+        setValidationError(csvState, afterParseValidationResult.error);
+      }
+    });
   } else {
-    // If validation is invalid => set state to 'invalid' and add error messages
-    csvState.update((s) => ({
-      uploadState: 'invalid',
-      errorMessages: [...s.errorMessages, beforeParseValidationResult.error],
-    }));
+    // If the validation failed: we set the error message and set state to 'invalid'
+    setValidationError(csvState, beforeParseValidationResult.error);
   }
 };
 
 export const imagesDropHandling = async (dataTransfer) => {
   let validationResult = validateImages(dataTransfer);
 
-  // If validation is valid => get files and add them to the store + set state to 'uploaded'
   if (validationResult === true) {
     const files = await getFilesAsync(dataTransfer);
-    imagesFiles.set(files);
-    imagesState.set({
-      uploadState: 'uploaded',
-      errorMessages: [],
-    });
+    // If the validation successful: we add the file to the store + set state to 'uploaded'
+    saveFileInStore(imagesFiles, files);
+    setValidationSuccess(imagesState);
   } else {
-    // If validation is invalid => set state to 'invalid' and add error messages
-    imagesState.update((s) => ({
-      uploadState: 'invalid',
-      errorMessages: [...s.errorMessages, validationResult.error],
-    }));
+    // If the validation failed: we set the error message and set state to 'invalid'
+    setValidationError(imagesState, validationResult.error);
   }
 };

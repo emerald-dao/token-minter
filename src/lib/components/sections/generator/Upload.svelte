@@ -1,9 +1,9 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
-  import { csvState, imagesState, imagesFiles, csvFiles, userIPFSToken } from "$lib/generator/CollectionFilesStore";
+  import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore";
+  import { csvState, csvFiles } from "$lib/generator/stores/CsvStore";
+  import { imagesState, imagesFiles } from "$lib/generator/stores/ImagesStore";
   import { csvDropHandling, imagesDropHandling } from "$lib/generator/dropHandling"
-  // When CSV and images are uploaded run the cross check validation
-  // $: if(csvUploaded && imagesUploaded) crossedChecked = crossCheckValidation($csv.files, $images.files);
 
   export let onSubmitAction;
   export let onSubmitText;
@@ -52,15 +52,13 @@
       type="text"
       bind:value={$userIPFSToken}
     />
-  </div>
-  
+  </div> 
 
   <StepsButtons 
     onSubmitAction={onSubmitAction} 
     onSubmitText={onSubmitText} 
     disabled={!($csvState.uploadState === 'success') || !(imagesState.uploadState === "success")}
   />
-
 
 </div>
 

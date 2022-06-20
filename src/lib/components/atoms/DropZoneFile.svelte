@@ -3,25 +3,25 @@
   import { afterUpdate } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
-  afterUpdate (() => {
-		displayThumbnail(file);
-	});
+  // afterUpdate (() => {
+	// 	displayThumbnail(file);
+	// });
 
-  const displayThumbnail = (file) => {
+  // const displayThumbnail = (file) => {
     
-    // TODO: include conditional rendering for image
-    const reader = new FileReader();
-    reader.readAsDataURL(file); // base 64 format
+  //   // TODO: include conditional rendering for image
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file); // base 64 format
     
-    reader.onload = () => {
-      thumbnailElement.style.backgroundImage = `url('${reader.result}')`; /*asynchronous call. This function runs once reader is done reading file. reader.result is the base 64 format*/
-      thumbnailElement.style.height = "100%";
-      thumbnailElement.style.aspectRatio = "1/1";
-      thumbnailElement.style.backgroundSize = "cover";
-      thumbnailElement.style.display = "flex";
-      thumbnailElement.style.borderRadius = "0.2rem";
-    };
-  };
+  //   reader.onload = () => {
+  //     thumbnailElement.style.backgroundImage = `url('${reader.result}')`; /*asynchronous call. This function runs once reader is done reading file. reader.result is the base 64 format*/
+  //     thumbnailElement.style.height = "100%";
+  //     thumbnailElement.style.aspectRatio = "1/1";
+  //     thumbnailElement.style.backgroundSize = "cover";
+  //     thumbnailElement.style.display = "flex";
+  //     thumbnailElement.style.borderRadius = "0.2rem";
+  //   };
+  // };
 
   let dispatch = createEventDispatcher();
 
