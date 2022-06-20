@@ -10,7 +10,9 @@
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
   import { deployContract } from "../flow/actions.js";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
-  import { csvFiles, imagesFiles, userIPFSToken } from "$lib/generator/CollectionFilesStore"
+  import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore"
+  import { csvParsedFile } from "$lib/generator/stores/CsvStore"
+  import { imagesFiles } from "$lib/generator/stores/ImagesStore"
 
   // The current step of our process.
   let step = 0;
@@ -27,7 +29,7 @@
   function uploadAssets () {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
-    uploadToIPFS($csvFiles, $imagesFiles, userIPFSToken)
+    uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken)
     step += 1;
   }
   

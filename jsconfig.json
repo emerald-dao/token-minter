@@ -6,6 +6,6 @@
       "$lib/*": ["src/lib/*"]
     }
   },
-  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "src/lib/generator/CollectionFilesStore.ts"],
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "src/lib/generator/stores/IPFStokenStore.ts"],
   "extends": "./.svelte-kit/tsconfig.json"
 }
