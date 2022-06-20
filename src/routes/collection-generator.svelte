@@ -11,7 +11,7 @@
   import { deployContract } from "../flow/actions.js";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
   import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore"
-  import { csvFiles } from "$lib/generator/stores/CsvStore"
+  import { csvParsedFile } from "$lib/generator/stores/CsvStore"
   import { imagesFiles } from "$lib/generator/stores/ImagesStore"
 
   // The current step of our process.
@@ -29,7 +29,7 @@
   function uploadAssets () {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
-    uploadToIPFS($csvFiles, $imagesFiles, $userIPFSToken)
+    uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken)
     step += 1;
   }
   

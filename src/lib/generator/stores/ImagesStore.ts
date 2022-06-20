@@ -8,3 +8,10 @@ export const imagesState: Writable<FileState> = writable({
 });
 
 export const imagesFiles = writable([]);
+
+export const setImagesStateToIdle = () => {
+  imagesState.update((s) => ({
+    uploadState: 'idle',
+    errorMessages: [],
+  }));
+};

@@ -1,5 +1,5 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvFiles, csvState } from '$lib/generator/stores/CsvStore';
+import { csvParsedFile, csvFile, csvState } from '$lib/generator/stores/CsvStore';
 import { imagesFiles, imagesState } from '$lib/generator/stores/ImagesStore';
 import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/generator/stores/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
@@ -26,8 +26,9 @@ export const csvDropHandling = (dataTransfer) => {
       let afterParseValidationResult = validateCsvAfterParse(parsedCSV);
 
       if (afterParseValidationResult === true) {
-        // If the validation successful: we add the file to the store + set state to 'uploaded'
-        saveFileInStore(csvFiles, parsedCSV);
+        // If the validation successful: we add the files to the store + set state to 'uploaded'
+        saveFileInStore(csvFile, file);
+        saveFileInStore(csvParsedFile, parsedCSV);
         setValidationSuccess(csvState);
       } else {
         // If the validation failed: we set the error message and set state to 'invalid'

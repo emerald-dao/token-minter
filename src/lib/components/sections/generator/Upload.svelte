@@ -1,7 +1,7 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
   import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore";
-  import { csvState, csvFiles } from "$lib/generator/stores/CsvStore";
+  import { csvState, csvFile } from "$lib/generator/stores/CsvStore";
   import { imagesState, imagesFiles } from "$lib/generator/stores/ImagesStore";
   import { csvDropHandling, imagesDropHandling } from "$lib/generator/dropHandling"
 
@@ -21,8 +21,9 @@
       <DropZone 
         promptText="Drop CSV file" 
         dropHandlingFunction={csvDropHandling}
-        bind:fileStore={$csvFiles}
+        bind:fileStore={$csvFile}
         fileState={$csvState}
+        type="csv"
       />
     </div>
 
@@ -33,10 +34,11 @@
       </label>
       <span class="helper-text">Drop a folder containing all your collection images.</span>
       <DropZone 
-      promptText="Drop Images folder"
-      dropHandlingFunction={imagesDropHandling}
-      bind:fileStore={$imagesFiles}
-      fileState={$imagesState}
+        promptText="Drop Images folder"
+        dropHandlingFunction={imagesDropHandling}
+        bind:fileStore={$imagesFiles}
+        fileState={$imagesState}
+        type="image"
       />
     </div>
   </div>
@@ -57,7 +59,7 @@
   <StepsButtons 
     onSubmitAction={onSubmitAction} 
     onSubmitText={onSubmitText} 
-    disabled={!($csvState.uploadState === 'success') || !(imagesState.uploadState === "success")}
+    disabled={!($csvState.uploadState === 'success') && !(imagesState.uploadState === "success")}
   />
 
 </div>

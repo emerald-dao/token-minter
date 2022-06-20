@@ -7,4 +7,14 @@ export const csvState: Writable<FileState> = writable({
   errorMessages: [],
 });
 
-export const csvFiles = writable([]);
+export const csvParsedFile = writable(null);
+export const csvFile = writable(null);
+
+export const emptyCsvStore = () => {
+  csvState.set({
+    uploadState: 'idle',
+    errorMessages: [],
+  });
+  csvParsedFile.set(null);
+  csvFile.set(null);
+};
