@@ -59,7 +59,7 @@
   <StepsButtons 
     onSubmitAction={onSubmitAction} 
     onSubmitText={onSubmitText} 
-    disabled={!($csvState.uploadState === 'success') && !(imagesState.uploadState === "success")}
+    disabled={!($csvState.uploadState === 'success') || !(imagesState.uploadState === "success")}
   />
 
 </div>

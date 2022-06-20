@@ -4,10 +4,12 @@ import { imagesFiles, imagesState } from '$lib/generator/stores/ImagesStore';
 import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/generator/stores/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
 import Papa from 'papaparse';
+import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
+import { get } from 'svelte/store';
 
 export const csvDropHandling = (dataTransfer) => {
   // Run a first validation to see if the file is a CSV file
-  let beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
+  const beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
 
   if (beforeParseValidationResult === true) {
     // If the file is a CSV file: we parse the file and run a second validation
@@ -23,13 +25,28 @@ export const csvDropHandling = (dataTransfer) => {
       reader.readAsBinaryString(file);
     }).then(() => {
       // After parse, we run second validation
-      let afterParseValidationResult = validateCsvAfterParse(parsedCSV);
+      const afterParseValidationResult = validateCsvAfterParse(parsedCSV);
 
       if (afterParseValidationResult === true) {
-        // If the validation successful: we add the files to the store + set state to 'uploaded'
-        saveFileInStore(csvFile, file);
-        saveFileInStore(csvParsedFile, parsedCSV);
-        setValidationSuccess(csvState);
+        if (get(imagesState).uploadState === 'success') {
+          // If the validation successful and the images are already uploaded: we run the cross check validation
+          const crossedValidationResult = crossCheckValidation(parsedCSV, get(imagesFiles));
+
+          if (crossedValidationResult === true) {
+            // If the cross check validation successful: we save the file in the store
+            saveFileInStore(csvFile, file);
+            saveFileInStore(csvParsedFile, parsedCSV);
+            setValidationSuccess(csvState);
+          } else {
+            // If the cross check validation failed: we set the error message
+            setValidationError(csvState, crossedValidationResult.error);
+          }
+        } else {
+          // If images are not uploaded yet: we save our files and update validation state
+          saveFileInStore(csvFile, file);
+          saveFileInStore(csvParsedFile, parsedCSV);
+          setValidationSuccess(csvState);
+        }
       } else {
         // If the validation failed: we set the error message and set state to 'invalid'
         setValidationError(csvState, afterParseValidationResult.error);
@@ -42,13 +59,27 @@ export const csvDropHandling = (dataTransfer) => {
 };
 
 export const imagesDropHandling = async (dataTransfer) => {
-  let validationResult = validateImages(dataTransfer);
+  const validationResult = validateImages(dataTransfer);
 
   if (validationResult === true) {
     const files = await getFilesAsync(dataTransfer);
-    // If the validation successful: we add the file to the store + set state to 'uploaded'
-    saveFileInStore(imagesFiles, files);
-    setValidationSuccess(imagesState);
+
+    // If the validation successful and the CSV is already uploaded: we run the cross check validation
+    if (get(csvState).uploadState === 'success') {
+      const crossedValidationResult = crossCheckValidation(get(csvParsedFile), get(imagesFiles));
+      if (crossedValidationResult === true) {
+        // If the cross check validation successful: we save the file in the store
+        saveFileInStore(imagesFiles, files);
+        setValidationSuccess(imagesState);
+      } else {
+        // If the cross check validation failed: we set the error message
+        setValidationError(imagesState, crossedValidationResult.error);
+      }
+    } else {
+      // If the CSV is not uploaded yet: we save our files and update validation state
+      saveFileInStore(imagesFiles, files);
+      setValidationSuccess(imagesState);
+    }
   } else {
     // If the validation failed: we set the error message and set state to 'invalid'
     setValidationError(imagesState, validationResult.error);
