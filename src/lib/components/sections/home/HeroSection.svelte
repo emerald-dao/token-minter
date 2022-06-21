@@ -15,7 +15,11 @@
 				<Button>Start</Button>
 			</Stack>
 			<div class="grid-child">
-				<!-- TODO: ADD 3D SHAPE -->
+				<video width="100%" height="100%" autoplay loop muted>
+					<source src="emerald.webm" type="video/webm">
+					<track kind="captions"/>
+					Your browser does not support the video tag.
+				</video>
 			<div/>
 		</AdaptableGrid>
 	</Container>
