@@ -24,7 +24,7 @@
     display: flex;
     flex-direction: inherit;
     list-style-type: none;
-    gap: 2em;
+    gap: 3em;
     padding: 0;
     font-family: var(--font-mono);
     text-align: center;
