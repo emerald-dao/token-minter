@@ -28,6 +28,15 @@ export async function uploadToIPFS(csvFile, imageFiles, IPFSToken) {
     return a;
   }, []);
 
+  const attributes = parseCsv[0];
+  const metadata = { nft_data:{} }
+  let n = 0;
+  metadata.nft_data = parseCsv.slice(1).reduce( (a, nft)=>{
+		a[ nft[ 'name'] ] = nft;
+		a[ nft[ 'name'] ].serial = nft[ 'name' ].serial || ++n;
+		return a;
+  }, {});
+
   const { root, car } = await packToBlob({
     input: car_files,
     blockstore: new MemoryBlockStore(),
