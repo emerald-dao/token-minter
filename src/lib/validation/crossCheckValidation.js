@@ -20,7 +20,7 @@ export const crossCheckValidation = (parsedCsv, imagesFiles) => {
 
 	for( const fn in fileStats ){   // check for files w/ no metadata (orphans)
 	  if( fileStats[ fn ] < 0 ){
-	  		errs.push( `WARNING: ASSET FILE NOT REFERENCED BY ANY NFT: ${k}` );
+	  		errs.push( `WARNING: Asset file not referenced by any NFT: ${k}` );
 	  }
 	}
 
