@@ -12,12 +12,12 @@ export const navItems = [
     prefetch: true,
   },
   {
-    title: 'Guide',
+    title: 'User Guide',
     route: '/guide/welcome',
     prefetch: true,
   },
   {
-    title: 'Emerald City',
+    title: 'Emerald City Discord',
     route: 'https://discord.com/invite/emeraldcity',
     prefetch: false,
     target: '_blank',

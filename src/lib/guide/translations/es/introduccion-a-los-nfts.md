@@ -5,6 +5,10 @@ index: 2
 language: es
 ---
 
+<script>
+  import { PopularNFTs, Diagram, TokenTypes } from "$lib/components/guide-diagrams/index"
+</script>
+
 # Introducción a los Tokens No Fungibles (NFTs en inglés)
 
 ## ¿Qué es un NFT?
@@ -19,13 +23,27 @@ En la actualidad, verás que la mayoría de NFTs toma la forma de arte digital y
 - **Activos de videojuegos** ([Axie Infinity](https://axieinfinity.com/))
 - **Boletos de Prueba de Asistencia y Eventos** ([FLOAT](https://floats.city))
 
-Diagrama 1.1 Ejemplo de NFTs populares
+<Diagram name="Ejemplo de NFTs populares" number="1.1">
+  <PopularNFTs
+    flowText="NFTs almacenados en Flow Blockchain"
+    ethereumText="NFTs almacenados en Ethereum Blockchain"
+  />
+</Diagram>
 
 **(1b) Fungible vs. No Fungible**
 
 Para entender mejor el atributo de "originalidad" de un NFT, debemos aprender lo que los Tokens Fungibles son. Los Tokens Fungibles son activos que pueden ser reemplazados por otros del mismo tipo. Por ejemplo, si yo te pidiera que me dieras un billete de $1 a cambio de uno de mis billetes de $1, a ti no te importaría ya que ambos son exactamente lo mismo. Comúnmente, los Tokens Fungibles toman la forma de criptomoneda, una moneda digital que vive en el Blockchain (ej: [ETH](https://www.coindesk.com/price/ethereum/) y [FLOW](https://coinmarketcap.com/currencies/flow/)).
 
-Diagrama 1.2 Diferencias entre artículos o tokens Fungibles y No Fungibles
+<Diagram name="Diferencias entre tokens fungibles y no-fungibles" number="1.2">
+  <TokenTypes
+    fungibleDescription="Se pueden cambiar igual por igual. Tienen el mismo valor."
+    nonFungibleDescription="No se pueden cambiar igual por igual. Tienen un valor único."
+    money="Dinero"
+    gold="Oro"
+    car="Auto"
+    artwork="Obra de Arte"
+  />
+</Diagram>
 
 ## Ejemplo
 

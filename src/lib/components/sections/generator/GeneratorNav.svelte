@@ -1,5 +1,5 @@
 <script>
-  import { StepDescription, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
+  import { StepInstructions, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
 
   export let step;
   export let steps;
@@ -29,7 +29,7 @@
       {/each}
     </ul>
   </TransparentCard>
-  <StepDescription description={steps[step].description} />
+  <StepInstructions instructions={steps[step].instructions} />
 </div>
 
 <style type="scss">

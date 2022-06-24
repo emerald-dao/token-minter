@@ -39,6 +39,7 @@
 
   // The TOC data is all given as metadata from custom made rehype plugin.
   export let contentsArray;
+  let specialCharacters = /[^a-zA-Z0-9\s\-]+/g;
 
   const getToc = () => {
     contentsArray.forEach((content) => {
@@ -46,7 +47,7 @@
         toc = [...toc,
           {
             title: content.title,
-            path: content.title.replace(/ /g,"-").toLowerCase()
+            path: content.title.replace(specialCharacters, "").replace(/ /g,"-").toLowerCase()
           }
         ]
       }

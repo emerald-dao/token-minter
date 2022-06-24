@@ -5,6 +5,10 @@ index: 3
 language: en
 ---
 
+<script>
+  import { Diagram, ProcessStep, ContractExample, IpfsFlow } from "$lib/components/guide-diagrams/index"
+</script>
+
 # What goes into making an NFT?
 
 In order to create an NFT, we must have the following components:
@@ -15,7 +19,9 @@ In order to create an NFT, we must have the following components:
 
 Prior to jumping in, let’s view a diagram that provides a birds-eye view of the components that make up an NFT:
 
-Diagram 2.1 The end to end process of deploying an NFT
+<Diagram name="The end to end process of deploying an NFT" number="2.1">
+  <ProcessStep/>
+</Diagram>
 
 ## Smart Contracts
 
@@ -25,7 +31,9 @@ The cool part is that because smart contracts live on the Blockchain, we have fu
 
 ` `On the [Flow Blockchain](https://www.onflow.org/), smart contracts are written in a computer programming language called Cadence, unlike Solidity which is used for smart contracts on the [Ethereum Blockchain](https://ethereum.org/en/). In Section 3, we’ll talk about the pros and cons of this language as opposed to others like Solidity.
 
-Diagram 2.2 An example smart contract written in Cadence
+<Diagram name="An example smart contract written in Cadence" number="2.2">
+  <ContractExample/>
+</Diagram>
 
 ## Metadata
 
@@ -42,7 +50,9 @@ Metadata is a term used to describe the details of the NFT or any asset. What do
 
 ` `…but there are infinitely more fields that can describe an NFT. It is entirely up to the creator of the NFT to describe what Metadata a NFT has, and it's up to the developer of the smart contract to properly store or reference that Metadata inside the NFT itself. The problem, though, is that it’s expensive to store data on the Blockchain. So we must be careful to only store smaller things on the Blockchain, and store heavier things elsewhere…
 
-Diagram 2.3 List of Metadata on a Flunkz NFT
+<Diagram name="Flow of data to/from IPFS" number="2.4">
+  <IpfsFlow/>
+</Diagram>
 
 ## Asset Storage
 
