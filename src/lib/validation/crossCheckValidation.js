@@ -5,12 +5,19 @@
 
 // TODO: implement cross check validation
 export const crossCheckValidation = (parsedCsv, imagesFiles) => {
+  	const attributes = parsedCsv[0];
+  	const OK = 1, NOK = -1;
+  	let ipfs_keys = ['image'];
+  	if( attributes.includes('thumbnail') ) ipfs_keys.push('thumbnail');
+  	let file_xcheck = imageFiles.reduce( (a,f)=>{
+  		a[ f.name ] = NOK;
+  	},{} );
 
 	//---- check for errors in metadata: metadata w/ no file (ghosts)
 	let errs = parsedCsv.slice(1).reduce( (a, nft )=>{
-	    for( const k of metadata.ipfs_keys ){
-	        if( fileStats[ nft[ k ] ] ){
-	          fileStats[ nft[ k ] ] = 1;  // mark the file as referenced
+	    for( const k of ipfs_keys ){
+	        if( file_xcheck[ nft[ k ] ] ){
+	          file_xcheck[ nft[ k ] ] = OK;  // mark the file as referenced
 	        } else {
 	          let msg = nft[ k ]? 'FILE NOT FOUND' : 'NO FILE REFERENCED';
 	          a.push( `WARNING: ${msg} for item: ${nft.name}.${k}` );

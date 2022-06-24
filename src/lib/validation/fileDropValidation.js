@@ -29,26 +29,41 @@ export const validateCsvAfterParse = (parsedCsv) => {
   if (attributes.includes('name') && attributes.includes('description') && attributes.includes('image')) {
     console.log('Metadata', attributes);
 
+    const required = ['name','description','image'];
+    if( attributes.includes('thumbnail') ) required.push( 'thumbnail');
+
     // parse the metadata for each NFT into a dictionary, keyed by its unique name
-    metadata.nft_data = pt.data.slice(1).reduce( (a, vals)=>{
+    const errs = parseCsv.slice(1).reduce( (a, vals)=>{
 
         // values must be an ordered array corresponding to the metadata.attributes array 
        if( vals && vals.length > 0 && vals[0] !== '' ){
+            let key;
             let nft_attribs = {};
-            for( let i=0; i < metadata.attributes.length; i++ ){
-
+            for( let i=0; i < attributes.length; i++ ){
               // put values into the dict
-              nft_attribs[ metadata.attributes[i] ] = vals[ i ];
+              nft_attribs[ attributes[i] ] = vals[ i ];
 
               // catch the unique identifier of this NFT (name):
-              if( metadata.attributes[i] === 'name' ){ key = f[ i ]; }
+              if( attributes[i] === 'name' ){ key = f[ i ]; }
+            }
+            // validate key (present and non-duplicate)
+            if( !key ){
+                a.push( 'ERROR: Name attribute missing' );
             }
             if( a[ key ] ){
               // ERROR: occupied, this name has already been used!
                a.push( `ERROR: Name attribute must be unique: ${ key }` );
             } else {
-              a[ key ] = { data: nft_attribs, status: 0 };
+              a[ key ] = key;  // mark as used
             }
+
+            // check for all required attributes
+            required.forEach( k =>{
+                if( !nft_attribs[ k ] ){
+                  a.push( `ERROR: Required attribute ${k} missing in ${key}` );
+                }
+            })
+
         } else {
            a.push( `ERROR: Malformed record` );
         }
