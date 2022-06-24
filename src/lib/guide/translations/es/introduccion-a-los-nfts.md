@@ -25,7 +25,7 @@ En la actualidad, verás que la mayoría de NFTs toma la forma de arte digital y
 
 <Diagram name="Ejemplo de NFTs populares" number="1.1">
   <PopularNFTs
-    flowNFTs="NFT almacenados en Flow Blockchain"
+    flowText="NFTs almacenados en Flow Blockchain"
     ethereumText="NFTs almacenados en Ethereum Blockchain"
   />
 </Diagram>
