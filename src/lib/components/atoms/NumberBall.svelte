@@ -22,13 +22,11 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    cursor: pointer;
     transition: 0.8s;
   }
   .step-number-passed {
     color: var(--clr-primary-main);
     border: 1px var(--clr-primary-main) solid;
-    cursor: pointer;
   }
   .step-number-active {
     background-color: var(--clr-primary-main);
