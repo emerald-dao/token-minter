@@ -38,9 +38,9 @@
     <div class="mobile-nav">
       <Select on:change="{({ target }) => goto(`/guide/${lang}/${target.value}`)}">
         {#each chapters as { slug, title, index }}
-        <option value={slug} selected={$page.url.pathname.includes(slug)}>
-          {index}. {title}  
-        </option>
+          <option value={slug} selected={$page.url.pathname.includes(slug)}>
+            {index}. {title}  
+          </option>
         {/each} 
       </Select>
     </div>

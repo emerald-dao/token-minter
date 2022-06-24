@@ -10,7 +10,7 @@ export { default as ThemeToggle } from './ThemeToggle.svelte';
 export { default as FlowConnect } from './FlowConnect.svelte';
 export { default as Logo } from './Logo.svelte';
 export { default as NFTCard } from './NFTCard.svelte';
-export { default as StepDescription } from './StepDescription.svelte';
+export { default as StepInstructions } from './StepInstructions.svelte';
 export { default as StepsButtons } from './StepsButtons.svelte';
 export { default as DeploymentButton } from './DeploymentButton.svelte';
 export { default as DropZone } from './DropZone.svelte';
