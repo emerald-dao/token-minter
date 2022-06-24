@@ -1,38 +1,13 @@
 <script>
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index';
-  import { getFilesAsync } from '$lib/utilities/handleFileDrop';
-  import { createEventDispatcher } from 'svelte';
-
-  const dispatch = createEventDispatcher();
+  import { emptyCsvStore } from '$lib/generator/stores/CsvStore';
+  import { setImagesStateToIdle } from '$lib/generator/stores/ImagesStore';
 
   const handleFileDrop = async (e) => {
     e.preventDefault();
     dragOver = false;
     dropHandlingFunction(e.dataTransfer);
-    // if (validation === true) {
-    //   if (needsParsing) {
-    //     filesBeforeParsing = await getFilesAsync(e.dataTransfer);
-    //     // TODO: parse files
-    //     fileStore.update((s) => ({
-    //       ...s, 
-    //       files: filesBeforeParsing,
-    //       uploadState: 'uploaded'
-    //     }));
-    //   } else {
-    //     fileStore.update((s) => ({
-    //       ...s, 
-    //       files: filesBeforeParsing,
-    //       uploadState: 'uploaded'
-    //     }));
-    //   }
-    // } else {
-    //   fileStore.update((s) => ({
-    //     ...s, 
-    //     errorMessages: validation,
-    //     uploadState: 'invalid'
-    //   }));
-    // }
   }
 
   let dragOver = false; // Flag to check if we are dragging over the dropzone
@@ -41,6 +16,7 @@
   export let fileState;
   export let dropHandlingFunction; // Function containing validation logic + parsing logic + storing logic
   export let promptText = "Drop file here or click to upload";
+  export let type; // Type of file we are expecting
 </script>
 
 <div
@@ -53,16 +29,26 @@
   on:drop={handleFileDrop}
   ondragover="return false"
 >
-  {#if fileStore && fileStore.length > 0}
+  {#if fileStore && fileStore.length > 0 && type === "image"}
     {#each fileStore as file, index}
       <DropZoneFile 
         file = {file}
         on:deleteFile={() => {
           fileStore.splice(index, 1);
           fileStore = fileStore;
+          if (fileStore.length === 0) {
+            setImagesStateToIdle();
+          }
         }}
       />
     {/each}
+  {:else if !(fileStore === null) && type === "csv"}
+    <DropZoneFile 
+      file = {fileStore}
+      on:deleteFile={() => 
+        emptyCsvStore()
+      }
+    />
   {:else}
     <Icon icon=ion:cloud-upload-outline/>
     <span class="prompt">{promptText}</span>

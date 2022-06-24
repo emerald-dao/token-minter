@@ -5,9 +5,9 @@ import { MemoryBlockStore } from 'ipfs-car/blockstore/memory'
 import { TreewalkCarSplitter } from 'carbites/treewalk'
 
 
-export async function uploadToIPFS( metadata, assets, IPFSToken) {
-	
 	let car_files = [];
+
+export async function uploadToIPFS(csvFile, assets, IPFSToken) {
 
     //---- add metadata to .car file
     for( const key in metadata.nft_data ){
@@ -37,7 +37,6 @@ export async function uploadToIPFS( metadata, assets, IPFSToken) {
 
 }
 
-
 async function uploadCar( car, IPFSToken ) {
 
 	IPFSToken = IPFSToken || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDNjMjJlNDBBNDdiQWNBMmExMzUxOWM2RUZDODA3NEE0Mjg1YUE0RDIiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MDkwODQ2NDUzMCwibmFtZSI6IlRva2VuTWludGVyVGVzdCJ9.Oe5zDWDgTCEyGV__QVbVEZ6CH1aegZh5u8hPOjrIuk8'
@@ -58,9 +57,9 @@ async function uploadCar( car, IPFSToken ) {
           }
         }
     }
+
     for await ( const c of cars ) {
         result_cid = await NFTStorageClient.storeCar( c )
     }
     return result_cid
-
 }
