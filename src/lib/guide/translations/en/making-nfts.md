@@ -6,7 +6,7 @@ language: en
 ---
 
 <script>
-  import { Diagram, ProcessStep, ContractExample } from "$lib/components/guide-diagrams/index"
+  import { Diagram, ProcessStep, ContractExample, IpfsFlow } from "$lib/components/guide-diagrams/index"
 </script>
 
 # What goes into making an NFT?
@@ -50,7 +50,9 @@ Metadata is a term used to describe the details of the NFT or any asset. What do
 
 ` `…but there are infinitely more fields that can describe an NFT. It is entirely up to the creator of the NFT to describe what Metadata a NFT has, and it's up to the developer of the smart contract to properly store or reference that Metadata inside the NFT itself. The problem, though, is that it’s expensive to store data on the Blockchain. So we must be careful to only store smaller things on the Blockchain, and store heavier things elsewhere…
 
-Diagram 2.3 List of Metadata on a Flunkz NFT
+<Diagram name="Flow of data to/from IPFS" number="2.4">
+  <IpfsFlow/>
+</Diagram>
 
 ## Asset Storage
 

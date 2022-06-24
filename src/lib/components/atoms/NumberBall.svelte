@@ -16,6 +16,7 @@
     color: var(--clr-accent-strong);
     border: 1px var(--clr-accent-strong) solid;
     width: 2rem;
+    min-width: 2rem;
     height: 2rem;
     border-radius: 99px;
     display: flex;
