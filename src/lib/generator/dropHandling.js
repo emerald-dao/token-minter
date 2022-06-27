@@ -1,7 +1,7 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvParsedFile, csvFile, csvState } from '$lib/generator/stores/CsvStore';
-import { imagesFiles, imagesState } from '$lib/generator/stores/ImagesStore';
-import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/generator/stores/updateFunctions';
+import { csvParsedFile, csvFile, csvState } from '$lib/stores/generator/CsvStore';
+import { imagesFiles, imagesState } from '$lib/stores/generator/ImagesStore';
+import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
 import Papa from 'papaparse';
 import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
@@ -38,7 +38,7 @@ export const csvDropHandling = (dataTransfer) => {
             setValidationSuccess(csvState);
           } else {
             // If the cross check validation failed: we set the error message
-            setValidationError(csvState, crossedValidationResult.error);  // TODO: crossedValidationResult is an array of errors
+            setValidationError(csvState, crossedValidationResult.error); // TODO: crossedValidationResult is an array of errors
           }
         } else {
           // If images are not uploaded yet: we save our files and update validation state

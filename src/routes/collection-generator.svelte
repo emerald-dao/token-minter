@@ -10,9 +10,9 @@
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
   import { deployContract } from "../flow/actions.js";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
-  import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore"
-  import { csvParsedFile } from "$lib/generator/stores/CsvStore"
-  import { imagesFiles } from "$lib/generator/stores/ImagesStore"
+  import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore"
+  import { csvParsedFile } from "$lib/stores/generator/CsvStore"
+  import { imagesFiles } from "$lib/stores/generator/ImagesStore"
 
   // The current step of our process.
   let step = 0;

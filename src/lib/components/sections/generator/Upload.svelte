@@ -1,8 +1,8 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
-  import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore";
-  import { csvState, csvFile } from "$lib/generator/stores/CsvStore";
-  import { imagesState, imagesFiles } from "$lib/generator/stores/ImagesStore";
+  import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore";
+  import { csvState, csvFile } from "$lib/stores/generator/CsvStore";
+  import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
   import { csvDropHandling, imagesDropHandling } from "$lib/generator/dropHandling"
 
   export let onSubmitAction;
