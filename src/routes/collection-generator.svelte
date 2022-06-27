@@ -13,24 +13,13 @@
   import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore"
   import { csvParsedFile } from "$lib/stores/generator/CsvStore"
   import { imagesFiles } from "$lib/stores/generator/ImagesStore"
-
-  // The current step of our process.
-  let step = 0;
-
-  // Our handlers
-  function onNext() {
-    step += 1;
-  }
-
-  function onBack() {
-    step -= 1;
-  }
+  import { step, onBack, onNext } from "$lib/stores/generator/GeneratorGeneralStore"
 
   function uploadAssets () {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
     uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken)
-    step += 1;
+    onNext();
   }
   
   const steps = [
@@ -85,14 +74,14 @@
       <Container class="width-large gutter-y-none" height="100%">
         <div class="main-layout">
           <div class="sidebar-container">
-            <GeneratorNav bind:step={step} steps={steps}/>
+            <GeneratorNav bind:step={$step} steps={steps}/>
           </div>
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
               <svelte:component
-                this={steps[step].component}
-                onSubmitAction={steps[step].onSubmitAction}
-                onSubmitText={steps[step].onSubmitText}
+                this={steps[$step].component}
+                onSubmitAction={steps[$step].onSubmitAction}
+                onSubmitText={steps[$step].onSubmitText}
               />
             </TransparentCard>
             </div>

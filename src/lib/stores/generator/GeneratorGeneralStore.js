@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/env';
 
-export const step = writable((browser && localStorage.getItem('step')) || 0);
+export const step = writable(Number(browser && localStorage.getItem('step')) || 0);
 
 step.subscribe((val) => {
   if (browser) return (localStorage.step = val);

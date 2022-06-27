@@ -1,9 +1,10 @@
 <script>
   import { StepInstructions, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
+import { onMount } from "svelte";
 
   export let step;
   export let steps;
-
+  
   const goToStep = (i) => {
     // Allow navigation only to previous steps
     if (i < step) step = i;
