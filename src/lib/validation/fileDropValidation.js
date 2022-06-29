@@ -31,50 +31,55 @@ export const validateCsvAfterParse = (parsedCsv) => {
     const required = ['name', 'description', 'image'];
     if (attributes.includes('thumbnail')) required.push('thumbnail');
 
+    let usedKeys = {};
     // parse the metadata for each NFT into a dictionary, keyed by its unique name
-    const errs = parsedCsv.slice(1).reduce((a, vals) => {
+    const errs = parsedCsv.slice(1).reduce((trackedErrors, vals) => {
       // values must be an ordered array corresponding to the metadata.attributes array
       if (vals && vals.length > 0 && vals[0] !== '') {
-        let key;
+        let key; // this is the name
         let nft_attribs = {};
         for (let i = 0; i < attributes.length; i++) {
+          const attribute = attributes[i];
+          const attributeValue = vals[i];
           // put values into the dict
-          nft_attribs[attributes[i]] = vals[i];
+          nft_attribs[attribute] = attributeValue;
 
           // catch the unique identifier of this NFT (name):
-          if (attributes[i] === 'name') {
-            key = f[i];
+          if (attribute === 'name') {
+            key = attributeValue;
           }
         }
         // validate key (present and non-duplicate)
         if (!key) {
-          a.push('ERROR: Name attribute missing');
+          trackedErrors.push('ERROR: Name attribute missing');
         }
-        if (a[key]) {
+        if (usedKeys[key]) {
           // ERROR: occupied, this name has already been used!
-          a.push(`ERROR: Name attribute must be unique: ${key}`);
+          trackedErrors.push(`ERROR: Name attribute must be unique: ${key}`);
         } else {
-          a[key] = key; // mark as used
+          usedKeys[key] = key; // mark as used
         }
 
         // check for all required attributes
         required.forEach((k) => {
           if (!nft_attribs[k]) {
-            a.push(`ERROR: Required attribute ${k} missing in ${key}`);
+            trackedErrors.push(`ERROR: Required attribute ${k} missing in ${key}`);
           }
         });
       } else {
-        a.push(`ERROR: Malformed record`);
+        trackedErrors.push(`ERROR: Malformed record`);
       }
-      return a;
-    }, {});
+      return trackedErrors;
+    }, []);
+
+    console.log('errs', errs)
 
     if (errs.length === 0) {
       return true;
     } else {
       return {
         error: 'Errors encountered in CSV records',
-        errs: errs,
+        errs,
       };
     }
   } else {
