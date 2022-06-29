@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
+import { Buffer } from 'buffer';
 
 import * as fcl from '@onflow/fcl';
 import './config';
@@ -50,16 +51,17 @@ function switchNetwork(network) {
 }
 
 export const deployToTestnet = async () => {
-  switchNetwork('testnet')
+  switchNetwork('testnet');
   deployContract();
 };
 
 export const deployToMainnet = async () => {
-  switchNetwork('mainnet')
+  switchNetwork('mainnet');
   deployContract();
 };
 
 async function deployContract() {
+  initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
 
   try {
