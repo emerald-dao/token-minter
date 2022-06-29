@@ -4,13 +4,14 @@
 // If validation is not succesful => return an object with the error
 
 // TODO: implement cross check validation
-export const crossCheckValidation = (parsedCsv, imagesFiles) => {
+export const crossCheckValidation = (parsedCsv, imageFiles) => {
 	const attributes = parsedCsv[0];
 	const OK = 1, NOK = -1;
 	let ipfs_keys = ['image'];
 	if (attributes.includes('thumbnail')) ipfs_keys.push('thumbnail');
 	let file_xcheck = imageFiles.reduce((a, f) => {
 		a[f.name] = NOK;
+		return a;
 	}, {});
 
 	//---- check for errors in metadata: metadata w/ no file (ghosts)
@@ -23,6 +24,7 @@ export const crossCheckValidation = (parsedCsv, imagesFiles) => {
 				a.push(`WARNING: ${msg} for item: ${nft.name}.${k}`);
 			}
 		}
+		return a;
 	}, []);
 
 	for (const fn in fileStats) {   // check for files w/ no metadata (orphans)

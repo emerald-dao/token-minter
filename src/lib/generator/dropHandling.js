@@ -7,7 +7,7 @@ import Papa from 'papaparse';
 import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
 import { get } from 'svelte/store';
 
-export const csvDropHandling = (dataTransfer) => {
+export const csvDropHandling = async (dataTransfer) => {
   // Run a first validation to see if the file is a CSV file
   const beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
 
@@ -63,9 +63,10 @@ export const imagesDropHandling = async (dataTransfer) => {
   if (validationResult === true) {
     const files = await getFilesAsync(dataTransfer);
 
+
     // If the validation successful and the CSV is already uploaded: we run the cross check validation
     if (get(csvState).uploadState === 'success') {
-      const crossedValidationResult = crossCheckValidation(get(csvParsedFile), get(imagesFiles));
+      const crossedValidationResult = crossCheckValidation(get(csvParsedFile), files);
       if (crossedValidationResult === true) {
         // If the cross check validation successful: we save the file in the store
         saveFileInStore(imagesFiles, files);
