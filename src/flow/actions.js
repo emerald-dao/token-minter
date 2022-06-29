@@ -17,12 +17,12 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-// send a transaction to get a user's profile
+// send a script to get the NFT templates
 export const getTemplates = async () => {
   try {
     const response = await fcl.query({
       cadence: `
-        import ExampleNFT from 0xExampleNFT
+        import ExampleNFT from ${get(user.addr)}
 
         pub fun main(): {UInt64: ExampleNFT.Template} {
           return ExampleNFT.getTemplates()
@@ -37,12 +37,29 @@ export const getTemplates = async () => {
   }
 };
 
+function switchNetwork(network) {
+  if (network === 'testnet') {
+    fcl.config()
+      .put('accessNode.api', 'https://rest-testnet.onflow.org')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')
+  } else if (network === 'mainnet') {
+    fcl.config()
+      .put('accessNode.api', 'https://rest-mainnet.onflow.org')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn')
+  }
+}
+
 export const deployToTestnet = async () => {
-  console.log('deployToTestnet');
+  switchNetwork('testnet')
+  deployContract();
 };
 
 export const deployToMainnet = async () => {
-  initTransactionState();
+  switchNetwork('mainnet')
+  deployContract();
+};
+
+async function deployContract() {
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
 
   try {
@@ -72,7 +89,7 @@ export const deployToMainnet = async () => {
     console.log(e);
     transactionStatus.set(99);
   }
-};
+}
 
 function initTransactionState() {
   transactionInProgress.set(true);
