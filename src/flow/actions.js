@@ -37,7 +37,11 @@ export const getTemplates = async () => {
   }
 };
 
-export const deployContract = async () => {
+export const deployToTestnet = async () => {
+  console.log('deployToTestnet');
+};
+
+export const deployToMainnet = async () => {
   initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
 

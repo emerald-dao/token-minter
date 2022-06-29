@@ -1,8 +1,8 @@
 <script>
   import Icon from "@iconify/svelte";
   import { DropZoneFile } from '$lib/components/atoms/index';
-  import { emptyCsvStore } from '$lib/generator/stores/CsvStore';
-  import { setImagesStateToIdle } from '$lib/generator/stores/ImagesStore';
+  import { emptyCsvStore } from '$lib/stores/generator/CsvStore';
+  import { setImagesStateToIdle } from '$lib/stores/generator/ImagesStore';
 
   const handleFileDrop = async (e) => {
     e.preventDefault();

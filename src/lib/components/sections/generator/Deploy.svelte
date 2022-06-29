@@ -1,29 +1,29 @@
 <script>
-  import { Button, DeploymentButton } from "$lib/components/atoms/index";
+  import { DeploymentButton } from "$lib/components/atoms/index";
   import DeploymentTransaction from '$lib/components/sections/generator/DeploymentTransaction.svelte';
-  import { deployContract } from "../../../../flow/actions.js";
-	import { transactionInProgress } from "../../../../flow/stores";
+  import { deployToMainnet, deployToTestnet } from "../../../../flow/actions.js";
+	import { transactionInProgress, contractCode, contractInfo } from "../../../../flow/stores";
 
   let deploymentOptions = [
     {
       title: "Deploy to Testnet",
       emoji: "🧪",
       description: "Deploy your collection to the Flow test blockchain.",
-      onClickAction: () => alert("test"),
+      onClickAction: deployToTestnet,
       accent: false
     },
     {
       title: "Deploy to Mainnet",
       emoji: "🚀",
       description: "Deploy your collection to the Flow mainnet blockchain.",
-      onClickAction: deployContract,
+      onClickAction: deployToMainnet,
       accent: true
     },
     {
       title: "Download Code",
       emoji: "🔽",
       description: "Download the Cadence contract to your machine.",
-      onClickAction: () => alert("download"),
+      onClickAction: "download",
       accent: false
     },
   ];
@@ -34,13 +34,24 @@
     <DeploymentTransaction/>
   {:else}
     {#each deploymentOptions as option}
-      <DeploymentButton
-        title={option.title}
-        emoji={option.emoji}
-        description={option.description}
-        onClickAction={option.onClickAction}
-        accent={option.accent}
-      />
+      {#if option.onClickAction === "download"}
+        <a href={`data:text/plain;charset=utf-8, ${encodeURIComponent($contractCode)}`} download={`${$contractInfo.name}.cdc`}>
+          <DeploymentButton
+            title={option.title}
+            emoji={option.emoji}
+            description={option.description}
+            accent={option.accent}
+          />
+        </a>
+      {:else}
+        <DeploymentButton
+          title={option.title}
+          emoji={option.emoji}
+          description={option.description}
+          onClickAction={option.onClickAction}
+          accent={option.accent}
+        />
+      {/if}
     {/each}
   {/if}
 </div>
@@ -55,6 +66,10 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+
+    a {
+      text-decoration: none;
+    }
     
     @include mq(small) {
       flex-direction: row;
