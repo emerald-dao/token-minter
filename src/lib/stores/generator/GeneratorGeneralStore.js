@@ -8,8 +8,8 @@ step.subscribe((val) => {
 });
 
 export const onNext = () => {
-  step.update((current) => Number(current) + 1);
+  step.update((current) => current + 1);
 };
 export const onBack = () => {
-  step.update((current) => Number(current) - 1);
+  step.update((current) => current - 1);
 };

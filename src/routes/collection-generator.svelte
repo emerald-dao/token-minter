@@ -8,7 +8,6 @@
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
-  import { deployContract } from "../flow/actions.js";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
   import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore"
   import { csvParsedFile } from "$lib/stores/generator/CsvStore"
@@ -60,7 +59,7 @@
       component: Deploy,
       emoji: "🚀",
       instructions: "Deploy your contract to the blockchain.",
-      onSubmitAction: deployContract,
+      onSubmitAction: onNext,
       onSubmitText: "Deploy",
     }
   ];
