@@ -9,6 +9,7 @@ export const csvState: Writable<FileState> = writable({
 
 export const csvParsedFile = writable(null);
 export const csvFile = writable(null);
+export const attributes = writable([]);
 
 export const emptyCsvStore = () => {
   csvState.set({

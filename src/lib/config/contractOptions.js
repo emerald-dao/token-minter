@@ -1,11 +1,11 @@
 let contractOptions = [
   {
     name: 'Minting starts active',
-    bindValue: 'minting-starts-active',
+    bindValue: 'startMinting',
   },
   {
     name: 'Only the owner can mint',
-    bindValue: 'only-owner',
+    bindValue: 'onlyOwner',
   },
 ];
 
