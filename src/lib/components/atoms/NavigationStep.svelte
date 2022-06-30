@@ -35,7 +35,7 @@
     margin-block: 0.2em;
     transition: 0.4s;
     width: 100%;
-    color: var(--clr-accent-strong);
+    color: var(--clr-accent-main-t3);
     padding-block: 0.6em;
     transition: 1s;
     
@@ -53,6 +53,6 @@
     cursor: pointer;
   }
   .li-passed {
-    color: var(--clr-primary-soft);
+    color: var(--clr-primary-main-t5);
   }
 </style>
