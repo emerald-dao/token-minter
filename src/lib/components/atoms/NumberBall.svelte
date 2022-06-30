@@ -26,8 +26,8 @@
     transition: 0.8s;
   }
   .step-number-passed {
-    color: var(--clr-primary-main);
-    border: 1px var(--clr-primary-main) solid;
+    color: var(--clr-primary-soft);
+    border: 1px var(--clr-primary-soft) solid;
   }
   .step-number-active {
     background-color: var(--clr-primary-main);

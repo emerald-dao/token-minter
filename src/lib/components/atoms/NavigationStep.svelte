@@ -10,6 +10,7 @@
 <li 
   class:li-active={active} 
   class:li-clickable={clickable}
+  class:li-passed={passed}
   on:click
 >
   <NumberBall active={active} passed={passed}>
@@ -47,13 +48,11 @@
   .li-active {
     display: flex;
     color: var(--clr-primary-main);
-    
-    @include mq(medium) {
-      line-height: 1em;
-      transition: 0.6s;
-    }
   }
   .li-clickable {
     cursor: pointer;
+  }
+  .li-passed {
+    color: var(--clr-primary-soft);
   }
 </style>
