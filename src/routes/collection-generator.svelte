@@ -4,10 +4,11 @@
   import { Section, Container, FlowConnect, Stack, TransparentCard } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
-  import Upload from '$lib/components/sections/generator/Upload.svelte';
+  import UploadAssets from '$lib/components/sections/generator/UploadAssets.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
+  import UploadMetadata from '$lib/components/sections/generator/UploadMetadata.svelte';
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
   import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore"
   import { csvParsedFile } from "$lib/stores/generator/CsvStore"
@@ -31,8 +32,8 @@
       onSubmitText: "Next",
     }, 
     {
-      title: "Upload",
-      component: Upload,
+      title: "Upload Assets",
+      component: UploadAssets,
       emoji: "🗂",
       instructions: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
       onSubmitAction: uploadAssets,
@@ -59,6 +60,14 @@
       component: Deploy,
       emoji: "🚀",
       instructions: "Deploy your contract to the blockchain.",
+      onSubmitAction: onNext,
+      onSubmitText: "Deploy",
+    },
+    {
+      title: "Upoad Metadata",
+      component: UploadMetadata,
+      emoji: "👆",
+      instructions: "Upload your metadata to your contract.",
       onSubmitAction: onNext,
       onSubmitText: "Deploy",
     }
