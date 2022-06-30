@@ -40,13 +40,15 @@ export const getTemplates = async () => {
 
 function switchNetwork(network) {
   if (network === 'testnet') {
-    fcl.config()
+    fcl
+      .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
   } else if (network === 'mainnet') {
-    fcl.config()
+    fcl
+      .config()
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
   }
 }
 
@@ -96,4 +98,21 @@ async function deployContract() {
 function initTransactionState() {
   transactionInProgress.set(true);
   transactionStatus.set(-1);
+}
+
+// Function to upload metadata to the contract in batches of 500
+export async function uploadMetadataToContract(firstTokenNumber, lastTokenNumber) {
+  // TODO: implement uploadMetadataToContract
+
+  console.log('Uploading metadta to the contract:', firstTokenNumber, lastTokenNumber);
+  const timer = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({
+        status: 'success',
+        message: 'Metadata uploaded successfully',
+      });
+    }, 2000);
+  });
+
+  return await timer;
 }
