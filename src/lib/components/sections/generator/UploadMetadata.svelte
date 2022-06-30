@@ -3,7 +3,7 @@
 </script>
 
 <Stack direction="column" gap="1rem">
-  <UploadMetadataPack initialToken="0" lastToken="499" uploadState="uploaded"/>
+  <UploadMetadataPack initialToken="0" lastToken="499" uploadState="to-upload"/>
   <UploadMetadataPack initialToken="500" lastToken="999" uploadState="to-upload"/>
-  <UploadMetadataPack initialToken="1000" lastToken="1499" uploadState="waiting"/>
+  <UploadMetadataPack initialToken="1000" lastToken="1499" uploadState="to-upload"/>
 </Stack>
