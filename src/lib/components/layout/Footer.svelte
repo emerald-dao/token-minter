@@ -9,30 +9,31 @@
   <footer>
     <Container class="width-large">
       <nav>
-        <Logo/>
+        <Logo/>  
         <Navigation/>
+      </nav>
     </Container>
   </footer>
 {/if}
 
 <style type="scss">
+  @use "../../styles/abstracts" as *;
+
   footer {
     padding: 0;
+    background-color: var(--clr-background-primary-t9);
   }
 
   nav {
+    flex-direction: column;
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--primary);
-  }
-
-  @media (max-width: 20em) {
-    nav {
-      flex-direction: column;
-      gap: 1em;
+    gap: 1em;
+    
+    @include mq(medium) {
+      padding-bottom: 10px;
+      flex-direction: row;
     }
   }
 </style>

@@ -1,6 +1,5 @@
 <script>
   import { StepInstructions, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
-import { onMount } from "svelte";
 
   export let step;
   export let steps;

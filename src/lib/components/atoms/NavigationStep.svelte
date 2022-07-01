@@ -23,21 +23,20 @@
   @use "../../styles/abstracts" as *;
   
   li {
-    display: none;
-    font-size: var(--fs-400);
+    display: flex;
     font-weight: 400;
     transition: 0.6s;
     flex-direction: row;
     align-items: center;
     gap: 0.5em;
     border-radius: 0.5em;
-    padding-block: 0.4em;
-    margin-block: 0.2em;
+
     transition: 0.4s;
     width: 100%;
     color: var(--clr-accent-main-t3);
     padding-block: 0.6em;
     transition: 1s;
+    font-size: var(--fs-200);
     
     @include mq(medium) {
       display: flex;
@@ -46,7 +45,7 @@
   }
 
   .li-active {
-    display: flex;
+    font-size: var(--fs-300);
     color: var(--clr-primary-main);
   }
   .li-clickable {

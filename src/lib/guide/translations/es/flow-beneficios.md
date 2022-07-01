@@ -5,7 +5,7 @@ index: 4
 language: es
 ---
 
-## Beneficios del Blockchain de Flow
+# Beneficios del Blockchain de Flow
 
 1. En Flow, los usuarios (como tú y yo) almacenan sus NFTs _en sus propias cuentas en realidad y son, por lo tanto, dueños de sus datos_. Esto es muy diferente a Blockchains como Ethereum donde los contratos inteligentes son los que almacenan tus NFTs.
 

@@ -16,4 +16,4 @@
 <CreateCollectionSection/>
 <FeaturesSection/>
 <LearnSection/>
-<InvitationSection/>
+<!-- <InvitationSection/> -->

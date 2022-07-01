@@ -1,3 +1,7 @@
+import { csvMetadata } from '$lib/generator/stores/CsvStore';
+import { saveFileInStore } from '$lib/generator/stores/updateFunctions';
+
+
 // This validations are called at the moment of file drop.
 //
 // If validation is succesful => return true
@@ -33,6 +37,8 @@ export const validateCsvAfterParse = (parsedCsv) => {
 
     let usedKeys = {};
     // parse the metadata for each NFT into a dictionary, keyed by its unique name
+
+    let metadata = {};
     const errs = parsedCsv.slice(1).reduce((trackedErrors, vals) => {
       // values must be an ordered array corresponding to the metadata.attributes array
       if (vals && vals.length > 0 && vals[0] !== '') {
@@ -75,6 +81,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
     console.log('errs', errs)
 
     if (errs.length === 0) {
+      saveFileInStore(csvMetadata, metadata);
       return true;
     } else {
       return {
@@ -84,7 +91,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
     }
   } else {
     return {
-      error: 'The following attributes are required: name, description, image',
+      error: `The following attributes are required: ${required}`,
     };
   }
 };

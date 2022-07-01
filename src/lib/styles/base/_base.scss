@@ -1,6 +1,9 @@
 body {
+  background-color: var(--clr-background-primary);
+}
+
+#svelte {
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  background-color: var(--clr-background-primary);
 }

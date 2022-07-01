@@ -44,8 +44,8 @@
   export let chapters
 </script>
 
-<Section class="padding-top-small padding-bottom-none">
-  <Container class="width-large">
+<Section class="padding-top-small padding-bottom-small">
+<Container class="width-large">
     <div class="main-wrapper">
       <nav>
         <GuideSidebarNav chapters={chapters}/>
@@ -64,14 +64,15 @@
   .main-wrapper {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     
     @include mq(medium) {
       display: grid;
+      gap: 3rem;
       grid-template-columns: minmax(0,1fr) minmax(0,2.5fr) minmax(0,15rem);
       grid-template-rows: repeat(2, auto);
-      gap: 3rem;
       grid-template-areas: "sidebar main toc" 
-                            ". footer-nav .";
+      ". footer-nav .";
       padding-left: 1rem;
       padding-right: 1rem;
     }

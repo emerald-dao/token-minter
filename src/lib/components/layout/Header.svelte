@@ -95,7 +95,7 @@
     align-items: center;
     text-align: center;
     padding: 10px;
-    z-index: 1;
+    z-index: 9999;
   }
 
   .desktop-menu {

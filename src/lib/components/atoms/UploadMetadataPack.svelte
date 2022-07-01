@@ -43,7 +43,7 @@
       {:else if uploadState === "loading"}
         <span>Uploading</span>
         <LoadingSpinner 
-          color="var(--clr-primary-strong)" 
+          color="var(--clr-primary-main-t4)" 
           iconWidth={iconWidth}
         />
       {:else if uploadState === "waiting"}
@@ -70,7 +70,7 @@
 
   button {
     border: none;
-    background: var(--clr-primary-main-t7);
+    background: var(--clr-primary-main-t6);
     cursor: pointer;
     outline: none;
     padding: 0.3em 0.8em;
@@ -95,6 +95,10 @@
   .waiting {
     background: var(--clr-accent-main-t9);
     color: var(--clr-accent-main-t5);
+  }
+  .loading {
+    background: var(--clr-primary-main-t8);
+    color: var(--clr-primary-main-t4);
   }
 </style>
 
