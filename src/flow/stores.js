@@ -11,34 +11,27 @@ export const transactionStatus = writable(null);
 export const transactionInProgress = writable(false);
 
 export const contractInfo = writable({
-  name: 'ExampleNFT',
-  maxSupply: null,
-  payment: null,
-  openMinting: true,
-  startMinting: true,
-  // These are all for setting custom parameters in the NFT
-  parameters: ['name', 'description', 'thumbnail'],
-  parameterFields: '\n			pub let name: String' + '\n			pub let description: String' + '\n			pub let thumbnail: String',
-  parameterInits: '\n				name: String,' + '\n				description: String,' + '\n				thumbnail: String',
-  parameterSets: '\n				self.name = name' + '\n				self.description = description' + '\n				self.thumbnail = thumbnail',
-  parameterMatches: '\n					name: name,' + '\n					description: description,' + '\n					thumbnail: thumbnail',
+	name: 'ExampleNFT',
+	maxSupply: null,
+	payment: null,
+	openMinting: true,
+	startMinting: true
 });
 
 export const contractCode = derived(
-  [contractInfo, user],
-  ([$contractInfo, $user]) => `
+	[contractInfo, user],
+	([$contractInfo, $user]) => `
 // This is an example implementation of a Flow Non-Fungible Token
 // It is not part of the official standard but it assumed to be
 // very similar to how many NFTs would implement the core functionality.
 import NonFungibleToken from ${NONFUNGIBLETOKEN_ADDR}
 import MetadataViews from ${NONFUNGIBLETOKEN_ADDR}
-${
-  $contractInfo.payment
-    ? `import FungibleToken from ${FUNGIBLETOKEN_ADDR}
+${$contractInfo.payment
+			? `import FungibleToken from ${FUNGIBLETOKEN_ADDR}
 import FlowToken from ${FLOWTOKEN_ADDR}
 `
-    : ''
-}
+			: ''
+		}
 
 pub contract ${$contractInfo.name}: NonFungibleToken {
 
@@ -58,10 +51,17 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	access(account) var templates: {UInt64: Template}
 
 	pub struct Template {
-		${$contractInfo.parameterFields}
+		pub let name: String
+		pub let description: String
+		pub let thumbnail: String
+		pub var metadata: {String: String}
 
-		init(${$contractInfo.parameterInits}
-		) {${$contractInfo.parameterSets}
+		init(_name: String, _description: String, _thumbnail: String, _metadata: {String: String}) {
+			self.name = _name
+			self.description = _description
+			self.thumbnail = _thumbnail
+			self.metadata = _metadata
+
 			${$contractInfo.name}.nextTemplateId = ${$contractInfo.name}.nextTemplateId + 1
 		}
 	}
@@ -75,11 +75,10 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		init() {
 			pre {
 				${$contractInfo.name}.minting: "Minting is currently closed by the Administrator!"
-				${
-          $contractInfo.maxSupply
-            ? `${$contractInfo.name}.totalSupply <= ${$contractInfo.maxSupply}: "You have reached max supply."`
-            : ''
-        }
+				${$contractInfo.maxSupply
+			? `${$contractInfo.name}.totalSupply <= ${$contractInfo.maxSupply}: "You have reached max supply."`
+			: ''
+		}
 			}
 			self.id = self.uuid
 			self.serial = ${$contractInfo.name}.totalSupply
@@ -163,17 +162,15 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		}
 	}
 
-	${
-    $contractInfo.openMinting
-      ? `
+	${$contractInfo.openMinting
+			? `
 	// mintNFT mints a new NFT and deposits 
 	// it in the recipients collection
 	pub fun mintNFT(
 		recipient: &{NonFungibleToken.CollectionPublic}${$contractInfo.payment ? ',\n			payment: @FlowToken.Vault' : ''}
 	) {
-		${
-      $contractInfo.payment
-        ? `
+		${$contractInfo.payment
+				? `
 		pre {
 			payment.balance == ${$contractInfo.name}.price: "You did not pass in the correct amount of FlowToken."
 		}
@@ -183,18 +180,21 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 
 		paymentRecipient.deposit(from: <- payment)
 		`
-        : ''
-    }
+				: ''
+			}
 		recipient.deposit(token: <- create NFT())
 	}
 	`
-      : ``
-  }
+			: ``
+		}
 	pub resource Administrator {
 
-		pub fun createTemplate(${$contractInfo.parameterInits}
-		) {
-			${$contractInfo.name}.templates[${$contractInfo.name}.nextTemplateId] = Template(${$contractInfo.parameterMatches}
+		pub fun createTemplate(name: String, description: String, thumbnail: String, metadata: {String: String}) {
+			${$contractInfo.name}.templates[${$contractInfo.name}.nextTemplateId] = Template(
+				_name: name,
+				_description: description,
+				_thumbnail: thumbnail,
+				_metadata: metadata
 			)
 		}
 
@@ -214,13 +214,12 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		pub fun createAdmin(): @Administrator {
 			return <- create Administrator()
 		}
-		${
-      $contractInfo.payment
-        ? `pub fun changePrice(newPrice: UFix64) {
+		${$contractInfo.payment
+			? `pub fun changePrice(newPrice: UFix64) {
 			${$contractInfo.name}.price = newPrice
 		}`
-        : ''
-    }
+			: ''
+		}
 	}
 
 	// public function that anyone can call to create a new empty collection
@@ -256,9 +255,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.account.save(<-collection, to: self.CollectionStoragePath)
 
 		// create a public capability for the collection
-		self.account.link<&${
-      $contractInfo.name
-    }.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
+		self.account.link<&${$contractInfo.name
+		}.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
 			self.CollectionPublicPath,
 			target: self.CollectionStoragePath
 		)

@@ -1,13 +1,13 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvParsedFile, csvFile, csvState } from '$lib/generator/stores/CsvStore';
-import { imagesFiles, imagesState } from '$lib/generator/stores/ImagesStore';
-import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/generator/stores/updateFunctions';
+import { csvParsedFile, csvFile, csvState, attributes } from '$lib/stores/generator/CsvStore';
+import { imagesFiles, imagesState } from '$lib/stores/generator/ImagesStore';
+import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
 import Papa from 'papaparse';
 import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
 import { get } from 'svelte/store';
 
-export const csvDropHandling = (dataTransfer) => {
+export const csvDropHandling = async (dataTransfer) => {
   // Run a first validation to see if the file is a CSV file
   const beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
 
@@ -35,15 +35,17 @@ export const csvDropHandling = (dataTransfer) => {
             // If the cross check validation successful: we save the file in the store
             saveFileInStore(csvFile, file);
             saveFileInStore(csvParsedFile, parsedCSV);
+            saveFileInStore(attributes, parsedCSV[0])
             setValidationSuccess(csvState);
           } else {
             // If the cross check validation failed: we set the error message
-            setValidationError(csvState, crossedValidationResult.error);  // TODO: crossedValidationResult is an array of errors
+            setValidationError(csvState, crossedValidationResult.error); // TODO: crossedValidationResult is an array of errors
           }
         } else {
           // If images are not uploaded yet: we save our files and update validation state
           saveFileInStore(csvFile, file);
           saveFileInStore(csvParsedFile, parsedCSV);
+          saveFileInStore(attributes, parsedCSV[0])
           setValidationSuccess(csvState);
         }
       } else {
@@ -62,6 +64,7 @@ export const imagesDropHandling = async (dataTransfer) => {
 
   if (validationResult === true) {
     const files = await getFilesAsync(dataTransfer);
+
 
     // If the validation successful and the CSV is already uploaded: we run the cross check validation
     if (get(csvState).uploadState === 'success') {

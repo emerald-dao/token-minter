@@ -4,33 +4,22 @@
   import { Section, Container, FlowConnect, Stack, TransparentCard } from "$lib/components/atoms/index";
   import CollectionInfo from '$lib/components/sections/generator/CollectionInfo.svelte';
   import ContractInfo from '$lib/components/sections/generator/ContractInfo.svelte';
-  import Upload from '$lib/components/sections/generator/Upload.svelte';
+  import UploadAssets from '$lib/components/sections/generator/UploadAssets.svelte';
   import CollectionPreview from '$lib/components/sections/generator/CollectionPreview.svelte';
   import GeneratorNav from '$lib/components/sections/generator/GeneratorNav.svelte';
   import Deploy from '$lib/components/sections/generator/Deploy.svelte';
-  import { deployContract } from "../flow/actions.js";
+  import UploadMetadata from '$lib/components/sections/generator/UploadMetadata.svelte';
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS"
-  import { userIPFSToken } from "$lib/generator/stores/IPFStokenStore"
-  import { csvParsedFile } from "$lib/generator/stores/CsvStore"
-  import { imagesFiles } from "$lib/generator/stores/ImagesStore"
-
-  // The current step of our process.
-  let step = 0;
-
-  // Our handlers
-  function onNext() {
-    step += 1;
-  }
-
-  function onBack() {
-    step -= 1;
-  }
+  import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore"
+  import { csvParsedFile } from "$lib/stores/generator/CsvStore"
+  import { imagesFiles } from "$lib/stores/generator/ImagesStore"
+  import { step, onBack, onNext } from "$lib/stores/generator/GeneratorGeneralStore"
 
   function uploadAssets () {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
     uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken)
-    step += 1;
+    onNext();
   }
   
   const steps = [
@@ -43,8 +32,8 @@
       onSubmitText: "Next",
     }, 
     {
-      title: "Upload",
-      component: Upload,
+      title: "Upload Assets",
+      component: UploadAssets,
       emoji: "🗂",
       instructions: "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
       onSubmitAction: uploadAssets,
@@ -71,7 +60,15 @@
       component: Deploy,
       emoji: "🚀",
       instructions: "Deploy your contract to the blockchain.",
-      onSubmitAction: deployContract,
+      onSubmitAction: onNext,
+      onSubmitText: "Deploy",
+    },
+    {
+      title: "Upoad Metadata",
+      component: UploadMetadata,
+      emoji: "👆",
+      instructions: "Upload your metadata to your contract.",
+      onSubmitAction: onNext,
       onSubmitText: "Deploy",
     }
   ];
@@ -85,14 +82,14 @@
       <Container class="width-large gutter-y-none" height="100%">
         <div class="main-layout">
           <div class="sidebar-container">
-            <GeneratorNav bind:step={step} steps={steps}/>
+            <GeneratorNav bind:step={$step} steps={steps}/>
           </div>
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
               <svelte:component
-                this={steps[step].component}
-                onSubmitAction={steps[step].onSubmitAction}
-                onSubmitText={steps[step].onSubmitText}
+                this={steps[$step].component}
+                onSubmitAction={steps[$step].onSubmitAction}
+                onSubmitText={steps[$step].onSubmitText}
               />
             </TransparentCard>
             </div>

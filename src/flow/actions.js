@@ -1,5 +1,6 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
+import { Buffer } from 'buffer';
 
 import * as fcl from '@onflow/fcl';
 import './config';
@@ -17,12 +18,12 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-// send a transaction to get a user's profile
+// send a script to get the NFT templates
 export const getTemplates = async () => {
   try {
     const response = await fcl.query({
       cadence: `
-        import ExampleNFT from 0xExampleNFT
+        import ExampleNFT from ${get(user.addr)}
 
         pub fun main(): {UInt64: ExampleNFT.Template} {
           return ExampleNFT.getTemplates()
@@ -37,7 +38,31 @@ export const getTemplates = async () => {
   }
 };
 
-export const deployContract = async () => {
+function switchNetwork(network) {
+  if (network === 'testnet') {
+    fcl
+      .config()
+      .put('accessNode.api', 'https://rest-testnet.onflow.org')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
+  } else if (network === 'mainnet') {
+    fcl
+      .config()
+      .put('accessNode.api', 'https://rest-mainnet.onflow.org')
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
+  }
+}
+
+export const deployToTestnet = async () => {
+  switchNetwork('testnet');
+  deployContract();
+};
+
+export const deployToMainnet = async () => {
+  switchNetwork('mainnet');
+  deployContract();
+};
+
+async function deployContract() {
   initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
 
@@ -68,9 +93,26 @@ export const deployContract = async () => {
     console.log(e);
     transactionStatus.set(99);
   }
-};
+}
 
 function initTransactionState() {
   transactionInProgress.set(true);
   transactionStatus.set(-1);
+}
+
+// Function to upload metadata to the contract in batches of 500
+export async function uploadMetadataToContract(firstTokenNumber, lastTokenNumber) {
+  // TODO: implement uploadMetadataToContract
+
+  console.log('Uploading metadta to the contract:', firstTokenNumber, lastTokenNumber);
+  const timer = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({
+        status: 'success',
+        message: 'Metadata uploaded successfully',
+      });
+    }, 2000);
+  });
+
+  return await timer;
 }
