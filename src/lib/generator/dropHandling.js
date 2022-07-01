@@ -1,5 +1,5 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvParsedFile, csvFile, csvState, attributes } from '$lib/stores/generator/CsvStore.ts';
+import { csvParsedFile, csvFile, csvState } from '$lib/stores/generator/CsvStore.ts';
 import { imagesFiles, imagesState } from '$lib/stores/generator/ImagesStore';
 import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
@@ -35,7 +35,6 @@ export const csvDropHandling = async (dataTransfer) => {
             // If the cross check validation successful: we save the file in the store
             saveFileInStore(csvFile, file);
             saveFileInStore(csvParsedFile, parsedCSV);
-            saveFileInStore(attributes, parsedCSV[0])
             setValidationSuccess(csvState);
           } else {
             // If the cross check validation failed: we set the error message
@@ -45,7 +44,6 @@ export const csvDropHandling = async (dataTransfer) => {
           // If images are not uploaded yet: we save our files and update validation state
           saveFileInStore(csvFile, file);
           saveFileInStore(csvParsedFile, parsedCSV);
-          saveFileInStore(attributes, parsedCSV[0])
           setValidationSuccess(csvState);
         }
       } else {
