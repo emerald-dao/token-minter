@@ -1,4 +1,4 @@
-import { csvMetadata } from '$lib/generator/stores/CsvStore.ts';
+import { csvMetadata } from '$lib/stores/generator/stores/CsvStore.ts';
 import { saveFileInStore } from '$lib/generator/stores/updateFunctions';
 
 
