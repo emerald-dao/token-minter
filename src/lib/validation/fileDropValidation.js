@@ -1,5 +1,5 @@
 import { csvMetadata } from '$lib/stores/generator/stores/CsvStore.ts';
-import { saveFileInStore } from '$lib/generator/stores/updateFunctions';
+import { saveFileInStore } from '$lib/stores/generator/stores/updateFunctions';
 
 
 // This validations are called at the moment of file drop.
