@@ -2,7 +2,7 @@ import { csvMetadata } from '$lib/stores/generator/CsvStore.ts';
 import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 
 
-// This validations are called at the moment of file drop.
+// This validations are called at the moment of file drop
 //
 // If validation is succesful => return true
 // If validation is not succesful => return an object with the error
