@@ -1,5 +1,5 @@
 import { validateCsvBeforeParse, validateCsvAfterParse, validateImages } from '$lib/validation/fileDropValidation';
-import { csvParsedFile, csvFile, csvState, attributes } from '$lib/stores/generator/CsvStore';
+import { csvParsedFile, csvFile, csvState, attributes } from '$lib/stores/generator/CsvStore.ts';
 import { imagesFiles, imagesState } from '$lib/stores/generator/ImagesStore';
 import { setValidationError, setValidationSuccess, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import { getFilesAsync } from '$lib/utilities/handleFileDrop';
