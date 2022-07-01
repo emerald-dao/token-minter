@@ -1,3 +1,7 @@
+import { csvMetadata } from '$lib/generator/stores/CsvStore';
+import { saveFileInStore } from '$lib/generator/stores/updateFunctions';
+
+
 // This validations are called at the moment of file drop.
 //
 // If validation is succesful => return true
@@ -33,7 +37,8 @@ export const validateCsvAfterParse = (parsedCsv) => {
     if( attributes.includes('thumbnail') ) required.push( 'thumbnail');
 
     // parse the metadata for each NFT into a dictionary, keyed by its unique name
-    const errs = parseCsv.slice(1).reduce( (a, vals)=>{
+    let metadata = {};
+    const errs = parsedCsv.slice(1).reduce( (a, vals)=>{
 
         // values must be an ordered array corresponding to the metadata.attributes array 
        if( vals && vals.length > 0 && vals[0] !== '' ){
@@ -44,17 +49,17 @@ export const validateCsvAfterParse = (parsedCsv) => {
               nft_attribs[ attributes[i] ] = vals[ i ];
 
               // catch the unique identifier of this NFT (name):
-              if( attributes[i] === 'name' ){ key = f[ i ]; }
+              if( attributes[i] === 'name' ){ key = vals[ i ]; }
             }
             // validate key (present and non-duplicate)
             if( !key ){
                 a.push( 'ERROR: Name attribute missing' );
             }
-            if( a[ key ] ){
+            if( metadata[ key ] ){
               // ERROR: occupied, this name has already been used!
                a.push( `ERROR: Name attribute must be unique: ${ key }` );
             } else {
-              a[ key ] = key;  // mark as used
+              metadata[ key ] = nft_attribs;  // mark as used
             }
 
             // check for all required attributes
@@ -64,13 +69,12 @@ export const validateCsvAfterParse = (parsedCsv) => {
                 }
             })
 
-        } else {
-           a.push( `ERROR: Malformed record` );
         }
         return a;
-    }, { } );
+    }, [ ] );
 
     if( errs.length === 0 ){
+      saveFileInStore(csvMetadata, metadata);
       return true;
     } else {
       return {
@@ -80,7 +84,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
     }
   } else {
     return {
-      error: 'The following attributes are required: name, description, image',
+      error: `The following attributes are required: ${required}`,
     };
   }
 };

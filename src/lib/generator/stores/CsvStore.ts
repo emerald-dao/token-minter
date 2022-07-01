@@ -8,6 +8,7 @@ export const csvState: Writable<FileState> = writable({
 });
 
 export const csvParsedFile = writable(null);
+export const csvMetadata = writable(null);
 export const csvFile = writable(null);
 
 export const emptyCsvStore = () => {
@@ -16,5 +17,6 @@ export const emptyCsvStore = () => {
     errorMessages: [],
   });
   csvParsedFile.set(null);
+  csvMetadata.set(null);
   csvFile.set(null);
 };
