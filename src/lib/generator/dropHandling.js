@@ -31,7 +31,7 @@ export const csvDropHandling = async (dataTransfer) => {
         if (get(imagesState).uploadState === 'success') {
           // If the validation successful and the images are already uploaded: we run the cross check validation
           const crossedValidationResult = crossCheckValidation(parsedCSV, get(imagesFiles));
-          if (crossedValidationResult.length === true) {
+          if (crossedValidationResult === true) {
             // If the cross check validation successful: we save the file in the store
             saveFileInStore(csvFile, file);
             saveFileInStore(csvParsedFile, parsedCSV);
