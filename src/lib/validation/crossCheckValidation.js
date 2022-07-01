@@ -1,4 +1,4 @@
-import { csvMetadata } from '$lib/generator/stores/CsvStore.ts';
+import { csvMetadata } from '$lib/stores/generator/CsvStore.ts';
 import { get } from 'svelte/store';
 
 // Validation that runs once both files are dropped and independently validated
