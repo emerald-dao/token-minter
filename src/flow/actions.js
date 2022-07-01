@@ -39,17 +39,17 @@ export const getTemplates = async () => {
 };
 
 function switchNetwork(network) {
-  if (network === 'testnet') {
-    fcl
-      .config()
-      .put('accessNode.api', 'https://rest-testnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
-  } else if (network === 'mainnet') {
-    fcl
-      .config()
-      .put('accessNode.api', 'https://rest-mainnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
-  }
+  // if (network === 'testnet') {
+  //   fcl
+  //     .config()
+  //     .put('accessNode.api', 'https://rest-testnet.onflow.org')
+  //     .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
+  // } else if (network === 'mainnet') {
+  //   fcl
+  //     .config()
+  //     .put('accessNode.api', 'https://rest-mainnet.onflow.org')
+  //     .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
+  // }
 }
 
 export const deployToTestnet = async () => {

@@ -1,16 +1,16 @@
 <script>
-  import Icon from "@iconify/svelte";
+  // import Icon from "@iconify/svelte";
 
   export let iconWidth = "2em";
   export let color;
 </script>
 
 <div class="rotating">
-  <Icon icon=ion:refresh-circle width={iconWidth} color={color}/>
+  <!-- <Icon icon=ion:refresh-circle width={iconWidth} color={color}/> -->
 </div>
 
 <style>
-  div {
+  /* div {
     display: flex;
     justify-content: center;
     justify-items: center;
@@ -27,6 +27,5 @@
 
   .rotating {
     animation: rotating 2s linear infinite;
-  }
+  } */
 </style>
-

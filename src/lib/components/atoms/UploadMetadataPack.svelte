@@ -1,25 +1,27 @@
 <script>
-  import { TransparentCard, Stack, LoadingSpinner } from "$lib/components/atoms/index";
-  import Icon from "@iconify/svelte";
-  import { uploadMetadataToContract } from '../../../flow/actions'
+  // import { TransparentCard, Stack, LoadingSpinner } from "$lib/components/atoms/index";
+  // import Icon from "@iconify/svelte";
+  // import { uploadMetadataToContract } from '../../../flow/actions'
 
-  export let uploadState = "to-upload"
+  export let uploadState = "to-upload";
   export let initialToken = 0;
   export let lastToken = 500;
-  let iconWidth = "1.5em"
+  // let iconWidth = "1.5em"
 
-  const onUpload = async () => {
-    uploadState = "loading"
-    let uploadResult = await uploadMetadataToContract(initialToken, lastToken)
-    if (uploadResult.status === "success") {
-      uploadState = "uploaded"
-    } else {
-      uploadState = "error"
-    }
-  }
+  // const onUpload = async () => {
+  //   uploadState = "loading"
+  //   let uploadResult = await uploadMetadataToContract(initialToken, lastToken)
+  //   if (uploadResult.status === "success") {
+  //     uploadState = "uploaded"
+  //   } else {
+  //     uploadState = "error"
+  //   }
+  // }
 </script>
 
-<TransparentCard height="fit-content" accent={uploadState === "to-upload" || uploadState === "loading"}>
+<div />
+
+<!-- <TransparentCard height="fit-content" accent={uploadState === "to-upload" || uploadState === "loading"}>
   <Stack direction="row" justify="space-between">
     <span class="nfts-numbers">
       {`NFT ${initialToken} to ${lastToken}`}
@@ -56,9 +58,9 @@
       {/if}
     </button>
   </Stack>
-</TransparentCard>
+</TransparentCard> -->
 
-<style type="scss">
+<!-- <style type="scss">
   .nfts-numbers {
     font-size: var(--fs-300);
     font-weight: 400;
@@ -101,4 +103,4 @@
     color: var(--clr-primary-main-t4);
   }
 </style>
-
+ -->
