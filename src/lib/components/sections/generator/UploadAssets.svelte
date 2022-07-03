@@ -58,7 +58,7 @@
     {onSubmitAction}
     {onSubmitText}
     disabled={!($csvState.uploadState === "success") ||
-      !(imagesState.uploadState === "success")} />
+      !($imagesState.uploadState === "success")} />
 </div>
 
 <style type="scss">

@@ -283,8 +283,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.AdministratorStoragePath = /storage/${$contractInfo.name}Administrator${$user?.addr}
 
 		// Create a Collection resource and save it to storage
-		let collection < - create Collection()
-		self.account.save(< -collection, to: self.CollectionStoragePath)
+		let collection <- create Collection()
+		self.account.save(<- collection, to: self.CollectionStoragePath)
 
 		// create a public capability for the collection
 		self.account.link<&${$contractInfo.name}.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
@@ -293,8 +293,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		)
 
 		// Create a Administrator resource and save it to storage
-		let administrator < - create Administrator()
-		self.account.save(< - administrator, to: self.AdministratorStoragePath)
+		let administrator <- create Administrator()
+		self.account.save(<- administrator, to: self.AdministratorStoragePath)
 
 		emit ContractInitialized()
 	}

@@ -64,6 +64,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
           trackedErrors.push(`ERROR: Name attribute must be unique: ${key}`);
         } else {
           usedKeys[key] = key; // mark as used
+          metadata[key] = nft_attribs;
         }
 
         // check for all required attributes

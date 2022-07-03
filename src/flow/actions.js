@@ -18,20 +18,34 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-// send a script to get the NFT templates
 export const getTemplates = async () => {
   try {
-    const response = await fcl.query({
-      cadence: `
-        import ExampleNFT from ${get(user.addr)}
+    // TODO:
+    // Get NFTs from the IPFS Upload
+    // This will have to get the NFTs from IPFS
+    const response = [
+      {
+        name: 'Cap1',
+        description: 'White cap with petroman',
+        thumbnail: 'QmakaeD3HArtCKLvy6PvYaQFNHZ92eW2d4MpSLkFSMzN38'
+      },
+      {
+        name: 'Cap2',
+        description: 'Purple cap with petroman',
+        thumbnail: 'QmPnCLekhp9wjGC8SpDCBb5rVsT3npYojD45db9hgG5DRQ'
+      },
+      {
+        name: 'Cap3',
+        description: 'Green cap with deer',
+        thumbnail: 'QmR5zDG6NUfseKCoZ2ou6ydRfaNRWS6gc9zeB8rKoGwrFQ'
+      },
+      {
+        name: 'Cap4',
+        description: 'Gray cap with petroman',
+        thumbnail: 'QmSGSAUnXGBV7nYgSJidSUJAeY9mqGbCQyD6y5Q77KWmk2'
+      }
+    ];
 
-        pub fun main(): {UInt64: ExampleNFT.Template} {
-          return ExampleNFT.getTemplates()
-        }
-      `,
-      args: (arg, t) => [],
-    });
-    console.log(response);
     return response;
   } catch (e) {
     console.log(e);
@@ -111,6 +125,7 @@ async function deployContract() {
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
       transactionStatus.set(res.status);
+      console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
       }
