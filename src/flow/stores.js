@@ -246,11 +246,11 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	}
 
 	// Get information about a Template
-	pub fun getTemplate(_ serial: UInt64): Template? {
+	pub fun getUnpurchasedTemplate(_ serial: UInt64): Template? {
 		return self.unpurchasedTemplates[serial]
 	}
 
-	pub fun getTemplates(): {UInt64: Template} {
+	pub fun getUnpurchasedTemplates(): {UInt64: Template} {
 		return self.unpurchasedTemplates
 	}
 

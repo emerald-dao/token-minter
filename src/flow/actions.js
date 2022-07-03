@@ -90,6 +90,25 @@ export const getTemplates = async () => {
   }
 };
 
+export const getUnpurchasedNFTs = async (contractName) => {
+  try {
+    const response = await fcl.query({
+      cadence: `
+      import ${contractName} from ${get(user).addr}
+
+      pub fun main(accountAddr: Address, contractName: String): [${contractName}.Template] {
+        return ${contractName}.getUnpurchasedTemplates().values
+      }
+      `,
+      args: (arg, t) => []
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function switchNetwork(network) {
   if (network === 'testnet') {
     fcl
