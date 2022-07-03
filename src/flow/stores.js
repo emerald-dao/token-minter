@@ -105,7 +105,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		init() {
 			self.id = self.uuid
 			self.serial = ${$contractInfo.name}.totalSupply
-			self.template = ExampleNFT.unpurchasedTemplates.remove(key: self.serial) ?? panic("There does not exist a Template for this NFT.")
+			self.template = ${$contractInfo.name}.unpurchasedTemplates.remove(key: self.serial) ?? panic("There does not exist a Template for this NFT.")
 
 			${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
 		}
@@ -128,7 +128,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		// deposit takes a NFT and adds it to the collections dictionary
 		// and adds the ID to the id array
 		pub fun deposit(token: @NonFungibleToken.NFT) {
-			let token <- token as! @${$contractInfo.name}.NFT
+			let token <- token as! @NFT
 
 			let id: UInt64 = token.id
 
@@ -151,7 +151,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 
 		pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver} {
 			let token = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
-			let nft = token as! &${$contractInfo.name}.NFT
+			let nft = token as! &NFT
 			return nft as &AnyResource{MetadataViews.Resolver}
 		}
 
@@ -214,8 +214,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 
 		// turn minting on/off
 		pub fun toggleMinting(): Bool {
-			ExampleNFT.minting = !ExampleNFT.minting
-			return ExampleNFT.minting
+			${$contractInfo.name}.minting = !${$contractInfo.name}.minting
+			return ${$contractInfo.name}.minting
 		}
 
 		// create a new Administrator resource
@@ -228,15 +228,15 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		}
 
 		pub fun changeName(newName: String) {
-			ExampleNFT.name = newName
+			${$contractInfo.name}.name = newName
 		}
 
 		pub fun changeDescription(newDescription: String) {
-			ExampleNFT.description = newDescription
+			${$contractInfo.name}.description = newDescription
 		}
 
 		pub fun changeImage(newImage: String) {
-			ExampleNFT.image = newImage
+			${$contractInfo.name}.image = newImage
 		}
 	}
 
@@ -287,7 +287,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.account.save(<- collection, to: self.CollectionStoragePath)
 
 		// create a public capability for the collection
-		self.account.link<&${$contractInfo.name}.Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
+		self.account.link<&Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
 			self.CollectionPublicPath,
 			target: self.CollectionStoragePath
 		)

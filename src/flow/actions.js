@@ -18,6 +18,44 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
+export const getCollectionInfo = async = (contractName) => {
+  try {
+    const response = await fcl.query({
+      cadence: `
+      import ${contractName} from ${get(user).addr}
+
+      pub fun main(accountAddr: Address, contractName: String): CollectionInfo {
+        return CollectionInfo(
+          name: ${contractName}.name,
+          description: ${contractName}.description,
+          image: ${contractName}.image,
+          price: ${contractName}.price
+        )
+      }
+
+      pub struct CollectionInfo {
+        pub let name: String
+        pub let description: String
+        pub let image: String
+        pub let price: UFix64
+
+        init(name: String, description: String, image: String, price: UFix64) {
+          self.name = name
+          self.description = description
+          self.image = image
+          self.price = price
+        }
+      }
+      `,
+      args: (arg, t) => []
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export const getTemplates = async () => {
   try {
     // TODO:
@@ -145,7 +183,7 @@ function initTransactionState() {
 export async function uploadMetadataToContract(firstTokenNumber, lastTokenNumber) {
   // TODO: implement uploadMetadataToContract
 
-  console.log('Uploading metadta to the contract:', firstTokenNumber, lastTokenNumber);
+  console.log('Uploading metadata to the contract:', firstTokenNumber, lastTokenNumber);
   const timer = new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve({
