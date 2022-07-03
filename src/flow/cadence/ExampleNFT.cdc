@@ -5,11 +5,17 @@ import NonFungibleToken from "./NonFungibleToken.cdc"
 import MetadataViews from "./MetadataViews.cdc"
 	
 pub contract ExampleNFT: NonFungibleToken {
+
+		// Collection Info
+		pub var name: String
+		pub var description: String
+		pub var image: String
 	
 		// the amount of NFTs minted
 		pub var totalSupply: UInt64
 		// The key that maps to a Template in `templates`
 		pub var nextTemplateId: UInt64
+		// whether or not public minting is open
 		pub var minting: Bool
 		
 		pub event ContractInitialized()
@@ -20,8 +26,11 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let CollectionPublicPath: PublicPath
 		pub let AdministratorStoragePath: StoragePath
 
-		// maps templateId to Template
-		access(account) var templates: {UInt64: Template}
+		// maps serial to Template
+		// if an NFT was minted with the serial, it no longer
+		// exists in this dictionary (so if all the NFTs are minted,
+		// this will be empty)
+		access(account) var initialTemplates: {UInt64: Template}
 
 		pub struct Template {
 			
@@ -46,13 +55,15 @@ pub contract ExampleNFT: NonFungibleToken {
 			pub let id: UInt64
 			// The 'serial' is what maps to its 'Template'
 			pub let serial: UInt64
-
+			pub let template: Template
+ 
 			init() {
 				pre {
 					ExampleNFT.minting: "Minting is currently closed by the Administrator!"
 				}
 				self.id = self.uuid
 				self.serial = ExampleNFT.totalSupply
+				self.template = ExampleNFT.initialTemplates.remove(key: self.serial) ?? panic("There does not exist a Template for this NFT.")
 
 				ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
 			}
@@ -115,11 +126,11 @@ pub contract ExampleNFT: NonFungibleToken {
 			// borrowNFT gets a reference to an NFT in the collection
 			// so that the caller can read its metadata and call its methods
 			pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT {
-				return &self.ownedNFTs[id] as &NonFungibleToken.NFT
+				return (&self.ownedNFTs[id] as &NonFungibleToken.NFT?)!
 			}
 
 			pub fun borrowViewResolver(id: UInt64): &{MetadataViews.Resolver} {
-				let token = &self.ownedNFTs[id] as auth &NonFungibleToken.NFT
+				let token = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)
 				let nft = token as! &ExampleNFT.NFT
 				return nft as &{MetadataViews.Resolver}
 			}
@@ -140,7 +151,7 @@ pub contract ExampleNFT: NonFungibleToken {
 				description: String,
 				thumbnail: String
 			) {
-				ExampleNFT.templates[ExampleNFT.nextTemplateId] = Template(
+				ExampleNFT.initialTemplates[ExampleNFT.nextTemplateId] = Template(
 					name: name,
 					description: description,
 					thumbnail: thumbnail
@@ -164,7 +175,17 @@ pub contract ExampleNFT: NonFungibleToken {
 				return <- create Administrator()
 			}
 
-			
+			pub fun changeName(name: String) {
+				ExampleNFT.name = name
+			}
+
+			pub fun changeDescription(description: String) {
+				ExampleNFT.description = description
+			}
+
+			pub fun changeImage(image: String) {
+				ExampleNFT.image = image
+			}
 		}
 
 		// public function that anyone can call to create a new empty collection
@@ -174,20 +195,25 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// Get information about a Template
 		pub fun getTemplate(_ serial: UInt64): Template? {
-			return self.templates[serial]
+			return self.initialTemplates[serial]
 		}
 
 		pub fun getTemplates(): {UInt64: Template} {
-			return self.templates
+			return self.initialTemplates
 		}
 
-		init() {
+		init(_name: String, _description: String, _image: String) {
+			// Collection Info
+			self.name = _name
+			self.description = _description
+			self.image = _image
+
 			// Initialize the total supply
 			self.nextTemplateId = 0
 			self.totalSupply = 0
 			self.minting = true
 			
-			self.templates = {}
+			self.initialTemplates = {}
 
 			// Set the named paths
 			self.CollectionStoragePath = /storage/ExampleNFTCollection0x86d486feb7683e02

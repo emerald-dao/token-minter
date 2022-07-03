@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, contractInfo } from './stores';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -65,18 +65,34 @@ export const deployToMainnet = async () => {
 async function deployContract() {
   initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
+  const contractInfo = get(contractInfo);
 
   try {
     const transactionId = await fcl.mutate({
       cadence: `
-      transaction(contractName: String, contractCode: String) {
+      transaction(contractName: String, contractCode: String, description: String, imageHash: String, minting: Bool, price: UFix64) {
         prepare(deployer: AuthAccount) {
           log(contractCode)
-          deployer.contracts.add(name: contractName, code: contractCode.decodeHex())
+          deployer.contracts.add(
+            name: contractName, 
+            code: contractCode.decodeHex(),
+            _name: contractName,
+            _description: description,
+            _image: imageHash,
+            _minting: minting,
+            _price: price
+          )
         }
       }
       `,
-      args: (arg, t) => [arg(get(contractInfo).name, t.String), arg(hexCode, t.String)],
+      args: (arg, t) => [
+        arg(contractInfo.name, t.String),
+        arg(hexCode, t.String),
+        arg(contractInfo.description, t.String),
+        arg(contractInfo.imageHash, t.String),
+        arg(contractInfo.startMinting, t.Bool),
+        arg(Number(contractInfo.payment).toFixed(2), t.UFix64)
+      ],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
