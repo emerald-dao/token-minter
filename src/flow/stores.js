@@ -35,6 +35,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub var name: String
 	pub var description: String
 	pub var image: String
+	pub var ipfsStorage: String
 
 	pub var nextTemplateId: UInt64
 	pub var totalSupply: UInt64
@@ -258,12 +259,14 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		_description: String, 
 		_image: String, 
 		_minting: Bool, 
-		_price: UFix64
+		_price: UFix64,
+		_ipfsStorage: String
 	) {
 		// Collection Info
 		self.name = _name
 		self.description = _description
 		self.image = _image
+		self.ipfsStorage = _ipfsStorage
 
 		// Initialize default info
 		self.minting = _minting

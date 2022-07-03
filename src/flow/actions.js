@@ -70,7 +70,15 @@ async function deployContract() {
   try {
     const transactionId = await fcl.mutate({
       cadence: `
-      transaction(contractName: String, contractCode: String, description: String, imageHash: String, minting: Bool, price: UFix64) {
+      transaction(
+        contractName: String, 
+        contractCode: String, 
+        description: String, 
+        imageHash: String, 
+        minting: Bool, 
+        price: UFix64, 
+        ipfsStorage: String
+      ) {
         prepare(deployer: AuthAccount) {
           log(contractCode)
           deployer.contracts.add(
@@ -80,7 +88,8 @@ async function deployContract() {
             _description: description,
             _image: imageHash,
             _minting: minting,
-            _price: price
+            _price: price,
+            _ipfsStorage: ipfsStorage
           )
         }
       }
@@ -91,7 +100,8 @@ async function deployContract() {
         arg(info.description, t.String),
         arg(info.imageHash, t.String),
         arg(info.startMinting, t.Bool),
-        arg(Number(info.payment).toFixed(2), t.UFix64)
+        arg(Number(info.payment).toFixed(2), t.UFix64),
+        arg('', t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
