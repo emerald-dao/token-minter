@@ -1,4 +1,4 @@
-export const dappTitle = 'NFT Minter';
+export const dappTitle = 'Touchstone';
 export const dappDescription = 'Pending';
 export const dappURL = 'pending.com';
 export const dappLink = 'pending';
