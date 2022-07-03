@@ -13,7 +13,7 @@ export const transactionInProgress = writable(false);
 export const contractInfo = writable({
 	name: 'ExampleNFT',
 	description: 'This is an example NFT Collection.',
-	imageHash: 'bafybeiewzu5s4x5pmxxw5vrp7aihrhhlufz5p2buv67r26v7pa64qllolu',
+	imageHash: '',
 	maxSupply: null,
 	payment: null,
 	startMinting: true
