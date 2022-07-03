@@ -265,12 +265,12 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.description = _description
 		self.image = _image
 
-		// Initialize the total supply
-		self.nextTemplateId = 0
-		self.totalSupply = 0
+		// Initialize default info
 		self.minting = _minting
 		self.price = _price
 
+		self.nextTemplateId = 0
+		self.totalSupply = 0
 		self.unpurchasedTemplates = {}
 		self.primaryBuyers = {}
 

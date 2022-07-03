@@ -14,10 +14,16 @@ let collectionOptions = [
     helperText: 'Define the price of each NFT in Flow tokens',
   },
   {
-    name: 'Max Supply',
-    type: 'number',
-    bindValue: 'maxSupply',
-    helperText: 'Define the maximum of NFTs that can be minted in your collection',
+    name: 'Description',
+    type: 'text',
+    bindValue: 'description',
+    helperText: 'Provide a description for your project',
+  },
+  {
+    name: 'Image',
+    type: 'file',
+    bindValue: 'imageHash',
+    helperText: 'Provide an image for your project',
   },
 ];
 

@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, contractInfo } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -65,7 +65,7 @@ export const deployToMainnet = async () => {
 async function deployContract() {
   initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
-  const contractInfo = get(contractInfo);
+  const info = get(contractInfo);
 
   try {
     const transactionId = await fcl.mutate({
@@ -86,12 +86,12 @@ async function deployContract() {
       }
       `,
       args: (arg, t) => [
-        arg(contractInfo.name, t.String),
+        arg(info.name, t.String),
         arg(hexCode, t.String),
-        arg(contractInfo.description, t.String),
-        arg(contractInfo.imageHash, t.String),
-        arg(contractInfo.startMinting, t.Bool),
-        arg(Number(contractInfo.payment).toFixed(2), t.UFix64)
+        arg(info.description, t.String),
+        arg(info.imageHash, t.String),
+        arg(info.startMinting, t.Bool),
+        arg(Number(info.payment).toFixed(2), t.UFix64)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
