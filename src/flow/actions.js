@@ -18,7 +18,7 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-export const getCollectionInfo = async = (contractName) => {
+export const getCollectionInfo = async (contractName) => {
   try {
     const response = await fcl.query({
       cadence: `
@@ -47,14 +47,14 @@ export const getCollectionInfo = async = (contractName) => {
         }
       }
       `,
-      args: (arg, t) => []
+      args: (arg, t) => [],
     });
 
     return response;
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 export const getTemplates = async () => {
   try {
@@ -65,23 +65,23 @@ export const getTemplates = async () => {
       {
         name: 'Cap1',
         description: 'White cap with petroman',
-        thumbnail: 'QmakaeD3HArtCKLvy6PvYaQFNHZ92eW2d4MpSLkFSMzN38'
+        thumbnail: 'QmakaeD3HArtCKLvy6PvYaQFNHZ92eW2d4MpSLkFSMzN38',
       },
       {
         name: 'Cap2',
         description: 'Purple cap with petroman',
-        thumbnail: 'QmPnCLekhp9wjGC8SpDCBb5rVsT3npYojD45db9hgG5DRQ'
+        thumbnail: 'QmPnCLekhp9wjGC8SpDCBb5rVsT3npYojD45db9hgG5DRQ',
       },
       {
         name: 'Cap3',
         description: 'Green cap with deer',
-        thumbnail: 'QmR5zDG6NUfseKCoZ2ou6ydRfaNRWS6gc9zeB8rKoGwrFQ'
+        thumbnail: 'QmR5zDG6NUfseKCoZ2ou6ydRfaNRWS6gc9zeB8rKoGwrFQ',
       },
       {
         name: 'Cap4',
         description: 'Gray cap with petroman',
-        thumbnail: 'QmSGSAUnXGBV7nYgSJidSUJAeY9mqGbCQyD6y5Q77KWmk2'
-      }
+        thumbnail: 'QmSGSAUnXGBV7nYgSJidSUJAeY9mqGbCQyD6y5Q77KWmk2',
+      },
     ];
 
     return response;
@@ -100,14 +100,14 @@ export const getUnpurchasedNFTs = async (contractName) => {
         return ${contractName}.getUnpurchasedTemplates().values
       }
       `,
-      args: (arg, t) => []
+      args: (arg, t) => [],
     });
 
     return response;
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 function switchNetwork(network) {
   if (network === 'testnet') {
@@ -172,7 +172,7 @@ async function deployContract() {
         arg(info.imageHash, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
-        arg('', t.String)
+        arg('', t.String),
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
