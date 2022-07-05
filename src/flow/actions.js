@@ -18,7 +18,7 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-export const getCollectionInfo = async = (contractName) => {
+export const getCollectionInfo = async (contractName) => {
   try {
     const response = await fcl.query({
       cadence: `
