@@ -64,7 +64,11 @@
     {/if}
   {/if}
   <!-- Add a hidden input element to trigger when the user clicks the drop zone -->
-  <input type="file" bind:this={inputRef} on:input={onInput} webkitdirectory directory multiple>
+  {#if type === "image"}
+    <input type="file" bind:this={inputRef} on:input={onInput} webkitdirectory directory multiple>
+  {:else}
+    <input type="file" bind:this={inputRef} on:input={onInput}>
+  {/if}
 </div>
 
 <style type="scss">

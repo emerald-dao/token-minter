@@ -7,8 +7,6 @@ import { get } from 'svelte/store';
 // If validation is not succesful => return an object with the error message AND an array of errors
 
 export const crossCheckValidation = (parsedCsv, files) => {
-  console.log(files);
-  console.log(parsedCsv);
   const attributes = parsedCsv[0];
   const OK = 1,
     NOK = -1;
