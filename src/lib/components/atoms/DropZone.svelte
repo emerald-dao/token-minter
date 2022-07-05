@@ -5,9 +5,18 @@
   import { setImagesStateToIdle } from "$lib/stores/generator/ImagesStore";
 
   const handleFileDrop = async (e) => {
+    console.log(e.dataTransfer);
     e.preventDefault();
     dragOver = false;
     dropHandlingFunction(e.dataTransfer);
+  };
+
+  const onInput = (e) => {
+    console.log(e.target.files);
+    console.log(e.target);
+    e.preventDefault();
+    dragOver = false;
+    dropHandlingFunction(e.target);
   };
 
   let dragOver = false; // Flag to check if we are dragging over the dropzone
@@ -17,6 +26,8 @@
   export let dropHandlingFunction; // Function containing validation logic + parsing logic + storing logic
   export let promptText = "Drop file here or click to upload";
   export let type; // Type of file we are expecting
+
+  let inputRef; // Reference to the hidden input element
 </script>
 
 <div
@@ -27,6 +38,7 @@
   on:dragleave={() => (dragOver = false)}
   on:dragend={() => (dragOver = false)}
   on:drop={handleFileDrop}
+  on:click={() => inputRef.click()}
   ondragover="return false">
   {#if fileStore && fileStore.length > 0 && type === "image"}
     {#each fileStore as file, index}
@@ -50,6 +62,12 @@
         <p class="error">{error}</p>
       {/each}
     {/if}
+  {/if}
+  <!-- Add a hidden input element to trigger when the user clicks the drop zone -->
+  {#if type === "image"}
+    <input type="file" bind:this={inputRef} on:input={onInput} webkitdirectory directory multiple>
+  {:else}
+    <input type="file" bind:this={inputRef} on:input={onInput}>
   {/if}
 </div>
 
@@ -83,5 +101,9 @@
   }
   .drop-zone-error {
     border-color: red;
+  }
+
+  input {
+    display: none;
   }
 </style>

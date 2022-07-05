@@ -7,13 +7,15 @@ import Papa from 'papaparse';
 import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
 import { get } from 'svelte/store';
 
-export const csvDropHandling = async (dataTransfer) => {
+export const csvDropHandling = async (data) => {
+  const files = getFilesFromData(data);
+
   // Run a first validation to see if the file is a CSV file
-  const beforeParseValidationResult = validateCsvBeforeParse(dataTransfer);
+  const beforeParseValidationResult = validateCsvBeforeParse(files);
 
   if (beforeParseValidationResult === true) {
     // If the file is a CSV file: we parse the file and run a second validation
-    const file = dataTransfer.items[0].getAsFile();
+    const file = files.source === 'input' ? files.list[0] : files.list[0].getAsFile();
     let parsedCSV;
     return new Promise((resolve, reject) => {
       let reader = new FileReader();
@@ -57,31 +59,49 @@ export const csvDropHandling = async (dataTransfer) => {
   }
 };
 
-export const imagesDropHandling = async (dataTransfer) => {
-  const validationResult = validateImages(dataTransfer);
+export const imagesDropHandling = async (data) => {
+  const files = getFilesFromData(data);
+  const validationResult = validateImages(files);
 
   if (validationResult === true) {
-    const files = await getFilesAsync(dataTransfer);
-
+    const getFiles = files.source === 'input' ? [...files.list] : await getFilesAsync(files.list);
 
     // If the validation successful and the CSV is already uploaded: we run the cross check validation
     if (get(csvState).uploadState === 'success') {
-      const crossedValidationResult = crossCheckValidation(get(csvParsedFile), files);
+      const crossedValidationResult = crossCheckValidation(get(csvParsedFile), getFiles);
       if (crossedValidationResult === true) {
         // If the cross check validation successful: we save the file in the store
-        saveFileInStore(imagesFiles, files);
+        saveFileInStore(imagesFiles, getFiles);
         setValidationSuccess(imagesState);
       } else {
         // If the cross check validation failed: we set the error message
-        setValidationError(imagesState, crossedValidationResult.error);
+        setValidationError(imagesState, crossedValidationResult.error); // TODO: crossedValidationResult is an array of errors
       }
     } else {
       // If the CSV is not uploaded yet: we save our files and update validation state
-      saveFileInStore(imagesFiles, files);
+      saveFileInStore(imagesFiles, getFiles);
       setValidationSuccess(imagesState);
     }
   } else {
     // If the validation failed: we set the error message and set state to 'invalid'
     setValidationError(imagesState, validationResult.error);
+  }
+};
+
+const getFilesFromData = (data) => {
+  // Data can come from a file-drop or from input field.
+  // We have to manage both of them in different ways.
+  // If data comes from a file-drop, we have to use the data.items method to get the files.
+  // If data comes from input field, we have to use the data.files method to get the files.
+  if (data.items) {
+    return {
+      source: 'drop',
+      list: data.items,
+    };
+  } else {
+    return {
+      source: 'input',
+      list: data.files,
+    };
   }
 };

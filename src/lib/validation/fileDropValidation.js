@@ -1,28 +1,32 @@
 import { csvMetadata } from '$lib/stores/generator/CsvStore.ts';
 import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 
-
 // This validations are called at the moment of file drop
 //
 // If validation is succesful => return true
 // If validation is not succesful => return an object with the error
 
 // The initial validation occurs before the file is parsed.
-export const validateCsvBeforeParse = (dataTransfer) => {
-  if (dataTransfer.items) {
-    if (dataTransfer.items.length === 1) {
-      const item = dataTransfer.items[0];
-      if (item.kind === 'file') {
-        const file = item.getAsFile();
-        if (file && file.type === 'text/csv') {
-          return true;
-        } else {
-          return {
-            error: 'Invalid file type',
-          };
-        }
+export const validateCsvBeforeParse = (files) => {
+  if (files.list) {
+    if (files.list.length === 1) {
+      const file = files.source === 'input' ? files.list[0] : files.list[0].getAsFile();
+      if (file && file.type === 'text/csv') {
+        return true;
+      } else {
+        return {
+          error: 'Invalid file type',
+        };
       }
+    } else {
+      return {
+        error: 'Too many files',
+      };
     }
+  } else {
+    return {
+      error: 'No files',
+    };
   }
 };
 
@@ -79,7 +83,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
       return trackedErrors;
     }, []);
 
-    console.log('errs', errs)
+    console.log('errs', errs);
 
     if (errs.length === 0) {
       saveFileInStore(csvMetadata, metadata);
@@ -97,6 +101,6 @@ export const validateCsvAfterParse = (parsedCsv) => {
   }
 };
 
-export const validateImages = (dataTransfer) => {
+export const validateImages = (files) => {
   return true;
 };
