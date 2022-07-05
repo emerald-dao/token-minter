@@ -1,7 +1,7 @@
-export async function getFilesAsync(dataTransfer) {
+export async function getFilesAsync(data) {
   const files = [];
-  for (let i = 0; i < dataTransfer.items.length; i++) {
-    const item = dataTransfer.items[i];
+  for (let i = 0; i < data.length; i++) {
+    const item = data[i];
     if (item.kind === 'file') {
       if (typeof item.webkitGetAsEntry === 'function') {
         const entry = item.webkitGetAsEntry();
