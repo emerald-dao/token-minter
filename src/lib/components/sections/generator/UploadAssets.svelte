@@ -42,14 +42,23 @@
   </div>
 
   <div class="form">
-    <label for="ipfs-token">IPFS Token</label>
+    <label for="ipfs-token">IPFS Key</label>
     <!-- TODO: Add tutorial on how to get an IPFS token  -->
-    <span class="helper-text"
-      >Follow this tutorial on how to get your IPFS Token.</span>
+    <span class="helper-text">
+      To get your own IPFS Key:
+      <ol>
+        <li>
+          Log in to <a href="https://nft.storage/login/" target="_blank"
+            >nft.storage</a>
+        </li>
+        <li>Click "API Keys"</li>
+        <li>Click "+ New Key" and create your own key</li>
+      </ol>
+    </span>
     <input
       name="ipfs-token"
       id="ipfs-token"
-      placeholder="Your IPFS Token"
+      placeholder="Your IPFS Key"
       type="text"
       bind:value={$userIPFSToken} />
   </div>

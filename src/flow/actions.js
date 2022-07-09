@@ -6,6 +6,7 @@ import * as fcl from '@onflow/fcl';
 import './config';
 
 import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
+import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -108,13 +109,13 @@ async function deployContract() {
     const transactionId = await fcl.mutate({
       cadence: `
       transaction(
-        contractName: String, 
-        contractCode: String, 
-        description: String, 
-        imageHash: String, 
-        minting: Bool, 
-        price: UFix64, 
-        ipfsCID: String
+        contractName: String,
+        description: String,
+        imageHash: String,
+        minting: Bool,
+        price: UFix64,
+        ipfsCID: String,
+        contractCode: String
       ) {
         prepare(deployer: AuthAccount) {
           log(contractCode)
@@ -133,12 +134,12 @@ async function deployContract() {
       `,
       args: (arg, t) => [
         arg(info.name, t.String),
-        arg(hexCode, t.String),
         arg(info.description, t.String),
         arg(info.imageHash, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
-        arg('', t.String),
+        arg(get(resultCID), t.String),
+        arg(hexCode, t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,

@@ -23,7 +23,7 @@ export const contractInfo = writable({
 export const contractCode = derived(
 	[contractInfo, user],
 	([$contractInfo, $user]) => `
-// CREATED BY: Touchstone from Emerald City DAO (https://ecdao.org/).
+// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).
 
 import NonFungibleToken from ${NONFUNGIBLETOKEN_ADDR}
 import MetadataViews from ${NONFUNGIBLETOKEN_ADDR}
@@ -96,7 +96,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 						name: self.template.name,
 						description: self.template.description,
 						thumbnail: MetadataViews.IPFSFile(
-							cid: ${contractInfo.name}.ipfsCID,
+							cid: ${$contractInfo.name}.ipfsCID,
 							path: self.template.thumbnailPath
 						)
 					)

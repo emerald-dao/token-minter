@@ -76,7 +76,7 @@
       onSubmitText: "Deploy",
     },
     {
-      title: "Upoad Metadata",
+      title: "Upload Metadata",
       component: UploadMetadata,
       emoji: "👆",
       instructions: "Upload your metadata to your contract.",
