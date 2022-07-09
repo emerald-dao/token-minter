@@ -46,7 +46,7 @@
       component: UploadAssets,
       emoji: "🗂",
       instructions:
-        "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
+        "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
       onSubmitAction: uploadAssets,
       onSubmitText: "Upload to IPFS",
     },
