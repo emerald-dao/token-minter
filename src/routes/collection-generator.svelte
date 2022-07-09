@@ -17,7 +17,7 @@
   import UploadMetadata from "$lib/components/sections/generator/UploadMetadata.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
   import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore";
-  import { csvParsedFile } from "$lib/stores/generator/CsvStore.ts";
+  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
   import { imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {
     step,
@@ -28,7 +28,7 @@
   function uploadAssets() {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
-    uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken);
+    uploadToIPFS($csvMetadata, $imagesFiles, $userIPFSToken);
     onNext();
   }
 
