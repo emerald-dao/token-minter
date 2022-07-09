@@ -1,6 +1,6 @@
 <script>
   import { StepsButtons, DropZone } from "$lib/components/atoms/index";
-  import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore";
+  import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
   import { csvState, csvFile } from "$lib/stores/generator/CsvStore.ts";
   import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {

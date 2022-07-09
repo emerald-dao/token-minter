@@ -1,12 +1,24 @@
 <script>
   import { NFTCard, StepsButtons } from "$lib/components/atoms/index";
-  import { getTemplates } from "../../../../flow/actions.js";
+  import { resultCID } from "$lib/stores/generator/IPFSstore";
+  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
   export let onSubmitText;
   export let onSubmitAction;
 
-  let getNFTs = async () => Object.values(await getTemplates());
-  let NFTs = getNFTs();
+  function getTemplates(assets, ipfsCID) {
+    const response = assets.reduce((a, asset) => {
+      a.push({
+        name: asset.name,
+        description: asset.description,
+        thumbnail: `${ipfsCID}/${asset.thumbnail}`,
+      });
+      return a;
+    }, []);
+    return response;
+  }
+
+  let NFTs = getTemplates($csvMetadata, $resultCID);
 </script>
 
 <div class="main-wrapper">
@@ -14,15 +26,18 @@
     <p>...Getting NFTs</p>
   {:then NFTs}
     <div class="nfts">
-      {#each  NFTs as NFT }
-        <NFTCard name={NFT.name} description={NFT.description} thumbnailURL={`https://ipfs.infura.io/ipfs/${NFT.thumbnail}`}/>
+      {#each NFTs as NFT}
+        <NFTCard
+          name={NFT.name}
+          description={NFT.description}
+          thumbnailURL={`https://ipfs.infura.io/ipfs/${NFT.thumbnail}`} />
       {/each}
-    </div>  
+    </div>
   {:catch error}
-    <p style="color: red">"We couldn't connect with the Flow Blockchain"</p>
+    <p style="color: red">{error}</p>
   {/await}
-  
-  <StepsButtons onSubmitText={onSubmitText} onSubmitAction={onSubmitAction}/>
+
+  <StepsButtons {onSubmitText} {onSubmitAction} />
 </div>
 
 <style type="scss">
@@ -30,10 +45,10 @@
 
   .main-wrapper {
     height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
     width: 100%;
 
     .nfts {
@@ -41,7 +56,7 @@
       flex-direction: column;
       gap: 1rem;
       width: 100%;
-      
+
       @include mq(small) {
         display: grid;
         grid-template-columns: repeat(4, 1fr);

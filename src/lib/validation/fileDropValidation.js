@@ -34,15 +34,11 @@ export const validateCsvBeforeParse = (files) => {
 export const validateCsvAfterParse = (parsedCsv) => {
   const attributes = parsedCsv[0];
   if (attributes.includes('name') && attributes.includes('description') && attributes.includes('image')) {
-    console.log('Metadata', attributes);
-
     const required = ['name', 'description', 'image'];
     if (attributes.includes('thumbnail')) required.push('thumbnail');
 
-    let usedKeys = {};
-    // parse the metadata for each NFT into a dictionary, keyed by its unique name
-
-    let metadata = {};
+    // parse the metadata for each NFT into a dictionary
+    let metadata = [];
     const errs = parsedCsv.slice(1).reduce((trackedErrors, vals) => {
       // values must be an ordered array corresponding to the metadata.attributes array
       if (vals && vals.length > 0 && vals[0] !== '') {
@@ -59,17 +55,8 @@ export const validateCsvAfterParse = (parsedCsv) => {
             key = attributeValue;
           }
         }
-        // validate key (present and non-duplicate)
-        if (!key) {
-          trackedErrors.push('ERROR: Name attribute missing');
-        }
-        if (usedKeys[key]) {
-          // ERROR: occupied, this name has already been used!
-          trackedErrors.push(`ERROR: Name attribute must be unique: ${key}`);
-        } else {
-          usedKeys[key] = key; // mark as used
-          metadata[key] = nft_attribs;
-        }
+
+        metadata.push(nft_attribs);
 
         // check for all required attributes
         required.forEach((k) => {
@@ -83,12 +70,13 @@ export const validateCsvAfterParse = (parsedCsv) => {
       return trackedErrors;
     }, []);
 
-    console.log('errs', errs);
+    console.log(metadata);
 
     if (errs.length === 0) {
       saveFileInStore(csvMetadata, metadata);
       return true;
     } else {
+      console.log('errs', errs);
       return {
         error: 'Errors encountered in CSV records',
         errs,

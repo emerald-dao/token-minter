@@ -56,40 +56,6 @@ export const getCollectionInfo = async (contractName) => {
   }
 };
 
-export const getTemplates = async () => {
-  try {
-    // TODO:
-    // Get NFTs from the IPFS Upload
-    // This will have to get the NFTs from IPFS
-    const response = [
-      {
-        name: 'Cap1',
-        description: 'White cap with petroman',
-        thumbnail: 'QmakaeD3HArtCKLvy6PvYaQFNHZ92eW2d4MpSLkFSMzN38',
-      },
-      {
-        name: 'Cap2',
-        description: 'Purple cap with petroman',
-        thumbnail: 'QmPnCLekhp9wjGC8SpDCBb5rVsT3npYojD45db9hgG5DRQ',
-      },
-      {
-        name: 'Cap3',
-        description: 'Green cap with deer',
-        thumbnail: 'QmR5zDG6NUfseKCoZ2ou6ydRfaNRWS6gc9zeB8rKoGwrFQ',
-      },
-      {
-        name: 'Cap4',
-        description: 'Gray cap with petroman',
-        thumbnail: 'QmSGSAUnXGBV7nYgSJidSUJAeY9mqGbCQyD6y5Q77KWmk2',
-      },
-    ];
-
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
 export const getUnpurchasedNFTs = async (contractName) => {
   try {
     const response = await fcl.query({
@@ -148,7 +114,7 @@ async function deployContract() {
         imageHash: String, 
         minting: Bool, 
         price: UFix64, 
-        ipfsStorage: String
+        ipfsCID: String
       ) {
         prepare(deployer: AuthAccount) {
           log(contractCode)
@@ -160,7 +126,7 @@ async function deployContract() {
             _image: imageHash,
             _minting: minting,
             _price: price,
-            _ipfsStorage: ipfsStorage
+            _ipfsCID: ipfsCID
           )
         }
       }

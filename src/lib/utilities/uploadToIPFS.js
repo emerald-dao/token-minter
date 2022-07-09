@@ -3,12 +3,14 @@ import { packToBlob } from 'ipfs-car/pack/blob';
 import { unpack } from 'ipfs-car/unpack';
 import { MemoryBlockStore } from 'ipfs-car/blockstore/memory';
 import { TreewalkCarSplitter } from 'carbites/treewalk';
+import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
+import { resultCID } from '$lib/stores/generator/IPFSstore';
 
 export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   //---- add metadata to .car file
   //  NOTE: this may not be needed if all metadata is stored in the contract
-  const car_files = Object.values(assets).reduce((a, item) => {
-    a.push({ path: item.serial, content: JSON.stringify(item) });
+  const car_files = assets.reduce((a, item, index) => {
+    a.push({ path: index.toString(), content: JSON.stringify(item) });
     return a;
   }, []);
 
@@ -17,7 +19,7 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
     car_files.push({ path: imageFile.name, content: imageFile });
   });
 
-  console.log(car_files);
+  console.log(car_files)
 
   const { root, car } = await packToBlob({
     input: car_files,
@@ -28,6 +30,7 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   let result_cid = await uploadCar(car, IPFSToken);
   if (result_cid === root.toString()) {
     console.log('Resulting IPFS CID', result_cid)
+    saveFileInStore(resultCID, result_cid);
   } else {
     error = 'ERROR: precomputed CID does not match CID from IPFS';
   }

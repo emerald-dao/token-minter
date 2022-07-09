@@ -16,7 +16,8 @@ export const contractInfo = writable({
 	imageHash: '',
 	maxSupply: null,
 	payment: null,
-	startMinting: true
+	startMinting: true,
+	ipfsHash: ''
 });
 
 export const contractCode = derived(
@@ -35,12 +36,13 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub var name: String
 	pub var description: String
 	pub var image: String
-	pub var ipfsStorage: String
+	pub var ipfsCID: String
+	pub var price: UFix64
 
+	// Contract Info
 	pub var nextTemplateId: UInt64
 	pub var totalSupply: UInt64
 	pub var minting: Bool
-	pub var price: UFix64
 
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
@@ -59,14 +61,14 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		pub let templateId: UInt64
 		pub let name: String
 		pub let description: String
-		pub let thumbnail: String
+		pub let thumbnailPath: String
 		pub var metadata: {String: String}
 
-		init(_name: String, _description: String, _thumbnail: String, _metadata: {String: String}) {
+		init(_name: String, _description: String, _thumbnailPath: String, _metadata: {String: String}) {
 			self.templateId = ${$contractInfo.name}.nextTemplateId
 			self.name = _name
 			self.description = _description
-			self.thumbnail = _thumbnail
+			self.thumbnailPath = _thumbnailPath
 			self.metadata = _metadata
 
 			${$contractInfo.name}.nextTemplateId = ${$contractInfo.name}.nextTemplateId + 1
@@ -94,8 +96,8 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 						name: self.template.name,
 						description: self.template.description,
 						thumbnail: MetadataViews.IPFSFile(
-							cid: self.template.thumbnail,
-							path: nil
+							cid: ${contractInfo.name}.ipfsCID,
+							path: self.template.thumbnailPath
 						)
 					)
 			}
@@ -197,11 +199,11 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createTemplate(name: String, description: String, thumbnail: String, metadata: {String: String}) {
+		pub fun createTemplate(name: String, description: String, thumbnailPath: String, metadata: {String: String}) {
 			${$contractInfo.name}.unpurchasedTemplates[${$contractInfo.name}.nextTemplateId] = Template(
 				_name: name,
 				_description: description,
-				_thumbnail: thumbnail,
+				_thumbnailPath: thumbnailPath,
 				_metadata: metadata
 			)
 		}
@@ -260,13 +262,13 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		_image: String, 
 		_minting: Bool, 
 		_price: UFix64,
-		_ipfsStorage: String
+		_ipfsCID: String
 	) {
 		// Collection Info
 		self.name = _name
 		self.description = _description
 		self.image = _image
-		self.ipfsStorage = _ipfsStorage
+		self.ipfsCID = _ipfsCID
 
 		// Initialize default info
 		self.minting = _minting
