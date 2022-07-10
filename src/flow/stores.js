@@ -40,7 +40,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub var price: UFix64
 
 	// Contract Info
-	pub var nextTemplateId: UInt64
+	pub var nextMetadataId: UInt64
 	pub var totalSupply: UInt64
 	pub var minting: Bool
 
@@ -52,36 +52,36 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub let CollectionPublicPath: PublicPath
 	pub let AdministratorStoragePath: StoragePath
 
-	// maps serial of NFT to Template
-	access(account) var unpurchasedTemplates: {UInt64: Template}
+	// maps serial of NFT to NFTMetadata
+	access(account) var unpurchasedNFTs: {UInt64: NFTMetadata}
 	// maps the serial of an NFT to the primary buyer
 	access(account) var primaryBuyers: {UInt64: Address}
 
-	pub struct Template {
-		pub let templateId: UInt64
+	pub struct NFTMetadata {
+		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String
 		pub let thumbnailPath: String
-		pub var metadata: {String: String}
+		pub var extra: {String: String}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _metadata: {String: String}) {
-			self.templateId = ${$contractInfo.name}.nextTemplateId
+		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: String}) {
+			self.metadataId = ${$contractInfo.name}.nextMetadataId
 			self.name = _name
 			self.description = _description
 			self.thumbnailPath = _thumbnailPath
-			self.metadata = _metadata
+			self.extra = _extra
 
-			${$contractInfo.name}.nextTemplateId = ${$contractInfo.name}.nextTemplateId + 1
+			${$contractInfo.name}.nextMetadataId = ${$contractInfo.name}.nextMetadataId + 1
 		}
 	}
 
 	pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
-		// The 'serial' is what maps this NFT to its 'Template'
+		// The 'serial' is what maps this NFT to its 'NFTMetadata'
 		pub let serial: UInt64
 		// Contains all the metadata of the NFT
-		pub let template: Template
+		pub let metadata: NFTMetadata
 
 		pub fun getViews(): [Type] {
 				return [
@@ -93,11 +93,11 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 			switch view {
 				case Type<MetadataViews.Display>():
 					return MetadataViews.Display(
-						name: self.template.name,
-						description: self.template.description,
+						name: self.metadata.name,
+						description: self.metadata.description,
 						thumbnail: MetadataViews.IPFSFile(
 							cid: ${$contractInfo.name}.ipfsCID,
-							path: self.template.thumbnailPath
+							path: self.metadata.thumbnailPath
 						)
 					)
 			}
@@ -107,7 +107,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		init() {
 			self.id = self.uuid
 			self.serial = ${$contractInfo.name}.totalSupply
-			self.template = ${$contractInfo.name}.unpurchasedTemplates.remove(key: self.serial) ?? panic("There does not exist a Template for this NFT.")
+			self.metadata = ${$contractInfo.name}.unpurchasedNFTs.remove(key: self.serial) ?? panic("There does not exist a NFTMetadata for this NFT.")
 
 			${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
 		}
@@ -199,12 +199,12 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createTemplate(name: String, description: String, thumbnailPath: String, metadata: {String: String}) {
-			${$contractInfo.name}.unpurchasedTemplates[${$contractInfo.name}.nextTemplateId] = Template(
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: String}) {
+			${$contractInfo.name}.unpurchasedNFTs[${$contractInfo.name}.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
 				_thumbnailPath: thumbnailPath,
-				_metadata: metadata
+				_extra: extra
 			)
 		}
 
@@ -247,13 +247,17 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		return <- create Collection()
 	}
 
-	// Get information about a Template
-	pub fun getUnpurchasedTemplate(_ serial: UInt64): Template? {
-		return self.unpurchasedTemplates[serial]
+	// Get information about a NFTMetadata
+	pub fun getUnpurchasedNFT(_ serial: UInt64): NFTMetadata? {
+		return self.unpurchasedNFTs[serial]
 	}
 
-	pub fun getUnpurchasedTemplates(): {UInt64: Template} {
-		return self.unpurchasedTemplates
+	pub fun getUnpurchasedNFTs(): {UInt64: NFTMetadata} {
+		return self.unpurchasedNFTs
+	}
+
+	pub fun getPrimaryBuyers(): {UInt64: Address} {
+		return self.primaryBuyers
 	}
 
 	init(
@@ -274,9 +278,9 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		self.minting = _minting
 		self.price = _price
 
-		self.nextTemplateId = 0
+		self.nextMetadataId = 0
 		self.totalSupply = 0
-		self.unpurchasedTemplates = {}
+		self.unpurchasedNFTs = {}
 		self.primaryBuyers = {}
 
 		// Set the named paths

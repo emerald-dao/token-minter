@@ -19,18 +19,20 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = () => fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-export const getCollectionInfo = async (contractName) => {
+export const getCollectionInfo = async (contractName, userAddress) => {
   try {
     const response = await fcl.query({
       cadence: `
-      import ${contractName} from ${get(user).addr}
+      import ${contractName} from ${userAddress}
 
-      pub fun main(accountAddr: Address, contractName: String): CollectionInfo {
+      pub fun main(): CollectionInfo {
         return CollectionInfo(
           name: ${contractName}.name,
           description: ${contractName}.description,
           image: ${contractName}.image,
-          price: ${contractName}.price
+          ipfsCID: ${contractName}.ipfsCID
+          price: ${contractName}.price,
+          unpurchasedNFTs: ${contractName}.getUnpurchasedNFTs()
         )
       }
 
@@ -38,13 +40,24 @@ export const getCollectionInfo = async (contractName) => {
         pub let name: String
         pub let description: String
         pub let image: String
+        pub let ipfsCID: String
         pub let price: UFix64
+        pub let unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
 
-        init(name: String, description: String, image: String, price: UFix64) {
+        init(
+          name: String, 
+          description: String, 
+          image: String, 
+          ipfsCID: String, 
+          price: UFix64,
+          unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
+        ) {
           self.name = name
           self.description = description
           self.image = image
+          self.ipfsCID = ipfsCID
           self.price = price
+          self.unpurchasedNFTs = unpurchasedNFTs
         }
       }
       `,
