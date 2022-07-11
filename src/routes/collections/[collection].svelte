@@ -82,6 +82,7 @@
   }
   h1 {
     font-size: var(--fs-600);
+    text-align: center;
   }
   p {
     font-size: var(--fs-300);
