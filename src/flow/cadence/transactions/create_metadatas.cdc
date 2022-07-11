@@ -30,10 +30,11 @@ transaction(names: [String], descriptions: [String], thumbnails: [String]) {
   execute {
     var i = 0
     while i < names.length {
-      self.Administrator.createTemplate(
+      self.Administrator.createNFTMetadata(
         name: names[i], 
         description: descriptions[i], 
-        thumbnail: thumbnails[i]
+        thumbnailPath: thumbnails[i],
+        extra: {}
       )
       i = i + 1
     }

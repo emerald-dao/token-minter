@@ -9,6 +9,8 @@ export const user = writable(null);
 export const profile = writable(null);
 export const transactionStatus = writable(null);
 export const transactionInProgress = writable(false);
+export const uploadingStatus = writable(null);
+export const uploadingInProgress = writable(false);
 
 export const contractInfo = writable({
 	name: 'ExampleNFT',
@@ -16,13 +18,14 @@ export const contractInfo = writable({
 	imageHash: '',
 	maxSupply: null,
 	payment: null,
-	startMinting: true
+	startMinting: true,
+	ipfsHash: ''
 });
 
 export const contractCode = derived(
 	[contractInfo, user],
 	([$contractInfo, $user]) => `
-// CREATED BY: Touchstone from Emerald City DAO (https://ecdao.org/).
+// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).
 
 import NonFungibleToken from ${NONFUNGIBLETOKEN_ADDR}
 import MetadataViews from ${NONFUNGIBLETOKEN_ADDR}
@@ -35,12 +38,13 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub var name: String
 	pub var description: String
 	pub var image: String
-	pub var ipfsStorage: String
+	pub var ipfsCID: String
+	pub var price: UFix64
 
-	pub var nextTemplateId: UInt64
+	// Contract Info
+	pub var nextMetadataId: UInt64
 	pub var totalSupply: UInt64
 	pub var minting: Bool
-	pub var price: UFix64
 
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
@@ -50,36 +54,36 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	pub let CollectionPublicPath: PublicPath
 	pub let AdministratorStoragePath: StoragePath
 
-	// maps serial of NFT to Template
-	access(account) var unpurchasedTemplates: {UInt64: Template}
+	// maps serial of NFT to NFTMetadata
+	access(account) var unpurchasedNFTs: {UInt64: NFTMetadata}
 	// maps the serial of an NFT to the primary buyer
 	access(account) var primaryBuyers: {UInt64: Address}
 
-	pub struct Template {
-		pub let templateId: UInt64
+	pub struct NFTMetadata {
+		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String
-		pub let thumbnail: String
-		pub var metadata: {String: String}
+		pub let thumbnailPath: String
+		pub var extra: {String: String}
 
-		init(_name: String, _description: String, _thumbnail: String, _metadata: {String: String}) {
-			self.templateId = ${$contractInfo.name}.nextTemplateId
+		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: String}) {
+			self.metadataId = ${$contractInfo.name}.nextMetadataId
 			self.name = _name
 			self.description = _description
-			self.thumbnail = _thumbnail
-			self.metadata = _metadata
+			self.thumbnailPath = _thumbnailPath
+			self.extra = _extra
 
-			${$contractInfo.name}.nextTemplateId = ${$contractInfo.name}.nextTemplateId + 1
+			${$contractInfo.name}.nextMetadataId = ${$contractInfo.name}.nextMetadataId + 1
 		}
 	}
 
 	pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
-		// The 'serial' is what maps this NFT to its 'Template'
+		// The 'serial' is what maps this NFT to its 'NFTMetadata'
 		pub let serial: UInt64
 		// Contains all the metadata of the NFT
-		pub let template: Template
+		pub let metadata: NFTMetadata
 
 		pub fun getViews(): [Type] {
 				return [
@@ -91,11 +95,11 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 			switch view {
 				case Type<MetadataViews.Display>():
 					return MetadataViews.Display(
-						name: self.template.name,
-						description: self.template.description,
+						name: self.metadata.name,
+						description: self.metadata.description,
 						thumbnail: MetadataViews.IPFSFile(
-							cid: self.template.thumbnail,
-							path: nil
+							cid: ${$contractInfo.name}.ipfsCID,
+							path: self.metadata.thumbnailPath
 						)
 					)
 			}
@@ -105,7 +109,7 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		init() {
 			self.id = self.uuid
 			self.serial = ${$contractInfo.name}.totalSupply
-			self.template = ${$contractInfo.name}.unpurchasedTemplates.remove(key: self.serial) ?? panic("There does not exist a Template for this NFT.")
+			self.metadata = ${$contractInfo.name}.unpurchasedNFTs.remove(key: self.serial) ?? panic("There does not exist a NFTMetadata for this NFT.")
 
 			${$contractInfo.name}.totalSupply = ${$contractInfo.name}.totalSupply + 1
 		}
@@ -197,12 +201,12 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createTemplate(name: String, description: String, thumbnail: String, metadata: {String: String}) {
-			${$contractInfo.name}.unpurchasedTemplates[${$contractInfo.name}.nextTemplateId] = Template(
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: String}) {
+			${$contractInfo.name}.unpurchasedNFTs[${$contractInfo.name}.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
-				_thumbnail: thumbnail,
-				_metadata: metadata
+				_thumbnailPath: thumbnailPath,
+				_extra: extra
 			)
 		}
 
@@ -245,13 +249,17 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		return <- create Collection()
 	}
 
-	// Get information about a Template
-	pub fun getUnpurchasedTemplate(_ serial: UInt64): Template? {
-		return self.unpurchasedTemplates[serial]
+	// Get information about a NFTMetadata
+	pub fun getUnpurchasedNFT(_ serial: UInt64): NFTMetadata? {
+		return self.unpurchasedNFTs[serial]
 	}
 
-	pub fun getUnpurchasedTemplates(): {UInt64: Template} {
-		return self.unpurchasedTemplates
+	pub fun getUnpurchasedNFTs(): {UInt64: NFTMetadata} {
+		return self.unpurchasedNFTs
+	}
+
+	pub fun getPrimaryBuyers(): {UInt64: Address} {
+		return self.primaryBuyers
 	}
 
 	init(
@@ -260,21 +268,21 @@ pub contract ${$contractInfo.name}: NonFungibleToken {
 		_image: String, 
 		_minting: Bool, 
 		_price: UFix64,
-		_ipfsStorage: String
+		_ipfsCID: String
 	) {
 		// Collection Info
 		self.name = _name
 		self.description = _description
 		self.image = _image
-		self.ipfsStorage = _ipfsStorage
+		self.ipfsCID = _ipfsCID
 
 		// Initialize default info
 		self.minting = _minting
 		self.price = _price
 
-		self.nextTemplateId = 0
+		self.nextMetadataId = 0
 		self.totalSupply = 0
-		self.unpurchasedTemplates = {}
+		self.unpurchasedNFTs = {}
 		self.primaryBuyers = {}
 
 		// Set the named paths

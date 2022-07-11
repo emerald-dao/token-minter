@@ -3,30 +3,23 @@ import { packToBlob } from 'ipfs-car/pack/blob';
 import { unpack } from 'ipfs-car/unpack';
 import { MemoryBlockStore } from 'ipfs-car/blockstore/memory';
 import { TreewalkCarSplitter } from 'carbites/treewalk';
+import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
+import { resultCID } from '$lib/stores/generator/IPFSstore';
 
-export async function uploadToIPFS(csvFile, imageFiles, IPFSToken) {
-  const attributes = parseCsv[0];
-  const metadata = { nft_data: {} };
-  let n = 0;
-  metadata.nft_data = parseCsv.slice(1).reduce((a, nft) => {
-    a[nft['name']] = nft;
-    a[nft['name']].serial = nft['name'].serial;
-    ++n;
-    return a;
-  }, {});
-
+export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   //---- add metadata to .car file
   //  NOTE: this may not be needed if all metadata is stored in the contract
-  for (const key in nft_data) {
-    let item = metadata.nft_data[key];
-    car_files.push({ path: item.serial, content: JSON.stringify(item) }); //
-  }
-
-  //---- build .car file
-  const car_files = imageFiles.reduce((a, file) => {
-    a.push({ path: file.name, content: file });
+  const car_files = assets.reduce((a, item, index) => {
+    a.push({ path: index.toString(), content: JSON.stringify(item) });
     return a;
   }, []);
+
+  //---- build .car file
+  imageFiles.forEach(imageFile => {
+    car_files.push({ path: imageFile.name, content: imageFile });
+  });
+
+  console.log(car_files)
 
   const { root, car } = await packToBlob({
     input: car_files,
@@ -36,11 +29,8 @@ export async function uploadToIPFS(csvFile, imageFiles, IPFSToken) {
   //---- upload to IPFS
   let result_cid = await uploadCar(car, IPFSToken);
   if (result_cid === root.toString()) {
-    //---- save the CID into the metadata.nft_data
-    // TODO: need to pass CID with NFT metadata to the token minter
-    for (const key in metadata.nft_data) {
-      metadata.nft_data[key].cid = result_cid;
-    }
+    console.log('Resulting IPFS CID', result_cid)
+    saveFileInStore(resultCID, result_cid);
   } else {
     error = 'ERROR: precomputed CID does not match CID from IPFS';
   }

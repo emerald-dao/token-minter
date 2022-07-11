@@ -17,7 +17,7 @@ export const navItems = [
     prefetch: true,
   },
   {
-    title: 'Emerald City Discord',
+    title: 'Discord',
     route: 'https://discord.com/invite/emeraldcity',
     prefetch: false,
     target: '_blank',

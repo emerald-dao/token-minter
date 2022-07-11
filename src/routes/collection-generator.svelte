@@ -16,8 +16,8 @@
   import Deploy from "$lib/components/sections/generator/Deploy.svelte";
   import UploadMetadata from "$lib/components/sections/generator/UploadMetadata.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
-  import { userIPFSToken } from "$lib/stores/generator/IPFStokenStore";
-  import { csvParsedFile } from "$lib/stores/generator/CsvStore.ts";
+  import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
+  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
   import { imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {
     step,
@@ -25,10 +25,10 @@
     onNext,
   } from "$lib/stores/generator/GeneratorGeneralStore";
 
-  function uploadAssets() {
+  async function uploadAssets() {
     // TODO: Upload assets to IPFS
     console.log("Uploading assets to IPFS");
-    uploadToIPFS($csvParsedFile, $imagesFiles, $userIPFSToken);
+    await uploadToIPFS($csvMetadata, $imagesFiles, $userIPFSToken);
     onNext();
   }
 
@@ -46,7 +46,7 @@
       component: UploadAssets,
       emoji: "🗂",
       instructions:
-        "Upload a folder with your collection. Folder must includ a file namde ....csv with your collection metadata and a folder named Images with your collection images.",
+        "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
       onSubmitAction: uploadAssets,
       onSubmitText: "Upload to IPFS",
     },
@@ -76,7 +76,7 @@
       onSubmitText: "Deploy",
     },
     {
-      title: "Upoad Metadata",
+      title: "Upload Metadata",
       component: UploadMetadata,
       emoji: "👆",
       instructions: "Upload your metadata to your contract.",

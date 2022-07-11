@@ -6,6 +6,7 @@
   } from "$lib/components/atoms/index";
   import Icon from "@iconify/svelte";
   import { uploadMetadataToContract } from "../../../flow/actions";
+  import { contractInfo } from "../../../flow/stores";
 
   export let uploadState = "to-upload";
   export let initialToken = 0;
@@ -14,7 +15,7 @@
 
   const onUpload = async () => {
     uploadState = "loading";
-    let uploadResult = await uploadMetadataToContract(initialToken, lastToken);
+    let uploadResult = await uploadMetadataToContract($contractInfo.name);
     if (uploadResult.status === "success") {
       uploadState = "uploaded";
     } else {
