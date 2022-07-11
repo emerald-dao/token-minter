@@ -22,3 +22,4 @@ export { default as TransparentCard } from './TransparentCard.svelte';
 export { default as NFTGuideGrid } from './NFTGuideGrid.svelte';
 export { default as UploadMetadataPack } from './UploadMetadataPack.svelte';
 export { default as LoadingSpinner } from './LoadingSpinner.svelte';
+export { default as CollectionCard } from './CollectionCard.svelte';
