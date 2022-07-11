@@ -232,6 +232,7 @@ export async function uploadMetadataToContract(contractName) {
   console.log('Uploading metadata to the contract:', nextMetadataId, nextMetadataId + BATCH_SIZE);
 
   initTransactionState();
+  uploadingInProgress.set(true);
   try {
     const transactionId = await fcl.mutate({
       cadence: `
