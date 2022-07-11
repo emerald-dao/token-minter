@@ -5,8 +5,10 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode } from './stores';
+import { user, transactionStatus, transactionInProgress, uploadingStatus, uploadingInProgress, contractInfo, contractCode } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
+
+import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -16,7 +18,7 @@ if (browser) {
 
 // Lifecycle FCL Auth functions
 export const unauthenticate = () => fcl.unauthenticate();
-export const logIn = () => fcl.logIn();
+export const logIn = async () => await fcl.logIn();
 export const signUp = () => fcl.signUp();
 
 export const getCollectionInfo = async (contractName, userAddress) => {
@@ -76,8 +78,8 @@ export const getUnpurchasedNFTs = async (contractName) => {
       cadence: `
       import ${contractName} from ${get(user).addr}
 
-      pub fun main(accountAddr: Address, contractName: String): [${contractName}.Template] {
-        return ${contractName}.getUnpurchasedTemplates().values
+      pub fun main(accountAddr: Address, contractName: String): [${contractName}.NFTMetadata] {
+        return ${contractName}.getUnpurchasedNFTs().values
       }
       `,
       args: (arg, t) => [],
@@ -90,7 +92,12 @@ export const getUnpurchasedNFTs = async (contractName) => {
 };
 
 function switchNetwork(network) {
-  if (network === 'testnet') {
+  if (network === 'emulator') {
+    fcl
+      .config()
+      .put('accessNode.api', 'http://localhost:8080')
+      .put('discovery.wallet', 'http://localhost:8701/fcl/authn')
+  } else if (network === 'testnet') {
     fcl
       .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
@@ -178,19 +185,117 @@ function initTransactionState() {
   transactionStatus.set(-1);
 }
 
+const getNextMetadataId = async (contractName, userAddress) => {
+  try {
+    const response = await fcl.query({
+      cadence: `
+      import ${contractName} from ${userAddress}
+
+      pub fun main(): UInt64 {
+        return ${contractName}.nextMetadataId
+      }
+      `,
+      args: (arg, t) => [],
+    });
+
+    return Number(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 // Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(firstTokenNumber, lastTokenNumber) {
+export async function uploadMetadataToContract(contractName) {
+  const BATCH_SIZE = 500;
   // TODO: implement uploadMetadataToContract
 
-  console.log('Uploading metadata to the contract:', firstTokenNumber, lastTokenNumber);
-  const timer = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({
-        status: 'success',
-        message: 'Metadata uploaded successfully',
-      });
-    }, 2000);
-  });
+  const userAddr = get(user).addr;
+  // Get The MetadataId we should start at
+  const nextMetadataId = await getNextMetadataId(contractName, userAddr);
+  const metadatas = get(csvMetadata).slice(nextMetadataId, nextMetadataId + BATCH_SIZE);
+  let names = [];
+  let descriptions = [];
+  let thumbnails = [];
+  let extras = [];
+  for (var i = 0; i < metadatas.length; i++) {
+    const { name, description, image, ...rest } = metadatas[i];
+    names.push(name);
+    descriptions.push(description);
+    thumbnails.push(image);
+    let extra = [];
+    for (const attribute in rest) {
+      extra.push({ key: attribute, value: rest[attribute] });
+    }
+    extras.push(extra);
+  }
 
-  return await timer;
+  console.log('Uploading metadata to the contract:', nextMetadataId, nextMetadataId + BATCH_SIZE);
+
+  initTransactionState();
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: `
+      import ${contractName} from ${userAddr}
+
+      // Put a batch of up to ${BATCH_SIZE} NFT Metadatas inside the contract
+
+      transaction(names: [String], descriptions: [String], thumbnails: [String], extras: [{String: String}]) {
+        let Administrator: &${contractName}.Administrator
+        prepare(deployer: AuthAccount) {
+          self.Administrator = deployer.borrow<&${contractName}.Administrator>(from: ${contractName}.AdministratorStoragePath)
+                                ?? panic("This account has not deployed the contract.")
+        }
+
+        pre {
+          names.length <= ${BATCH_SIZE}: 
+            "There must be less than or equal to ${BATCH_SIZE} NFTMetadata being added at a time."
+          names.length == descriptions.length && descriptions.length == thumbnails.length && thumbnails.length == extras.length:
+            "You must pass in a same amount of each parameter."
+        }
+
+        execute {
+          var i = 0
+          while i < names.length {
+            self.Administrator.createNFTMetadata(
+              name: names[i], 
+              description: descriptions[i], 
+              thumbnailPath: thumbnails[i],
+              extra: extras[i]
+            )
+            i = i + 1
+          }
+        }
+      }
+      `,
+      args: (arg, t) => [
+        arg(names, t.Array(t.String)),
+        arg(descriptions, t.Array(t.String)),
+        arg(thumbnails, t.Array(t.String)),
+        arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String })))
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        if (res.statusCode === 0) {
+          uploadingStatus.set({ success: true })
+        } else {
+          uploadingStatus.set({ success: false, error: res.errorMessage })
+        }
+        uploadingInProgress.set(false);
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+    uploadingStatus.set({ success: false, error: e })
+    uploadingInProgress.set(false);
+  }
 }
