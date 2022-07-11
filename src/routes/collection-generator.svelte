@@ -8,82 +8,14 @@
     Stack,
     TransparentCard,
   } from "$lib/components/atoms/index";
-  import CollectionInfo from "$lib/components/sections/generator/CollectionInfo.svelte";
-  import ContractInfo from "$lib/components/sections/generator/ContractInfo.svelte";
-  import UploadAssets from "$lib/components/sections/generator/UploadAssets.svelte";
-  import CollectionPreview from "$lib/components/sections/generator/CollectionPreview.svelte";
   import GeneratorNav from "$lib/components/sections/generator/GeneratorNav.svelte";
-  import Deploy from "$lib/components/sections/generator/Deploy.svelte";
-  import UploadMetadata from "$lib/components/sections/generator/UploadMetadata.svelte";
-  import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
-  import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
-  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
-  import { imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {
-    step,
-    onBack,
-    onNext,
-  } from "$lib/stores/generator/GeneratorGeneralStore";
+    activeStep,
+    stepsArray,
+  } from "$lib/stores/generator/generatorGeneralStore";
 
-  async function uploadAssets() {
-    // TODO: Upload assets to IPFS
-    console.log("Uploading assets to IPFS");
-    await uploadToIPFS($csvMetadata, $imagesFiles, $userIPFSToken);
-    onNext();
-  }
-
-  const steps = [
-    {
-      title: "Collection Information",
-      component: CollectionInfo,
-      emoji: "ℹ️",
-      instructions: "Define some general information around your collection.",
-      onSubmitAction: onNext,
-      onSubmitText: "Next",
-    },
-    {
-      title: "Upload Assets",
-      component: UploadAssets,
-      emoji: "🗂",
-      instructions:
-        "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
-      onSubmitAction: uploadAssets,
-      onSubmitText: "Upload to IPFS",
-    },
-    {
-      title: "Collection Preview",
-      component: CollectionPreview,
-      emoji: "🖼",
-      instructions:
-        "Looks like everything is in order. Let's see what you've got.",
-      onSubmitAction: onNext,
-      onSubmitText: "Next",
-    },
-    {
-      title: "Contract Information",
-      component: ContractInfo,
-      emoji: "📜",
-      instructions: "Define some general information around your contract.",
-      onSubmitAction: onNext,
-      onSubmitText: "Next",
-    },
-    {
-      title: "Deploy",
-      component: Deploy,
-      emoji: "🚀",
-      instructions: "Deploy your contract to the blockchain.",
-      onSubmitAction: onNext,
-      onSubmitText: "Deploy",
-    },
-    {
-      title: "Upload Metadata",
-      component: UploadMetadata,
-      emoji: "👆",
-      instructions: "Upload your metadata to your contract.",
-      onSubmitAction: onNext,
-      onSubmitText: "Deploy",
-    },
-  ];
+  const steps = $stepsArray;
+  
 </script>
 
 <Section class="padding-top-none padding-bottom-none">
@@ -93,14 +25,14 @@
       <Container class="width-large gutter-y-none" height="100%">
         <div class="main-layout">
           <div class="sidebar-container">
-            <GeneratorNav bind:step={$step} {steps} />
+            <GeneratorNav bind:step={$activeStep} {steps} />
           </div>
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
               <svelte:component
-                this={steps[$step].component}
-                onSubmitAction={steps[$step].onSubmitAction}
-                onSubmitText={steps[$step].onSubmitText} />
+                this={steps[$activeStep].component}
+                onSubmitAction={steps[$activeStep].onSubmitAction}
+                onSubmitText={steps[$activeStep].onSubmitText} />
             </TransparentCard>
           </div>
         </div>

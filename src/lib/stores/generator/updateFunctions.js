@@ -1,3 +1,6 @@
+import { get } from 'svelte/store';
+import { activeStep, stepsArray } from './generatorGeneralStore';
+
 export const saveFileInStore = (store, file) => {
   store.set(file);
 };
@@ -14,4 +17,19 @@ export const setValidationSuccess = (store) => {
     uploadState: 'success',
     errorMessages: [],
   }));
+};
+
+export const onNext = () => {
+  changeStepState(get(activeStep), 'success');
+  activeStep.update((current) => current + 1);
+};
+export const onBack = () => {
+  activeStep.update((current) => current - 1);
+};
+
+export const changeStepState = (stepNumber, state) => {
+  stepsArray.update((steps) => {
+    steps[stepNumber].state = state;
+    return steps;
+  });
 };

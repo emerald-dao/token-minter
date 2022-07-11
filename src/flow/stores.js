@@ -13,18 +13,18 @@ export const uploadingStatus = writable(null);
 export const uploadingInProgress = writable(false);
 
 export const contractInfo = writable({
-	name: 'ExampleNFT',
-	description: 'This is an example NFT Collection.',
-	imageHash: '',
-	maxSupply: null,
-	payment: null,
-	startMinting: true,
-	ipfsHash: ''
+  name: 'ExampleNFT',
+  description: 'This is an example NFT Collection.',
+  imageHash: '',
+  maxSupply: null,
+  payment: null,
+  startMinting: true,
+  ipfsHash: '',
 });
 
 export const contractCode = derived(
-	[contractInfo, user],
-	([$contractInfo, $user]) => `
+  [contractInfo, user],
+  ([$contractInfo, $user]) => `
 // CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).
 
 import NonFungibleToken from ${NONFUNGIBLETOKEN_ADDR}
