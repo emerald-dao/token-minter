@@ -12,7 +12,6 @@
 <Section>
 	<Container>
 		<Stack>
-			<!-- TODO: ADD 3D SHAPE -->
 			<Tagline>CREATE YOUR COLLECTION</Tagline>
 			<h2>{dappTitle}</h2>
 			<p>Create an NFT collection and deploy a smart contract without code.</p>
@@ -20,6 +19,11 @@
 				<Button class="small ghost">User Guide</Button>
 				<Button class="small">Collection Generator</Button>
 			</div>
+			<video width="50%" height="100%" autoplay loop muted>
+				<source src="emerald2.webm" type="video/webm" />
+				<track kind="captions"/>
+				Your browser does not support the video tag.
+			</video>
 		</Stack>
 	</Container>
 </Section>

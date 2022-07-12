@@ -22,6 +22,7 @@ export const setValidationSuccess = (store) => {
 export const onNext = () => {
   changeStepState(get(activeStep), 'success');
   activeStep.update((current) => current + 1);
+  console.log(get(stepsArray));
 };
 export const onBack = () => {
   activeStep.update((current) => current - 1);
