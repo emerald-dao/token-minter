@@ -1,4 +1,4 @@
-// CREATED BY: Touchstone from Emerald City DAO (https://ecdao.org/).
+// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).
 
 import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
@@ -25,11 +25,16 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub let CollectionStoragePath: StoragePath
 	pub let CollectionPublicPath: PublicPath
+	pub let CollectionPrivatePath: PrivatePath
 	pub let AdministratorStoragePath: StoragePath
 
-	// maps serial of NFT to NFTMetadata
-	access(account) var unpurchasedNFTs: {UInt64: NFTMetadata}
-	// maps the serial of an NFT to the primary buyer
+	// Maps serial of NFT to NFTMetadata
+	access(account) var metadatas: {UInt64: NFTMetadata}
+
+	// Maps the serial of an NFT to the primary buyer
+	//
+	// You can also get a list of purchased NFTs
+	// by doing `primaryBuyers.keys`
 	access(account) var primaryBuyers: {UInt64: Address}
 
 	pub struct NFTMetadata {
@@ -83,7 +88,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.NFTCollectionData(
 						storagePath: ExampleNFT.CollectionStoragePath,
 						publicPath: ExampleNFT.CollectionPublicPath,
-						providerPath: /private/ExampleNFTCollection,
+						providerPath: ExampleNFT.CollectionPrivatePath,
 						publicCollection: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(),
 						publicLinkedType: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(),
 						providerLinkedType: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection, NonFungibleToken.Provider}>(),
@@ -127,7 +132,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		init() {
 			self.id = self.uuid
 			self.serial = ExampleNFT.totalSupply
-			self.metadata = ExampleNFT.unpurchasedNFTs.remove(key: self.serial) ?? panic("There does not exist a NFTMetadata for this NFT.")
+			self.metadata = ExampleNFT.metadatas[self.serial] ?? panic("There does not exist a NFTMetadata for this NFT.")
 
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
 		}
@@ -220,7 +225,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub resource Administrator {
 		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: String}) {
-			ExampleNFT.unpurchasedNFTs[ExampleNFT.nextMetadataId] = NFTMetadata(
+			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
 				_thumbnailPath: thumbnailPath,
@@ -268,16 +273,20 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	// Get information about a NFTMetadata
-	pub fun getUnpurchasedNFT(_ serial: UInt64): NFTMetadata? {
-		return self.unpurchasedNFTs[serial]
+	pub fun getNFTMetadata(_ serial: UInt64): NFTMetadata? {
+		return self.metadatas[serial]
 	}
 
-	pub fun getUnpurchasedNFTs(): {UInt64: NFTMetadata} {
-		return self.unpurchasedNFTs
+	pub fun getNFTMetadatas(): {UInt64: NFTMetadata} {
+		return self.metadatas
 	}
 
 	pub fun getPrimaryBuyers(): {UInt64: Address} {
 		return self.primaryBuyers
+	}
+
+	pub fun getPrimaryPurchased(): [UInt64] {
+		return self.primaryBuyers.keys
 	}
 
 	init(
@@ -300,20 +309,24 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0
-		self.unpurchasedNFTs = {}
+		self.metadatas = {}
 		self.primaryBuyers = {}
 
 		// Set the named paths
-		self.CollectionStoragePath = /storage/ExampleNFTCollection
-		self.CollectionPublicPath = /public/ExampleNFTCollection
-		self.AdministratorStoragePath = /storage/ExampleNFTAdministrator
+		// We prefix the paths with 'T' for "Touchstone". This is also
+		// to prevent clashing with existing Collection paths in the 
+		// ecosystem.
+		self.CollectionStoragePath = /storage/TExampleNFTCollection
+		self.CollectionPublicPath = /public/TExampleNFTCollection
+		self.CollectionPrivatePath = /private/TExampleNFTCollection
+		self.AdministratorStoragePath = /storage/TExampleNFTAdministrator
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()
 		self.account.save(<- collection, to: self.CollectionStoragePath)
 
 		// create a public capability for the collection
-		self.account.link<&Collection{NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection}>(
+		self.account.link<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(
 			self.CollectionPublicPath,
 			target: self.CollectionStoragePath
 		)
