@@ -1,9 +1,9 @@
 // CREATED BY: Touchstone from Emerald City DAO (https://ecdao.org/).
 
-import NonFungibleToken from "./NonFungibleToken.cdc"
-import MetadataViews from "./MetadataViews.cdc"
-import FungibleToken from "./FungibleToken.cdc"
-import FlowToken from "./FlowToken.cdc"
+import NonFungibleToken from "./utility/NonFungibleToken.cdc"
+import MetadataViews from "./utility/MetadataViews.cdc"
+import FungibleToken from "./utility/FungibleToken.cdc"
+import FlowToken from "./utility/FlowToken.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
@@ -60,7 +60,11 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		pub fun getViews(): [Type] {
 				return [
-						Type<MetadataViews.Display>()
+						Type<MetadataViews.Display>(),
+						Type<MetadataViews.ExternalURL>(),
+						Type<MetadataViews.NFTCollectionData>(),
+						Type<MetadataViews.NFTCollectionDisplay>(),
+						Type<MetadataViews.Royalties>()
 				]
 		}
 
@@ -75,6 +79,47 @@ pub contract ExampleNFT: NonFungibleToken {
 							path: self.metadata.thumbnailPath
 						)
 					)
+				case Type<MetadataViews.NFTCollectionData>():
+					return MetadataViews.NFTCollectionData(
+						storagePath: ExampleNFT.CollectionStoragePath,
+						publicPath: ExampleNFT.CollectionPublicPath,
+						providerPath: /private/ExampleNFTCollection,
+						publicCollection: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(),
+						publicLinkedType: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(),
+						providerLinkedType: Type<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection, NonFungibleToken.Provider}>(),
+						createEmptyCollectionFunction: (fun (): @NonFungibleToken.Collection {
+								return <- ExampleNFT.createEmptyCollection()
+						})
+					)
+				case Type<MetadataViews.ExternalURL>():
+          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.id.toString()))
+				case Type<MetadataViews.NFTCollectionDisplay>():
+					let media = MetadataViews.Media(
+						file: MetadataViews.IPFSFile(
+							cid: ExampleNFT.ipfsCID,
+							path: self.metadata.thumbnailPath
+						),
+						mediaType: "image"
+					)
+					return MetadataViews.NFTCollectionDisplay(
+						name: ExampleNFT.name,
+						description: ExampleNFT.description,
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/"),
+						squareImage: media,
+						bannerImage: media,
+						socials: {
+							"twitter": MetadataViews.ExternalURL("https://twitter.com/emerald_dao"),
+							"discord": MetadataViews.ExternalURL("https://discord.gg/emeraldcity")
+						}
+					)
+				case Type<MetadataViews.Royalties>():
+					return MetadataViews.Royalties([
+						MetadataViews.Royalty(
+							_recipient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+							_cut: 0.05,
+							_description: "Emerald City DAO receives a 5% royalty fee because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
+						)
+					])
 			}
 			return nil
 		}
