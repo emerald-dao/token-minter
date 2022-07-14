@@ -21,6 +21,35 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = async () => await fcl.logIn();
 export const signUp = () => fcl.signUp();
 
+export const getContracts = async (address) => {
+  try {
+    const response = await fcl.query({
+      cadence: `
+      pub fun main(account: Address): [String] {
+        let contracts = getAccount(account).contracts
+        let answer: [String] = []
+        
+        for contractName in contracts.names {
+          answer.append(String.encodeHex(contracts.get(name: contractName)!.code))
+        }
+      
+        return answer
+      }
+      `,
+      args: (arg, t) => [
+        arg(address, t.Address)
+      ],
+    });
+
+    const contractCodes = response.map(thing => Buffer.from(thing, 'hex').toString());
+    const createdByTouchstone = contractCodes.filter(thing => thing.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/)."));
+    console.log(createdByTouchstone);
+    return createdByTouchstone;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getCollectionInfo = async (contractName, userAddress) => {
   try {
     const response = await fcl.query({
