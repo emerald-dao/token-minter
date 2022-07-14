@@ -4,7 +4,6 @@ import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
-
 pub contract ExampleNFT: NonFungibleToken {
 
 	// Collection Info
@@ -64,13 +63,13 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let metadata: NFTMetadata
 
 		pub fun getViews(): [Type] {
-				return [
-						Type<MetadataViews.Display>(),
-						Type<MetadataViews.ExternalURL>(),
-						Type<MetadataViews.NFTCollectionData>(),
-						Type<MetadataViews.NFTCollectionDisplay>(),
-						Type<MetadataViews.Royalties>()
-				]
+			return [
+				Type<MetadataViews.Display>(),
+				Type<MetadataViews.ExternalURL>(),
+				Type<MetadataViews.NFTCollectionData>(),
+				Type<MetadataViews.NFTCollectionDisplay>(),
+				Type<MetadataViews.Royalties>()
+			]
 		}
 
 		pub fun resolveView(_ view: Type): AnyStruct? {
@@ -101,8 +100,8 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let media = MetadataViews.Media(
 						file: MetadataViews.IPFSFile(
-							cid: ExampleNFT.ipfsCID,
-							path: self.metadata.thumbnailPath
+							cid: ExampleNFT.image,
+							path: nil
 						),
 						mediaType: "image"
 					)
