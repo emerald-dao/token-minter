@@ -7,7 +7,7 @@ pub fun main(): CollectionInfo {
     image: ExampleNFT.image,
     ipfsCID: ExampleNFT.ipfsCID,
     price: ExampleNFT.price,
-    metadatas: ExampleNFT.getNFTMetadatas(),
+    metadatas: ExampleNFT.getNFTMetadatas().values,
     purchasedNFTs: ExampleNFT.getPrimaryBuyers().keys
   )
 }
@@ -18,7 +18,7 @@ pub struct CollectionInfo {
   pub let image: String
   pub let ipfsCID: String
   pub let price: UFix64
-  pub let metadatas: {UInt64: ExampleNFT.NFTMetadata}
+  pub let metadatas: [ExampleNFT.NFTMetadata]
   pub let purchasedNFTs: [UInt64]
 
   init(
@@ -27,7 +27,7 @@ pub struct CollectionInfo {
     image: String, 
     ipfsCID: String, 
     price: UFix64,
-    metadatas: {UInt64: ExampleNFT.NFTMetadata}, 
+    metadatas: [ExampleNFT.NFTMetadata], 
     purchasedNFTs: [UInt64]
   ) {
     self.name = name

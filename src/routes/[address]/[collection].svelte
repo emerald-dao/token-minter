@@ -9,39 +9,30 @@
     NFTCard,
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
-
-  let collectionInfo = getCollectionInfo(
-    $page.params.collection,
-    $page.params.address
-  );
 </script>
 
 <Section class="padding-top-small padding-bottom-small">
-  <Container class="width-small">
-    <Stack>
-      <img src="/images/guide/ballerz.png" alt="Collection main" />
-      <h1>Ballerz Collection</h1>
-      <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book.
-      </p>
-    </Stack>
-  </Container>
-  <Container>
-    <AdaptableGrid minWidth="12em" gap="1.2em">
-      <!-- {#each NFTs as NFT}
-        <NFTCard
-          thumbnailURL={NFT.thumbnailURL}
-          name={NFT.name}
-          backgroundColor={NFT.backgroundColor}
-          description={NFT.description}
-          price={NFT.price}
-          buy="true" />
-      {/each} -->
-    </AdaptableGrid>
-  </Container>
+  {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
+    <Container class="width-small">
+      <Stack>
+        <img src="/images/guide/ballerz.png" alt="Collection main" />
+        <h1>{collectionInfo.name}</h1>
+        <p>{collectionInfo.description}</p>
+      </Stack>
+    </Container>
+    <Container>
+      <AdaptableGrid minWidth="12em" gap="1.2em">
+        {#each collectionInfo.metadatas as NFT}
+          <NFTCard
+            thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.ipfsCID}/${NFT.thumbnailPath}`}
+            name={NFT.name}
+            description={NFT.description}
+            price={parseFloat(collectionInfo.price).toFixed(2)}
+            buy="true" />
+        {/each}
+      </AdaptableGrid>
+    </Container>
+  {/await}
 </Section>
 
 <style type="scss">
