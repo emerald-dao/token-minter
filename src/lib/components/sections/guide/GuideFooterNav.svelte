@@ -2,15 +2,14 @@
   // Get chapter's previous and following chapter
   import { page } from '$app/stores';
 
-  $: pathname = $page.url.pathname;
-  $: relativePathname = pathname.replace(/^(\/guide\/[^\/]+)\//, '');
+  let pathname = $page.url.pathname;
+  let relativePathname = pathname.replace(/^(\/guide\/[^\/]+)\//, '');
   
   export let chapters
 
-  $: currentChapter = chapters.find(chapter => chapter.slug === relativePathname);
-
-  $: previousChapter = currentChapter.index > 1 ? chapters[currentChapter.index - 2] : null;
-  $: nextChapter = currentChapter.index < chapters.length ? chapters[currentChapter.index] : null;
+  let currentChapter = chapters.find(chapter => chapter.slug === relativePathname);
+  let previousChapter = currentChapter.index > 1 ? chapters[currentChapter.index - 2] : null;
+  let nextChapter = currentChapter.index < chapters.length ? chapters[currentChapter.index] : null;
 </script>
 
 <nav>

@@ -2,7 +2,6 @@
 	import { 
 		HeroSection, 
 		CreateCollectionSection, 
-		FeaturesSection, 
 		LearnSection, 
 		InvitationSection 
 	} from "$lib/components/sections/home/index";
@@ -14,6 +13,5 @@
 
 <HeroSection/>
 <CreateCollectionSection/>
-<FeaturesSection/>
 <LearnSection/>
 <!-- <InvitationSection/> -->

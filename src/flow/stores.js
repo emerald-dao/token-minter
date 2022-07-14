@@ -14,13 +14,13 @@ export const uploadingStatus = writable(null);
 export const uploadingInProgress = writable(false);
 
 export const contractInfo = writable({
-	name: 'ExampleNFT',
-	description: 'This is an example NFT Collection.',
-	imageHash: '',
-	maxSupply: null,
-	payment: null,
-	startMinting: true,
-	ipfsHash: ''
+  name: 'ExampleNFT',
+  description: 'This is an example NFT Collection.',
+  imageHash: '',
+  maxSupply: null,
+  payment: null,
+  startMinting: true,
+  ipfsHash: '',
 });
 
 export const contractCode = derived(
