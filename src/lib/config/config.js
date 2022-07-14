@@ -17,6 +17,11 @@ export const navItems = [
     prefetch: true,
   },
   {
+    title: 'Collections',
+    route: '/collections',
+    prefetch: true,
+  },
+  {
     title: 'Discord',
     route: 'https://discord.com/invite/emeraldcity',
     prefetch: false,

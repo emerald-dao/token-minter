@@ -8,3 +8,15 @@ export interface ErrorMessages {
   image_files?: [];
   nft_ids?: [];
 }
+
+// TODO: Implement interface
+export interface Step {
+  title: string;
+  // TODO: Add Svelte component type
+  component: any;
+  emoji: string;
+  instructions: string;
+  onSubmitAction: Function;
+  onSubmitText: string;
+  state: 'inactive' | 'active' | 'loading' | 'success' | 'error';
+}

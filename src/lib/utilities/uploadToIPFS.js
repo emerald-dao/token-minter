@@ -15,11 +15,11 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   }, []);
 
   //---- build .car file
-  imageFiles.forEach(imageFile => {
+  imageFiles.forEach((imageFile) => {
     car_files.push({ path: imageFile.name, content: imageFile });
   });
 
-  console.log(car_files)
+  console.log(car_files);
 
   const { root, car } = await packToBlob({
     input: car_files,
@@ -29,10 +29,13 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   //---- upload to IPFS
   let result_cid = await uploadCar(car, IPFSToken);
   if (result_cid === root.toString()) {
-    console.log('Resulting IPFS CID', result_cid)
+    console.log('Resulting IPFS CID', result_cid);
     saveFileInStore(resultCID, result_cid);
+    return true;
   } else {
-    error = 'ERROR: precomputed CID does not match CID from IPFS';
+    return {
+      error: 'ERROR: precomputed CID does not match CID from IPFS',
+    };
   }
 }
 
