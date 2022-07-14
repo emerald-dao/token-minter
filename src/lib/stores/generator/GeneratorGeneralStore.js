@@ -26,7 +26,6 @@ export const stepsArray = writable([
     component: CollectionInfo,
     emoji: 'ℹ️',
     instructions: 'Define some general information around your collection.',
-    onSubmitAction: onNext,
     onSubmitText: 'Next',
     state: 'inactive',
   },
@@ -45,7 +44,6 @@ export const stepsArray = writable([
     component: CollectionPreview,
     emoji: '🖼',
     instructions: "Looks like everything is in order. Let's see what you've got.",
-    onSubmitAction: onNext,
     onSubmitText: 'Next',
     state: 'inactive',
   },
@@ -54,7 +52,6 @@ export const stepsArray = writable([
     component: ContractInfo,
     emoji: '📜',
     instructions: 'Define some general information around your contract.',
-    onSubmitAction: onNext,
     onSubmitText: 'Next',
     state: 'inactive',
   },
@@ -63,7 +60,6 @@ export const stepsArray = writable([
     component: Deploy,
     emoji: '🚀',
     instructions: 'Deploy your contract to the blockchain.',
-    onSubmitAction: onNext,
     onSubmitText: 'Deploy',
     state: 'inactive',
   },
@@ -72,7 +68,6 @@ export const stepsArray = writable([
     component: UploadMetadata,
     emoji: '👆',
     instructions: 'Upload your metadata to your contract.',
-    onSubmitAction: onNext,
     onSubmitText: 'Deploy',
     state: 'inactive',
   },
@@ -80,6 +75,6 @@ export const stepsArray = writable([
 
 async function uploadAssetsToIpfs() {
   console.log('Uploading assets to IPFS');
-  await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
-  onNext();
+  // await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
+  return false;
 }

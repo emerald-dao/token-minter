@@ -13,6 +13,7 @@
     activeStep,
     stepsArray,
   } from "$lib/stores/generator/generatorGeneralStore";
+  import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
   const steps = $stepsArray;
   
@@ -31,7 +32,7 @@
             <TransparentCard padding="2.5rem" height="100%">
               <svelte:component
                 this={steps[$activeStep].component}
-                onSubmitAction={steps[$activeStep].onSubmitAction}
+                onSubmitAction={() => onNext(steps[$activeStep].onSubmitAction)}
                 onSubmitText={steps[$activeStep].onSubmitText} />
             </TransparentCard>
           </div>

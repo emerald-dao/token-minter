@@ -19,11 +19,35 @@ export const setValidationSuccess = (store) => {
   }));
 };
 
-export const onNext = () => {
-  changeStepState(get(activeStep), 'success');
-  activeStep.update((current) => current + 1);
-  console.log(get(stepsArray));
+export const onNext = (stepFunction) => {
+  if (stepFunction) {
+    changeStepState(get(activeStep), 'loading');
+    let promise = new Promise(async (resolve, reject) => {
+      let job = await stepFunction();
+      console.log(job);
+      if (job === true) {
+        console.log(job);
+        resolve('success');
+      } else {
+        reject('error');
+      }
+    });
+    promise
+      .then(() => {
+        activeStep.update((current) => current + 1);
+        changeStepState(get(activeStep), 'success');
+        console.log('onNext success');
+      })
+      .catch(() => {
+        changeStepState(get(activeStep), 'error');
+        console.log('onNext error');
+      });
+  } else {
+    activeStep.update((current) => current + 1);
+    changeStepState(get(activeStep), 'success');
+  }
 };
+
 export const onBack = () => {
   activeStep.update((current) => current - 1);
 };
