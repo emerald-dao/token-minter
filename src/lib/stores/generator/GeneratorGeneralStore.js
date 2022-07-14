@@ -75,6 +75,5 @@ export const stepsArray = writable([
 
 async function uploadAssetsToIpfs() {
   console.log('Uploading assets to IPFS');
-  // await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
-  return false;
+  await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
 }

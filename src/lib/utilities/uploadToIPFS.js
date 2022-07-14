@@ -31,8 +31,11 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   if (result_cid === root.toString()) {
     console.log('Resulting IPFS CID', result_cid);
     saveFileInStore(resultCID, result_cid);
+    return true;
   } else {
-    error = 'ERROR: precomputed CID does not match CID from IPFS';
+    return {
+      error: 'ERROR: precomputed CID does not match CID from IPFS',
+    };
   }
 }
 

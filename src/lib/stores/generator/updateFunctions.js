@@ -24,23 +24,20 @@ export const onNext = (stepFunction) => {
     changeStepState(get(activeStep), 'loading');
     let promise = new Promise(async (resolve, reject) => {
       let job = await stepFunction();
-      console.log(job);
       if (job === true) {
-        console.log(job);
         resolve('success');
       } else {
-        reject('error');
+        reject(job.error);
       }
     });
     promise
       .then(() => {
         activeStep.update((current) => current + 1);
         changeStepState(get(activeStep), 'success');
-        console.log('onNext success');
       })
-      .catch(() => {
+      .catch((message) => {
         changeStepState(get(activeStep), 'error');
-        console.log('onNext error');
+        alert(message);
       });
   } else {
     activeStep.update((current) => current + 1);
