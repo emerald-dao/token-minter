@@ -10,6 +10,9 @@ import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
 import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
+// Cadence code
+import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
+
 if (browser) {
   // set Svelte $user store to currentUser,
   // so other components can access it
@@ -50,51 +53,18 @@ export const getContracts = async (address) => {
   }
 };
 
-export const getCollectionInfo = async (contractName, userAddress) => {
+export const getCollectionInfo = async (contractName, contractAddress) => {
+  const script = getCollectionInfoScript
+    .replace('"../ExampleNFT.cdc"', contractAddress)
+    .replaceAll('ExampleNFT', contractName)
+  console.log(script)
   try {
     const response = await fcl.query({
-      cadence: `
-      import ${contractName} from ${userAddress}
-
-      pub fun main(): CollectionInfo {
-        return CollectionInfo(
-          name: ${contractName}.name,
-          description: ${contractName}.description,
-          image: ${contractName}.image,
-          ipfsCID: ${contractName}.ipfsCID
-          price: ${contractName}.price,
-          unpurchasedNFTs: ${contractName}.getUnpurchasedNFTs()
-        )
-      }
-
-      pub struct CollectionInfo {
-        pub let name: String
-        pub let description: String
-        pub let image: String
-        pub let ipfsCID: String
-        pub let price: UFix64
-        pub let unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
-
-        init(
-          name: String, 
-          description: String, 
-          image: String, 
-          ipfsCID: String, 
-          price: UFix64,
-          unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
-        ) {
-          self.name = name
-          self.description = description
-          self.image = image
-          self.ipfsCID = ipfsCID
-          self.price = price
-          self.unpurchasedNFTs = unpurchasedNFTs
-        }
-      }
-      `,
+      cadence: script,
       args: (arg, t) => [],
     });
 
+    console.log(response);
     return response;
   } catch (e) {
     console.log(e);

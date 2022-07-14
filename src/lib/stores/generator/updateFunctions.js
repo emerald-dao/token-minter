@@ -21,12 +21,14 @@ export const setValidationSuccess = (store) => {
 
 export const onNext = (stepFunction) => {
   if (stepFunction) {
+    console.log(stepFunction)
     changeStepState(get(activeStep), 'loading');
     let promise = new Promise(async (resolve, reject) => {
       let job = await stepFunction();
       if (job === true) {
         resolve('success');
       } else {
+        console.log(job)
         reject(job.error);
       }
     });

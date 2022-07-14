@@ -96,7 +96,7 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.id.toString()))
+          return MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let media = MetadataViews.Media(
 						file: MetadataViews.IPFSFile(
@@ -108,7 +108,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.name,
 						description: ExampleNFT.description,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/"),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT")),
 						squareImage: media,
 						bannerImage: media,
 						socials: {
@@ -190,36 +190,27 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
-	// purchaseNFT purchases a new NFT and deposits 
-	// it in the recipients collection
-	pub fun purchaseNFT(
-		recipient: &{NonFungibleToken.CollectionPublic},
-		payment: @FlowToken.Vault
-	) {
-		pre {
-			self.minting: "Minting is currently closed by the Administrator!"
-			payment.balance == self.price: "You did not pass in the correct amount of FlowToken."
-		}
-
-		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
-									.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-		paymentRecipient.deposit(from: <- payment)
-
-		self.mintNFT(recipient: recipient)
-	}
-
-	pub fun freeNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-		pre {
-			self.minting: "Minting is currently closed by the Administrator!"
-			self.price == 0.0: "You must call the purchaseNFT function instead."
-		}
-		self.mintNFT(recipient: recipient)
-	}
-
-	access(contract) fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
+	// A helper function for both `ExampleNFT.mintNFT`
+	// and for `@Administrator.mintNFT`
+	access(contract) fun mintHelper(recipient: &{NonFungibleToken.CollectionPublic}) {		
 		let nft <- create NFT()
 		self.primaryBuyers[nft.serial] = recipient.owner!.address
 		recipient.deposit(token: <- nft)
+	}
+
+	// A function to mint NFTs. 
+	// You can only call this function if minting
+	// is currently active.
+	pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, payment: @FlowToken.Vault) {
+		pre {
+			self.minting: "Minting is currently closed by the Administrator!"
+			payment.balance == self.price: "Payment does not match the price."
+		}
+		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
+								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+		paymentRecipient.deposit(from: <- payment)
+		
+		self.mintHelper(recipient: recipient)
 	}
 
 	pub resource Administrator {
@@ -235,7 +226,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
 		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-			ExampleNFT.mintNFT(recipient: recipient)
+			ExampleNFT.mintHelper(recipient: recipient)
 		}
 
 		// turn minting on/off
@@ -282,10 +273,6 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub fun getPrimaryBuyers(): {UInt64: Address} {
 		return self.primaryBuyers
-	}
-
-	pub fun getPrimaryPurchased(): [UInt64] {
-		return self.primaryBuyers.keys
 	}
 
 	init(
