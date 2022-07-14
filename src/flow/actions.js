@@ -12,6 +12,7 @@ import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
 // Cadence code
 import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
+import { onNext } from '$lib/stores/generator/updateFunctions';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -65,25 +66,6 @@ export const getCollectionInfo = async (contractName, contractAddress) => {
     });
 
     console.log(response);
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const getUnpurchasedNFTs = async (contractName) => {
-  try {
-    const response = await fcl.query({
-      cadence: `
-      import ${contractName} from ${get(user).addr}
-
-      pub fun main(accountAddr: Address, contractName: String): [${contractName}.NFTMetadata] {
-        return ${contractName}.getUnpurchasedNFTs().values
-      }
-      `,
-      args: (arg, t) => [],
-    });
-
     return response;
   } catch (e) {
     console.log(e);
@@ -170,6 +152,10 @@ async function deployContract() {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
+        // If deployment is successful
+        if (res.statusCode === 0) {
+          onNext();
+        }
         setTimeout(() => transactionInProgress.set(false), 2000);
       }
     });
