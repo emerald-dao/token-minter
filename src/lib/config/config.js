@@ -13,7 +13,7 @@ export const navItems = [
   },
   {
     title: 'User Guide',
-    route: '/guide/welcome',
+    route: '/guide/en/welcome',
     prefetch: true,
   },
   {
