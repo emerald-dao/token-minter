@@ -1,5 +1,5 @@
 <script>
-  import { getCollectionInfo } from "../../flow/actions";
+  import { getCollectionInfo, purchaseNFT } from "../../flow/actions";
 
   import {
     Section,
@@ -9,6 +9,10 @@
     NFTCard,
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
+
+  const purchaseFunction = (serial, price) => {
+    purchaseNFT(serial, price, $page.params.collection, $page.params.address);
+  };
 </script>
 
 <Section class="padding-top-small padding-bottom-small">
@@ -28,7 +32,9 @@
             name={NFT.name}
             description={NFT.description}
             price={parseFloat(collectionInfo.price).toFixed(2)}
-            buy="true" />
+            buy={!collectionInfo.purchasedNFTs.includes(NFT.metadataId)}
+            serial={NFT.metadataId}
+            {purchaseFunction} />
         {/each}
       </AdaptableGrid>
     </Container>

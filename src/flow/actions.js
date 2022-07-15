@@ -110,11 +110,11 @@ async function deployContract() {
   }
 }
 
-async function purchaseNFT(serial, price, contractName, contractAddress) {
+export const purchaseNFT = async (serial, price, contractName, contractAddress) => {
   const transaction = purchaseNFTTx
     .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replace('"../FlowToken.cdc"', FLOWTOKEN_ADDR)
-    .replace('"../NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
+    .replace('"../utility/FlowToken.cdc"', FLOWTOKEN_ADDR)
+    .replace('"../utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
     .replaceAll('ExampleNFT', contractName)
 
   initTransactionState();
