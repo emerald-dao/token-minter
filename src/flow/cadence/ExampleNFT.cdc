@@ -130,7 +130,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		init(_serial: UInt64, _recipient: Address) {
 			pre {
-				ExampleNFT.primaryBuyers.containsKey(_serial):
+				!ExampleNFT.primaryBuyers.containsKey(_serial):
 					"This NFT has already been minted."
 			}
 			self.id = self.uuid
