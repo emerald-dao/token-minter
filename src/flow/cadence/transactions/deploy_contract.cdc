@@ -1,7 +1,7 @@
 transaction(
   contractName: String,
   description: String,
-  imageHash: String,
+  imagePath: String,
   minting: Bool,
   price: UFix64,
   ipfsCID: String,
@@ -14,7 +14,7 @@ transaction(
       code: contractCode.decodeHex(),
       _name: contractName,
       _description: description,
-      _image: imageHash,
+      _image: imagePath,
       _minting: minting,
       _price: price,
       _ipfsCID: ipfsCID

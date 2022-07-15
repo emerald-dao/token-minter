@@ -14,9 +14,9 @@ export const uploadingStatus = writable(null);
 export const uploadingInProgress = writable(false);
 
 export const contractInfo = writable({
-	name: 'ExampleNFT',
-	description: 'This is an example NFT Collection.',
-	imageHash: '',
+	name: '',
+	description: '',
+	image: null,
 	maxSupply: null,
 	payment: null,
 	startMinting: true,

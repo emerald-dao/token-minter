@@ -22,6 +22,12 @@
 		},
 		extend: [validator({ schema })],
 	});
+
+	let files;
+	$: if (files) {
+		const file = files[0];
+		$contractInfo.image = file;
+	}
 </script>
 
 <form use:form>
@@ -32,14 +38,25 @@
 			{#if option.helperText}
 				<span class="helper-text">{option.helperText}</span>
 			{/if}
-			<input
-				name={option.bindValue}
-				id={option.bindValue}
-				placeholder={option.placheholder}
-				{...{ type: option.type }}
-				bind:value={$contractInfo[option.bindValue]}
-				class:input-error={$errors[option.bindValue]}
-				class:input-ok={!$errors[option.bindValue]} />
+			{#if option.type === "file"}
+				<input
+					name={option.bindValue}
+					id={option.bindValue}
+					placeholder={option.placeholder}
+					type="file"
+					bind:files
+					class:input-error={$errors[option.bindValue]}
+					class:input-ok={!$errors[option.bindValue]} />
+			{:else}
+				<input
+					name={option.bindValue}
+					id={option.bindValue}
+					placeholder={option.placeholder}
+					{...{ type: option.type }}
+					bind:value={$contractInfo[option.bindValue]}
+					class:input-error={$errors[option.bindValue]}
+					class:input-ok={!$errors[option.bindValue]} />
+			{/if}
 			{#if $errors[option.bindValue]}
 				<span class="error">{$errors[option.bindValue]}</span>
 			{/if}

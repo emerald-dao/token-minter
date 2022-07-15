@@ -81,7 +81,7 @@ async function deployContract() {
       args: (arg, t) => [
         arg(info.name, t.String),
         arg(info.description, t.String),
-        arg(info.imageHash, t.String),
+        arg(info.image.name, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
         arg(get(resultCID), t.String),

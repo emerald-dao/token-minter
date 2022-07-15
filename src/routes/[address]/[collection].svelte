@@ -19,7 +19,9 @@
   {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
     <Container class="width-small">
       <Stack>
-        <img src="/images/guide/ballerz.png" alt="Collection main" />
+        <img
+          src={`https://nftstorage.link/ipfs/${collectionInfo.ipfsCID}/${collectionInfo.image}`}
+          alt="Collection main" />
         <h1>{collectionInfo.name}</h1>
         <p>{collectionInfo.description}</p>
       </Stack>
