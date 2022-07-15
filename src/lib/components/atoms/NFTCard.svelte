@@ -30,8 +30,6 @@
       <Button class="small" on:click={() => purchaseFunction(serial, price)}>
         Buy
       </Button>
-    {:else}
-      <small>This NFT has been purchased.</small>
     {/if}
   </div>
 </TransparentCard>
