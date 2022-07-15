@@ -128,11 +128,16 @@ pub contract ExampleNFT: NonFungibleToken {
 			return nil
 		}
 
-		init() {
+		init(_serial: UInt64, _recipient: Address) {
+			pre {
+				ExampleNFT.primaryBuyers.containsKey(_serial):
+					"This NFT has already been minted."
+			}
 			self.id = self.uuid
-			self.serial = ExampleNFT.totalSupply
-			self.metadata = ExampleNFT.metadatas[self.serial] ?? panic("There does not exist a NFTMetadata for this NFT.")
+			self.serial = _serial
+			self.metadata = ExampleNFT.metadatas[_serial] ?? panic("There does not exist an NFTMetadata for this serial.")
 
+			ExampleNFT.primaryBuyers[_serial] = _recipient
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
 		}
 	}
@@ -190,18 +195,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
-	// A helper function for both `ExampleNFT.mintNFT`
-	// and for `@Administrator.mintNFT`
-	access(contract) fun mintHelper(recipient: &{NonFungibleToken.CollectionPublic}) {		
-		let nft <- create NFT()
-		self.primaryBuyers[nft.serial] = recipient.owner!.address
-		recipient.deposit(token: <- nft)
-	}
-
 	// A function to mint NFTs. 
 	// You can only call this function if minting
 	// is currently active.
-	pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}, payment: @FlowToken.Vault) {
+	pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
 		pre {
 			self.minting: "Minting is currently closed by the Administrator!"
 			payment.balance == self.price: "Payment does not match the price."
@@ -210,7 +207,7 @@ pub contract ExampleNFT: NonFungibleToken {
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 		
-		self.mintHelper(recipient: recipient)
+		recipient.deposit(token: <- create NFT(_serial: serial, _recipient: recipient.owner!.address))
 	}
 
 	pub resource Administrator {
@@ -225,8 +222,8 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
-		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-			ExampleNFT.mintHelper(recipient: recipient)
+		pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
+			recipient.deposit(token: <- create NFT(_serial: serial, _recipient: recipient.owner!.address))
 		}
 
 		// turn minting on/off
