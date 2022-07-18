@@ -100,6 +100,7 @@ async function deployContract() {
       if (res.status === 4) {
         // If deployment is successful
         if (res.statusCode === 0) {
+          console.log("Successfully deployed the contract.")
           onNext();
         }
         setTimeout(() => transactionInProgress.set(false), 2000);

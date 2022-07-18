@@ -15,7 +15,9 @@
 
   const onUpload = async () => {
     uploadState = "loading";
-    let uploadResult = await uploadMetadataToContract($contractInfo.name);
+    let uploadResult = await uploadMetadataToContract(
+      $contractInfo.name.replace(/\s+/g, "")
+    );
     if (uploadResult.status === "success") {
       uploadState = "uploaded";
     } else {

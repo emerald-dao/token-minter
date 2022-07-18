@@ -2,25 +2,31 @@
   import { Stack, UploadMetadataPack } from "$lib/components/atoms/index";
   import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
-  console.log(csvMetadata);
+  console.log($csvMetadata);
   function calculateSegments() {
     const BATCH_SIZE = 500;
-    const segmentLength = csvMetadata.length / BATCH_SIZE;
+    // This is the exact amount of elements to upload
+    const amount = $csvMetadata.length;
+    const array = new Array(Math.floor(amount / BATCH_SIZE))
+      .fill(BATCH_SIZE)
+      .concat(amount % BATCH_SIZE);
+    return array.map((element, i) => ({
+      initialToken: BATCH_SIZE * i,
+      lastToken: Math.min(
+        BATCH_SIZE * (i + 1) - 1,
+        BATCH_SIZE * i + element - 1
+      ),
+    }));
   }
   let segments = calculateSegments();
 </script>
 
 <Stack direction="column" gap="1rem">
-  <UploadMetadataPack
-    initialToken="0"
-    lastToken="499"
-    uploadState="to-upload" />
-  <UploadMetadataPack
-    initialToken="500"
-    lastToken="999"
-    uploadState="to-upload" />
-  <UploadMetadataPack
-    initialToken="1000"
-    lastToken="1499"
-    uploadState="to-upload" />
+  {#each segments as segment}
+    <svelte:component
+      this={UploadMetadataPack}
+      initialToken={segment.initialToken}
+      lastToken={segment.lastToken}
+      uploadState="to-upload" />
+  {/each}
 </Stack>
