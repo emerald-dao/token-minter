@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, uploadingStatus, uploadingInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
 import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
@@ -233,10 +233,9 @@ export async function uploadMetadataToContract(contractName) {
   const transaction = createMetadatasTx
     .replace('"../ExampleNFT.cdc"', userAddr)
     .replaceAll('ExampleNFT', contractName)
-    .replaceAll(500, BATCH_SIZE);
+    .replaceAll('500', BATCH_SIZE);
 
   initTransactionState();
-  uploadingInProgress.set(true);
 
   try {
     const transactionId = await fcl.mutate({
@@ -257,19 +256,17 @@ export async function uploadMetadataToContract(contractName) {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
-        if (res.statusCode === 0) {
-          uploadingStatus.set({ success: true })
-        } else {
-          uploadingStatus.set({ success: false, error: res.errorMessage })
-        }
-        uploadingInProgress.set(false);
         setTimeout(() => transactionInProgress.set(false), 2000);
+        if (res.statusCode === 0) {
+          return { success: true };
+        } else {
+          return { success: false, error: res.errorMessage }
+        }
       }
     });
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
-    uploadingStatus.set({ success: false, error: e })
-    uploadingInProgress.set(false);
+    return { success: false, error: e }
   }
 }

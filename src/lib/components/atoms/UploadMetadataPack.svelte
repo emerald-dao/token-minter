@@ -10,7 +10,7 @@
 
   export let uploadState = "to-upload";
   export let initialToken = 0;
-  export let lastToken = 500;
+  export let lastToken = 499;
   let iconWidth = "1.5em";
 
   const onUpload = async () => {
@@ -18,7 +18,7 @@
     let uploadResult = await uploadMetadataToContract(
       $contractInfo.name.replace(/\s+/g, "")
     );
-    if (uploadResult.status === "success") {
+    if (uploadResult.success) {
       uploadState = "uploaded";
     } else {
       uploadState = "error";
