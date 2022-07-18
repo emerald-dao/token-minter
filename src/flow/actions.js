@@ -79,13 +79,14 @@ async function deployContract() {
     const transactionId = await fcl.mutate({
       cadence: deployContractTx,
       args: (arg, t) => [
+        arg(info.name.replace(/\s+/g, ''), t.String),
+        arg(hexCode, t.String),
         arg(info.name, t.String),
         arg(info.description, t.String),
         arg(info.image.name, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
-        arg(get(resultCID), t.String),
-        arg(hexCode, t.String)
+        arg(get(resultCID), t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
