@@ -33,12 +33,6 @@
 				"testnet": "0x7e60df042a9c0868",
 				"mainnet": "0x1654653399040a61"
 			}
-		},
-		"Touchstone": {
-			"source": "./src/flow/cadence/Touchstone.cdc",
-			"aliases": {
-				"testnet": "0x82ac1084a70a9042"
-			}
 		}
 	},
 	"networks": {
