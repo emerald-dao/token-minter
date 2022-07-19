@@ -260,7 +260,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     if (status === 4 && statusCode === 0) {
       return { success: true };
     }
-    return { success: false, error: errorMessage }
+    return { success: false, error: errorMessage };
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
