@@ -5,7 +5,7 @@
 		Button,
 		Stack,
 		Tagline,
-		AdaptableGrid
+		AdaptableGrid,
 	} from "$lib/components/atoms/index";
 	import { dappTitle } from "$lib/config/config";
 </script>
@@ -16,7 +16,7 @@
 			<div class="video sticky">
 				<video width="100%" height="100%" autoplay loop muted>
 					<source src="emerald2.webm" type="video/webm" />
-					<track kind="captions"/>
+					<track kind="captions" />
 					Your browser does not support the video tag.
 				</video>
 			</div>
@@ -55,8 +55,10 @@
 					</p>
 				</div>
 				<div class="buttons-group">
-					<Button class="medium ghost">User Guide</Button>
-					<Button class="medium">Generate Collection</Button>
+					<Button class="medium ghost" href="/guide/en/welcome"
+						>User Guide</Button>
+					<Button class="medium" href="/collection-generator"
+						>Generate Collection</Button>
 				</div>
 			</Stack>
 		</AdaptableGrid>
@@ -77,7 +79,7 @@
 	h2 {
 		margin-bottom: 2rem;
 	}
-	
+
 	.feature {
 		h4 {
 			font-size: var(--fs-400);
