@@ -248,18 +248,22 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       limit: 9999,
     });
     console.log({ transactionId });
+    let result = {};
     fcl.tx(transactionId).subscribe((res) => {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
         if (res.statusCode === 0) {
-          return { success: true };
+          result = { success: true };
         } else {
-          return { success: false, error: res.errorMessage }
+          result = { success: false, error: res.errorMessage }
         }
       }
     });
+
+    await fcl.tx(transactionId).onceSealed();
+    return result;
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
