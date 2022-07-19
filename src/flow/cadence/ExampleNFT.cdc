@@ -4,9 +4,8 @@ import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
-import Touchstone from "./Touchstone.cdc"
 
-pub contract ExampleNFT: NonFungibleToken, Touchstone {
+pub contract ExampleNFT: NonFungibleToken {
 
 	// Collection Info
 	pub var name: String
@@ -72,8 +71,8 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		pub let totalSupply: UInt64
 		pub let ipfsCID: String?
 		pub let minting: Bool
-		pub let metadatas: [Touchstone.NFTMetadata]
-		pub let purchasedNFTs: {UInt64: Address}
+		pub let metadatas: {UInt64: NFTMetadata}
+		pub let primaryBuyers: {UInt64: Address}
 
 		init() {
 			self.name = ExampleNFT.name
@@ -84,8 +83,8 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 			self.totalSupply = ExampleNFT.totalSupply
 			self.ipfsCID = ExampleNFT.ipfsCID
 			self.minting = ExampleNFT.minting
-			self.metadatas = ExampleNFT.getNFTMetadatas().values
-			self.purchasedNFTs = ExampleNFT.getPrimaryBuyers()
+			self.metadatas = ExampleNFT.getNFTMetadatas()
+			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
 		}
 	}
 

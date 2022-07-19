@@ -28,13 +28,13 @@
     </Container>
     <Container>
       <AdaptableGrid minWidth="12em" gap="1.2em">
-        {#each collectionInfo.metadatas as NFT}
+        {#each Object.values(collectionInfo.metadatas) as NFT}
           <NFTCard
             thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
             name={NFT.name}
             description={NFT.description}
             price={parseFloat(collectionInfo.price).toFixed(2)}
-            buy={!Object.keys(collectionInfo.purchasedNFTs).includes(
+            buy={!Object.keys(collectionInfo.primaryBuyers).includes(
               NFT.metadataId
             )}
             serial={NFT.metadataId}
