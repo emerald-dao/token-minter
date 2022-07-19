@@ -34,7 +34,9 @@
             name={NFT.name}
             description={NFT.description}
             price={parseFloat(collectionInfo.price).toFixed(2)}
-            buy={!collectionInfo.purchasedNFTs.includes(NFT.metadataId)}
+            buy={!Object.keys(collectionInfo.purchasedNFTs).includes(
+              NFT.metadataId
+            )}
             serial={NFT.metadataId}
             {purchaseFunction} />
         {/each}
