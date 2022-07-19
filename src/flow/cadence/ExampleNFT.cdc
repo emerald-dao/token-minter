@@ -21,19 +21,22 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	pub var totalSupply: UInt64
 	pub var minting: Bool
 
+	// Events
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
+	pub event TouchstonePurchase(id: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile, extra: {String: String})
 
+	// Paths
 	pub let CollectionStoragePath: StoragePath
 	pub let CollectionPublicPath: PublicPath
 	pub let CollectionPrivatePath: PrivatePath
 	pub let AdministratorStoragePath: StoragePath
 
-	// Maps serial of NFT to NFTMetadata
+	// Maps metadataId of NFT to NFTMetadata
 	access(account) var metadatas: {UInt64: NFTMetadata}
 
-	// Maps the serial of an NFT to the primary buyer
+	// Maps the metadataId of an NFT to the primary buyer
 	//
 	// You can also get a list of purchased NFTs
 	// by doing `primaryBuyers.keys`
@@ -91,12 +94,11 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
-		// The 'serial' is what maps this NFT to its 'NFTMetadata'
-		// It is incremental based on `totalSupply`
-		pub let serial: UInt64
+		// The 'metadataId' is what maps this NFT to its 'NFTMetadata'
+		pub let metadataId: UInt64
 
 		pub fun getMetadata(): NFTMetadata {
-			return ExampleNFT.getNFTMetadata(self.serial)!
+			return ExampleNFT.getNFTMetadata(self.metadataId)!
 		}
 
 		pub fun getViews(): [Type] {
@@ -161,7 +163,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 					])
 				case Type<MetadataViews.Serial>():
 					return MetadataViews.Serial(
-						self.serial
+						self.metadataId
 					)
 				case Type<MetadataViews.Traits>():
 					return MetadataViews.dictToTraits(dict: self.getMetadata().extra, excludedNames: nil)
@@ -180,17 +182,17 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 			return nil
 		}
 
-		init(_serial: UInt64, _recipient: Address) {
+		init(_metadataId: UInt64, _recipient: Address) {
 			pre {
-				ExampleNFT.metadatas[_serial] != nil:
+				ExampleNFT.metadatas[_metadataId] != nil:
 					"This NFT does not exist yet."
-				!ExampleNFT.primaryBuyers.containsKey(_serial):
+				!ExampleNFT.primaryBuyers.containsKey(_metadataId):
 					"This NFT has already been minted."
 			}
 			self.id = self.uuid
-			self.serial = _serial
+			self.metadataId = _metadataId
 
-			ExampleNFT.primaryBuyers[_serial] = _recipient
+			ExampleNFT.primaryBuyers[_metadataId] = _recipient
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
 		}
 	}
@@ -251,7 +253,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	// A function to mint NFTs. 
 	// You can only call this function if minting
 	// is currently active.
-	pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
+	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
 		pre {
 			self.minting: "Minting is currently closed by the Administrator!"
 			payment.balance == self.price: "Payment does not match the price."
@@ -266,7 +268,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 		
-		recipient.deposit(token: <- create NFT(_serial: serial, _recipient: recipient.owner!.address))
+		recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
 	}
 
 	pub resource Administrator {
@@ -281,8 +283,8 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
-		pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
-			recipient.deposit(token: <- create NFT(_serial: serial, _recipient: recipient.owner!.address))
+		pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
+			recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
 		}
 
 		// turn minting on/off
@@ -322,8 +324,8 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	}
 
 	// Get information about a NFTMetadata
-	pub fun getNFTMetadata(_ serial: UInt64): NFTMetadata? {
-		return self.metadatas[serial]
+	pub fun getNFTMetadata(_ metadataId: UInt64): NFTMetadata? {
+		return self.metadatas[metadataId]
 	}
 
 	pub fun getNFTMetadatas(): {UInt64: NFTMetadata} {

@@ -47,7 +47,7 @@ pub contract interface Touchstone {
 
   // Makes sure there is a mintNFT function, but more importantly,
   // that it gives proper loyalty to Emerald City DAO.
-  pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
+  pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
     post {
       before(getAccount(0x86d486feb7683e02).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance) + (payment.balance * 0.05)
       <= 
@@ -57,7 +57,7 @@ pub contract interface Touchstone {
   }
 
   // A function to get information about a specific NFT
-  pub fun getNFTMetadata(_ serial: UInt64): NFTMetadata?
+  pub fun getNFTMetadata(_ metadataId: UInt64): NFTMetadata?
 
   // A function to get information about the entire collection
   pub fun getCollectionInfo(): CollectionInfo
