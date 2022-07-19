@@ -4,12 +4,14 @@ import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
-pub contract ExampleNFT: NonFungibleToken {
+import Touchstone from "./Touchstone.cdc"
+
+pub contract ExampleNFT: NonFungibleToken, Touchstone {
 
 	// Collection Info
 	pub var name: String
 	pub var description: String
-	pub var image: String
+	pub var image: MetadataViews.IPFSFile
 	pub var ipfsCID: String
 	pub var price: UFix64
 
@@ -40,17 +42,45 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String 
-		pub let thumbnailPath: String
+		pub let thumbnail: MetadataViews.IPFSFile
 		pub var extra: {String: String}
 
 		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: String}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
-			self.thumbnailPath = _thumbnailPath
+			self.thumbnail = MetadataViews.IPFSFile(
+				cid: ExampleNFT.ipfsCID,
+				path: _thumbnailPath
+			)
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
+		}
+	}
+
+	pub struct CollectionInfo {
+		pub let name: String
+		pub let description: String
+		pub let image: MetadataViews.IPFSFile
+		pub let price: UFix64
+		pub let metadatas: [Touchstone.NFTMetadata]
+		pub let purchasedNFTs: [UInt64]
+
+		init(
+			name: String, 
+			description: String, 
+			image: MetadataViews.IPFSFile,
+			price: UFix64,
+			metadatas: [Touchstone.NFTMetadata], 
+			purchasedNFTs: [UInt64]
+		) {
+			self.name = name
+			self.description = description
+			self.image = image
+			self.price = price
+			self.metadatas = metadatas
+			self.purchasedNFTs = purchasedNFTs
 		}
 	}
 
@@ -78,10 +108,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.Display(
 						name: self.metadata.name,
 						description: self.metadata.description,
-						thumbnail: MetadataViews.IPFSFile(
-							cid: ExampleNFT.ipfsCID,
-							path: self.metadata.thumbnailPath
-						)
+						thumbnail: self.metadata.thumbnail
 					)
 				case Type<MetadataViews.NFTCollectionData>():
 					return MetadataViews.NFTCollectionData(
@@ -99,10 +126,7 @@ pub contract ExampleNFT: NonFungibleToken {
           return MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let media = MetadataViews.Media(
-						file: MetadataViews.IPFSFile(
-							cid: ExampleNFT.image,
-							path: nil
-						),
+						file: ExampleNFT.image,
 						mediaType: "image"
 					)
 					return MetadataViews.NFTCollectionDisplay(
@@ -249,8 +273,11 @@ pub contract ExampleNFT: NonFungibleToken {
 			ExampleNFT.description = newDescription
 		}
 
-		pub fun changeImage(newImage: String) {
-			ExampleNFT.image = newImage
+		pub fun changeImage(cid: String, path: String?) {
+			ExampleNFT.image = MetadataViews.IPFSFile(
+				cid: cid,
+				path: path
+			)
 		}
 	}
 
@@ -272,10 +299,21 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.primaryBuyers
 	}
 
+	pub fun getCollectionInfo(): Touchstone.CollectionInfo {
+		return CollectionInfo(
+			name: self.name,
+			description: self.description,
+			image: self.image,
+			price: self.price,
+			metadatas: self.getNFTMetadatas().values,
+			purchasedNFTs: self.getPrimaryBuyers().keys
+		)
+	}
+
 	init(
 		_name: String, 
 		_description: String, 
-		_image: String, 
+		_imagePath: String, 
 		_minting: Bool, 
 		_price: UFix64,
 		_ipfsCID: String
@@ -283,7 +321,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Collection Info
 		self.name = _name
 		self.description = _description
-		self.image = _image
+		self.image = MetadataViews.IPFSFile(
+			cid: _ipfsCID,
+			path: _imagePath
+		)
 		self.ipfsCID = _ipfsCID
 
 		// Initialize default info

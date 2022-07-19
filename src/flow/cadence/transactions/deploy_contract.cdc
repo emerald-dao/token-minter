@@ -15,7 +15,7 @@ transaction(
       code: contractCode.decodeHex(),
       _name: collectionName,
       _description: description,
-      _image: imagePath,
+      _imagePath: imagePath,
       _minting: minting,
       _price: price,
       _ipfsCID: ipfsCID
