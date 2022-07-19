@@ -5,10 +5,9 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR, TOUCHSTONE_ADDR } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
-import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 import { onNext } from '$lib/stores/generator/updateFunctions';
 
 ///////////////
@@ -170,6 +169,7 @@ export const getContracts = async (address) => {
 export const getCollectionInfo = async (contractName, contractAddress) => {
   const script = getCollectionInfoScript
     .replace('"../ExampleNFT.cdc"', contractAddress)
+    .replace('"../Touchstone.cdc"', TOUCHSTONE_ADDR)
     .replaceAll('ExampleNFT', contractName)
 
   try {

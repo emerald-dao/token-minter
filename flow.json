@@ -8,19 +8,37 @@
 	"contracts": {
 		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
 		"MetadataViews": {
-			"source": "./src/flow/cadence/MetadataViews.cdc",
+			"source": "./src/flow/cadence/utility/MetadataViews.cdc",
 			"aliases": {
 				"testnet": "0x631e88ae7f1d7c20"
 			}
 		},
 		"NonFungibleToken": {
-			"source": "./src/flow/cadence/NonFungibleToken.cdc",
+			"source": "./src/flow/cadence/utility/NonFungibleToken.cdc",
 			"aliases": {
 				"testnet": "0x631e88ae7f1d7c20"
 			}
 		},
-		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc",
-		"FlowToken": "./src/flow/cadence/FlowToken.cdc"
+		"FungibleToken": {
+			"source": "./src/flow/cadence/utility/FungibleToken.cdc",
+			"aliases": {
+				"testnet": "0x9a0766d93b6608b7",
+				"mainnet": "0xf233dcee88fe0abe"
+			}
+		},
+		"FlowToken": {
+			"source": "./src/flow/cadence/utility/FlowToken.cdc",
+			"aliases": {
+				"testnet": "0x7e60df042a9c0868",
+				"mainnet": "0x1654653399040a61"
+			}
+		},
+		"Touchstone": {
+			"source": "./src/flow/cadence/Touchstone.cdc",
+			"aliases": {
+				"testnet": "0x86d486feb7683e02"
+			}
+		}
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -54,7 +72,7 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"ExampleNFT"
+				"Touchstone"
 			]
 		}
 	}
