@@ -14,9 +14,9 @@
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>
-    <h1>Collections</h1>
+    <h1>Browse Collections</h1>
     <p>
-      Browse collections created with {dappTitle} and mint your favourite NFTs
+      Check out {owner}'s collections created with {dappTitle}!
     </p>
     {#await getContracts(owner) then collections}
       <Stack direction="column">

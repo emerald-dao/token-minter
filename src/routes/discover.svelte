@@ -8,6 +8,7 @@
     Stack,
     CollectionCard,
   } from "$lib/components/atoms/index";
+  import Button from "$lib/components/atoms/Button.svelte";
 
   let collections = [
     {
@@ -37,6 +38,8 @@
   ];
 
   getContracts($user?.addr);
+
+  let address;
 </script>
 
 <Section class="padding-top-small padding-bottom-small">
@@ -45,6 +48,14 @@
     <p>
       Browse collections created with {dappTitle} and mint your favourite NFTs
     </p>
+    <div class="flex">
+      <input
+        type="text"
+        bind:value={address}
+        placeholder="0x5643fd47a29770e7" />
+      <Button href={`${address}`}>Search</Button>
+    </div>
+
     <Stack direction="column">
       {#each collections as collection}
         <CollectionCard
@@ -59,6 +70,18 @@
 </Section>
 
 <style type="scss">
+  .flex {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    display: flex;
+    margin-bottom: 100px;
+
+    input {
+      margin-right: 5px;
+    }
+  }
   h1 {
     font-size: var(--fs-700);
     text-align: center;
