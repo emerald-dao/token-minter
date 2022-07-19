@@ -20,7 +20,7 @@
     <Container class="width-small">
       <Stack>
         <img
-          src={`https://nftstorage.link/ipfs/${collectionInfo.ipfsCID}/${collectionInfo.image}`}
+          src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
           alt="Collection main" />
         <h1>{collectionInfo.name}</h1>
         <p>{collectionInfo.description}</p>
@@ -30,7 +30,7 @@
       <AdaptableGrid minWidth="12em" gap="1.2em">
         {#each collectionInfo.metadatas as NFT}
           <NFTCard
-            thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.ipfsCID}/${NFT.thumbnailPath}`}
+            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
             name={NFT.name}
             description={NFT.description}
             price={parseFloat(collectionInfo.price).toFixed(2)}
