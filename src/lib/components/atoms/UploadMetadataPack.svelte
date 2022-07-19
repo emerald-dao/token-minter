@@ -21,12 +21,15 @@
   const onUpload = async () => {
     uploadState = "loading";
     const contractName = $contractInfo.name.replace(/\s+/g, "");
+    // Fetches the next metadata we are supposed to upload to the contract
     const nextMetadataId = await getNextMetadataId(contractName, $user.addr);
+    // Makes sure we are on the correct step
     if (nextMetadataId !== initialToken) {
       uploadState = "error";
       console.log("The NFTs to upload do not match.");
       return;
     }
+    // Gets the batch of metadata we want to upload
     const metadatas = $csvMetadata.slice(initialToken, lastToken + 1);
     const uploadResult = await uploadMetadataToContract(
       contractName,
