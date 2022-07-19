@@ -36,6 +36,8 @@ pub contract interface Touchstone {
     pub let purchasedNFTs: [UInt64]
   }
 
+  // Makes sure there is a mintNFT function, but more importantly,
+  // that it gives proper loyalty to Emerald City DAO.
   pub fun mintNFT(serial: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
     post {
       before(getAccount(0x86d486feb7683e02).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance) + (payment.balance * 0.05)
