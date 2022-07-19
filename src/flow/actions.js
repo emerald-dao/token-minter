@@ -16,6 +16,7 @@ import { onNext } from '$lib/stores/generator/updateFunctions';
 // Scripts
 import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
 import getContractsScript from "./cadence/scripts/get_contracts.cdc?raw";
+import getContractDisplaysScript from "./cadence/scripts/get_contract_displays.cdc?raw";
 // Transactions
 import createMetadatasTx from "./cadence/transactions/create_metadatas.cdc?raw";
 import deployContractTx from "./cadence/transactions/deploy_contract.cdc?raw";
@@ -149,6 +150,7 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
 // ****** Scripts ****** //
 
 export const getContracts = async (address) => {
+  console.log(address)
   try {
     const response = await fcl.query({
       cadence: getContractsScript,
@@ -158,12 +160,37 @@ export const getContracts = async (address) => {
     });
 
     const contractCodes = response.map(thing => Buffer.from(thing, 'hex').toString());
-    const createdByTouchstone = contractCodes.filter(thing => {
-      return thing.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
-        thing.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
+    const createdByTouchstone = contractCodes.filter(contract => {
+      return contract.code.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
+        contract.code.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
     });
-    console.log(createdByTouchstone);
-    return createdByTouchstone;
+
+    let imports = '';
+    let displays = '';
+    createdByTouchstone.forEach(contract => {
+      imports += `import ${contract.name} from ${address}\n`;
+      displays += `
+      let display = ${contract.name}.getCollectionInfo()
+      answer.append(CollectionDisplay(
+        _name: display.name,
+        _description: display.description,
+        _image: display.image
+      ))\n
+      `
+    })
+    const script = getContractDisplaysScript.replace('// IMPORTS', imports).replace('// DISPLAYS', displays)
+
+    try {
+      const response = await fcl.query({
+        cadence: script,
+        args: (arg, t) => [],
+      });
+      console.log(response);
+
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
   } catch (e) {
     console.log(e);
   }
