@@ -10,6 +10,7 @@
     const array = new Array(Math.floor(amount / BATCH_SIZE))
       .fill(BATCH_SIZE)
       .concat(amount % BATCH_SIZE);
+    // Calculates the different segments we will need
     return array.map((element, i) => ({
       initialToken: BATCH_SIZE * i,
       lastToken: Math.min(
