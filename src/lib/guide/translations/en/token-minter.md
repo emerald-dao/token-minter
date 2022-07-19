@@ -19,8 +19,8 @@ There are a few things you have to enter:
 
 ## Upload Assets
 
-1. CSV File - this is a file that contains all of your attributes and associated metadata for each NFT. Click <a href="../../../../../assets/set1_clean.csv" download="example.csv">here</a> to download an example.
-2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`. Click <a>here</a> to download an example.
+1. CSV File - this is a file that contains all of your attributes and associated metadata for each NFT. You must have a `name`, `description`, and `image` attribute. Click <a href="/assets/metadata.csv" download="">here</a> to download an example.
+2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`. Click <a href="/assets/images.zip" download="">here</a> to download an example.
 3. IPFS Key - this is a key you can provide for us to upload your assets to IPFS. You can get this by going to https://nft.storage/login, clicking "API Keys" at the top, and creating your own key. 
 
 ## Collection Preview
