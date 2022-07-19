@@ -247,23 +247,20 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       authorizations: [fcl.authz],
       limit: 9999,
     });
-    console.log({ transactionId });
-    let result = {};
+
     fcl.tx(transactionId).subscribe((res) => {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        if (res.statusCode === 0) {
-          result = { success: true };
-        } else {
-          result = { success: false, error: res.errorMessage }
-        }
       }
     });
 
-    await fcl.tx(transactionId).onceSealed();
-    return result;
+    const { status, statusCode, errorMessage } = await fcl.tx(transactionId).onceSealed();
+    if (status === 4 && statusCode === 0) {
+      return { success: true };
+    }
+    return { success: false, error: res.errorMessage }
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
