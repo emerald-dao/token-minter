@@ -1,3 +1,4 @@
+import { persistentWritable } from '$lib/stores/ThemeStore';
 import { writable, get, derived } from 'svelte/store';
 import contract from './cadence/ExampleNFT.cdc?raw';
 
@@ -11,7 +12,7 @@ export const profile = writable(null);
 export const transactionStatus = writable(null);
 export const transactionInProgress = writable(false);
 
-export const contractInfo = writable({
+export const contractInfo = persistentWritable('contractInfo', {
 	name: '',
 	description: '',
 	image: null,

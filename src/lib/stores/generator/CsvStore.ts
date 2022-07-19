@@ -10,7 +10,7 @@ export const csvState: Writable<FileState> = writable({
 });
 
 export const csvParsedFile = writable(null);
-export const csvMetadata = persistentWritable('csvMetadata');
+export const csvMetadata = persistentWritable('csvMetadata', {});
 export const csvFile = writable(null);
 
 export const emptyCsvStore = () => {
