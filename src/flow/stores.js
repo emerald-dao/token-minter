@@ -5,7 +5,7 @@ import contract from './cadence/ExampleNFT.cdc?raw';
 export const EMULATOR_ADDR = '0xf8d6e0586b0a20c7';
 export const NONFUNGIBLETOKEN_ADDR = '0x631e88ae7f1d7c20';
 export const FLOWTOKEN_ADDR = '0x7e60df042a9c0868';
-export const TOUCHSTONE_ADDR = '0x86d486feb7683e02';
+export const TOUCHSTONE_ADDR = '0x82ac1084a70a9042';
 export const FUNGIBLETOKEN_ADDR = '0x9a0766d93b6608b7';
 
 export const user = writable(null);

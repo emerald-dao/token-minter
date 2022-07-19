@@ -37,7 +37,7 @@
 		"Touchstone": {
 			"source": "./src/flow/cadence/Touchstone.cdc",
 			"aliases": {
-				"testnet": "0x86d486feb7683e02"
+				"testnet": "0x82ac1084a70a9042"
 			}
 		}
 	},
@@ -52,13 +52,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x86d486feb7683e02",
+			"address": "0x82ac1084a70a9042",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "cbe6a1294d6706fd7931c5ef1f1e730332e5a8c2661998847da6ea8b9f5a2052"
+				"privateKey": "25dabcbc4b425e7e46ba67eb027c4b468b9185dd645037a6a17b6d6d948f66eb"
 			}
 		}
 	},

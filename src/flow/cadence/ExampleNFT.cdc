@@ -257,7 +257,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 			payment.balance == self.price: "Payment does not match the price."
 		}
 		// Handle Emerald City DAO royalty (5%)
-		let ecDAO = getAccount(0x86d486feb7683e02).getCapability(/public/flowTokenReceiver)
+		let ecDAO = getAccount(0x82ac1084a70a9042).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		ecDAO.deposit(from: <- payment.withdraw(amount: payment.balance * 0.05))
 

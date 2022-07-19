@@ -49,9 +49,9 @@ pub contract interface Touchstone {
   // that it gives proper loyalty to Emerald City DAO.
   pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
     post {
-      before(getAccount(0x86d486feb7683e02).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance) + (payment.balance * 0.05)
+      before(getAccount(0x82ac1084a70a9042).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance) + (payment.balance * 0.05)
       <= 
-      getAccount(0x86d486feb7683e02).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance:
+      getAccount(0x82ac1084a70a9042).getCapability(/public/flowTokenVault).borrow<&FlowToken.Vault{FungibleToken.Balance}>()!.balance:
         "You did not give Emerald City royalty for minting this NFT."
     }
   }
