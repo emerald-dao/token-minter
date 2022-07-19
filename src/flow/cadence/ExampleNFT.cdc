@@ -14,6 +14,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	pub var image: MetadataViews.IPFSFile
 	pub var ipfsCID: String
 	pub var price: UFix64
+	pub let dateCreated: UFix64
 
 	// Contract Info
 	pub var nextMetadataId: UInt64
@@ -43,9 +44,9 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		pub let name: String
 		pub let description: String 
 		pub let thumbnail: MetadataViews.IPFSFile
-		pub var extra: {String: String}
+		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: String}) {
+		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
@@ -64,23 +65,26 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		pub let description: String
 		pub let image: MetadataViews.IPFSFile
 		pub let price: UFix64
+		pub let dateCreated: UFix64
+		pub let totalSupply: UInt64
+		pub let ipfsCID: String?
+		pub let minting: Bool
 		pub let metadatas: [Touchstone.NFTMetadata]
+		pub let primaryBuyers: {UInt64: Address}
 		pub let purchasedNFTs: [UInt64]
 
-		init(
-			name: String, 
-			description: String, 
-			image: MetadataViews.IPFSFile,
-			price: UFix64,
-			metadatas: [Touchstone.NFTMetadata], 
-			purchasedNFTs: [UInt64]
-		) {
-			self.name = name
-			self.description = description
-			self.image = image
-			self.price = price
-			self.metadatas = metadatas
-			self.purchasedNFTs = purchasedNFTs
+		init() {
+			self.name = ExampleNFT.name
+			self.description = ExampleNFT.description
+			self.image = ExampleNFT.image
+			self.price = ExampleNFT.price
+			self.dateCreated = ExampleNFT.dateCreated
+			self.totalSupply = ExampleNFT.totalSupply
+			self.ipfsCID = ExampleNFT.ipfsCID
+			self.minting = ExampleNFT.minting
+			self.metadatas = ExampleNFT.getNFTMetadatas().values
+			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
+			self.purchasedNFTs = ExampleNFT.getPrimaryBuyers().keys
 		}
 	}
 
@@ -88,9 +92,12 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
 		// The 'serial' is what maps this NFT to its 'NFTMetadata'
+		// It is incremental based on `totalSupply`
 		pub let serial: UInt64
-		// Contains all the metadata of the NFT
-		pub let metadata: NFTMetadata
+
+		pub fun getMetadata(): NFTMetadata {
+			return ExampleNFT.getNFTMetadata(self.serial)!
+		}
 
 		pub fun getViews(): [Type] {
 			return [
@@ -98,17 +105,21 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 				Type<MetadataViews.ExternalURL>(),
 				Type<MetadataViews.NFTCollectionData>(),
 				Type<MetadataViews.NFTCollectionDisplay>(),
-				Type<MetadataViews.Royalties>()
+				Type<MetadataViews.Royalties>(),
+				Type<MetadataViews.Serial>(),
+				Type<MetadataViews.Traits>(),
+				Type<MetadataViews.NFTView>()
 			]
 		}
 
 		pub fun resolveView(_ view: Type): AnyStruct? {
 			switch view {
 				case Type<MetadataViews.Display>():
+					let metadata = self.getMetadata()
 					return MetadataViews.Display(
-						name: self.metadata.name,
-						description: self.metadata.description,
-						thumbnail: self.metadata.thumbnail
+						name: metadata.name,
+						description: metadata.description,
+						thumbnail: metadata.thumbnail
 					)
 				case Type<MetadataViews.NFTCollectionData>():
 					return MetadataViews.NFTCollectionData(
@@ -148,18 +159,36 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 							_description: "Emerald City DAO receives a 5% royalty fee because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
 						)
 					])
+				case Type<MetadataViews.Serial>():
+					return MetadataViews.Serial(
+						self.serial
+					)
+				case Type<MetadataViews.Traits>():
+					return MetadataViews.dictToTraits(dict: self.getMetadata().extra, excludedNames: nil)
+				case Type<MetadataViews.NFTView>():
+					return MetadataViews.NFTView(
+						id: self.id,
+            uuid: self.uuid,
+            display: self.resolveView(Type<MetadataViews.Display>()) as! MetadataViews.Display?,
+            externalURL: self.resolveView(Type<MetadataViews.ExternalURL>()) as! MetadataViews.ExternalURL?,
+            collectionData: self.resolveView(Type<MetadataViews.NFTCollectionData>()) as! MetadataViews.NFTCollectionData?,
+            collectionDisplay: self.resolveView(Type<MetadataViews.NFTCollectionDisplay>()) as! MetadataViews.NFTCollectionDisplay?,
+            royalties: self.resolveView(Type<MetadataViews.Royalties>()) as! MetadataViews.Royalties?,
+            traits: self.resolveView(Type<MetadataViews.Traits>()) as! MetadataViews.Traits?
+					)
 			}
 			return nil
 		}
 
 		init(_serial: UInt64, _recipient: Address) {
 			pre {
+				ExampleNFT.metadatas[_serial] != nil:
+					"This NFT does not exist yet."
 				!ExampleNFT.primaryBuyers.containsKey(_serial):
 					"This NFT has already been minted."
 			}
 			self.id = self.uuid
 			self.serial = _serial
-			self.metadata = ExampleNFT.metadatas[_serial] ?? panic("There does not exist an NFTMetadata for this serial.")
 
 			ExampleNFT.primaryBuyers[_serial] = _recipient
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
@@ -241,7 +270,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: String}) {
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
@@ -305,15 +334,8 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		return self.primaryBuyers
 	}
 
-	pub fun getCollectionInfo(): Touchstone.CollectionInfo {
-		return CollectionInfo(
-			name: self.name,
-			description: self.description,
-			image: self.image,
-			price: self.price,
-			metadatas: self.getNFTMetadatas().values,
-			purchasedNFTs: self.getPrimaryBuyers().keys
-		)
+	pub fun getCollectionInfo(): CollectionInfo {
+		return CollectionInfo()
 	}
 
 	init(
@@ -336,6 +358,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		// Initialize default info
 		self.minting = _minting
 		self.price = _price
+		self.dateCreated = getCurrentBlock().timestamp
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0
@@ -346,10 +369,10 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		// We prefix the paths with 'T' for "Touchstone". This is also
 		// to prevent clashing with existing Collection paths in the 
 		// ecosystem.
-		self.CollectionStoragePath = /storage/TExampleNFTCollection
-		self.CollectionPublicPath = /public/TExampleNFTCollection
-		self.CollectionPrivatePath = /private/TExampleNFTCollection
-		self.AdministratorStoragePath = /storage/TExampleNFTAdministrator
+		self.CollectionStoragePath = /storage/TExampleNFTCollectionUSER_ADDR
+		self.CollectionPublicPath = /public/TExampleNFTCollectionUSER_ADDR
+		self.CollectionPrivatePath = /private/TExampleNFTCollectionUSER_ADDR
+		self.AdministratorStoragePath = /storage/TExampleNFTAdministratorUSER_ADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()
@@ -368,3 +391,4 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		emit ContractInitialized()
 	}
 }
+ 

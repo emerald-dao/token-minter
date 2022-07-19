@@ -28,6 +28,7 @@ export const contractCode = derived(
 	([$contractInfo, $user]) => {
 		return contract
 			.replaceAll('ExampleNFT', $contractInfo.name.replace(/\s+/g, ''))
+			.replaceAll('USER_ADDR', $user.addr)
 			.replace('"./utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
 			.replace('"./utility/MetadataViews.cdc"', NONFUNGIBLETOKEN_ADDR)
 			.replace('"./utility/FungibleToken.cdc"', FUNGIBLETOKEN_ADDR)

@@ -16,7 +16,7 @@ pub contract interface Touchstone {
     // Thumbnail of the NFT
 		pub let thumbnail: MetadataViews.IPFSFile
     // All of the extra metadata
-		pub var extra: {String: String}
+		pub var extra: {String: AnyStruct}
 	}
 
   // Must have a CollectionInfo with these things
@@ -29,7 +29,16 @@ pub contract interface Touchstone {
     pub let image: MetadataViews.IPFSFile
     // The default price of the collection
     pub let price: UFix64
-    // All of the NFTs
+    // A unix timestamp of when the collection was created
+    pub let dateCreated: UFix64
+    // The total amount of NFTs that have been minted
+    pub let totalSupply: UInt64
+    // An optional string if all your assets are
+    // currently stored somewhere on IPFS
+    pub let ipfsCID: String?
+    // Whether or not minting (purchasing) is currently open
+		pub let minting: Bool
+    // All of the NFTs in the collection
     pub let metadatas: [NFTMetadata]
     // A list of ids of the NFTs
     // that have been purchased
@@ -47,5 +56,9 @@ pub contract interface Touchstone {
     }
   }
 
+  // A function to get information about a specific NFT
+  pub fun getNFTMetadata(_ serial: UInt64): NFTMetadata?
+
+  // A function to get information about the entire collection
   pub fun getCollectionInfo(): CollectionInfo
 }
