@@ -66,9 +66,7 @@
 			]
 		},
 		"testnet": {
-			"testnet-account": [
-				"Touchstone"
-			]
+			"testnet-account": []
 		}
 	}
 }
