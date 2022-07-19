@@ -227,6 +227,12 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 			self.minting: "Minting is currently closed by the Administrator!"
 			payment.balance == self.price: "Payment does not match the price."
 		}
+		// Handle Emerald City DAO royalty (5%)
+		let ecDAO = self.account.getCapability(/public/flowTokenReceiver)
+								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+		ecDAO.deposit(from: <- payment.withdraw(amount: payment.balance * 0.05))
+
+		// Give the rest to the collection owner
 		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
