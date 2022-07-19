@@ -185,7 +185,7 @@ export const getCollectionInfo = async (contractName, contractAddress) => {
   }
 };
 
-const getNextMetadataId = async (contractName, userAddress) => {
+export async function getNextMetadataId(contractName, userAddress) {
   try {
     const response = await fcl.query({
       cadence: `
@@ -205,13 +205,9 @@ const getNextMetadataId = async (contractName, userAddress) => {
 };
 
 // Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(contractName) {
-  const BATCH_SIZE = 500;
-
+export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
   const userAddr = get(user).addr;
   // Get The MetadataId we should start at
-  const nextMetadataId = await getNextMetadataId(contractName, userAddr);
-  const metadatas = get(csvMetadata).slice(nextMetadataId, nextMetadataId + BATCH_SIZE);
   let names = [];
   let descriptions = [];
   let thumbnails = [];
@@ -228,12 +224,12 @@ export async function uploadMetadataToContract(contractName) {
     extras.push(extra);
   }
 
-  console.log('Uploading metadata to the contract:', nextMetadataId, nextMetadataId + BATCH_SIZE);
+  console.log('Uploading ' + batchSize + ' NFTs to the contract.')
 
   const transaction = createMetadatasTx
     .replace('"../ExampleNFT.cdc"', userAddr)
     .replaceAll('ExampleNFT', contractName)
-    .replaceAll('500', BATCH_SIZE);
+    .replaceAll('500', batchSize);
 
   initTransactionState();
 

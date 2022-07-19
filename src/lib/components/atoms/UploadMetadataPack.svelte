@@ -5,18 +5,33 @@
     LoadingSpinner,
   } from "$lib/components/atoms/index";
   import Icon from "@iconify/svelte";
-  import { uploadMetadataToContract } from "../../../flow/actions";
-  import { contractInfo } from "../../../flow/stores";
+  import {
+    uploadMetadataToContract,
+    getNextMetadataId,
+  } from "../../../flow/actions";
+  import { contractInfo, user } from "../../../flow/stores";
+  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
   export let uploadState = "to-upload";
   export let initialToken = 0;
   export let lastToken = 499;
+  export let batchSize = 500;
   let iconWidth = "1.5em";
 
   const onUpload = async () => {
     uploadState = "loading";
-    let uploadResult = await uploadMetadataToContract(
-      $contractInfo.name.replace(/\s+/g, "")
+    const contractName = $contractInfo.name.replace(/\s+/g, "");
+    const nextMetadataId = await getNextMetadataId(contractName, $user.addr);
+    if (nextMetadataId !== initialToken) {
+      uploadState = "error";
+      console.log("The NFTs to upload do not match.");
+      return;
+    }
+    const metadatas = $csvMetadata.slice(initialToken, lastToken + 1);
+    const uploadResult = await uploadMetadataToContract(
+      contractName,
+      metadatas,
+      batchSize
     );
     if (uploadResult.success) {
       uploadState = "uploaded";

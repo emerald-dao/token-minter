@@ -3,8 +3,8 @@
   import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
   console.log($csvMetadata);
+  const BATCH_SIZE = 500;
   function calculateSegments() {
-    const BATCH_SIZE = 500;
     // This is the exact amount of elements to upload
     const amount = $csvMetadata.length;
     const array = new Array(Math.floor(amount / BATCH_SIZE))
@@ -27,6 +27,7 @@
       this={UploadMetadataPack}
       initialToken={segment.initialToken}
       lastToken={segment.lastToken}
+      batchSize={segment.lastToken - segment.initialToken + 1}
       uploadState="to-upload" />
   {/each}
 </Stack>
