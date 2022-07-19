@@ -17,8 +17,8 @@ export const navItems = [
     prefetch: true,
   },
   {
-    title: 'Collections',
-    route: '/collections',
+    title: 'Discover',
+    route: '/discover',
     prefetch: true,
   },
   {
