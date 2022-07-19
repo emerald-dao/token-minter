@@ -158,7 +158,10 @@ export const getContracts = async (address) => {
     });
 
     const contractCodes = response.map(thing => Buffer.from(thing, 'hex').toString());
-    const createdByTouchstone = contractCodes.filter(thing => thing.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/)."));
+    const createdByTouchstone = contractCodes.filter(thing => {
+      return thing.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
+        thing.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
+    });
     console.log(createdByTouchstone);
     return createdByTouchstone;
   } catch (e) {
