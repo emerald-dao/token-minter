@@ -1,45 +1,15 @@
 <script>
-  import { user } from "../../flow/stores";
   import { getContracts } from "../../flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
     Container,
     Stack,
-    FlowConnect,
-    TransparentCard,
-    NFTCard,
     CollectionCard,
   } from "$lib/components/atoms/index";
+  import { page } from "$app/stores";
 
-  let collections = [
-    {
-      name: "Ballerz",
-      slug: "ballerz",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
-    },
-    {
-      name: "Ballerz",
-      slug: "ballerz",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
-    },
-    {
-      name: "Ballerz",
-      slug: "ballerz",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
-    },
-  ];
-
-  getContracts($user?.addr);
+  const owner = $page.params.address;
 </script>
 
 <Section class="padding-top-small padding-bottom-small">
@@ -48,16 +18,18 @@
     <p>
       Browse collections created with {dappTitle} and mint your favourite NFTs
     </p>
-    <Stack direction="column">
-      {#each collections as collection}
-        <CollectionCard
-          name={collection.name}
-          url={`/collections/${collection.slug}`}
-          thumbnailURL={collection.thumbnailURL}
-          description={collection.description}
-          owner={collection.owner} />
-      {/each}
-    </Stack>
+    {#await getContracts(owner) then collections}
+      <Stack direction="column">
+        {#each collections as collection}
+          <CollectionCard
+            name={collection.name}
+            url={`/${owner}/${collection.name.replace(/\s+/g, "")}`}
+            thumbnailURL={`https://nftstorage.link/ipfs/${collection.image.cid}/${collection.image.path}`}
+            description={collection.description}
+            {owner} />
+        {/each}
+      </Stack>
+    {/await}
   </Container>
 </Section>
 

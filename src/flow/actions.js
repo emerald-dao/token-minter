@@ -5,7 +5,7 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR, METADATAVIEWS_ADDR } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
 import { onNext } from '$lib/stores/generator/updateFunctions';
@@ -150,19 +150,18 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
 // ****** Scripts ****** //
 
 export const getContracts = async (address) => {
-  console.log(address)
   try {
-    const response = await fcl.query({
+    const response1 = await fcl.query({
       cadence: getContractsScript,
       args: (arg, t) => [
         arg(address, t.Address)
       ],
     });
 
-    const contractCodes = response.map(thing => Buffer.from(thing, 'hex').toString());
-    const createdByTouchstone = contractCodes.filter(contract => {
-      return contract.code.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
-        contract.code.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
+    const createdByTouchstone = response1.filter(contract => {
+      const contractCode = Buffer.from(contract.code, 'hex').toString()
+      return contractCode.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
+        contractCode.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
     });
 
     let imports = '';
@@ -178,19 +177,17 @@ export const getContracts = async (address) => {
       ))\n
       `
     })
-    const script = getContractDisplaysScript.replace('// IMPORTS', imports).replace('// DISPLAYS', displays)
+    const script = getContractDisplaysScript
+      .replace('"../utility/MetadataViews.cdc"', METADATAVIEWS_ADDR)
+      .replace('// IMPORTS', imports)
+      .replace('// DISPLAYS', displays);
 
-    try {
-      const response = await fcl.query({
-        cadence: script,
-        args: (arg, t) => [],
-      });
-      console.log(response);
+    const response2 = await fcl.query({
+      cadence: script,
+      args: (arg, t) => [],
+    });
 
-      return response;
-    } catch (e) {
-      console.log(e);
-    }
+    return response2;
   } catch (e) {
     console.log(e);
   }
