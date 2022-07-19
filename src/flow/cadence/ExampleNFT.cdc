@@ -25,7 +25,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
-	pub event TouchstonePurchase(id: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile, extra: {String: String})
+	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile)
 
 	// Paths
 	pub let CollectionStoragePath: StoragePath
@@ -267,8 +267,12 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
+
+		let nft <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address)
+		let metadata = self.getNFTMetadata(metadataId)!
+		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail)
 		
-		recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
+		recipient.deposit(token: <- nft)
 	}
 
 	pub resource Administrator {
