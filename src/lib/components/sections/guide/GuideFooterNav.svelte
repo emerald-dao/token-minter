@@ -1,15 +1,18 @@
 <script>
   // Get chapter's previous and following chapter
-  import { page } from '$app/stores';
+  import { page } from "$app/stores";
+  export let chapters;
 
-  let pathname = $page.url.pathname;
-  let relativePathname = pathname.replace(/^(\/guide\/[^\/]+)\//, '');
-  
-  export let chapters
-
-  let currentChapter = chapters.find(chapter => chapter.slug === relativePathname);
-  let previousChapter = currentChapter.index > 1 ? chapters[currentChapter.index - 2] : null;
-  let nextChapter = currentChapter.index < chapters.length ? chapters[currentChapter.index] : null;
+  $: relativePathname = $page.url.pathname.replace(/^(\/guide\/[^\/]+)\//, "");
+  $: currentChapter = chapters.find(
+    (chapter) => chapter.slug === relativePathname
+  );
+  $: previousChapter =
+    currentChapter.index > 1 ? chapters[currentChapter.index - 2] : null;
+  $: nextChapter =
+    currentChapter.index < chapters.length
+      ? chapters[currentChapter.index]
+      : null;
 </script>
 
 <nav>
@@ -60,7 +63,7 @@
   }
 
   .card-direction {
-    color: var(--clr-font-text)
+    color: var(--clr-font-text);
   }
 
   .left {
