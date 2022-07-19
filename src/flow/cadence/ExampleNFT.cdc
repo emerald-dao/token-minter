@@ -73,8 +73,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 		pub let ipfsCID: String?
 		pub let minting: Bool
 		pub let metadatas: [Touchstone.NFTMetadata]
-		pub let primaryBuyers: {UInt64: Address}
-		pub let purchasedNFTs: [UInt64]
+		pub let purchasedNFTs: {UInt64: Address}
 
 		init() {
 			self.name = ExampleNFT.name
@@ -86,8 +85,7 @@ pub contract ExampleNFT: NonFungibleToken, Touchstone {
 			self.ipfsCID = ExampleNFT.ipfsCID
 			self.minting = ExampleNFT.minting
 			self.metadatas = ExampleNFT.getNFTMetadatas().values
-			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
-			self.purchasedNFTs = ExampleNFT.getPrimaryBuyers().keys
+			self.purchasedNFTs = ExampleNFT.getPrimaryBuyers()
 		}
 	}
 

@@ -41,8 +41,8 @@ pub contract interface Touchstone {
     // All of the NFTs in the collection
     pub let metadatas: [NFTMetadata]
     // A list of ids of the NFTs
-    // that have been purchased
-    pub let purchasedNFTs: [UInt64]
+    // that have been purchased and by whom
+    pub let purchasedNFTs: {UInt64: Address}
   }
 
   // Makes sure there is a mintNFT function, but more importantly,
