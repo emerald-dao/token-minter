@@ -1,6 +1,5 @@
 import ExampleNFT from "../ExampleNFT.cdc"
-import Touchstone from "../Touchstone.cdc"
 
-pub fun main(): Touchstone.CollectionInfo {
+pub fun main(): ExampleNFT.CollectionInfo {
   return ExampleNFT.getCollectionInfo()
 }
