@@ -6,20 +6,17 @@
     Section,
     Container,
     Stack,
-    FlowConnect,
-    TransparentCard,
-    NFTCard,
     CollectionCard,
   } from "$lib/components/atoms/index";
 
   let collections = [
     {
-      name: "Ballerz",
-      slug: "ballerz",
+      name: "Hats NFT 6",
+      slug: "HatsNFT6",
       thumbnailURL: "/images/guide/ballerz.png",
       description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
+        "Hats NFT 6 created their collection on Touchstone. Founded in 2016, they have been OGs in the crypto space...!",
+      owner: "0x6c0d53c676256e8c",
     },
     {
       name: "Ballerz",
@@ -44,7 +41,7 @@
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>
-    <h1>Collections</h1>
+    <h1>Discover Collections</h1>
     <p>
       Browse collections created with {dappTitle} and mint your favourite NFTs
     </p>
@@ -52,7 +49,7 @@
       {#each collections as collection}
         <CollectionCard
           name={collection.name}
-          url={`/collections/${collection.slug}`}
+          url={`/${collection.owner}/${collection.slug}`}
           thumbnailURL={collection.thumbnailURL}
           description={collection.description}
           owner={collection.owner} />
