@@ -70,6 +70,15 @@ function initTransactionState() {
   transactionStatus.set(-1);
 }
 
+function replaceWithProperValues(script, contractName = '', contractAddress = '') {
+  return script
+    .replace('"../ExampleNFT.cdc"', contractAddress)
+    .replace('"../utility/FlowToken.cdc"', FLOWTOKEN_ADDR)
+    .replace('"../utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
+    .replace('"../utility/MetadataViews.cdc"', METADATAVIEWS_ADDR)
+    .replaceAll('ExampleNFT', contractName)
+}
+
 // ****** Transactions ****** //
 
 async function deployContract(hexCode) {
@@ -115,11 +124,7 @@ async function deployContract(hexCode) {
 }
 
 export const purchaseNFT = async (serial, price, contractName, contractAddress) => {
-  const transaction = purchaseNFTTx
-    .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replace('"../utility/FlowToken.cdc"', FLOWTOKEN_ADDR)
-    .replace('"../utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
-    .replaceAll('ExampleNFT', contractName)
+  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
 
   initTransactionState();
 
@@ -179,8 +184,7 @@ export const getContracts = async (address) => {
       ))\n
       `
     })
-    const script = getContractDisplaysScript
-      .replace('"../utility/MetadataViews.cdc"', METADATAVIEWS_ADDR)
+    const script = replaceWithProperValues(getContractDisplaysScript)
       .replace('// IMPORTS', imports)
       .replace('// DISPLAYS', displays);
 
@@ -196,9 +200,7 @@ export const getContracts = async (address) => {
 };
 
 export const getCollectionInfo = async (contractName, contractAddress) => {
-  const script = getCollectionInfoScript
-    .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replaceAll('ExampleNFT', contractName)
+  const script = replaceWithProperValues(getCollectionInfoScript, contractName, contractAddress);
 
   try {
     const response = await fcl.query({
@@ -254,9 +256,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
 
   console.log('Uploading ' + batchSize + ' NFTs to the contract.')
 
-  const transaction = createMetadatasTx
-    .replace('"../ExampleNFT.cdc"', userAddr)
-    .replaceAll('ExampleNFT', contractName)
+  const transaction = replaceWithProperValues(createMetadatasTx, undefined, userAddr)
     .replaceAll('500', batchSize);
 
   initTransactionState();
