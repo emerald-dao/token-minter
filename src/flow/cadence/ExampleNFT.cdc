@@ -34,13 +34,13 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub let AdministratorStoragePath: StoragePath
 
 	// Maps metadataId of NFT to NFTMetadata
-	access(account) var metadatas: {UInt64: NFTMetadata}
+	access(account) let metadatas: {UInt64: NFTMetadata}
 
 	// Maps the metadataId of an NFT to the primary buyer
 	//
 	// You can also get a list of purchased NFTs
 	// by doing `primaryBuyers.keys`
-	access(account) var primaryBuyers: {UInt64: Address}
+	access(account) let primaryBuyers: {UInt64: Address}
 
 	pub struct NFTMetadata {
 		pub let metadataId: UInt64
@@ -154,9 +154,9 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.Royalties>():
 					return MetadataViews.Royalties([
 						MetadataViews.Royalty(
-							_recipient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
-							_cut: 0.025, // 2.5% royalty on secondary sales
-							_description: "Emerald City DAO receives a 2.5% royalty feeon secondary sales because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
+							recepient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+							cut: 0.025, // 2.5% royalty on secondary sales
+							description: "Emerald City DAO receives a 2.5% royalty from secondary sales because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
 						)
 					])
 				case Type<MetadataViews.Serial>():
