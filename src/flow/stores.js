@@ -37,10 +37,8 @@ export const contractInfo = persistentWritable('contractInfo', {
 	name: '',
 	description: '',
 	image: null,
-	maxSupply: null,
 	payment: null,
-	startMinting: true,
-	ipfsHash: '',
+	startMinting: true
 });
 
 export const contractCode = derived(

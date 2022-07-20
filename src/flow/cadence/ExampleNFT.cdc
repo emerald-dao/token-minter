@@ -155,8 +155,8 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.Royalties([
 						MetadataViews.Royalty(
 							_recipient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
-							_cut: 0.05,
-							_description: "Emerald City DAO receives a 5% royalty fee because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
+							_cut: 0.025, // 2.5% royalty on secondary sales
+							_description: "Emerald City DAO receives a 2.5% royalty feeon secondary sales because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
 						)
 					])
 				case Type<MetadataViews.Serial>():
@@ -257,7 +257,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			payment.balance == self.price: "Payment does not match the price."
 		}
 		// Handle Emerald City DAO royalty (5%)
-		let ecDAO = getAccount(0x82ac1084a70a9042).getCapability(/public/flowTokenReceiver)
+		let ecDAO = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		ecDAO.deposit(from: <- payment.withdraw(amount: payment.balance * 0.05))
 

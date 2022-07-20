@@ -53,13 +53,16 @@ function switchNetwork(network) {
 }
 
 export const deployToTestnet = async () => {
+  // unauthenticate();
   switchNetwork('testnet');
-  deployContract();
+  const hexCode = Buffer.from(get(contractCode)).toString('hex').replace('0x5643fd47a29770e7', '0x6c0d53c676256e8c');
+  deployContract(hexCode);
 };
 
 export const deployToMainnet = async () => {
   switchNetwork('mainnet');
-  deployContract();
+  const hexCode = Buffer.from(get(contractCode)).toString('hex');
+  deployContract(hexCode);
 };
 
 function initTransactionState() {
@@ -69,8 +72,7 @@ function initTransactionState() {
 
 // ****** Transactions ****** //
 
-async function deployContract() {
-  const hexCode = Buffer.from(get(contractCode)).toString('hex');
+async function deployContract(hexCode) {
   const info = get(contractInfo);
 
   initTransactionState();
