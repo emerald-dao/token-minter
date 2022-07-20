@@ -5,10 +5,10 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, FLOWTOKEN_ADDR, NONFUNGIBLETOKEN_ADDR, METADATAVIEWS_ADDR } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, addresses, network } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
-import { onNext } from '$lib/stores/generator/updateFunctions';
+import { onNext, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 
 ///////////////
 // Cadence code 
@@ -33,18 +33,20 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = async () => await fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-function switchNetwork(network) {
-  if (network === 'emulator') {
+function switchNetwork(newNetwork) {
+  if (newNetwork === 'emulator') {
     fcl
       .config()
       .put('accessNode.api', 'http://localhost:8080')
       .put('discovery.wallet', 'http://localhost:8701/fcl/authn')
-  } else if (network === 'testnet') {
+  } else if (newNetwork === 'testnet') {
+    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
-  } else if (network === 'mainnet') {
+  } else if (newNetwork === 'mainnet') {
+    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
@@ -55,14 +57,12 @@ function switchNetwork(network) {
 export const deployToTestnet = async () => {
   // unauthenticate();
   switchNetwork('testnet');
-  const hexCode = Buffer.from(get(contractCode)).toString('hex').replace('0x5643fd47a29770e7', '0x6c0d53c676256e8c');
-  deployContract(hexCode);
+  deployContract();
 };
 
 export const deployToMainnet = async () => {
   switchNetwork('mainnet');
-  const hexCode = Buffer.from(get(contractCode)).toString('hex');
-  deployContract(hexCode);
+  deployContract();
 };
 
 function initTransactionState() {
@@ -70,18 +70,27 @@ function initTransactionState() {
   transactionStatus.set(-1);
 }
 
-function replaceWithProperValues(script, contractName = '', contractAddress = '') {
+export function replaceWithProperValues(script, contractName = '', contractAddress = '') {
+  const addressList = get(addresses);
   return script
     .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replace('"../utility/FlowToken.cdc"', FLOWTOKEN_ADDR)
-    .replace('"../utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
-    .replace('"../utility/MetadataViews.cdc"', METADATAVIEWS_ADDR)
-    .replaceAll('ExampleNFT', contractName)
+    .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
+    .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
+    .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"./utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
+    .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
+    .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
+    .replace('"./utility/FlowToken.cdc"', addressList.FlowToken)
+    .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
+    .replaceAll('ExampleNFT', contractName);
 }
 
 // ****** Transactions ****** //
 
-async function deployContract(hexCode) {
+async function deployContract() {
+  const hexCode = Buffer.from(get(contractCode)).toString('hex');
+  console.log('Contract Code', get(contractCode));
   const info = get(contractInfo);
 
   initTransactionState();
@@ -256,7 +265,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
 
   console.log('Uploading ' + batchSize + ' NFTs to the contract.')
 
-  const transaction = replaceWithProperValues(createMetadatasTx, undefined, userAddr)
+  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr)
     .replaceAll('500', batchSize);
 
   initTransactionState();

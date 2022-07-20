@@ -1,5 +1,6 @@
 import { persistentWritable } from '$lib/stores/ThemeStore';
 import { writable, get, derived } from 'svelte/store';
+import { replaceWithProperValues } from './actions';
 import contract from './cadence/ExampleNFT.cdc?raw';
 
 const contractData = {
@@ -19,19 +20,29 @@ const contractData = {
 		testnet: "0x7e60df042a9c0868",
 		mainnet: "0x1654653399040a61"
 	},
+	ECTreasury: {
+		testnet: "0x6c0d53c676256e8c",
+		mainnet: "0x5643fd47a29770e7"
+	}
 }
 
-const network = 'testnet';
-export const EMULATOR_ADDR = '0xf8d6e0586b0a20c7';
-export const NONFUNGIBLETOKEN_ADDR = contractData.NonFungibleToken[network];
-export const METADATAVIEWS_ADDR = contractData.MetadataViews[network];
-export const FLOWTOKEN_ADDR = contractData.FlowToken[network];
-export const FUNGIBLETOKEN_ADDR = contractData.FungibleToken[network];
-
 export const user = writable(null);
+export const network = writable('testnet');
 export const profile = writable(null);
 export const transactionStatus = writable(null);
 export const transactionInProgress = writable(false);
+export const addresses = derived(
+	[network],
+	([$network]) => {
+		return {
+			NonFungibleToken: contractData.NonFungibleToken[$network],
+			MetadataViews: contractData.MetadataViews[$network],
+			FungibleToken: contractData.FungibleToken[$network],
+			FlowToken: contractData.FlowToken[$network],
+			ECTreasury: contractData.ECTreasury[$network]
+		}
+	}
+)
 
 export const contractInfo = persistentWritable('contractInfo', {
 	name: '',
@@ -42,14 +53,9 @@ export const contractInfo = persistentWritable('contractInfo', {
 });
 
 export const contractCode = derived(
-	[contractInfo, user],
+	[contractInfo, user, addresses],
 	([$contractInfo, $user]) => {
-		return contract
-			.replaceAll('ExampleNFT', $contractInfo.name.replace(/\s+/g, ''))
-			.replaceAll('USER_ADDR', $user.addr)
-			.replace('"./utility/NonFungibleToken.cdc"', NONFUNGIBLETOKEN_ADDR)
-			.replace('"./utility/MetadataViews.cdc"', METADATAVIEWS_ADDR)
-			.replace('"./utility/FungibleToken.cdc"', FUNGIBLETOKEN_ADDR)
-			.replace('"./utility/FlowToken.cdc"', FLOWTOKEN_ADDR);
+		return replaceWithProperValues(contract, $contractInfo.name.replace(/\s+/g, ''), undefined)
+			.replaceAll('USER_ADDR', $user.addr);
 	}
 );
