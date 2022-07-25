@@ -14,11 +14,11 @@
 	<Container>
 		<AdaptableGrid>
 			<div class="video sticky">
-				<!-- <video width="100%" height="100%" autoplay loop muted>
+				<video width="100%" height="100%" autoplay loop muted>
 					<source src="emerald2.webm" type="video/webm" />
 					<track kind="captions" />
 					Your browser does not support the video tag.
-				</video> -->
+				</video>
 			</div>
 
 			<Stack align="flex-start" justify="center">
