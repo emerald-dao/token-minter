@@ -33,6 +33,26 @@
 				"testnet": "0x7e60df042a9c0868",
 				"mainnet": "0x1654653399040a61"
 			}
+		},
+		"FLOAT": {
+			"source": "./src/flow/cadence/utility/FLOAT.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042",
+				"mainnet": "0x2d4c3caffbeab845"
+			}
+		},
+		"GrantedAccountAccess": {
+			"source": "./src/flow/cadence/utility/GrantedAccountAccess.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042",
+				"mainnet": "0x2d4c3caffbeab845"
+			}
+		},
+		"MintVerifiers": {
+			"source": "./src/flow/cadence/MintVerifiers.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042"
+			}
 		}
 	},
 	"networks": {
@@ -66,7 +86,9 @@
 			]
 		},
 		"testnet": {
-			"testnet-account": []
+			"testnet-account": [
+				"MintVerifiers"
+			]
 		}
 	}
 }

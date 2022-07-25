@@ -1,7 +1,7 @@
 let contractOptions = [
   {
     name: 'Minting starts active',
-    bindValue: 'startMinting',
+    bindValue: 'startMinting'
   }
 ];
 

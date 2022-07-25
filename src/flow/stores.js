@@ -23,6 +23,22 @@ const contractData = {
 	ECTreasury: {
 		testnet: "0x6c0d53c676256e8c",
 		mainnet: "0x5643fd47a29770e7"
+	},
+	MintVerifiers: {
+		testnet: "0x82ac1084a70a9042",
+		mainnet: ""
+	},
+	FLOAT: {
+		testnet: "0x82ac1084a70a9042",
+		mainnet: "0x2d4c3caffbeab845"
+	},
+	FIND: {
+		testnet: "0xa16ab1d0abde3625",
+		mainnet: "0x097bafa4e0b48eef"
+	},
+	FN: {
+		testnet: "0xb05b2abb42335e88",
+		mainnet: "0x233eb012d34b0070"
 	}
 }
 
@@ -39,7 +55,11 @@ export const addresses = derived(
 			MetadataViews: contractData.MetadataViews[$network],
 			FungibleToken: contractData.FungibleToken[$network],
 			FlowToken: contractData.FlowToken[$network],
-			ECTreasury: contractData.ECTreasury[$network]
+			ECTreasury: contractData.ECTreasury[$network],
+			MintVerifiers: contractData.MintVerifiers[$network],
+			FLOAT: contractData.FLOAT[$network],
+			FIND: contractData.FIND[$network],
+			FN: contractData.FN[$network]
 		}
 	}
 )
@@ -49,7 +69,9 @@ export const contractInfo = persistentWritable('contractInfo', {
 	description: '',
 	image: null,
 	payment: null,
-	startMinting: true
+	startMinting: true,
+	floatLink: false,
+	floatLinkText: ''
 });
 
 export const contractCode = derived(

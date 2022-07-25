@@ -5,6 +5,7 @@ import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
+import MintVerifiers from "./MintVerifiers.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
@@ -20,6 +21,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub var nextMetadataId: UInt64
 	pub var totalSupply: UInt64
 	pub var minting: Bool
+	access(self) var mintVerifiers: [{MintVerifiers.IVerifier}]
 
 	// Events
 	pub event ContractInitialized()
@@ -74,6 +76,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let minting: Bool
 		pub let metadatas: {UInt64: NFTMetadata}
 		pub let primaryBuyers: {UInt64: Address}
+		pub let mintVerifiers: [{MintVerifiers.IVerifier}]
 
 		init() {
 			self.name = ExampleNFT.name
@@ -86,6 +89,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.minting = ExampleNFT.minting
 			self.metadatas = ExampleNFT.getNFTMetadatas()
 			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
+			self.mintVerifiers = ExampleNFT.mintVerifiers
 		}
 	}
 
@@ -256,6 +260,13 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.minting: "Minting is currently closed by the Administrator!"
 			payment.balance == self.price: "Payment does not match the price."
 		}
+
+		// Confirm recipient passes all verifiers
+		for verifier in ExampleNFT.mintVerifiers {
+			let params = {"minter": recipient.owner!.address}
+			verifier.verify(params)
+		}
+
 		// Handle Emerald City DAO royalty (5%)
 		let ecDAO = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
@@ -266,10 +277,14 @@ pub contract ExampleNFT: NonFungibleToken {
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 
+		// Mint the nft 
 		let nft <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address)
+
+		// Emit event
 		let metadata = self.getNFTMetadata(metadataId)!
 		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail)
 		
+		// Deposit nft
 		recipient.deposit(token: <- nft)
 	}
 
@@ -289,15 +304,15 @@ pub contract ExampleNFT: NonFungibleToken {
 			recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
 		}
 
+		// create a new Administrator resource
+		pub fun createAdmin(): @Administrator {
+			return <- create Administrator()
+		}
+
 		// turn minting on/off
 		pub fun toggleMinting(): Bool {
 			ExampleNFT.minting = !ExampleNFT.minting
 			return ExampleNFT.minting
-		}
-
-		// create a new Administrator resource
-		pub fun createAdmin(): @Administrator {
-			return <- create Administrator()
 		}
 
 		pub fun changePrice(newPrice: UFix64) {
@@ -317,6 +332,10 @@ pub contract ExampleNFT: NonFungibleToken {
 				cid: cid,
 				path: path
 			)
+		}
+
+		pub fun changeVerifiers(mintVerifiers: [{MintVerifiers.IVerifier}]) {
+			ExampleNFT.mintVerifiers = mintVerifiers
 		}
 	}
 
@@ -348,7 +367,8 @@ pub contract ExampleNFT: NonFungibleToken {
 		_imagePath: String, 
 		_minting: Bool, 
 		_price: UFix64,
-		_ipfsCID: String
+		_ipfsCID: String,
+		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
 		self.name = _name
@@ -363,6 +383,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.minting = _minting
 		self.price = _price
 		self.dateCreated = getCurrentBlock().timestamp
+		self.mintVerifiers = _mintVerifiers
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0

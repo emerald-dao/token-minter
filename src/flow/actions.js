@@ -21,6 +21,7 @@ import getContractDisplaysScript from "./cadence/scripts/get_contract_displays.c
 import createMetadatasTx from "./cadence/transactions/create_metadatas.cdc?raw";
 import deployContractTx from "./cadence/transactions/deploy_contract.cdc?raw";
 import purchaseNFTTx from "./cadence/transactions/purchase_nft.cdc?raw";
+import { resolveAddressObject } from './utils';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -74,7 +75,6 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
   const addressList = get(addresses);
   return script
     .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
     .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
@@ -82,6 +82,9 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
     .replace('"./utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
@@ -95,18 +98,33 @@ async function deployContract() {
 
   initTransactionState();
 
+  let eventOwner = null;
+  let eventId = null;
+  if (info.floatLink) {
+    const cutLink = info.floatLinkText.replace('https://floats.city/', ''); // jacob.find/event/376102041
+    eventOwner = cutLink.substring(0, cutLink.indexOf('/'));
+    eventOwner = (await resolveAddressObject(eventOwner)).address;
+    eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
+  }
+
+  console.log(eventOwner);
+  console.log(eventId);
+
   try {
     const transactionId = await fcl.mutate({
-      cadence: deployContractTx,
+      cadence: replaceWithProperValues(deployContractTx),
       args: (arg, t) => [
         arg(info.name.replace(/\s+/g, ''), t.String),
-        arg(hexCode, t.String),
         arg(info.name, t.String),
         arg(info.description, t.String),
         arg(info.image.name, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
-        arg(get(resultCID), t.String)
+        arg(get(resultCID), t.String),
+        arg(info.floatLink, t.Bool),
+        arg(eventOwner, t.Optional(t.Address)),
+        arg(eventId, t.Optional(t.UInt64)),
+        arg(hexCode, t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
