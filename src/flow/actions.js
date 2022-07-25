@@ -182,14 +182,14 @@ export const getContracts = async (address) => {
 
     let imports = '';
     let displays = '';
-    createdByTouchstone.forEach(contract => {
+    createdByTouchstone.forEach((contract, i) => {
       imports += `import ${contract.name} from ${address}\n`;
       displays += `
-      let display = ${contract.name}.getCollectionInfo()
+      let display${i} = ${contract.name}.getCollectionInfo()
       answer.append(CollectionDisplay(
-        _name: display.name,
-        _description: display.description,
-        _image: display.image
+        _name: display${i}.name,
+        _description: display${i}.description,
+        _image: display${i}.image
       ))\n
       `
     })
