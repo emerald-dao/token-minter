@@ -13,12 +13,12 @@ export const navItems = [
   },
   {
     title: 'User Guide',
-    route: '/guide/welcome',
+    route: '/guide/en/welcome',
     prefetch: true,
   },
   {
-    title: 'Collections',
-    route: '/collections',
+    title: 'Discover',
+    route: '/discover',
     prefetch: true,
   },
   {

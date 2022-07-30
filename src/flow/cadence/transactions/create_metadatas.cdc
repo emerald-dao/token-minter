@@ -1,19 +1,8 @@
 import ExampleNFT from "../ExampleNFT.cdc"
 
 // Put a batch of up to 500 NFT Metadatas inside the contract
-// Example names: `["Education", "Building", "Governance"]`
-// Example descriptions: `[
-//  "This is the logo of the Education Guild", 
-//  "This is the logo of the Building Guild", 
-//  "This is the logo of the Governance Guild"
-// ]`
-// Example thumbnails: `[
-//  "QmYVKNWdm2961QtHz721tdA8dvBT116eT2DtATsX53Kt28",
-//  "QmPkJbnJSt3ZkHuGAnHyHCAhWVrneRrK6VHMjgu5oPGnoq",
-//  "QmcpmzEDmZtP37csyNaYaxzhoMQmmUrQsihE3x2XGKsg1Z"
-// ]`
 
-transaction(names: [String], descriptions: [String], thumbnails: [String]) {
+transaction(names: [String], descriptions: [String], thumbnails: [String], extras: [{String: String}]) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
     self.Administrator = deployer.borrow<&ExampleNFT.Administrator>(from: ExampleNFT.AdministratorStoragePath)
@@ -22,8 +11,8 @@ transaction(names: [String], descriptions: [String], thumbnails: [String]) {
 
   pre {
     names.length <= 500: 
-      "There must be less than or equal to 500 Templates being added at a time."
-    names.length == descriptions.length && descriptions.length == thumbnails.length:
+      "There must be less than or equal to 500 NFTMetadata being added at a time."
+    names.length == descriptions.length && descriptions.length == thumbnails.length && thumbnails.length == extras.length:
       "You must pass in a same amount of each parameter."
   }
 
@@ -34,7 +23,7 @@ transaction(names: [String], descriptions: [String], thumbnails: [String]) {
         name: names[i], 
         description: descriptions[i], 
         thumbnailPath: thumbnails[i],
-        extra: {}
+        extra: extras[i]
       )
       i = i + 1
     }

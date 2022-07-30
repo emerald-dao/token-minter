@@ -84,7 +84,7 @@ export const validateCsvAfterParse = (parsedCsv) => {
     }
   } else {
     return {
-      error: `The following attributes are required: ${required}`,
+      error: `The following attributes are required: name, description, image`,
     };
   }
 };

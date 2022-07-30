@@ -1,5 +1,5 @@
 <script>
-   import {
+  import {
     Section,
     Container,
     Stack,
@@ -18,17 +18,17 @@
 <a href={url}>
   <TransparentCard>
     <div class="main-wrapper" direction="row" align="flex-start">
-      <img src={thumbnailURL} alt="Collection thumbnail">
-        <div class="content-wrapper">
-          <Stack direction="column" align="left" gap="0.6em">
-            <h2>{name}</h2>
-            <p class="owner">By {owner}</p>
-            <p class="description">
-              {description}
-            </p>
-          </Stack>
-        </div>
+      <img src={thumbnailURL} alt="Collection thumbnail" />
+      <div class="content-wrapper">
+        <Stack direction="column" align="left" gap="0.6em">
+          <h2>{name}</h2>
+          <p class="owner">By {owner}</p>
+          <p class="description">
+            {description}
+          </p>
+        </Stack>
       </div>
+    </div>
   </TransparentCard>
 </a>
 
@@ -38,6 +38,7 @@
   a {
     text-decoration: none;
     color: var(--clr-font-text);
+    max-width: 900px;
 
     .main-wrapper {
       display: flex;
@@ -58,10 +59,10 @@
           width: 30%;
         }
       }
-     
+
       .content-wrapper {
         padding-block: 2em;
-        
+
         h2 {
           color: var(--clr-accent-strong);
           font-size: var(--fs-600);

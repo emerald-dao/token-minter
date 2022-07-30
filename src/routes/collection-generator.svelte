@@ -12,7 +12,7 @@
   import {
     activeStep,
     stepsArray,
-  } from "$lib/stores/generator/generatorGeneralStore";
+  } from "$lib/stores/generator/GeneratorGeneralStore";
   import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
   const steps = $stepsArray;

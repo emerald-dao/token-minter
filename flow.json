@@ -8,19 +8,52 @@
 	"contracts": {
 		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
 		"MetadataViews": {
-			"source": "./src/flow/cadence/MetadataViews.cdc",
+			"source": "./src/flow/cadence/utility/MetadataViews.cdc",
 			"aliases": {
-				"testnet": "0x631e88ae7f1d7c20"
+				"testnet": "0x631e88ae7f1d7c20",
+				"mainnet": "0x1d7e57aa55817448"
 			}
 		},
 		"NonFungibleToken": {
-			"source": "./src/flow/cadence/NonFungibleToken.cdc",
+			"source": "./src/flow/cadence/utility/NonFungibleToken.cdc",
 			"aliases": {
 				"testnet": "0x631e88ae7f1d7c20"
 			}
 		},
-		"FungibleToken": "./src/flow/cadence/FungibleToken.cdc",
-		"FlowToken": "./src/flow/cadence/FlowToken.cdc"
+		"FungibleToken": {
+			"source": "./src/flow/cadence/utility/FungibleToken.cdc",
+			"aliases": {
+				"testnet": "0x9a0766d93b6608b7",
+				"mainnet": "0xf233dcee88fe0abe"
+			}
+		},
+		"FlowToken": {
+			"source": "./src/flow/cadence/utility/FlowToken.cdc",
+			"aliases": {
+				"testnet": "0x7e60df042a9c0868",
+				"mainnet": "0x1654653399040a61"
+			}
+		},
+		"FLOAT": {
+			"source": "./src/flow/cadence/utility/FLOAT.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042",
+				"mainnet": "0x2d4c3caffbeab845"
+			}
+		},
+		"GrantedAccountAccess": {
+			"source": "./src/flow/cadence/utility/GrantedAccountAccess.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042",
+				"mainnet": "0x2d4c3caffbeab845"
+			}
+		},
+		"MintVerifiers": {
+			"source": "./src/flow/cadence/MintVerifiers.cdc",
+			"aliases": {
+				"testnet": "0x82ac1084a70a9042"
+			}
+		}
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -33,13 +66,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x86d486feb7683e02",
+			"address": "0x82ac1084a70a9042",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "cbe6a1294d6706fd7931c5ef1f1e730332e5a8c2661998847da6ea8b9f5a2052"
+				"privateKey": "25dabcbc4b425e7e46ba67eb027c4b468b9185dd645037a6a17b6d6d948f66eb"
 			}
 		}
 	},
@@ -54,7 +87,7 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"ExampleNFT"
+				"MintVerifiers"
 			]
 		}
 	}

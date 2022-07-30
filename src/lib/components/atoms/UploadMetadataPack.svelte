@@ -5,18 +5,38 @@
     LoadingSpinner,
   } from "$lib/components/atoms/index";
   import Icon from "@iconify/svelte";
-  import { uploadMetadataToContract } from "../../../flow/actions";
-  import { contractInfo } from "../../../flow/stores";
+  import {
+    uploadMetadataToContract,
+    getNextMetadataId,
+  } from "../../../flow/actions";
+  import { contractInfo, user } from "../../../flow/stores";
+  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
 
   export let uploadState = "to-upload";
   export let initialToken = 0;
-  export let lastToken = 500;
+  export let lastToken = 499;
+  export let batchSize = 500;
   let iconWidth = "1.5em";
 
   const onUpload = async () => {
     uploadState = "loading";
-    let uploadResult = await uploadMetadataToContract($contractInfo.name);
-    if (uploadResult.status === "success") {
+    const contractName = $contractInfo.name.replace(/\s+/g, "");
+    // Fetches the next metadata we are supposed to upload to the contract
+    const nextMetadataId = await getNextMetadataId(contractName, $user.addr);
+    // Makes sure we are on the correct step
+    if (nextMetadataId !== initialToken) {
+      uploadState = "error";
+      console.log("The NFTs to upload do not match.");
+      return;
+    }
+    // Gets the batch of metadata we want to upload
+    const metadatas = $csvMetadata.slice(initialToken, lastToken + 1);
+    const uploadResult = await uploadMetadataToContract(
+      contractName,
+      metadatas,
+      batchSize
+    );
+    if (uploadResult.success) {
       uploadState = "uploaded";
     } else {
       uploadState = "error";

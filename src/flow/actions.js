@@ -5,10 +5,23 @@ import { Buffer } from 'buffer';
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, uploadingStatus, uploadingInProgress, contractInfo, contractCode } from './stores';
+import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, addresses, network } from './stores';
 import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 
-import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
+import { onNext, saveFileInStore } from '$lib/stores/generator/updateFunctions';
+
+///////////////
+// Cadence code 
+///////////////
+// Scripts
+import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
+import getContractsScript from "./cadence/scripts/get_contracts.cdc?raw";
+import getContractDisplaysScript from "./cadence/scripts/get_contract_displays.cdc?raw";
+// Transactions
+import createMetadatasTx from "./cadence/transactions/create_metadatas.cdc?raw";
+import deployContractTx from "./cadence/transactions/deploy_contract.cdc?raw";
+import purchaseNFTTx from "./cadence/transactions/purchase_nft.cdc?raw";
+import { resolveAddressObject } from './utils';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -21,117 +34,20 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = async () => await fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-export const getContracts = async (address) => {
-  try {
-    const response = await fcl.query({
-      cadence: `
-      pub fun main(account: Address): [String] {
-        let contracts = getAccount(account).contracts
-        let answer: [String] = []
-        
-        for contractName in contracts.names {
-          answer.append(String.encodeHex(contracts.get(name: contractName)!.code))
-        }
-      
-        return answer
-      }
-      `,
-      args: (arg, t) => [
-        arg(address, t.Address)
-      ],
-    });
-
-    const contractCodes = response.map(thing => Buffer.from(thing, 'hex').toString());
-    const createdByTouchstone = contractCodes.filter(thing => thing.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/)."));
-    console.log(createdByTouchstone);
-    return createdByTouchstone;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const getCollectionInfo = async (contractName, userAddress) => {
-  try {
-    const response = await fcl.query({
-      cadence: `
-      import ${contractName} from ${userAddress}
-
-      pub fun main(): CollectionInfo {
-        return CollectionInfo(
-          name: ${contractName}.name,
-          description: ${contractName}.description,
-          image: ${contractName}.image,
-          ipfsCID: ${contractName}.ipfsCID
-          price: ${contractName}.price,
-          unpurchasedNFTs: ${contractName}.getUnpurchasedNFTs()
-        )
-      }
-
-      pub struct CollectionInfo {
-        pub let name: String
-        pub let description: String
-        pub let image: String
-        pub let ipfsCID: String
-        pub let price: UFix64
-        pub let unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
-
-        init(
-          name: String, 
-          description: String, 
-          image: String, 
-          ipfsCID: String, 
-          price: UFix64,
-          unpurchasedNFTs: {UInt64: ${contractName}.NFTMetadata}
-        ) {
-          self.name = name
-          self.description = description
-          self.image = image
-          self.ipfsCID = ipfsCID
-          self.price = price
-          self.unpurchasedNFTs = unpurchasedNFTs
-        }
-      }
-      `,
-      args: (arg, t) => [],
-    });
-
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-export const getUnpurchasedNFTs = async (contractName) => {
-  try {
-    const response = await fcl.query({
-      cadence: `
-      import ${contractName} from ${get(user).addr}
-
-      pub fun main(accountAddr: Address, contractName: String): [${contractName}.NFTMetadata] {
-        return ${contractName}.getUnpurchasedNFTs().values
-      }
-      `,
-      args: (arg, t) => [],
-    });
-
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
-};
-
-function switchNetwork(network) {
-  if (network === 'emulator') {
+function switchNetwork(newNetwork) {
+  if (newNetwork === 'emulator') {
     fcl
       .config()
       .put('accessNode.api', 'http://localhost:8080')
       .put('discovery.wallet', 'http://localhost:8701/fcl/authn')
-  } else if (network === 'testnet') {
+  } else if (newNetwork === 'testnet') {
+    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
-  } else if (network === 'mainnet') {
+  } else if (newNetwork === 'mainnet') {
+    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
@@ -140,6 +56,7 @@ function switchNetwork(network) {
 }
 
 export const deployToTestnet = async () => {
+  // unauthenticate();
   switchNetwork('testnet');
   deployContract();
 };
@@ -149,46 +66,101 @@ export const deployToMainnet = async () => {
   deployContract();
 };
 
+function initTransactionState() {
+  transactionInProgress.set(true);
+  transactionStatus.set(-1);
+}
+
+export function replaceWithProperValues(script, contractName = '', contractAddress = '') {
+  const addressList = get(addresses);
+  return script
+    .replace('"../ExampleNFT.cdc"', contractAddress)
+    .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
+    .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
+    .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"./utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
+    .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
+    .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
+    .replace('"./utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
+    .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
+    .replaceAll('ExampleNFT', contractName);
+}
+
+// ****** Transactions ****** //
+
 async function deployContract() {
-  initTransactionState();
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
+  console.log('Contract Code', get(contractCode));
   const info = get(contractInfo);
+
+  initTransactionState();
+
+  let eventOwner = null;
+  let eventId = null;
+  if (info.floatLink) {
+    const cutLink = info.floatLinkText.replace('https://floats.city/', ''); // jacob.find/event/376102041
+    eventOwner = cutLink.substring(0, cutLink.indexOf('/'));
+    eventOwner = (await resolveAddressObject(eventOwner)).address;
+    eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
+  }
+
+  console.log(eventOwner);
+  console.log(eventId);
 
   try {
     const transactionId = await fcl.mutate({
-      cadence: `
-      transaction(
-        contractName: String,
-        description: String,
-        imageHash: String,
-        minting: Bool,
-        price: UFix64,
-        ipfsCID: String,
-        contractCode: String
-      ) {
-        prepare(deployer: AuthAccount) {
-          log(contractCode)
-          deployer.contracts.add(
-            name: contractName, 
-            code: contractCode.decodeHex(),
-            _name: contractName,
-            _description: description,
-            _image: imageHash,
-            _minting: minting,
-            _price: price,
-            _ipfsCID: ipfsCID
-          )
-        }
-      }
-      `,
+      cadence: replaceWithProperValues(deployContractTx),
       args: (arg, t) => [
+        arg(info.name.replace(/\s+/g, ''), t.String),
         arg(info.name, t.String),
         arg(info.description, t.String),
-        arg(info.imageHash, t.String),
+        arg(info.image.name, t.String),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
         arg(get(resultCID), t.String),
+        arg(info.floatLink, t.Bool),
+        arg(eventOwner, t.Optional(t.Address)),
+        arg(eventId, t.Optional(t.UInt64)),
         arg(hexCode, t.String)
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        // If deployment is successful
+        if (res.statusCode === 0) {
+          console.log("Successfully deployed the contract.")
+          onNext();
+        }
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+}
+
+export const purchaseNFT = async (serial, price, contractName, contractAddress) => {
+  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: transaction,
+      args: (arg, t) => [
+        arg(serial, t.UInt64),
+        arg(price, t.UFix64)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -209,12 +181,68 @@ async function deployContract() {
   }
 }
 
-function initTransactionState() {
-  transactionInProgress.set(true);
-  transactionStatus.set(-1);
-}
+// ****** Scripts ****** //
 
-const getNextMetadataId = async (contractName, userAddress) => {
+export const getContracts = async (address) => {
+  try {
+    const response1 = await fcl.query({
+      cadence: getContractsScript,
+      args: (arg, t) => [
+        arg(address, t.Address)
+      ],
+    });
+
+    const createdByTouchstone = response1.filter(contract => {
+      const contractCode = Buffer.from(contract.code, 'hex').toString()
+      return contractCode.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
+        contractCode.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
+    });
+
+    let imports = '';
+    let displays = '';
+    createdByTouchstone.forEach((contract, i) => {
+      imports += `import ${contract.name} from ${address}\n`;
+      displays += `
+      let display${i} = ${contract.name}.getCollectionInfo()
+      answer.append(CollectionDisplay(
+        _name: display${i}.name,
+        _description: display${i}.description,
+        _image: display${i}.image
+      ))\n
+      `
+    })
+    const script = replaceWithProperValues(getContractDisplaysScript)
+      .replace('// IMPORTS', imports)
+      .replace('// DISPLAYS', displays);
+
+    const response2 = await fcl.query({
+      cadence: script,
+      args: (arg, t) => [],
+    });
+
+    return response2;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getCollectionInfo = async (contractName, contractAddress) => {
+  const script = replaceWithProperValues(getCollectionInfoScript, contractName, contractAddress);
+
+  try {
+    const response = await fcl.query({
+      cadence: script,
+      args: (arg, t) => [],
+    });
+
+    console.log(response);
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export async function getNextMetadataId(contractName, userAddress) {
   try {
     const response = await fcl.query({
       cadence: `
@@ -234,14 +262,9 @@ const getNextMetadataId = async (contractName, userAddress) => {
 };
 
 // Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(contractName) {
-  const BATCH_SIZE = 500;
-  // TODO: implement uploadMetadataToContract
-
+export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
   const userAddr = get(user).addr;
   // Get The MetadataId we should start at
-  const nextMetadataId = await getNextMetadataId(contractName, userAddr);
-  const metadatas = get(csvMetadata).slice(nextMetadataId, nextMetadataId + BATCH_SIZE);
   let names = [];
   let descriptions = [];
   let thumbnails = [];
@@ -258,45 +281,16 @@ export async function uploadMetadataToContract(contractName) {
     extras.push(extra);
   }
 
-  console.log('Uploading metadata to the contract:', nextMetadataId, nextMetadataId + BATCH_SIZE);
+  console.log('Uploading ' + batchSize + ' NFTs to the contract.')
+
+  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr)
+    .replaceAll('500', batchSize);
 
   initTransactionState();
-  uploadingInProgress.set(true);
+
   try {
     const transactionId = await fcl.mutate({
-      cadence: `
-      import ${contractName} from ${userAddr}
-
-      // Put a batch of up to ${BATCH_SIZE} NFT Metadatas inside the contract
-
-      transaction(names: [String], descriptions: [String], thumbnails: [String], extras: [{String: String}]) {
-        let Administrator: &${contractName}.Administrator
-        prepare(deployer: AuthAccount) {
-          self.Administrator = deployer.borrow<&${contractName}.Administrator>(from: ${contractName}.AdministratorStoragePath)
-                                ?? panic("This account has not deployed the contract.")
-        }
-
-        pre {
-          names.length <= ${BATCH_SIZE}: 
-            "There must be less than or equal to ${BATCH_SIZE} NFTMetadata being added at a time."
-          names.length == descriptions.length && descriptions.length == thumbnails.length && thumbnails.length == extras.length:
-            "You must pass in a same amount of each parameter."
-        }
-
-        execute {
-          var i = 0
-          while i < names.length {
-            self.Administrator.createNFTMetadata(
-              name: names[i], 
-              description: descriptions[i], 
-              thumbnailPath: thumbnails[i],
-              extra: extras[i]
-            )
-            i = i + 1
-          }
-        }
-      }
-      `,
+      cadence: transaction,
       args: (arg, t) => [
         arg(names, t.Array(t.String)),
         arg(descriptions, t.Array(t.String)),
@@ -308,24 +302,23 @@ export async function uploadMetadataToContract(contractName) {
       authorizations: [fcl.authz],
       limit: 9999,
     });
-    console.log({ transactionId });
+
     fcl.tx(transactionId).subscribe((res) => {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
-        if (res.statusCode === 0) {
-          uploadingStatus.set({ success: true })
-        } else {
-          uploadingStatus.set({ success: false, error: res.errorMessage })
-        }
-        uploadingInProgress.set(false);
         setTimeout(() => transactionInProgress.set(false), 2000);
       }
     });
+
+    const { status, statusCode, errorMessage } = await fcl.tx(transactionId).onceSealed();
+    if (status === 4 && statusCode === 0) {
+      return { success: true };
+    }
+    return { success: false, error: errorMessage };
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
-    uploadingStatus.set({ success: false, error: e })
-    uploadingInProgress.set(false);
+    return { success: false, error: e }
   }
 }

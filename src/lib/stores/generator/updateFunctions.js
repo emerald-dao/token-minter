@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { activeStep, stepsArray } from './generatorGeneralStore';
+import { activeStep, stepsArray } from './GeneratorGeneralStore';
 
 export const saveFileInStore = (store, file) => {
   store.set(file);
@@ -27,6 +27,7 @@ export const onNext = (stepFunction) => {
       if (job === true) {
         resolve('success');
       } else {
+        console.log(job)
         reject(job.error);
       }
     });
