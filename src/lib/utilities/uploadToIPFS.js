@@ -5,6 +5,8 @@ import { MemoryBlockStore } from 'ipfs-car/blockstore/memory';
 import { TreewalkCarSplitter } from 'carbites/treewalk';
 import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import { resultCID } from '$lib/stores/generator/IPFSstore';
+import { contractInfo } from '../../flow/stores';
+import { get } from 'svelte/store';
 
 export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   //---- add metadata to .car file
@@ -18,6 +20,10 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   imageFiles.forEach((imageFile) => {
     car_files.push({ path: imageFile.name, content: imageFile });
   });
+  // Also upload the main image file for the collection
+  const mainImage = get(contractInfo).image;
+  console.log(mainImage)
+  car_files.push({ path: mainImage.name, content: mainImage })
 
   console.log(car_files);
 

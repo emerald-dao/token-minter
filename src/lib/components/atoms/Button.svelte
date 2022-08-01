@@ -1,44 +1,47 @@
 <script>
   let buttonProps = {
-    class:[$$restProps.class]
-  }
+    class: [$$restProps.class],
+  };
   export let href;
   export let disabled = false;
 </script>
 
 {#if href}
-  <a 
+  <a
     {href}
     on:click
     on:mouseover
     on:focus
     on:mouseenter
     on:mouseleave
-    disabled={disabled}
-    {...buttonProps}
-  >
-    <slot/>
+    {disabled}
+    {...buttonProps}>
+    <slot />
   </a>
 {:else}
-  <button 
+  <button
     on:click
     on:mouseover
     on:focus
     on:mouseenter
     on:mouseleave
-    disabled={disabled}
-    {...buttonProps}
-  >
-    <slot/>
+    {disabled}
+    {...buttonProps}>
+    <slot />
   </button>
 {/if}
 
 <style type="scss">
   @use "../../styles/abstracts" as *;
 
-  button, a {
+  button,
+  a {
     width: 100%;
-    background: linear-gradient(to left, var(--clr-primary-main), var(--clr-accent-main));
+    background: linear-gradient(
+      to left,
+      var(--clr-primary-main),
+      var(--clr-accent-main)
+    );
     color: var(--clr-font-text-button);
     font-family: var(--font-mono);
     padding: 0.3em 1.5em;
@@ -53,6 +56,10 @@
     @include mq(small) {
       width: fit-content;
     }
+  }
+
+  a {
+    text-decoration: none;
   }
 
   .ghost {
@@ -82,7 +89,8 @@
   }
 
   button:hover {
-    box-shadow: var(--clr-accent-soft) 4px 4px, var(--clr-accent-soft-t6) 8px 8px;
+    box-shadow: var(--clr-accent-soft) 4px 4px,
+      var(--clr-accent-soft-t6) 8px 8px;
     transition: 0.4s;
   }
 </style>

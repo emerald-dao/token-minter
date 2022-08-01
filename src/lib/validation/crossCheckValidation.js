@@ -8,8 +8,7 @@ import { get } from 'svelte/store';
 
 export const crossCheckValidation = (parsedCsv, files) => {
   const attributes = parsedCsv[0];
-  const OK = 1,
-    NOK = -1;
+  const OK = 1, NOK = -1;
   let ipfs_keys = ['image'];
   if (attributes.includes('thumbnail')) ipfs_keys.push('thumbnail');
   let file_xcheck = files.reduce((a, f) => {

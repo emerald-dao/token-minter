@@ -1,88 +1,129 @@
 // CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).
+// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.
 
 import NonFungibleToken from "./utility/NonFungibleToken.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
+import MintVerifiers from "./MintVerifiers.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
 	// Collection Info
 	pub var name: String
 	pub var description: String
-	pub var image: String
+	pub var image: MetadataViews.IPFSFile
 	pub var ipfsCID: String
 	pub var price: UFix64
+	pub let dateCreated: UFix64
 
 	// Contract Info
 	pub var nextMetadataId: UInt64
 	pub var totalSupply: UInt64
 	pub var minting: Bool
+	access(self) var mintVerifiers: [{MintVerifiers.IVerifier}]
 
+	// Events
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
+	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile)
 
+	// Paths
 	pub let CollectionStoragePath: StoragePath
 	pub let CollectionPublicPath: PublicPath
 	pub let CollectionPrivatePath: PrivatePath
 	pub let AdministratorStoragePath: StoragePath
 
-	// Maps serial of NFT to NFTMetadata
-	access(account) var metadatas: {UInt64: NFTMetadata}
+	// Maps metadataId of NFT to NFTMetadata
+	access(account) let metadatas: {UInt64: NFTMetadata}
 
-	// Maps the serial of an NFT to the primary buyer
+	// Maps the metadataId of an NFT to the primary buyer
 	//
 	// You can also get a list of purchased NFTs
 	// by doing `primaryBuyers.keys`
-	access(account) var primaryBuyers: {UInt64: Address}
+	access(account) let primaryBuyers: {UInt64: Address}
 
 	pub struct NFTMetadata {
 		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String 
-		pub let thumbnailPath: String
-		pub var extra: {String: String}
+		pub let thumbnail: MetadataViews.IPFSFile
+		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: String}) {
+		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
-			self.thumbnailPath = _thumbnailPath
+			self.thumbnail = MetadataViews.IPFSFile(
+				cid: ExampleNFT.ipfsCID,
+				path: _thumbnailPath
+			)
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 	}
 
+	pub struct CollectionInfo {
+		pub let name: String
+		pub let description: String
+		pub let image: MetadataViews.IPFSFile
+		pub let price: UFix64
+		pub let dateCreated: UFix64
+		pub let totalSupply: UInt64
+		pub let ipfsCID: String?
+		pub let minting: Bool
+		pub let metadatas: {UInt64: NFTMetadata}
+		pub let primaryBuyers: {UInt64: Address}
+		pub let mintVerifiers: [{MintVerifiers.IVerifier}]
+
+		init() {
+			self.name = ExampleNFT.name
+			self.description = ExampleNFT.description
+			self.image = ExampleNFT.image
+			self.price = ExampleNFT.price
+			self.dateCreated = ExampleNFT.dateCreated
+			self.totalSupply = ExampleNFT.totalSupply
+			self.ipfsCID = ExampleNFT.ipfsCID
+			self.minting = ExampleNFT.minting
+			self.metadatas = ExampleNFT.getNFTMetadatas()
+			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
+			self.mintVerifiers = ExampleNFT.mintVerifiers
+		}
+	}
+
 	pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
-		// The 'serial' is what maps this NFT to its 'NFTMetadata'
-		pub let serial: UInt64
-		// Contains all the metadata of the NFT
-		pub let metadata: NFTMetadata
+		// The 'metadataId' is what maps this NFT to its 'NFTMetadata'
+		pub let metadataId: UInt64
+
+		pub fun getMetadata(): NFTMetadata {
+			return ExampleNFT.getNFTMetadata(self.metadataId)!
+		}
 
 		pub fun getViews(): [Type] {
-				return [
-						Type<MetadataViews.Display>(),
-						Type<MetadataViews.ExternalURL>(),
-						Type<MetadataViews.NFTCollectionData>(),
-						Type<MetadataViews.NFTCollectionDisplay>(),
-						Type<MetadataViews.Royalties>()
-				]
+			return [
+				Type<MetadataViews.Display>(),
+				Type<MetadataViews.ExternalURL>(),
+				Type<MetadataViews.NFTCollectionData>(),
+				Type<MetadataViews.NFTCollectionDisplay>(),
+				Type<MetadataViews.Royalties>(),
+				Type<MetadataViews.Serial>(),
+				Type<MetadataViews.Traits>(),
+				Type<MetadataViews.NFTView>()
+			]
 		}
 
 		pub fun resolveView(_ view: Type): AnyStruct? {
 			switch view {
 				case Type<MetadataViews.Display>():
+					let metadata = self.getMetadata()
 					return MetadataViews.Display(
-						name: self.metadata.name,
-						description: self.metadata.description,
-						thumbnail: MetadataViews.IPFSFile(
-							cid: ExampleNFT.ipfsCID,
-							path: self.metadata.thumbnailPath
-						)
+						name: metadata.name,
+						description: metadata.description,
+						thumbnail: metadata.thumbnail
 					)
 				case Type<MetadataViews.NFTCollectionData>():
 					return MetadataViews.NFTCollectionData(
@@ -97,19 +138,16 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.id.toString()))
+          return MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let media = MetadataViews.Media(
-						file: MetadataViews.IPFSFile(
-							cid: ExampleNFT.ipfsCID,
-							path: self.metadata.thumbnailPath
-						),
+						file: ExampleNFT.image,
 						mediaType: "image"
 					)
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.name,
 						description: ExampleNFT.description,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/"),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT")),
 						squareImage: media,
 						bannerImage: media,
 						socials: {
@@ -120,20 +158,43 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.Royalties>():
 					return MetadataViews.Royalties([
 						MetadataViews.Royalty(
-							_recipient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
-							_cut: 0.05,
-							_description: "Emerald City DAO receives a 5% royalty fee because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
+							recepient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+							cut: 0.025, // 2.5% royalty on secondary sales
+							description: "Emerald City DAO receives a 2.5% royalty from secondary sales because this collection was created using Touchstone (https://touchstone.city/), a tool for NFTs created by Emerald City DAO."
 						)
 					])
+				case Type<MetadataViews.Serial>():
+					return MetadataViews.Serial(
+						self.metadataId
+					)
+				case Type<MetadataViews.Traits>():
+					return MetadataViews.dictToTraits(dict: self.getMetadata().extra, excludedNames: nil)
+				case Type<MetadataViews.NFTView>():
+					return MetadataViews.NFTView(
+						id: self.id,
+            uuid: self.uuid,
+            display: self.resolveView(Type<MetadataViews.Display>()) as! MetadataViews.Display?,
+            externalURL: self.resolveView(Type<MetadataViews.ExternalURL>()) as! MetadataViews.ExternalURL?,
+            collectionData: self.resolveView(Type<MetadataViews.NFTCollectionData>()) as! MetadataViews.NFTCollectionData?,
+            collectionDisplay: self.resolveView(Type<MetadataViews.NFTCollectionDisplay>()) as! MetadataViews.NFTCollectionDisplay?,
+            royalties: self.resolveView(Type<MetadataViews.Royalties>()) as! MetadataViews.Royalties?,
+            traits: self.resolveView(Type<MetadataViews.Traits>()) as! MetadataViews.Traits?
+					)
 			}
 			return nil
 		}
 
-		init() {
+		init(_metadataId: UInt64, _recipient: Address) {
+			pre {
+				ExampleNFT.metadatas[_metadataId] != nil:
+					"This NFT does not exist yet."
+				!ExampleNFT.primaryBuyers.containsKey(_metadataId):
+					"This NFT has already been minted."
+			}
 			self.id = self.uuid
-			self.serial = ExampleNFT.totalSupply
-			self.metadata = ExampleNFT.metadatas[self.serial] ?? panic("There does not exist a NFTMetadata for this NFT.")
+			self.metadataId = _metadataId
 
+			ExampleNFT.primaryBuyers[_metadataId] = _recipient
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
 		}
 	}
@@ -191,40 +252,44 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
-	// purchaseNFT purchases a new NFT and deposits 
-	// it in the recipients collection
-	pub fun purchaseNFT(
-		recipient: &{NonFungibleToken.CollectionPublic},
-		payment: @FlowToken.Vault
-	) {
+	// A function to mint NFTs. 
+	// You can only call this function if minting
+	// is currently active.
+	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
 		pre {
 			self.minting: "Minting is currently closed by the Administrator!"
-			payment.balance == self.price: "You did not pass in the correct amount of FlowToken."
+			payment.balance == self.price: "Payment does not match the price."
 		}
 
+		// Confirm recipient passes all verifiers
+		for verifier in ExampleNFT.mintVerifiers {
+			let params = {"minter": recipient.owner!.address}
+			verifier.verify(params)
+		}
+
+		// Handle Emerald City DAO royalty (5%)
+		let ecDAO = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
+								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+		ecDAO.deposit(from: <- payment.withdraw(amount: payment.balance * 0.05))
+
+		// Give the rest to the collection owner
 		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
-									.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 
-		self.mintNFT(recipient: recipient)
-	}
+		// Mint the nft 
+		let nft <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address)
 
-	pub fun freeNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-		pre {
-			self.minting: "Minting is currently closed by the Administrator!"
-			self.price == 0.0: "You must call the purchaseNFT function instead."
-		}
-		self.mintNFT(recipient: recipient)
-	}
-
-	access(contract) fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-		let nft <- create NFT()
-		self.primaryBuyers[nft.serial] = recipient.owner!.address
+		// Emit event
+		let metadata = self.getNFTMetadata(metadataId)!
+		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail)
+		
+		// Deposit nft
 		recipient.deposit(token: <- nft)
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: String}) {
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
@@ -235,19 +300,19 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
-		pub fun mintNFT(recipient: &{NonFungibleToken.CollectionPublic}) {
-			ExampleNFT.mintNFT(recipient: recipient)
+		pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
+			recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
+		}
+
+		// create a new Administrator resource
+		pub fun createAdmin(): @Administrator {
+			return <- create Administrator()
 		}
 
 		// turn minting on/off
 		pub fun toggleMinting(): Bool {
 			ExampleNFT.minting = !ExampleNFT.minting
 			return ExampleNFT.minting
-		}
-
-		// create a new Administrator resource
-		pub fun createAdmin(): @Administrator {
-			return <- create Administrator()
 		}
 
 		pub fun changePrice(newPrice: UFix64) {
@@ -262,8 +327,15 @@ pub contract ExampleNFT: NonFungibleToken {
 			ExampleNFT.description = newDescription
 		}
 
-		pub fun changeImage(newImage: String) {
-			ExampleNFT.image = newImage
+		pub fun changeImage(cid: String, path: String?) {
+			ExampleNFT.image = MetadataViews.IPFSFile(
+				cid: cid,
+				path: path
+			)
+		}
+
+		pub fun changeVerifiers(mintVerifiers: [{MintVerifiers.IVerifier}]) {
+			ExampleNFT.mintVerifiers = mintVerifiers
 		}
 	}
 
@@ -273,8 +345,8 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	// Get information about a NFTMetadata
-	pub fun getNFTMetadata(_ serial: UInt64): NFTMetadata? {
-		return self.metadatas[serial]
+	pub fun getNFTMetadata(_ metadataId: UInt64): NFTMetadata? {
+		return self.metadatas[metadataId]
 	}
 
 	pub fun getNFTMetadatas(): {UInt64: NFTMetadata} {
@@ -285,27 +357,33 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.primaryBuyers
 	}
 
-	pub fun getPrimaryPurchased(): [UInt64] {
-		return self.primaryBuyers.keys
+	pub fun getCollectionInfo(): CollectionInfo {
+		return CollectionInfo()
 	}
 
 	init(
 		_name: String, 
 		_description: String, 
-		_image: String, 
+		_imagePath: String, 
 		_minting: Bool, 
 		_price: UFix64,
-		_ipfsCID: String
+		_ipfsCID: String,
+		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
 		self.name = _name
 		self.description = _description
-		self.image = _image
+		self.image = MetadataViews.IPFSFile(
+			cid: _ipfsCID,
+			path: _imagePath
+		)
 		self.ipfsCID = _ipfsCID
 
 		// Initialize default info
 		self.minting = _minting
 		self.price = _price
+		self.dateCreated = getCurrentBlock().timestamp
+		self.mintVerifiers = _mintVerifiers
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0
@@ -316,10 +394,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// We prefix the paths with 'T' for "Touchstone". This is also
 		// to prevent clashing with existing Collection paths in the 
 		// ecosystem.
-		self.CollectionStoragePath = /storage/TExampleNFTCollection
-		self.CollectionPublicPath = /public/TExampleNFTCollection
-		self.CollectionPrivatePath = /private/TExampleNFTCollection
-		self.AdministratorStoragePath = /storage/TExampleNFTAdministrator
+		self.CollectionStoragePath = /storage/TExampleNFTCollectionUSER_ADDR
+		self.CollectionPublicPath = /public/TExampleNFTCollectionUSER_ADDR
+		self.CollectionPrivatePath = /private/TExampleNFTCollectionUSER_ADDR
+		self.AdministratorStoragePath = /storage/TExampleNFTAdministratorUSER_ADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()
@@ -338,3 +416,4 @@ pub contract ExampleNFT: NonFungibleToken {
 		emit ContractInitialized()
 	}
 }
+ 

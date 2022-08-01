@@ -1,17 +1,22 @@
 <script>
-  import { TransparentCard, Button } from "$lib/components/atoms/index"
+  import { TransparentCard, Button } from "$lib/components/atoms/index";
 
   export let thumbnailURL;
   export let name;
   export let description;
   export let backgroundColor;
   export let price;
+  export let serial;
+  export let purchaseFunction;
   export let buy = false;
 </script>
 
 <TransparentCard padding="0.8em">
   <div class="main-wrapper">
-    <img src={thumbnailURL} alt={`${name} image`} style={`background-color: ${backgroundColor};`}>
+    <img
+      src={thumbnailURL}
+      alt={`${name} image`}
+      style={`background-color: ${backgroundColor};`} />
     <div class="content">
       <h4>{name}</h4>
       {#if description}
@@ -22,7 +27,9 @@
       {/if}
     </div>
     {#if buy}
-      <Button class="small">Buy</Button>
+      <Button class="small" on:click={() => purchaseFunction(serial, price)}>
+        Buy
+      </Button>
     {/if}
   </div>
 </TransparentCard>
@@ -38,10 +45,10 @@
       margin-bottom: 1.2em;
       border-radius: 0.4rem;
     }
-    
+
     .content {
       margin-bottom: 1.2em;
-      
+
       h4 {
         font-size: var(--fs-400);
         font-weight: 600;

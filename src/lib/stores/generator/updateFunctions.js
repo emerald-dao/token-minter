@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { activeStep, stepsArray } from './generatorGeneralStore';
+import { activeStep, stepsArray } from './GeneratorGeneralStore';
 
 export const saveFileInStore = (store, file) => {
   store.set(file);

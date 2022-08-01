@@ -23,12 +23,12 @@
 					Create your own NFT Collections without knowing any code. Learn all
 					about NFTs on the Flow Blockchain.
 				</p>
-				<Button>Start</Button>
+				<Button href="/collection-generator">Start</Button>
 			</Stack>
 			<Stack align="center" justify="center">
 				<video width="100%" height="100%" autoplay loop muted>
 					<source src="emerald1.webm" type="video/webm" />
-					<track kind="captions"/>
+					<track kind="captions" />
 					Your browser does not support the video tag.
 				</video>
 			</Stack>
