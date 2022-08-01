@@ -41,18 +41,17 @@ function switchNetwork(newNetwork) {
       .put('accessNode.api', 'http://localhost:8080')
       .put('discovery.wallet', 'http://localhost:8701/fcl/authn')
   } else if (newNetwork === 'testnet') {
-    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
   } else if (newNetwork === 'mainnet') {
-    saveFileInStore(network, newNetwork)
     fcl
       .config()
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
   }
+  saveFileInStore(network, newNetwork)
 }
 
 export const deployToTestnet = async () => {
@@ -93,7 +92,6 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
 
 async function deployContract() {
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
-  console.log('Contract Code', get(contractCode));
   const info = get(contractInfo);
 
   initTransactionState();
