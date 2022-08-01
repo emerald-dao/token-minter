@@ -23,11 +23,12 @@ export const onNext = (stepFunction) => {
   if (stepFunction) {
     changeStepState(get(activeStep), 'loading');
     let promise = new Promise(async (resolve, reject) => {
-      let job = await stepFunction();
-      if (job === true) {
+      let stepJob = await stepFunction();
+      console.log('stepJob', stepFunction);
+      if (stepJob === true) {
         resolve('success');
       } else {
-        reject(job.error);
+        reject(stepJob.error);
       }
     });
     promise
