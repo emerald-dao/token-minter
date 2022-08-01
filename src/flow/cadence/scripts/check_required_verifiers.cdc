@@ -19,7 +19,7 @@ pub fun main(potentialMinter: Address): [VerifierInfo] {
       case Type<MintVerifiers.SingularFLOAT>():
         let specific = verifier as! MintVerifiers.SingularFLOAT
         let event = specific.eventCap.borrow()!.borrowPublicEventRef(eventId: specific.eventId)!
-        metadata = {"eventImage": event.image, "eventName": event.name}
+        metadata = {"eventImage": event.image, "eventName": event.name, "eventId": specific.eventId, "eventOwner": specific.eventOwner, "url": "https://floats.city/".concat(specific.eventOwner.toString()).concat("/").concat(specific.eventId.toString())}
     }
 
     answer.append(VerifierInfo(

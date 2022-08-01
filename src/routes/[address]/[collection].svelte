@@ -1,5 +1,9 @@
 <script>
-  import { getCollectionInfo, purchaseNFT } from "../../flow/actions";
+  import {
+    checkRequiredVerifiers,
+    getCollectionInfo,
+    purchaseNFT,
+  } from "../../flow/actions";
 
   import {
     Section,
@@ -9,6 +13,7 @@
     NFTCard,
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
+  import { user } from "../../flow/stores.js";
 
   const purchaseFunction = (serial, price) => {
     purchaseNFT(serial, price, $page.params.collection, $page.params.address);
@@ -26,6 +31,11 @@
         <p>{collectionInfo.description}</p>
       </Stack>
     </Container>
+    {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
+      <Container>
+        <p>Show the verifiers in here.</p>
+      </Container>
+    {/await}
     <Container>
       <AdaptableGrid minWidth="12em" gap="1.2em">
         {#each Object.values(collectionInfo.metadatas) as NFT}
