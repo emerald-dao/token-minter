@@ -29,7 +29,7 @@ const contractData = {
 		mainnet: ""
 	},
 	FLOAT: {
-		testnet: "0x82ac1084a70a9042",
+		testnet: "0x0afe396ebc8eee65",
 		mainnet: "0x2d4c3caffbeab845"
 	},
 	FIND: {

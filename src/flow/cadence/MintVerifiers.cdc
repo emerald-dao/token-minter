@@ -1,6 +1,5 @@
 import FLOAT from "./utility/FLOAT.cdc"
 
-
 pub contract MintVerifiers {
 
   pub struct interface IVerifier {

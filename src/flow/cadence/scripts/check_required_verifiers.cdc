@@ -19,10 +19,12 @@ pub fun main(potentialMinter: Address): [VerifierInfo] {
       case Type<MintVerifiers.SingularFLOAT>():
         let specific = verifier as! MintVerifiers.SingularFLOAT
         let event = specific.eventCap.borrow()!.borrowPublicEventRef(eventId: specific.eventId)!
-        metadata = {"eventImage": event.image, "eventName": event.name, "eventId": specific.eventId, "eventOwner": specific.eventOwner, "url": "https://floats.city/".concat(specific.eventOwner.toString()).concat("/").concat(specific.eventId.toString())}
+        metadata = {"eventImage": event.image, "eventName": event.name, "eventId": specific.eventId, "eventOwner": specific.eventOwner, "url": "https://testnet.floats.city/".concat(specific.eventOwner.toString()).concat("/event/").concat(specific.eventId.toString())}
     }
 
     answer.append(VerifierInfo(
+      verifier: verifier.verifier,
+      type: verifier.type,
       passing: checks[i],
       metadata: metadata
     ))
@@ -33,10 +35,14 @@ pub fun main(potentialMinter: Address): [VerifierInfo] {
 }
 
 pub struct VerifierInfo {
+  pub let verifier: String
+  pub let type: Type
   pub let passing: Bool
   pub let metadata: {String: AnyStruct} 
 
-  init(passing: Bool, metadata: {String: AnyStruct}) {
+  init(verifier: String, type: Type, passing: Bool, metadata: {String: AnyStruct}) {
+    self.verifier = verifier
+    self.type = type
     self.passing = passing
     self.metadata = metadata
   }

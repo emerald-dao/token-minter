@@ -14,6 +14,7 @@
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
   import { user } from "../../flow/stores.js";
+  import Verifiers from "$lib/components/atoms/Verifiers.svelte";
 
   const purchaseFunction = (serial, price) => {
     purchaseNFT(serial, price, $page.params.collection, $page.params.address);
@@ -33,7 +34,7 @@
     </Container>
     {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
       <Container>
-        <p>Show the verifiers in here.</p>
+        <Verifiers {verifiers} />
       </Container>
     {/await}
     <Container>

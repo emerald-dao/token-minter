@@ -39,14 +39,14 @@
 		"FLOAT": {
 			"source": "./src/flow/cadence/utility/FLOAT.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042",
+				"testnet": "0x0afe396ebc8eee65",
 				"mainnet": "0x2d4c3caffbeab845"
 			}
 		},
 		"GrantedAccountAccess": {
 			"source": "./src/flow/cadence/utility/GrantedAccountAccess.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042",
+				"testnet": "0x0afe396ebc8eee65",
 				"mainnet": "0x2d4c3caffbeab845"
 			}
 		},
