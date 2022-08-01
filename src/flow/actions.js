@@ -17,6 +17,7 @@ import { onNext, saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
 import getContractsScript from "./cadence/scripts/get_contracts.cdc?raw";
 import getContractDisplaysScript from "./cadence/scripts/get_contract_displays.cdc?raw";
+import checkRequiredVerifiersScript from "./cadence/scripts/check_required_verifiers.cdc?raw";
 // Transactions
 import createMetadatasTx from "./cadence/transactions/create_metadatas.cdc?raw";
 import deployContractTx from "./cadence/transactions/deploy_contract.cdc?raw";
@@ -105,8 +106,8 @@ async function deployContract() {
     eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
   }
 
-  console.log(eventOwner);
-  console.log(eventId);
+  console.log('[Verifier: FLOAT] Event Owner', eventOwner);
+  console.log('[Verifier: FLOAT] Event Id', eventId);
 
   try {
     const transactionId = await fcl.mutate({
@@ -176,6 +177,68 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
+  }
+}
+
+// Function to upload metadata to the contract in batches of 500
+export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
+  const userAddr = get(user).addr;
+  // Get The MetadataId we should start at
+  let names = [];
+  let descriptions = [];
+  let thumbnails = [];
+  let extras = [];
+  for (var i = 0; i < metadatas.length; i++) {
+    const { name, description, image, ...rest } = metadatas[i];
+    names.push(name);
+    descriptions.push(description);
+    thumbnails.push(image);
+    let extra = [];
+    for (const attribute in rest) {
+      extra.push({ key: attribute, value: rest[attribute] });
+    }
+    extras.push(extra);
+  }
+
+  console.log('Uploading ' + batchSize + ' NFTs to the contract.')
+
+  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr)
+    .replaceAll('500', batchSize);
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: transaction,
+      args: (arg, t) => [
+        arg(names, t.Array(t.String)),
+        arg(descriptions, t.Array(t.String)),
+        arg(thumbnails, t.Array(t.String)),
+        arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String })))
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+
+    const { status, statusCode, errorMessage } = await fcl.tx(transactionId).onceSealed();
+    if (status === 4 && statusCode === 0) {
+      return { success: true };
+    }
+    return { success: false, error: errorMessage };
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+    return { success: false, error: e }
   }
 }
 
@@ -259,64 +322,17 @@ export async function getNextMetadataId(contractName, userAddress) {
   }
 };
 
-// Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
-  const userAddr = get(user).addr;
-  // Get The MetadataId we should start at
-  let names = [];
-  let descriptions = [];
-  let thumbnails = [];
-  let extras = [];
-  for (var i = 0; i < metadatas.length; i++) {
-    const { name, description, image, ...rest } = metadatas[i];
-    names.push(name);
-    descriptions.push(description);
-    thumbnails.push(image);
-    let extra = [];
-    for (const attribute in rest) {
-      extra.push({ key: attribute, value: rest[attribute] });
-    }
-    extras.push(extra);
-  }
-
-  console.log('Uploading ' + batchSize + ' NFTs to the contract.')
-
-  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr)
-    .replaceAll('500', batchSize);
-
-  initTransactionState();
-
+export async function checkRequiredVerifiers(contractName, contractAddress, userAddress) {
   try {
-    const transactionId = await fcl.mutate({
-      cadence: transaction,
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(checkRequiredVerifiersScript, contractName, contractAddress),
       args: (arg, t) => [
-        arg(names, t.Array(t.String)),
-        arg(descriptions, t.Array(t.String)),
-        arg(thumbnails, t.Array(t.String)),
-        arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String })))
+        arg(userAddress, t.Address)
       ],
-      payer: fcl.authz,
-      proposer: fcl.authz,
-      authorizations: [fcl.authz],
-      limit: 9999,
     });
 
-    fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
-      console.log(res);
-      if (res.status === 4) {
-        setTimeout(() => transactionInProgress.set(false), 2000);
-      }
-    });
-
-    const { status, statusCode, errorMessage } = await fcl.tx(transactionId).onceSealed();
-    if (status === 4 && statusCode === 0) {
-      return { success: true };
-    }
-    return { success: false, error: errorMessage };
+    return response;
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
-    return { success: false, error: e }
   }
-}
+};

@@ -72,7 +72,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let price: UFix64
 		pub let dateCreated: UFix64
 		pub let totalSupply: UInt64
-		pub let ipfsCID: String?
+		pub let ipfsCID: String
 		pub let minting: Bool
 		pub let metadatas: {UInt64: NFTMetadata}
 		pub let primaryBuyers: {UInt64: Address}
@@ -264,7 +264,9 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Confirm recipient passes all verifiers
 		for verifier in ExampleNFT.mintVerifiers {
 			let params = {"minter": recipient.owner!.address}
-			verifier.verify(params)
+			if let error = verifier.verify(params) {
+				panic(error)
+			}
 		}
 
 		// Handle Emerald City DAO royalty (5%)

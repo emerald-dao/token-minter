@@ -53,7 +53,7 @@
 		"MintVerifiers": {
 			"source": "./src/flow/cadence/MintVerifiers.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042"
+				"testnet": "0x73a19dd056affc4d"
 			}
 		}
 	},
@@ -68,13 +68,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x82ac1084a70a9042",
+			"address": "0x73a19dd056affc4d",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "25dabcbc4b425e7e46ba67eb027c4b468b9185dd645037a6a17b6d6d948f66eb"
+				"privateKey": "d1c36bb6ed2d3900fbd47ce36a44446b1be9cfa78f34f2521a4b680a7835a16c"
 			}
 		}
 	},
