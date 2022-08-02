@@ -67,7 +67,7 @@
         </Stack>
       {/if}
     </Stack>
-      {#if uploadState === "to-upload"}
+      {#if uploadState === "to-upload" || uploadState === "error"}
         <Button class="small no-shadow" on:click={onUpload}>
           Upload
           <Icon
