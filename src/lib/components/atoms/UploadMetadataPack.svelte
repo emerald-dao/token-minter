@@ -3,6 +3,7 @@
     TransparentCard,
     Stack,
     LoadingSpinner,
+    Button
   } from "$lib/components/atoms/index";
   import Icon from "@iconify/svelte";
   import {
@@ -20,6 +21,7 @@
 
   const onUpload = async () => {
     uploadState = "loading";
+
     const contractName = $contractInfo.name.replace(/\s+/g, "");
     // Fetches the next metadata we are supposed to upload to the contract
     const nextMetadataId = await getNextMetadataId(contractName, $user.addr);
@@ -42,43 +44,62 @@
       uploadState = "error";
     }
   };
+
+  let error="Error while uploading. Please retry."
 </script>
 
 <TransparentCard
   height="fit-content"
   accent={uploadState === "to-upload" || uploadState === "loading"}>
   <Stack direction="row" justify="space-between">
-    <span class="nfts-numbers">
-      {`NFT ${initialToken} to ${lastToken}`}
-    </span>
-
-    <button
-      class={uploadState}
-      on:click={() => onUpload()}
-      disabled={!(uploadState === "to-upload")}>
-      {#if uploadState === "uploaded"}
-        <span>Uploaded</span>
-        <Icon
-          color="var(--clr-primary-main-t6)"
-          icon="ion:checkmark-circle"
-          width={iconWidth} />
-      {:else if uploadState === "to-upload"}
-        <span>Upload</span>
-        <Icon
-          color="var(--clr-primary-strong)"
-          icon="ion:arrow-up-circle"
-          width={iconWidth} />
-      {:else if uploadState === "loading"}
-        <span>Uploading</span>
-        <LoadingSpinner color="var(--clr-primary-main-t4)" {iconWidth} />
-      {:else if uploadState === "waiting"}
-        <span>Waiting</span>
-        <Icon
-          color="var(--clr-accent-main-t5)"
-          icon="ion:arrow-up-circle"
-          width={iconWidth} />
+    <Stack direction="row" align="center">
+      <span class="nfts-numbers">
+        {`NFT ${initialToken} to ${lastToken}`}
+      </span>
+      {#if error}
+        <Stack direction="row" align="center" gap="0.4em">
+          <Icon
+            icon="ion:alert-circle-outline"
+            width="1em"
+            color="red"
+          />
+          <span class="error">
+            {error}
+          </span>
+        </Stack>
       {/if}
-    </button>
+    </Stack>
+      {#if uploadState === "to-upload"}
+        <Button class="small no-shadow" on:click={onUpload}>
+          Upload
+          <Icon
+            icon="ion:arrow-up-circle"
+            color="var(--clr-font-text-inverse)"
+            width={iconWidth} />
+        </Button>
+      {:else if uploadState === "waiting"}
+        <Button class="small no-shadow waiting">
+          Waiting
+          <Icon
+            icon="ion:arrow-up-circle"
+            color="var(--clr-font-text-inverse)"
+            width={iconWidth} />
+        </Button>
+      {:else if uploadState === "loading"}
+        <Button class="small no-shadow loading">
+          Uploading
+          <LoadingSpinner color="var(--clr-font-text-inverse)" {iconWidth} />
+        </Button>
+      {:else if uploadState === "uploaded"}
+        <Button class="small no-shadow waiting">
+        Uploaded
+          <Icon
+            icon="ion:checkmark-circle"
+            color="var(--clr-font-text-inverse)"
+            width={iconWidth}
+          />
+        </Button>
+      {/if}
   </Stack>
 </TransparentCard>
 
@@ -90,38 +111,5 @@
     color: var(--clr-accent-strong);
     padding: 0.3em 1.2em;
     border-radius: 0.4em;
-  }
-
-  button {
-    border: none;
-    background: var(--clr-primary-main-t6);
-    cursor: pointer;
-    outline: none;
-    padding: 0.3em 0.8em;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.4em;
-    gap: 0.4em;
-    color: var(--clr-primary-strong);
-
-    span {
-      font-size: var(--fs-300);
-      font-weight: 400;
-    }
-  }
-
-  .uploaded {
-    background: var(--clr-primary-soft-t8);
-    color: var(--clr-primary-main-t7);
-  }
-  .waiting {
-    background: var(--clr-accent-main-t9);
-    color: var(--clr-accent-main-t5);
-  }
-  .loading {
-    background: var(--clr-primary-main-t8);
-    color: var(--clr-primary-main-t4);
   }
 </style>

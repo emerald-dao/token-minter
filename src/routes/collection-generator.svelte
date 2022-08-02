@@ -93,7 +93,10 @@
 
     .main-container {
       grid-area: main;
-      max-height: 80vh;
+
+      @include mq(medium) {
+        height: 80vh;
+      }
 
       .component-container {
         height: 100%;
