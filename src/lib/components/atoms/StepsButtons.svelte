@@ -5,6 +5,7 @@
     activeStep,
     stepsArray,
   } from "$lib/stores/generator/GeneratorGeneralStore";
+  import Icon from "@iconify/svelte";
 
   $: step = $stepsArray[$activeStep];
   export let errors;
@@ -17,45 +18,53 @@
       onNext();
     }
   }
+
+  let iconWidth = "1.5em";
 </script>
 
-<!-- Buttons for form submitting -->
-{#if submit}
+{#if step.button}
+  <!-- Buttons for form submitting -->
+  {#if submit}
   <!-- If error object is given -->
   {#if errors}
-    {#if Object.values(errors).every(element => element === null)}
-      <Button type="submit">
-        {step.buttonTexts.active}
-      </Button>
-    {:else}
-      <Button type="submit" disabled class="disabled">
-        {step.buttonTexts.active}
-      </Button>	
-    {/if}
+  {#if Object.values(errors).every(element => element === null)}
+  <Button type="submit">
+    {step.button.active.text}
+  </Button>
+  {:else}
+  <Button type="submit" disabled class="disabled">
+    {step.button.active.text}
+  </Button>	
+  {/if}
   <!-- Without error object -->
   {:else}
-    <Button type="submit">
-      {step.buttonTexts.active}
-    </Button>
+  <Button type="submit">
+    {step.button.active.text}
+  </Button>
   {/if}
-<!-- Buttons that do not submit forms -->
-{:else}
+  <!-- Buttons that do not submit forms -->
+  {:else}
   {#if step.state === "active" || step.state === "inactive"}
-    <Button on:click={onClick} >
-      {step.buttonTexts.active}
-    </Button>
+  <Button on:click={onClick} >
+    {step.button.active.text}
+    <Icon
+    color="var(--clr-font-text-inverse)"
+    icon={`ion:${step.button.active.icon}`}
+    width={iconWidth} />
+  </Button>
   {:else if step.state === "ready"}
-    <Button on:click={onClick}>
-      {step.buttonTexts.active}
-    </Button>
+  <Button on:click={onClick}>
+    {step.button.active.text}
+  </Button>
   {:else if step.state === "loading"}
-    <Button on:click={onClick} disabled>
-      <LoadingSpinner/>
-      {step.buttonTexts.loading}
-    </Button>
+  <Button on:click={onClick} disabled class="loading">
+    {step.button.loading.text}
+    <LoadingSpinner color="var(--clr-font-text-inverse)" {iconWidth}/>
+  </Button>
   {:else if step.state === "success"}
-    <Button on:click={onClick} disabled class="disabled">
-      Uploaded
-    </Button>
+  <Button on:click={onClick} disabled class="disabled">
+    Uploaded
+  </Button>
+  {/if}
   {/if}
 {/if}

@@ -44,8 +44,8 @@
     );
     color: var(--clr-font-text-button);
     font-family: var(--font-mono);
-    padding: 0.3em 1.5em;
-    border-radius: 0.2em;
+    padding: 0.4em 1.5em;
+    border-radius: 0.4em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -61,10 +61,16 @@
   a {
     text-decoration: none;
   }
+  a:hover {
+    color: inherit;
+  }
 
   .ghost {
     background: transparent;
     border: 2px solid var(--clr-accent-main);
+    color: var(--clr-accent-main);
+  }
+  .ghost:hover {
     color: var(--clr-accent-main);
   }
 
@@ -80,6 +86,33 @@
     font-size: var(--fs-400);
   }
 
+  .loading {
+    background: linear-gradient(
+      to left,
+      var(--clr-primary-main-t3),
+      var(--clr-accent-main-t3)
+    );
+    cursor: not-allowed;
+  }
+
+  .done {
+    background: linear-gradient(
+      to left,
+      var(--clr-primary-main-t6),
+      var(--clr-accent-main-t6)
+    );
+    cursor: not-allowed;
+  }
+
+  .waiting {
+    background: linear-gradient(
+      to left,
+      var(--clr-primary-main-t5),
+      var(--clr-accent-main-t5)
+    );
+    cursor: not-allowed;
+  }
+
   .disabled {
     background: gray;
     cursor: not-allowed;
@@ -88,9 +121,14 @@
     box-shadow: none;
   }
 
-  button:hover {
+  .no-shadow:hover {
+    box-shadow: none;
+  }
+
+  button:hover, a:hover {
     box-shadow: var(--clr-accent-soft) 4px 4px,
       var(--clr-accent-soft-t6) 8px 8px;
     transition: 0.4s;
+    color: var(--clr-font-text-inverse);
   }
 </style>

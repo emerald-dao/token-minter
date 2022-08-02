@@ -1,6 +1,5 @@
 import { writable, get } from 'svelte/store';
 import { browser } from '$app/env';
-import { onNext, onBack } from './updateFunctions';
 import {
   CollectionInfo,
   UploadAssets,
@@ -26,9 +25,13 @@ export const stepsArray = writable([
     component: CollectionInfo,
     emoji: 'ℹ️',
     instructions: 'Define some general information around your collection.',
-    buttonTexts: {
-      active: 'Next',
-      loading: 'Loading',
+    button: {
+      active: {
+        text: 'Next',
+      },
+      loading: {
+        text: 'Loading',
+      },
     },
     state: 'inactive',
   },
@@ -39,9 +42,14 @@ export const stepsArray = writable([
     instructions:
       "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
     onSubmitAction: uploadAssetsToIpfs,
-    buttonTexts: {
-      active: 'Upload to IPFS',
-      loading: 'Uploading',
+    button: {
+      active: {
+        text: 'Upload to IPFS',
+        icon: 'arrow-up-circle',
+      },
+      loading: {
+        text: 'Uploading',
+      },
     },
     state: 'inactive',
   },
@@ -50,9 +58,13 @@ export const stepsArray = writable([
     component: CollectionPreview,
     emoji: '🖼',
     instructions: "Looks like everything is in order. Let's see what you've got.",
-    buttonTexts: {
-      active: 'Next',
-      loading: 'Loading',
+    button: {
+      active: {
+        text: 'Next',
+      },
+      loading: {
+        text: 'Loading',
+      },
     },
     state: 'inactive',
   },
@@ -61,9 +73,13 @@ export const stepsArray = writable([
     component: ContractInfo,
     emoji: '📜',
     instructions: 'Define some general information around your contract.',
-    buttonTexts: {
-      active: 'Next',
-      loading: 'Loading',
+    button: {
+      active: {
+        text: 'Next',
+      },
+      loading: {
+        text: 'Loading',
+      },
     },
     state: 'inactive',
   },
@@ -72,10 +88,6 @@ export const stepsArray = writable([
     component: Deploy,
     emoji: '🚀',
     instructions: 'Deploy your contract to the blockchain.',
-    buttonTexts: {
-      active: 'Deploy',
-      loading: 'Deploying',
-    },
     state: 'inactive',
   },
   {
@@ -83,10 +95,6 @@ export const stepsArray = writable([
     component: UploadMetadata,
     emoji: '👆',
     instructions: 'Upload your metadata to your contract.',
-    buttonTexts: {
-      active: 'Deploy',
-      loading: 'Deploying',
-    },
     state: 'inactive',
   },
 ]);
