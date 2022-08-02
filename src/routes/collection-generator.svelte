@@ -7,16 +7,15 @@
     FlowConnect,
     Stack,
     TransparentCard,
+    StepsButtons
   } from "$lib/components/atoms/index";
   import GeneratorNav from "$lib/components/sections/generator/GeneratorNav.svelte";
   import {
     activeStep,
     stepsArray,
   } from "$lib/stores/generator/GeneratorGeneralStore";
-  import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
   const steps = $stepsArray;
-  
 </script>
 
 <Section class="padding-top-none padding-bottom-none">
@@ -30,10 +29,11 @@
           </div>
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
-              <svelte:component
-                this={steps[$activeStep].component}
-                onSubmitAction={() => onNext(steps[$activeStep].onSubmitAction)}
-                onSubmitText={steps[$activeStep].onSubmitText} />
+              <div class="component-container">
+                <svelte:component
+                  this={steps[$activeStep].component} />
+                  <StepsButtons step={steps[$activeStep]}/>
+              </div>
             </TransparentCard>
           </div>
         </div>
@@ -91,6 +91,10 @@
     .main-container {
       grid-area: main;
       max-height: 100%;
+
+      .component-container {
+        height: 100%;
+      }
     }
   }
 

@@ -20,6 +20,7 @@ export const setValidationSuccess = (store) => {
 };
 
 export const onNext = (stepFunction) => {
+  console.log('next');
   if (stepFunction) {
     changeStepState(get(activeStep), 'loading');
     let promise = new Promise(async (resolve, reject) => {
@@ -33,16 +34,16 @@ export const onNext = (stepFunction) => {
     });
     promise
       .then(() => {
-        activeStep.update((current) => current + 1);
         changeStepState(get(activeStep), 'success');
+        activeStep.update((current) => current + 1);
       })
       .catch((message) => {
         changeStepState(get(activeStep), 'error');
         alert(message);
       });
   } else {
-    activeStep.update((current) => current + 1);
     changeStepState(get(activeStep), 'success');
+    activeStep.update((current) => current + 1);
   }
 };
 

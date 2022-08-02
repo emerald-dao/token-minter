@@ -1,5 +1,5 @@
 <script>
-  import { StepsButtons, DropZone } from "$lib/components/atoms/index";
+  import { DropZone } from "$lib/components/atoms/index";
   import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
   import { csvState, csvFile } from "$lib/stores/generator/CsvStore.ts";
   import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
@@ -7,9 +7,7 @@
     csvDropHandling,
     imagesDropHandling,
   } from "$lib/generator/dropHandling";
-
-  export let onSubmitAction;
-  export let onSubmitText;
+  import { stepsArray, activeStep } from "$lib/stores/generator/GeneratorGeneralStore";
 </script>
 
 <div class="main-wrapper">
@@ -62,12 +60,6 @@
       type="text"
       bind:value={$userIPFSToken} />
   </div>
-
-  <StepsButtons
-    {onSubmitAction}
-    {onSubmitText}
-    disabled={!($csvState.uploadState === "success") ||
-      !($imagesState.uploadState === "success")} />
 </div>
 
 <style type="scss">

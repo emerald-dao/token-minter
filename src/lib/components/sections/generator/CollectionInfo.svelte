@@ -6,9 +6,6 @@
 	import { object, string, number } from "yup";
 	import { validator } from "@felte/validator-yup";
 
-	export let onSubmitAction;
-	export let onSubmitText;
-
 	// TODO: Make dynamic schema
 	const schema = object({
 		name: string().required(),
@@ -62,8 +59,6 @@
 			{/if}
 		{/each}
 	</div>
-
-	<StepsButtons {onSubmitText} submit errors={$errors} />
 </form>
 
 <style type="scss">

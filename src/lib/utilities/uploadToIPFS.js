@@ -22,10 +22,8 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   });
   // Also upload the main image file for the collection
   const mainImage = get(contractInfo).image;
-  console.log(mainImage)
-  car_files.push({ path: mainImage.name, content: mainImage })
-
-  console.log(car_files);
+  console.log(mainImage);
+  car_files.push({ path: mainImage.name, content: mainImage });
 
   const { root, car } = await packToBlob({
     input: car_files,

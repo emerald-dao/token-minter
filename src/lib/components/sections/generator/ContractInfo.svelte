@@ -81,9 +81,6 @@
 	<div class="code">
 		<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 	</div>
-	<div class="buttons">
-		<StepsButtons {onSubmitText} />
-	</div>
 </form>
 
 <style type="scss">
@@ -145,16 +142,6 @@
 				grid-area: code;
 			}
 			display: none;
-		}
-
-		.buttons {
-			display: flex;
-			width: 100%;
-			justify-content: flex-end;
-
-			@include mq(medium) {
-				grid-area: buttons;
-			}
 		}
 	}
 </style>

@@ -26,7 +26,10 @@ export const stepsArray = writable([
     component: CollectionInfo,
     emoji: 'ℹ️',
     instructions: 'Define some general information around your collection.',
-    onSubmitText: 'Next',
+    buttonTexts: {
+      active: 'Next',
+      loading: 'Loading',
+    },
     state: 'inactive',
   },
   {
@@ -36,7 +39,10 @@ export const stepsArray = writable([
     instructions:
       "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
     onSubmitAction: uploadAssetsToIpfs,
-    onSubmitText: 'Upload to IPFS',
+    buttonTexts: {
+      active: 'Upload to IPFS',
+      loading: 'Uploading',
+    },
     state: 'inactive',
   },
   {
@@ -44,7 +50,10 @@ export const stepsArray = writable([
     component: CollectionPreview,
     emoji: '🖼',
     instructions: "Looks like everything is in order. Let's see what you've got.",
-    onSubmitText: 'Next',
+    buttonTexts: {
+      active: 'Next',
+      loading: 'Loading',
+    },
     state: 'inactive',
   },
   {
@@ -52,7 +61,10 @@ export const stepsArray = writable([
     component: ContractInfo,
     emoji: '📜',
     instructions: 'Define some general information around your contract.',
-    onSubmitText: 'Next',
+    buttonTexts: {
+      active: 'Next',
+      loading: 'Loading',
+    },
     state: 'inactive',
   },
   {
@@ -60,7 +72,10 @@ export const stepsArray = writable([
     component: Deploy,
     emoji: '🚀',
     instructions: 'Deploy your contract to the blockchain.',
-    onSubmitText: 'Deploy',
+    buttonTexts: {
+      active: 'Deploy',
+      loading: 'Deploying',
+    },
     state: 'inactive',
   },
   {
@@ -68,12 +83,14 @@ export const stepsArray = writable([
     component: UploadMetadata,
     emoji: '👆',
     instructions: 'Upload your metadata to your contract.',
-    onSubmitText: 'Deploy',
+    buttonTexts: {
+      active: 'Deploy',
+      loading: 'Deploying',
+    },
     state: 'inactive',
   },
 ]);
 
 async function uploadAssetsToIpfs() {
-  console.log('Uploading assets to IPFS');
   return await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
 }

@@ -1,11 +1,22 @@
 <script>
-  import { Button } from "$lib/components/atoms/index"; 
+  import { Button, LoadingSpinner } from "$lib/components/atoms/index"; 
+  import { onNext } from "$lib/stores/generator/updateFunctions.js";
+  import {
+    activeStep,
+    stepsArray,
+  } from "$lib/stores/generator/GeneratorGeneralStore";
 
-  export let onSubmitText = "Next";
-  export let onSubmitAction
+  $: step = $stepsArray[$activeStep];
   export let errors;
   export let submit = false;
-  export let disabled = false;
+
+  let onClick = () => {
+    if (step.onSubmitAction) {
+      onNext(step.onSubmitAction);
+    } else {
+      onNext();
+    }
+  }
 </script>
 
 <div>
@@ -15,28 +26,37 @@
     {#if errors}
       {#if Object.values(errors).every(element => element === null)}
         <Button type="submit">
-          {onSubmitText}
+          {step.buttonTexts.active}
         </Button>
       {:else}
         <Button type="submit" disabled class="disabled">
-          {onSubmitText}
+          {step.buttonTexts.active}
         </Button>	
       {/if}
     <!-- Without error object -->
     {:else}
       <Button type="submit">
-        {onSubmitText}
+        {step.buttonTexts.active}
       </Button>
     {/if}
   <!-- Buttons that do not submit forms -->
   {:else}
-    {#if disabled}
-      <Button on:click={onSubmitAction} disabled class="disabled">
-        {onSubmitText}
+    {#if step.state === "active" || step.state === "inactive"}
+      <Button on:click={onClick} >
+        {step.buttonTexts.active}
       </Button>
-    {:else}
-      <Button on:click={onSubmitAction}>
-        {onSubmitText}
+    {:else if step.state === "ready"}
+      <Button on:click={onClick}>
+        {step.buttonTexts.active}
+      </Button>
+    {:else if step.state === "loading"}
+      <Button on:click={onClick} disabled>
+        <LoadingSpinner/>
+        {step.buttonTexts.loading}
+      </Button>
+    {:else if step.state === "success"}
+      <Button on:click={onClick} disabled class="disabled">
+        Uploaded
       </Button>
     {/if}
   {/if}

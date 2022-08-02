@@ -18,5 +18,5 @@ export interface Step {
   instructions: string;
   onSubmitAction: Function;
   onSubmitText: string;
-  state: 'inactive' | 'active' | 'loading' | 'success' | 'error';
+  state: 'inactive' | 'active' | 'ready' | 'loading' | 'success' | 'error';
 }
