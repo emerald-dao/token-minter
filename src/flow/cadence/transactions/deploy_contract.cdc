@@ -23,16 +23,14 @@ transaction(
 
     // Singular FLOAT Verifier
     if singularFLOAT {
-      let floatEvents = getAccount(eventOwner!).getCapability(FLOAT.FLOATEventsPublicPath)
-                          .borrow<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>()
-                          ?? panic("Could not get the FLOAT Events Collection.")
-      let floatEvent: &FLOAT.FLOATEvent{FLOAT.FLOATEventPublic} = floatEvents.borrowPublicEventRef(eventId: eventId!)
-                          ?? panic("This FLOAT event owner does not have a FLOAT Event with that id.")
+      let eventCap = getAccount(eventOwner!).getCapability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>(FLOAT.FLOATEventsPublicPath)
+      if eventCap.borrow()?.borrowPublicEventRef(eventId: eventId!) == nil {
+        panic("This is not a valid FLOAT Event.")
+      }
       mintVerifiers.append(MintVerifiers.SingularFLOAT(
         _eventOwner: eventOwner!,
         _eventId: eventId!,
-        _eventImage: floatEvent.image,
-        _eventName: floatEvent.name
+        _eventCap: eventCap
       ))
     }
 

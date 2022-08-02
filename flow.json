@@ -23,6 +23,7 @@
 		"FungibleToken": {
 			"source": "./src/flow/cadence/utility/FungibleToken.cdc",
 			"aliases": {
+				"emulator": "0xee82856bf20e2aa6",
 				"testnet": "0x9a0766d93b6608b7",
 				"mainnet": "0xf233dcee88fe0abe"
 			}
@@ -30,6 +31,7 @@
 		"FlowToken": {
 			"source": "./src/flow/cadence/utility/FlowToken.cdc",
 			"aliases": {
+				"emulator": "0x0ae53cb6e3f42a79",
 				"testnet": "0x7e60df042a9c0868",
 				"mainnet": "0x1654653399040a61"
 			}
@@ -37,21 +39,21 @@
 		"FLOAT": {
 			"source": "./src/flow/cadence/utility/FLOAT.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042",
+				"testnet": "0x0afe396ebc8eee65",
 				"mainnet": "0x2d4c3caffbeab845"
 			}
 		},
 		"GrantedAccountAccess": {
 			"source": "./src/flow/cadence/utility/GrantedAccountAccess.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042",
+				"testnet": "0x0afe396ebc8eee65",
 				"mainnet": "0x2d4c3caffbeab845"
 			}
 		},
 		"MintVerifiers": {
 			"source": "./src/flow/cadence/MintVerifiers.cdc",
 			"aliases": {
-				"testnet": "0x82ac1084a70a9042"
+				"testnet": "0x73a19dd056affc4d"
 			}
 		}
 	},
@@ -66,13 +68,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x82ac1084a70a9042",
+			"address": "0x73a19dd056affc4d",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "25dabcbc4b425e7e46ba67eb027c4b468b9185dd645037a6a17b6d6d948f66eb"
+				"privateKey": "d1c36bb6ed2d3900fbd47ce36a44446b1be9cfa78f34f2521a4b680a7835a16c"
 			}
 		}
 	},
@@ -80,9 +82,10 @@
 		"emulator": {
 			"emulator-account": [
 				"NonFungibleToken",
-				"FungibleToken",
-				"FlowToken",
-				"MetadataViews"
+				"MetadataViews",
+				"GrantedAccountAccess",
+				"FLOAT",
+				"MintVerifiers"
 			]
 		},
 		"testnet": {

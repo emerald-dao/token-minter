@@ -44,8 +44,6 @@
       uploadState = "error";
     }
   };
-
-  let error="Error while uploading. Please retry."
 </script>
 
 <TransparentCard
@@ -56,7 +54,7 @@
       <span class="nfts-numbers">
         {`NFT ${initialToken} to ${lastToken}`}
       </span>
-      {#if error}
+      {#if uploadState === "error"}
         <Stack direction="row" align="center" gap="0.4em">
           <Icon
             icon="ion:alert-circle-outline"
@@ -64,7 +62,7 @@
             color="red"
           />
           <span class="error">
-            {error}
+            There was an error uploading metadata. Please try again.
           </span>
         </Stack>
       {/if}

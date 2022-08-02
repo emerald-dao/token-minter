@@ -25,11 +25,11 @@ const contractData = {
 		mainnet: "0x5643fd47a29770e7"
 	},
 	MintVerifiers: {
-		testnet: "0x82ac1084a70a9042",
+		testnet: "0x73a19dd056affc4d",
 		mainnet: ""
 	},
 	FLOAT: {
-		testnet: "0x82ac1084a70a9042",
+		testnet: "0x0afe396ebc8eee65",
 		mainnet: "0x2d4c3caffbeab845"
 	},
 	FIND: {

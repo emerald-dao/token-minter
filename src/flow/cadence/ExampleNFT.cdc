@@ -72,7 +72,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let price: UFix64
 		pub let dateCreated: UFix64
 		pub let totalSupply: UInt64
-		pub let ipfsCID: String?
+		pub let ipfsCID: String
 		pub let minting: Bool
 		pub let metadatas: {UInt64: NFTMetadata}
 		pub let primaryBuyers: {UInt64: Address}
@@ -138,7 +138,7 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT"))
+          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let media = MetadataViews.Media(
 						file: ExampleNFT.image,
@@ -147,7 +147,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.name,
 						description: ExampleNFT.description,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat((self.owner!.address as Address).toString()).concat("/ExampleNFT")),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
 						squareImage: media,
 						bannerImage: media,
 						socials: {
@@ -264,7 +264,9 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Confirm recipient passes all verifiers
 		for verifier in ExampleNFT.mintVerifiers {
 			let params = {"minter": recipient.owner!.address}
-			verifier.verify(params)
+			if let error = verifier.verify(params) {
+				panic(error)
+			}
 		}
 
 		// Handle Emerald City DAO royalty (5%)
