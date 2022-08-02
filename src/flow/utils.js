@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import { addresses } from './stores';
+import * as fcl from '@onflow/fcl';
 
 export const resolveAddressObject = async (lookup) => {
   let answer = {
@@ -15,7 +16,7 @@ export const resolveAddressObject = async (lookup) => {
       answer.address = lookup;
       answer.resolvedNames.find = await fcl.query({
         cadence: `
-        import FIND from ${get(addresses.FIND)}
+        import FIND from ${get(addresses).FIND}
         pub fun main(address: Address): String? {
             let name = FIND.reverseLookup(address)
             return name?.concat(".find")
@@ -28,7 +29,7 @@ export const resolveAddressObject = async (lookup) => {
 
       answer.resolvedNames.fn = await fcl.query({
         cadence: `
-        import Domains from ${get(addresses.FN)}
+        import Domains from ${get(addresses).FN}
       
         pub fun main(address: Address): String? {
     
@@ -63,9 +64,9 @@ export const resolveAddressObject = async (lookup) => {
       answer.resolvedNames.find = lookup;
       answer.address = await fcl.query({
         cadence: `
-        import FIND from ${get(addresses.FIND)}
+        import FIND from ${get(addresses).FIND}
   
-        pub fun main(name: String) : Address?  {
+        pub fun main(name: String): Address?  {
           return FIND.lookupAddress(name)
         }
         `,
@@ -77,8 +78,8 @@ export const resolveAddressObject = async (lookup) => {
       answer.resolvedNames.fn = lookup;
       answer.address = await fcl.query({
         cadence: `
-        import Flowns from ${get(addresses.FN)}
-        import Domains from ${get(addresses.FN)}
+        import Flowns from ${get(addresses).FN}
+        import Domains from ${get(addresses).FN}
         pub fun main(name: String): Address? {
           
           let prefix = "0x"
@@ -96,6 +97,7 @@ export const resolveAddressObject = async (lookup) => {
     }
     return answer;
   } catch (e) {
+    console.log(e);
     return lookup;
   }
 }
