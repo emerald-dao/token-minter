@@ -30,9 +30,13 @@
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
               <div class="component-container">
-                <svelte:component
-                  this={steps[$activeStep].component} />
+                <div class="component-wrapper">
+                  <svelte:component
+                    this={steps[$activeStep].component} />
+                </div>
+                <div class="step-buttons">
                   <StepsButtons step={steps[$activeStep]}/>
+                </div>
               </div>
             </TransparentCard>
           </div>
@@ -59,7 +63,6 @@
   @use "../lib/styles/abstracts" as *;
 
   .main-wrapper {
-    height: 80vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,10 +93,33 @@
 
     .main-container {
       grid-area: main;
-      max-height: 100%;
+      max-height: 80vh;
 
       .component-container {
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .component-wrapper {
+          overflow-y: auto;
+        }
+
+        .step-buttons {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+
+          @include mq(small) {
+            margin-top: 2rem;
+            position: static;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            width: 100%;
+          }
+        }
       }
     }
   }

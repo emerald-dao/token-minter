@@ -19,65 +19,43 @@
   }
 </script>
 
-<div>
-  <!-- Buttons for form submitting -->
-  {#if submit}
-    <!-- If error object is given -->
-    {#if errors}
-      {#if Object.values(errors).every(element => element === null)}
-        <Button type="submit">
-          {step.buttonTexts.active}
-        </Button>
-      {:else}
-        <Button type="submit" disabled class="disabled">
-          {step.buttonTexts.active}
-        </Button>	
-      {/if}
-    <!-- Without error object -->
-    {:else}
+<!-- Buttons for form submitting -->
+{#if submit}
+  <!-- If error object is given -->
+  {#if errors}
+    {#if Object.values(errors).every(element => element === null)}
       <Button type="submit">
         {step.buttonTexts.active}
       </Button>
+    {:else}
+      <Button type="submit" disabled class="disabled">
+        {step.buttonTexts.active}
+      </Button>	
     {/if}
-  <!-- Buttons that do not submit forms -->
+  <!-- Without error object -->
   {:else}
-    {#if step.state === "active" || step.state === "inactive"}
-      <Button on:click={onClick} >
-        {step.buttonTexts.active}
-      </Button>
-    {:else if step.state === "ready"}
-      <Button on:click={onClick}>
-        {step.buttonTexts.active}
-      </Button>
-    {:else if step.state === "loading"}
-      <Button on:click={onClick} disabled>
-        <LoadingSpinner/>
-        {step.buttonTexts.loading}
-      </Button>
-    {:else if step.state === "success"}
-      <Button on:click={onClick} disabled class="disabled">
-        Uploaded
-      </Button>
-    {/if}
+    <Button type="submit">
+      {step.buttonTexts.active}
+    </Button>
   {/if}
-</div>
-
-<style type="scss">
-  @use "../../styles/abstracts" as *;
-  
-  div {
-    margin-top: 2rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
-    @include mq(small) {
-      position: static;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      width: 100%;
-    }
-  }
-</style>
+<!-- Buttons that do not submit forms -->
+{:else}
+  {#if step.state === "active" || step.state === "inactive"}
+    <Button on:click={onClick} >
+      {step.buttonTexts.active}
+    </Button>
+  {:else if step.state === "ready"}
+    <Button on:click={onClick}>
+      {step.buttonTexts.active}
+    </Button>
+  {:else if step.state === "loading"}
+    <Button on:click={onClick} disabled>
+      <LoadingSpinner/>
+      {step.buttonTexts.loading}
+    </Button>
+  {:else if step.state === "success"}
+    <Button on:click={onClick} disabled class="disabled">
+      Uploaded
+    </Button>
+  {/if}
+{/if}
