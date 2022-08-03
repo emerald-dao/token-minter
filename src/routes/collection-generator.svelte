@@ -44,7 +44,7 @@
         </div>
       </Container>
 
-      <!-- If not connected, ask to connect wallet -->
+    <!-- If not connected, ask to connect wallet -->
     {:else}
       <WalletConnectModal/>
     {/if}

@@ -7,11 +7,14 @@ import {
   ContractInfo,
   Deploy,
   UploadMetadata,
+  ThankYou,
 } from '$lib/components/sections/generator/index.js';
 import { uploadToIPFS } from '$lib/utilities/uploadToIPFS';
 import { userIPFSToken } from '$lib/stores/generator/IPFSstore';
-import { csvMetadata } from '$lib/stores/generator/CsvStore.ts';
-import { imagesFiles } from '$lib/stores/generator/ImagesStore';
+import { csvMetadata, emptyCsvStore } from '$lib/stores/generator/CsvStore.ts';
+import { imagesFiles, emptyImagesStore } from '$lib/stores/generator/ImagesStore';
+import { restartStates } from '$lib/stores/generator/updateFunctions';
+import { restartContractInfo } from '../../../flow/stores';
 
 export const activeStep = writable(Number(browser && localStorage.getItem('step')) || 0);
 
@@ -97,8 +100,28 @@ export const stepsArray = writable([
     instructions: 'Upload your metadata to your contract.',
     state: 'inactive',
   },
+  {
+    title: 'Thank You',
+    component: ThankYou,
+    emoji: '🎉',
+    state: 'inactive',
+    onSubmitAction: newCollection,
+    button: {
+      active: {
+        text: 'Create New Collection',
+        icon: 'add-circle',
+      },
+    },
+  },
 ]);
 
 async function uploadAssetsToIpfs() {
   return await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
+}
+
+async function newCollection() {
+  restartStates();
+  emptyCsvStore();
+  emptyImagesStore();
+  restartContractInfo();
 }

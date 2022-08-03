@@ -1,8 +1,7 @@
 import type { Writable } from 'svelte/types/runtime/store';
 import type { FileState } from './interfaces';
 import { writable } from 'svelte/store';
-import { browser } from '$app/env';
-import { persistentWritable } from '../ThemeStore.js'
+import { persistentWritable } from '../ThemeStore.js';
 
 export const csvState: Writable<FileState> = writable({
   uploadState: 'idle',

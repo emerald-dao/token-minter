@@ -29,7 +29,9 @@
       {/each}
     </ul>
   </TransparentCard>
-  <StepInstructions instructions={steps[step].instructions} />
+  {#if steps[step].instructions}
+    <StepInstructions instructions={steps[step].instructions} />
+  {/if}
 </div>
 
 <style type="scss">

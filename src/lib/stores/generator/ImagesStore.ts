@@ -15,3 +15,8 @@ export const setImagesStateToIdle = () => {
     errorMessages: [],
   }));
 };
+
+export const emptyImagesStore = () => {
+  setImagesStateToIdle();
+  imagesFiles.set(null);
+};

@@ -57,3 +57,14 @@ export const changeStepState = (stepNumber, state) => {
     return steps;
   });
 };
+
+export const restartStates = () => {
+  stepsArray.update((steps) => {
+    steps.forEach((step) => {
+      step.state = 'inactive';
+    }),
+      activeStep.set(0);
+    return steps;
+  }),
+    activeStep.set(0);
+};
