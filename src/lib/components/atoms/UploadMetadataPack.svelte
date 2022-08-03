@@ -62,7 +62,7 @@
             color="red"
           />
           <span class="error">
-            There was an error uploading metadata. Please try again.
+            There was an error while uploading metadata. Please try again.
           </span>
         </Stack>
       {/if}

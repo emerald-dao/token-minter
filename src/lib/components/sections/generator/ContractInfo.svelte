@@ -1,13 +1,9 @@
 <script>
-	import { StepsButtons } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/prism/PrismJS.svelte";
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 	import { createForm } from "felte";
 	import contractOptions from "$lib/config/contractOptions.js";
 	import floatOptions from "$lib/config/floatOptions.js";
-
-	export let onSubmitText;
-	export let onSubmitAction;
 
 	const { form } = createForm({
 		onSubmit() {
