@@ -7,7 +7,8 @@
     FlowConnect,
     Stack,
     TransparentCard,
-    StepsButtons
+    StepsButtons,
+    WalletConnectModal,
   } from "$lib/components/atoms/index";
   import GeneratorNav from "$lib/components/sections/generator/GeneratorNav.svelte";
   import {
@@ -45,16 +46,7 @@
 
       <!-- If not connected, ask to connect wallet -->
     {:else}
-      <div class="connection-wrapper">
-        <Container>
-          <TransparentCard accent={true} padding="4rem">
-            <Stack>
-              <p>Connect your Flow wallet to generate your collection</p>
-              <FlowConnect />
-            </Stack>
-          </TransparentCard>
-        </Container>
-      </div>
+      <WalletConnectModal/>
     {/if}
   </div>
 </Section>
@@ -124,18 +116,6 @@
           }
         }
       }
-    }
-  }
-
-  .connection-wrapper {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    p {
-      text-align: center;
     }
   }
 </style>
