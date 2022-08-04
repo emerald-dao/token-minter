@@ -6,6 +6,7 @@
   export let description;
   export let backgroundColor;
   export let price;
+  export let extra;
   export let serial;
   export let purchaseFunction;
   export let buy = false;

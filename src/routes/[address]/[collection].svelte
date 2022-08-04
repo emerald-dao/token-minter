@@ -44,10 +44,13 @@
             thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
             name={NFT.name}
             description={NFT.description}
-            price={parseFloat(collectionInfo.price).toFixed(2)}
+            price={NFT.extra["price"]
+              ? parseFloat(NFT.extra["price"]).toFixed(2)
+              : parseFloat(collectionInfo.price).toFixed(2)}
             buy={!Object.keys(collectionInfo.primaryBuyers).includes(
               NFT.metadataId
             )}
+            extra={NFT.extra}
             serial={NFT.metadataId}
             {purchaseFunction} />
         {/each}
