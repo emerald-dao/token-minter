@@ -14,6 +14,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub var description: String
 	pub var image: MetadataViews.IPFSFile
 	pub var ipfsCID: String
+	// A default price for the collection
 	pub var price: UFix64
 	pub let dateCreated: UFix64
 

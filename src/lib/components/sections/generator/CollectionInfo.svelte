@@ -1,7 +1,8 @@
 <script>
 	import { StepsButtons } from "$lib/components/atoms/index";
 	import { createForm } from "felte";
-	import { contractInfo } from "../../../../flow/stores.js";
+	import { getAllContractNames } from "../../../../flow/actions.js";
+	import { contractInfo, user } from "../../../../flow/stores.js";
 	import collectionOptions from "$lib/config/collectionOptions.js";
 	import { object, string, number } from "yup";
 	import { validator } from "@felte/validator-yup";
@@ -22,6 +23,17 @@
 		},
 		extend: [validator({ schema })],
 	});
+
+	async function checkContracts(proposedName) {
+		let contracts = await getAllContractNames($user.addr);
+		if (contracts.includes(proposedName.replace(/\s+/g, ""))) {
+			$errors["name"] = "This contract name is already taken :(";
+		}
+	}
+
+	$: if ($contractInfo.name) {
+		checkContracts($contractInfo.name);
+	}
 
 	let files;
 	$: if (files) {
