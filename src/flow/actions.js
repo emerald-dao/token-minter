@@ -1,27 +1,36 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
 import { Buffer } from 'buffer';
+import { onNext } from '$lib/stores/generator/updateFunctions';
 
 import * as fcl from '@onflow/fcl';
 import './config';
 
-import { user, transactionStatus, transactionInProgress, contractInfo, contractCode, addresses, network } from './stores';
-import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
+import {
+  user,
+  transactionStatus,
+  transactionInProgress,
+  contractInfo,
+  contractCode,
+  addresses,
+  network,
+} from './stores';
+import { resultCID } from '$lib/stores/generator/IPFSstore.ts';
 
-import { onNext, saveFileInStore } from '$lib/stores/generator/updateFunctions';
+import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 
 ///////////////
-// Cadence code 
+// Cadence code
 ///////////////
 // Scripts
-import getCollectionInfoScript from "./cadence/scripts/get_collection_info.cdc?raw";
-import getContractsScript from "./cadence/scripts/get_contracts.cdc?raw";
-import getContractDisplaysScript from "./cadence/scripts/get_contract_displays.cdc?raw";
-import checkRequiredVerifiersScript from "./cadence/scripts/check_required_verifiers.cdc?raw";
+import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
+import getContractsScript from './cadence/scripts/get_contracts.cdc?raw';
+import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
+import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
 // Transactions
-import createMetadatasTx from "./cadence/transactions/create_metadatas.cdc?raw";
-import deployContractTx from "./cadence/transactions/deploy_contract.cdc?raw";
-import purchaseNFTTx from "./cadence/transactions/purchase_nft.cdc?raw";
+import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
+import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
+import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
 import { resolveAddressObject } from './utils';
 
 if (browser) {
@@ -40,7 +49,7 @@ function switchNetwork(newNetwork) {
     fcl
       .config()
       .put('accessNode.api', 'http://localhost:8080')
-      .put('discovery.wallet', 'http://localhost:8701/fcl/authn')
+      .put('discovery.wallet', 'http://localhost:8701/fcl/authn');
   } else if (newNetwork === 'testnet') {
     fcl
       .config()
@@ -52,7 +61,7 @@ function switchNetwork(newNetwork) {
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
   }
-  saveFileInStore(network, newNetwork)
+  saveFileInStore(network, newNetwork);
 }
 
 export const deployToTestnet = async () => {
@@ -108,7 +117,6 @@ async function deployContract() {
 
   console.log('[Verifier: FLOAT] Event Owner', eventOwner);
   console.log('[Verifier: FLOAT] Event Id', eventId);
-
   try {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(deployContractTx),
@@ -123,7 +131,7 @@ async function deployContract() {
         arg(info.floatLink, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
-        arg(hexCode, t.String)
+        arg(hexCode, t.String),
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -131,13 +139,15 @@ async function deployContract() {
       limit: 9999,
     });
     console.log({ transactionId });
+
     fcl.tx(transactionId).subscribe((res) => {
       transactionStatus.set(res.status);
       console.log(res);
       if (res.status === 4) {
         // If deployment is successful
         if (res.statusCode === 0) {
-          console.log("Successfully deployed the contract.")
+          console.log('Successfully deployed the contract.');
+          // TODO: Take outside the onNext from this function
           onNext();
         }
         setTimeout(() => transactionInProgress.set(false), 2000);
@@ -150,17 +160,14 @@ async function deployContract() {
 }
 
 export const purchaseNFT = async (serial, price, contractName, contractAddress) => {
-  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
+  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress);
 
   initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
       cadence: transaction,
-      args: (arg, t) => [
-        arg(serial, t.UInt64),
-        arg(price, t.UFix64)
-      ],
+      args: (arg, t) => [arg(serial, t.UInt64), arg(price, t.UFix64)],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
@@ -178,7 +185,7 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
     console.log(e);
     transactionStatus.set(99);
   }
-}
+};
 
 // Function to upload metadata to the contract in batches of 500
 export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
@@ -200,10 +207,9 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     extras.push(extra);
   }
 
-  console.log('Uploading ' + batchSize + ' NFTs to the contract.')
+  console.log('Uploading ' + batchSize + ' NFTs to the contract.');
 
-  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr)
-    .replaceAll('500', batchSize);
+  const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr).replaceAll('500', batchSize);
 
   initTransactionState();
 
@@ -214,7 +220,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
         arg(names, t.Array(t.String)),
         arg(descriptions, t.Array(t.String)),
         arg(thumbnails, t.Array(t.String)),
-        arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String })))
+        arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -238,7 +244,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   } catch (e) {
     console.log(e);
     transactionStatus.set(99);
-    return { success: false, error: e }
+    return { success: false, error: e };
   }
 }
 
@@ -248,15 +254,19 @@ export const getContracts = async (address) => {
   try {
     const response1 = await fcl.query({
       cadence: getContractsScript,
-      args: (arg, t) => [
-        arg(address, t.Address)
-      ],
+      args: (arg, t) => [arg(address, t.Address)],
     });
 
-    const createdByTouchstone = response1.filter(contract => {
-      const contractCode = Buffer.from(contract.code, 'hex').toString()
-      return contractCode.includes("// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).") &&
-        contractCode.includes("// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.")
+    const createdByTouchstone = response1.filter((contract) => {
+      const contractCode = Buffer.from(contract.code, 'hex').toString();
+      return (
+        contractCode.includes(
+          '// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).'
+        ) &&
+        contractCode.includes(
+          '// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.'
+        )
+      );
     });
 
     let imports = '';
@@ -270,8 +280,8 @@ export const getContracts = async (address) => {
         _description: display${i}.description,
         _image: display${i}.image
       ))\n
-      `
-    })
+      `;
+    });
     const script = replaceWithProperValues(getContractDisplaysScript)
       .replace('// IMPORTS', imports)
       .replace('// DISPLAYS', displays);
@@ -320,19 +330,17 @@ export async function getNextMetadataId(contractName, userAddress) {
   } catch (e) {
     console.log(e);
   }
-};
+}
 
 export async function checkRequiredVerifiers(contractName, contractAddress, userAddress) {
   try {
     const response = await fcl.query({
       cadence: replaceWithProperValues(checkRequiredVerifiersScript, contractName, contractAddress),
-      args: (arg, t) => [
-        arg(userAddress, t.Address)
-      ],
+      args: (arg, t) => [arg(userAddress, t.Address)],
     });
 
     return response;
   } catch (e) {
     console.log(e);
   }
-};
+}

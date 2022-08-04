@@ -12,6 +12,9 @@
   } from "../../../flow/actions";
   import { contractInfo, user } from "../../../flow/stores";
   import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
+  import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
   export let uploadState = "to-upload";
   export let initialToken = 0;
@@ -40,6 +43,7 @@
     );
     if (uploadResult.success) {
       uploadState = "uploaded";
+      dispatch('uploaded');
     } else {
       uploadState = "error";
     }
