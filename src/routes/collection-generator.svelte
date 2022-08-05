@@ -27,7 +27,7 @@
             <GeneratorNav bind:step={$activeStep} {steps} />
           </div>
           <div class="main-container">
-            <TransparentCard padding="2.5rem" height="100%">
+            <TransparentCard padding="3rem" height="100%">
               <svelte:component
                 this={steps[$activeStep].component} />
             </TransparentCard>

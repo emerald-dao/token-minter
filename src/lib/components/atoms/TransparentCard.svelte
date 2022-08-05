@@ -11,16 +11,13 @@
 
 <style type="scss">
   div {
-    background-color: var(--clr-neutral-300-t9);
-    border: 0.5px var(--clr-neutral-700-t8) solid;
-    border-radius: 1rem;
-    padding: 1.4rem;
-    width: 100%;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  }
+      background-color: var(--clr-accent-soft-t9);
+      border-radius: 1rem;
+      padding: 1.4rem;
+      width: 100%;
+    }
   
   .accent {
     background-color: var(--clr-accent-soft-t8);
-    border: 0.5px var(--clr-accent-main-t5) solid;
   }
 </style>

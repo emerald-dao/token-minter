@@ -27,7 +27,7 @@
     }
     span {
       font-family: var(--font-primary);
-      font-size: 18px;
+      font-size: var(--fs-400);
       color: var(--clr-accent-main);
       text-transform: uppercase;
       font-weight: 900;
