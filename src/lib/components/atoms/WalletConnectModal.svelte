@@ -1,18 +1,18 @@
- <script>
+<script>
   import {
     Container,
     FlowConnect,
     Stack,
     TransparentCard,
   } from "$lib/components/atoms/index";
-</script> 
+</script>
 
 <div class="connection-wrapper">
   <Container>
     <TransparentCard accent={true} padding="4rem">
       <h3>Connect to Touchstone</h3>
       <Stack>
-        <p>Please coonnect your Flow wallet to generate your collection</p>
+        <p>Please connect your Flow wallet to generate your collection</p>
         <FlowConnect />
       </Stack>
     </TransparentCard>

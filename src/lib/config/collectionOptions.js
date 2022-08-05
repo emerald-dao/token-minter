@@ -3,7 +3,7 @@ let collectionOptions = [
     name: 'Collection Name',
     type: 'text',
     bindValue: 'name',
-    placeholder: 'Your Awesome Collection',
+    placeholder: 'My Awesome Collection',
     helperText: '',
   },
   {
