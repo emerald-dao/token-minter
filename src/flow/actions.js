@@ -250,6 +250,21 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
 
 // ****** Scripts ****** //
 
+export const getAllContractNames = async (address) => {
+  try {
+    const response = await fcl.query({
+      cadence: getContractsScript,
+      args: (arg, t) => [
+        arg(address, t.Address)
+      ],
+    });
+
+    return response.map(element => element.name);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 export const getContracts = async (address) => {
   try {
     const response1 = await fcl.query({

@@ -64,8 +64,6 @@ export const validateCsvAfterParse = (parsedCsv) => {
             trackedErrors.push(`ERROR: Required attribute ${k} missing in ${key}`);
           }
         });
-      } else {
-        trackedErrors.push(`ERROR: Malformed record`);
       }
       return trackedErrors;
     }, []);

@@ -14,6 +14,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub var description: String
 	pub var image: MetadataViews.IPFSFile
 	pub var ipfsCID: String
+	// A default price for the collection
 	pub var price: UFix64
 	pub let dateCreated: UFix64
 
@@ -258,7 +259,8 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
 		pre {
 			self.minting: "Minting is currently closed by the Administrator!"
-			payment.balance == self.price: "Payment does not match the price."
+			payment.balance == self.getPriceOfNFT(metadataId): 
+				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId).toString())
 		}
 
 		// Confirm recipient passes all verifiers
@@ -281,9 +283,8 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// Mint the nft 
 		let nft <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address)
-
-		// Emit event
 		let metadata = self.getNFTMetadata(metadataId)!
+		// Emit event
 		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail)
 		
 		// Deposit nft
@@ -361,6 +362,11 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub fun getCollectionInfo(): CollectionInfo {
 		return CollectionInfo()
+	}
+
+	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
+		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
+		return (metadata.extra["price"] as? UFix64) ?? self.price
 	}
 
 	init(
