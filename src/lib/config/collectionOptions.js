@@ -1,27 +1,27 @@
 let collectionOptions = [
   {
-    name: 'Collection Name',
+    name: 'Collection Name *',
     type: 'text',
     bindValue: 'name',
     placeholder: 'My Awesome Collection',
     helperText: '',
   },
   {
-    name: 'Price',
+    name: 'Price *',
     type: 'number',
     bindValue: 'payment',
     helperText: 'Define the price of each NFT in Flow tokens',
     placeholder: '10.0',
   },
   {
-    name: 'Description',
+    name: 'Description *',
     type: 'text',
     bindValue: 'description',
     helperText: 'Provide a description for your project',
     placeholder: 'This is a super awesome example NFT Collection.',
   },
   {
-    name: 'Square Image',
+    name: 'Square Image *',
     type: 'file',
     bindValue: 'image',
     helperText: 'Provide a square (main) image for your project',
