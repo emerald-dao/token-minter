@@ -13,8 +13,6 @@
 
 <style type="scss">
   .step-number {
-    color: var(--clr-accent-main-t3);
-    border: 2px var(--clr-accent-main-t3) solid;
     width: 2rem;
     min-width: 2rem;
     height: 2rem;
@@ -24,14 +22,15 @@
     align-items: center;
     font-weight: 600;
     transition: 0.8s;
+    background-color: var(--clr-accent-main-t7);
+    color: var(--clr-accent-main-t2);
   }
   .step-number-passed {
-    color: var(--clr-primary-main-t5);
-    border-color: var(--clr-primary-main-t5);
+    background-color: var(--clr-primary-main-t7);
+    color: var(--clr-primary-main-t6);
   }
   .step-number-active {
     background-color: var(--clr-primary-main);
     color: var(--clr-font-text-inverse);
-    border: none;
   }
 </style>

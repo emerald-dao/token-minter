@@ -15,24 +15,52 @@
 </script>
 
 {#if href}
-  <a
-    {href}
-    on:click
-    on:mouseover
-    on:focus
-    on:mouseenter
-    on:mouseleave
-    {disabled}
-    download={download || null}
-    {...buttonProps}>
-    {#if leftIcon}
-      <Icon icon={`ion:${leftIcon}`} width="1.5em" />
-    {/if}
-    <slot />
-    {#if rightIcon}
-      <Icon icon={`ion:${rightIcon}`} width="1.5em" />
-    {/if}
-  </a>
+  {#if download}
+    <a
+      {href}
+      on:click
+      on:mouseover
+      on:focus
+      on:mouseenter
+      on:mouseleave
+      {disabled}
+      {download}
+      {...buttonProps}>
+      {#if leftIcon}
+        <Icon
+          icon={`ion:${leftIcon}`}
+          width="1.5em" />
+      {/if}   
+      <slot />
+      {#if rightIcon}
+        <Icon
+          icon={`ion:${rightIcon}`}
+          width="1.5em" />
+      {/if}   
+    </a>
+  {:else}
+    <a
+      {href}
+      on:click
+      on:mouseover
+      on:focus
+      on:mouseenter
+      on:mouseleave
+      {disabled}
+      {...buttonProps}>
+      {#if leftIcon}
+        <Icon
+          icon={`ion:${leftIcon}`}
+          width="1.5em" />
+      {/if}   
+      <slot />
+      {#if rightIcon}
+        <Icon
+          icon={`ion:${rightIcon}`}
+          width="1.5em" />
+      {/if}   
+    </a>
+  {/if}   
 {:else}
   <button
     on:click
@@ -95,6 +123,12 @@
     background: transparent;
     border: 2px solid var(--clr-accent-main);
     color: var(--clr-accent-main);
+
+  }
+  
+  .main-color {
+    color: var(--clr-primary-main);
+    border-color: var(--clr-primary-main)
   }
   .ghost:hover {
     color: var(--clr-accent-main);

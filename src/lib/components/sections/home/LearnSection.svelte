@@ -15,9 +15,8 @@
 				<Stack align="start">
 					<h2>Learn to develop NFTs</h2>
 					<Stack direction="row">
-						<Button class="small ghost" href="https://academy.ecdao.org/"
+						<Button href="https://academy.ecdao.org/" leftIcon="school"
 							>Emerald Academy</Button>
-						<Button class="small" href="/guide/en/welcome">User Guide</Button>
 					</Stack>
 				</Stack>
 			</div>

@@ -2,7 +2,7 @@
   import { fly } from 'svelte/transition'
   import { navigating, page } from '$app/stores';
 
-  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select} from "$lib/components/atoms/index.js";
+  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select, DiscordInvite } from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
   import { t, locales, locale } from '$lib/guide/translations';
   import { goto } from '$app/navigation';
@@ -33,7 +33,8 @@
       <div class="desktop-menu">
         <Logo/>
         <Navigation/>
-        <Stack direction="row">
+        <Stack direction="row" gap="0.5em">
+          <DiscordInvite/>
           <ThemeToggle/>
           {#if $page.url.pathname.includes("guide") }
             <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
@@ -50,6 +51,7 @@
       <div class="mobile-menu">
         <Logo/>
         <div class="mobile-options">
+          <DiscordInvite/>
           <ThemeToggle/>
           <AnimatedHamburger {open} {onClick}/>
         </div>
