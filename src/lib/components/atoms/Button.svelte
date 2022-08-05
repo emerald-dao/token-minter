@@ -1,6 +1,6 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { LoadingSpinner } from "$lib/components/atoms/index"; 
+  import { LoadingSpinner } from "$lib/components/atoms/index";
 
   let buttonProps = {
     class: [$$restProps.class],
@@ -23,19 +23,15 @@
     on:mouseenter
     on:mouseleave
     {disabled}
-    {download}
+    download={download || null}
     {...buttonProps}>
     {#if leftIcon}
-      <Icon
-        icon={`ion:${leftIcon}`}
-        width="1.5em" />
-    {/if}   
+      <Icon icon={`ion:${leftIcon}`} width="1.5em" />
+    {/if}
     <slot />
     {#if rightIcon}
-      <Icon
-        icon={`ion:${rightIcon}`}
-        width="1.5em" />
-    {/if}   
+      <Icon icon={`ion:${rightIcon}`} width="1.5em" />
+    {/if}
   </a>
 {:else}
   <button
@@ -48,20 +44,14 @@
     {form}
     {...buttonProps}>
     {#if state === "loading"}
-      <LoadingSpinner
-        color="var(--clr-font-text-inverse)"
-        iconWidth="1.5em" />
-    {/if} 
+      <LoadingSpinner color="var(--clr-font-text-inverse)" iconWidth="1.5em" />
+    {/if}
     {#if leftIcon && state != "loading"}
-      <Icon
-        icon={`ion:${leftIcon}`}
-        width="1.5em" />
+      <Icon icon={`ion:${leftIcon}`} width="1.5em" />
     {/if}
     <slot />
     {#if rightIcon && state != "loading"}
-      <Icon
-        icon={`ion:${rightIcon}`}
-        width="1.5em" />
+      <Icon icon={`ion:${rightIcon}`} width="1.5em" />
     {/if}
   </button>
 {/if}
@@ -161,7 +151,8 @@
     box-shadow: none;
   }
 
-  button:hover, a:hover {
+  button:hover,
+  a:hover {
     box-shadow: var(--clr-accent-soft) 4px 4px,
       var(--clr-accent-soft-t6) 8px 8px;
     transition: 0.4s;
