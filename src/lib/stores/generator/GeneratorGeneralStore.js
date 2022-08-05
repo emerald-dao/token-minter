@@ -1,18 +1,19 @@
 import { writable, get } from 'svelte/store';
 import { browser } from '$app/env';
-import { onNext, onBack } from './updateFunctions';
 import {
   CollectionInfo,
   UploadAssets,
-  CollectionPreview,
   ContractInfo,
   Deploy,
   UploadMetadata,
+  ThankYou,
 } from '$lib/components/sections/generator/index.js';
 import { uploadToIPFS } from '$lib/utilities/uploadToIPFS';
 import { userIPFSToken } from '$lib/stores/generator/IPFSstore';
-import { csvMetadata } from '$lib/stores/generator/CsvStore.ts';
-import { imagesFiles } from '$lib/stores/generator/ImagesStore';
+import { csvMetadata, emptyCsvStore } from '$lib/stores/generator/CsvStore.ts';
+import { imagesFiles, emptyImagesStore } from '$lib/stores/generator/ImagesStore';
+import { onNext, restartStates } from '$lib/stores/generator/updateFunctions';
+import { restartContractInfo } from '../../../flow/stores';
 
 export const activeStep = writable(Number(browser && localStorage.getItem('step')) || 0);
 
@@ -26,7 +27,6 @@ export const stepsArray = writable([
     component: CollectionInfo,
     emoji: 'ℹ️',
     instructions: 'Define some general information around your collection.',
-    onSubmitText: 'Next',
     state: 'inactive',
   },
   {
@@ -35,16 +35,6 @@ export const stepsArray = writable([
     emoji: '🗂',
     instructions:
       "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
-    onSubmitAction: uploadAssetsToIpfs,
-    onSubmitText: 'Upload to IPFS',
-    state: 'inactive',
-  },
-  {
-    title: 'Collection Preview',
-    component: CollectionPreview,
-    emoji: '🖼',
-    instructions: "Looks like everything is in order. Let's see what you've got.",
-    onSubmitText: 'Next',
     state: 'inactive',
   },
   {
@@ -52,7 +42,6 @@ export const stepsArray = writable([
     component: ContractInfo,
     emoji: '📜',
     instructions: 'Define some general information around your contract.',
-    onSubmitText: 'Next',
     state: 'inactive',
   },
   {
@@ -60,7 +49,6 @@ export const stepsArray = writable([
     component: Deploy,
     emoji: '🚀',
     instructions: 'Deploy your contract to the blockchain.',
-    onSubmitText: 'Deploy',
     state: 'inactive',
   },
   {
@@ -68,12 +56,19 @@ export const stepsArray = writable([
     component: UploadMetadata,
     emoji: '👆',
     instructions: 'Upload your metadata to your contract.',
-    onSubmitText: 'Deploy',
+    state: 'inactive',
+  },
+  {
+    title: 'Thank You',
+    component: ThankYou,
+    emoji: '🎉',
     state: 'inactive',
   },
 ]);
 
-async function uploadAssetsToIpfs() {
-  console.log('Uploading assets to IPFS');
-  return await uploadToIPFS(get(csvMetadata), get(imagesFiles), get(userIPFSToken));
+export async function newCollection() {
+  restartStates();
+  emptyCsvStore();
+  emptyImagesStore();
+  restartContractInfo();
 }

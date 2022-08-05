@@ -36,6 +36,7 @@ input + label {
 .error {
   color: red;
   font-size: var(--fs-200);
+  position: relative;
 }
 
 .checkbox-label {

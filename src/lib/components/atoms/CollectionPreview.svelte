@@ -1,10 +1,7 @@
 <script>
-  import { NFTCard, StepsButtons } from "$lib/components/atoms/index";
+  import { NFTCard } from "$lib/components/atoms/index";
   import { resultCID } from "$lib/stores/generator/IPFSstore";
   import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
-
-  export let onSubmitText;
-  export let onSubmitAction;
 
   function getTemplates(assets, ipfsCID) {
     const response = assets.reduce((a, asset) => {
@@ -36,12 +33,10 @@
   {:catch error}
     <p style="color: red">{error}</p>
   {/await}
-
-  <StepsButtons {onSubmitText} {onSubmitAction} />
 </div>
 
 <style type="scss">
-  @use "../../../styles/abstracts" as *;
+  @use "../../styles/abstracts" as *;
 
   .main-wrapper {
     height: 100%;

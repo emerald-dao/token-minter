@@ -1,63 +1,70 @@
 <script>
-  import { Button } from "$lib/components/atoms/index"; 
+  import { Button, LoadingSpinner } from "$lib/components/atoms/index"; 
+  import { onNext } from "$lib/stores/generator/updateFunctions.js";
+  import {
+    activeStep,
+    stepsArray,
+  } from "$lib/stores/generator/GeneratorGeneralStore";
+  import Icon from "@iconify/svelte";
 
-  export let onSubmitText = "Next";
-  export let onSubmitAction
+  $: step = $stepsArray[$activeStep];
   export let errors;
   export let submit = false;
-  export let disabled = false;
+
+  let onClick = () => {
+    if (step.onSubmitAction) {
+      onNext(step.onSubmitAction);
+    } else {
+      onNext();
+    }
+  }
+
+  let iconWidth = "1.5em";
 </script>
 
-<div>
+{#if step.button}
   <!-- Buttons for form submitting -->
   {#if submit}
     <!-- If error object is given -->
     {#if errors}
       {#if Object.values(errors).every(element => element === null)}
         <Button type="submit">
-          {onSubmitText}
+          {step.button.active.text}
         </Button>
       {:else}
         <Button type="submit" disabled class="disabled">
-          {onSubmitText}
+          {step.button.active.text}
         </Button>	
       {/if}
     <!-- Without error object -->
     {:else}
       <Button type="submit">
-        {onSubmitText}
+        {step.button.active.text}
       </Button>
     {/if}
   <!-- Buttons that do not submit forms -->
   {:else}
-    {#if disabled}
-      <Button on:click={onSubmitAction} disabled class="disabled">
-        {onSubmitText}
+    {#if step.state === "active" || step.state === "inactive"}
+      <Button on:click={onClick} >
+        <Icon
+        color="var(--clr-font-text-inverse)"
+        icon={`ion:${step.button.active.icon}`}
+        width={iconWidth} />
+        {step.button.active.text}
       </Button>
-    {:else}
-      <Button on:click={onSubmitAction}>
-        {onSubmitText}
+    {:else if step.state === "ready"}
+      <Button on:click={onClick}>
+        {step.button.active.text}
+      </Button>
+    {:else if step.state === "loading"}
+      <Button on:click={onClick} disabled class="loading">
+        <LoadingSpinner color="var(--clr-font-text-inverse)" {iconWidth}/>
+        {step.button.loading.text}
+      </Button>
+    {:else if step.state === "success"}
+      <Button on:click={onClick} disabled class="disabled">
+        Uploaded
       </Button>
     {/if}
   {/if}
-</div>
-
-<style type="scss">
-  @use "../../styles/abstracts" as *;
-  
-  div {
-    margin-top: 2rem;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
-    @include mq(small) {
-      position: static;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      width: 100%;
-    }
-  }
-</style>
+{/if}

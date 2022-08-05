@@ -1,10 +1,11 @@
 <script>
   export let accent = false;
+  export let error = false;
   export let height = "100%"
   export let padding = "1.4rem"
 </script>
 
-<div class:accent={accent} style={`height: ${height}; padding: ${padding}`}>
+<div class:accent={accent} class:error={error} style={`height: ${height}; padding: ${padding}`}>
   <slot/>
 </div>
 

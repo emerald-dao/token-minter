@@ -20,29 +20,30 @@ export const setValidationSuccess = (store) => {
 };
 
 export const onNext = (stepFunction) => {
+  console.log('next');
   if (stepFunction) {
     changeStepState(get(activeStep), 'loading');
     let promise = new Promise(async (resolve, reject) => {
-      let job = await stepFunction();
-      if (job === true) {
+      let stepJob = await stepFunction();
+      console.log('stepJob', stepFunction);
+      if (stepJob === true) {
         resolve('success');
       } else {
-        console.log(job)
-        reject(job.error);
+        reject(stepJob.error);
       }
     });
     promise
       .then(() => {
-        activeStep.update((current) => current + 1);
         changeStepState(get(activeStep), 'success');
+        activeStep.update((current) => current + 1);
       })
       .catch((message) => {
         changeStepState(get(activeStep), 'error');
         alert(message);
       });
   } else {
-    activeStep.update((current) => current + 1);
     changeStepState(get(activeStep), 'success');
+    activeStep.update((current) => current + 1);
   }
 };
 
@@ -55,4 +56,15 @@ export const changeStepState = (stepNumber, state) => {
     steps[stepNumber].state = state;
     return steps;
   });
+};
+
+export const restartStates = () => {
+  stepsArray.update((steps) => {
+    steps.forEach((step) => {
+      step.state = 'inactive';
+    }),
+      activeStep.set(0);
+    return steps;
+  }),
+    activeStep.set(0);
 };
