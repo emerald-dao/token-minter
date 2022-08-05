@@ -21,10 +21,37 @@ let collectionOptions = [
     placeholder: 'This is a super awesome example NFT Collection.',
   },
   {
-    name: 'Image',
+    name: 'Square Image',
     type: 'file',
     bindValue: 'image',
-    helperText: 'Provide an image for your project',
+    helperText: 'Provide a square (main) image for your project',
+  },
+  {
+    name: 'Banner Image',
+    type: 'file',
+    bindValue: 'bannerImage',
+    helperText: 'Provide a banner image for your project',
+  },
+  {
+    name: 'Website',
+    type: 'text',
+    bindValue: 'website',
+    helperText: 'A link to your main website',
+    placeholder: 'https://ecdao.org',
+  },
+  {
+    name: 'Discord',
+    type: 'text',
+    bindValue: 'discord',
+    helperText: 'A link to your Discord community',
+    placeholder: 'https://discord.gg/emeraldcity',
+  },
+  {
+    name: 'Twitter',
+    type: 'text',
+    bindValue: 'twitter',
+    helperText: 'A link to your Twitter',
+    placeholder: 'https://twitter.com/emerald_dao',
   },
 ];
 
