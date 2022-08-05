@@ -31,7 +31,7 @@
     justify-content: center;
     align-items: center;
   }
-
+  
   li {
     font-size: var(--fs-400);
     
@@ -41,6 +41,11 @@
   }
   
   a {
+    color: var(--clr-accent-main);
     text-decoration: none;
+    transition: 0.3s;
+  }
+  a:hover {
+    color: var(--clr-accent-strong);
   }
 </style>

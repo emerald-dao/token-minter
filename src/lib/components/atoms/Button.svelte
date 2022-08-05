@@ -129,6 +129,12 @@
     background: transparent;
     border: 2px solid var(--clr-accent-main);
     color: var(--clr-accent-main);
+
+  }
+  
+  .main-color {
+    color: var(--clr-primary-main);
+    border-color: var(--clr-primary-main)
   }
   .ghost:hover {
     color: var(--clr-accent-main);

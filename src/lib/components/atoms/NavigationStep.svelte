@@ -24,16 +24,18 @@
   
   li {
     display: flex;
-    font-weight: 400;
+    font-weight: 500;
     transition: 0.6s;
     flex-direction: row;
     align-items: center;
     gap: 0.5em;
     border-radius: 0.5em;
+    letter-spacing: 0.05em;
+    font-family: var(--font-main);
 
     transition: 0.4s;
     width: 100%;
-    color: var(--clr-accent-main-t3);
+    color: var(--clr-accent-main-t4);
     padding-block: 0.6em;
     transition: 1s;
     font-size: var(--fs-200);
@@ -52,6 +54,6 @@
     cursor: pointer;
   }
   .li-passed {
-    color: var(--clr-primary-main-t5);
+    color: var(--clr-primary-main-t6);
   }
 </style>

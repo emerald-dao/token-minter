@@ -23,7 +23,7 @@ $colors: (
   ),
   blue: (
     100: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 80%, 1),
-    200: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 70%, 1),
+    200: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 73%, 1),
     300: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 60%, 1),
     400: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 43%, 1),
     500: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 20%, 1),

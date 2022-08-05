@@ -55,9 +55,9 @@
 					</p>
 				</div>
 				<div class="buttons-group">
-					<Button class="medium ghost" href="/guide/en/welcome"
-						>User Guide</Button>
-					<Button class="medium" href="/collection-generator"
+					<Button class="medium ghost" href="/guide/en/welcome" leftIcon="document-text"
+						>Guide</Button>
+					<Button class="medium" href="/collection-generator" leftIcon="add-circle"
 						>Generate Collection</Button>
 				</div>
 			</Stack>
