@@ -24,3 +24,4 @@ export { default as LoadingSpinner } from './LoadingSpinner.svelte';
 export { default as CollectionCard } from './CollectionCard.svelte';
 export { default as WalletConnectModal } from './WalletConnectModal.svelte';
 export { default as CollectionPreview } from './CollectionPreview.svelte';
+export { default as DiscordInvite } from './DiscordInvite.svelte';
