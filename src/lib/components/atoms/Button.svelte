@@ -15,28 +15,52 @@
 </script>
 
 {#if href}
-  <a
-    {href}
-    on:click
-    on:mouseover
-    on:focus
-    on:mouseenter
-    on:mouseleave
-    {disabled}
-    {download}
-    {...buttonProps}>
-    {#if leftIcon}
-      <Icon
-        icon={`ion:${leftIcon}`}
-        width="1.5em" />
-    {/if}   
-    <slot />
-    {#if rightIcon}
-      <Icon
-        icon={`ion:${rightIcon}`}
-        width="1.5em" />
-    {/if}   
-  </a>
+  {#if download}
+    <a
+      {href}
+      on:click
+      on:mouseover
+      on:focus
+      on:mouseenter
+      on:mouseleave
+      {disabled}
+      {download}
+      {...buttonProps}>
+      {#if leftIcon}
+        <Icon
+          icon={`ion:${leftIcon}`}
+          width="1.5em" />
+      {/if}   
+      <slot />
+      {#if rightIcon}
+        <Icon
+          icon={`ion:${rightIcon}`}
+          width="1.5em" />
+      {/if}   
+    </a>
+  {:else}
+    <a
+      {href}
+      on:click
+      on:mouseover
+      on:focus
+      on:mouseenter
+      on:mouseleave
+      {disabled}
+      {...buttonProps}>
+      {#if leftIcon}
+        <Icon
+          icon={`ion:${leftIcon}`}
+          width="1.5em" />
+      {/if}   
+      <slot />
+      {#if rightIcon}
+        <Icon
+          icon={`ion:${rightIcon}`}
+          width="1.5em" />
+      {/if}   
+    </a>
+  {/if}   
 {:else}
   <button
     on:click
