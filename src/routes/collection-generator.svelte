@@ -4,13 +4,11 @@
   import {
     Section,
     Container,
-    FlowConnect,
-    Stack,
     TransparentCard,
     StepsButtons,
     WalletConnectModal,
   } from "$lib/components/atoms/index";
-  import GeneratorNav from "$lib/components/sections/generator/GeneratorNav.svelte";
+  import { GeneratorNav, GeneratorStepLayout } from "$lib/components/sections/generator/index";
   import {
     activeStep,
     stepsArray,
@@ -30,15 +28,8 @@
           </div>
           <div class="main-container">
             <TransparentCard padding="2.5rem" height="100%">
-              <div class="component-container">
-                <div class="component-wrapper">
-                  <svelte:component
-                    this={steps[$activeStep].component} />
-                </div>
-                <div class="step-buttons">
-                  <StepsButtons step={steps[$activeStep]}/>
-                </div>
-              </div>
+              <svelte:component
+                this={steps[$activeStep].component} />
             </TransparentCard>
           </div>
         </div>
@@ -59,63 +50,36 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 1rem;
-  }
 
-  .main-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    .main-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+  
+      @include mq(medium) {
+        display: grid;
+        grid-template-columns: 270px 1fr;
+        gap: 2rem;
+        margin-bottom: 1rem;
+        height: 100%;
+        grid-template-areas: "sidebar main";
+      }
+
+      .main-container {
+        grid-area: main;
+
+        @include mq(medium) {
+          height: 80vh;
+        }
+    }
+  }
+  .sidebar-container {
+    height: 100%;
 
     @include mq(medium) {
-      display: grid;
-      grid-template-columns: 270px 1fr;
-      gap: 2rem;
-      margin-bottom: 1rem;
-      height: 100%;
-      grid-template-areas: "sidebar main";
-    }
-
-    .sidebar-container {
-      height: 100%;
-
-      @include mq(medium) {
-        grid-area: sidebar;
-      }
-    }
-
-    .main-container {
-      grid-area: main;
-
-      @include mq(medium) {
-        height: 80vh;
-      }
-
-      .component-container {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-        .component-wrapper {
-          overflow-y: auto;
-        }
-
-        .step-buttons {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-
-          @include mq(small) {
-            margin-top: 2rem;
-            position: static;
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
-            width: 100%;
-          }
-        }
-      }
+      grid-area: sidebar;
     }
   }
+}
+    
 </style>

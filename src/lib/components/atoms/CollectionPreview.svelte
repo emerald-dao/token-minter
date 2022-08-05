@@ -36,7 +36,7 @@
 </div>
 
 <style type="scss">
-  @use "../../../styles/abstracts" as *;
+  @use "../../styles/abstracts" as *;
 
   .main-wrapper {
     height: 100%;

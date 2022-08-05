@@ -1,17 +1,37 @@
 <script>
-  import { DropZone } from "$lib/components/atoms/index";
+  import { DropZone, Button, Stack } from "$lib/components/atoms/index";
   import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
-  import { csvState, csvFile } from "$lib/stores/generator/CsvStore.ts";
+  import { csvState, csvFile, csvMetadata } from "$lib/stores/generator/CsvStore.ts";
   import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {
     csvDropHandling,
     imagesDropHandling,
   } from "$lib/generator/dropHandling";
-  import { stepsArray, activeStep } from "$lib/stores/generator/GeneratorGeneralStore";
+  import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
+  import { uploadToIPFS } from '$lib/utilities/uploadToIPFS';
+  import { onNext } from "$lib/stores/generator/updateFunctions";
+  import {
+    activeStep,
+    stepsArray,
+  } from "$lib/stores/generator/GeneratorGeneralStore";
+
+  const onStepSubmit = async () => {
+    if ($csvFile && $imagesFiles && $userIPFSToken) {
+      // TODO: Any simpler way to do it?
+      async function uploadAssetsToIpfs() {
+        return await uploadToIPFS($csvMetadata, $imagesFiles, $userIPFSToken);
+      }
+      onNext(uploadAssetsToIpfs);
+    } else {
+      alert("Missing assets");
+    }
+	}
+
+  $: buttonActive = $csvFile && $imagesFiles && $userIPFSToken ? true : false;
 </script>
 
-<div class="main-wrapper">
-  <div class="drop-zones-wrapper">
+<GeneratorStepLayout>
+  <Stack direction="column" slot="main-content">
     <!-- CSV DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneCsv"> Collection Data </label>
@@ -37,51 +57,42 @@
         fileState={$imagesState}
         type="image" />
     </div>
-  </div>
 
-  <div class="form">
-    <label for="ipfs-token">IPFS Key</label>
-    <!-- TODO: Add tutorial on how to get an IPFS token  -->
-    <span class="helper-text">
-      To get your own IPFS Key:
-      <ol>
-        <li>
-          Log in to <a href="https://nft.storage/login/" target="_blank"
-            >nft.storage</a>
-        </li>
-        <li>Click "API Keys"</li>
-        <li>Click "+ New Key" and create your own key</li>
-      </ol>
-    </span>
-    <input
-      name="ipfs-token"
-      id="ipfs-token"
-      placeholder="Your IPFS Key"
-      type="text"
-      bind:value={$userIPFSToken} />
-  </div>
-</div>
+    <div class="form">
+      <label for="ipfs-token">IPFS Key</label>
+      <span class="helper-text">
+        To get your own IPFS Key:
+        <ol>
+          <li>
+            Log in to <a href="https://nft.storage/login/" target="_blank"
+              >nft.storage</a>
+          </li>
+          <li>Click "API Keys"</li>
+          <li>Click "+ New Key" and create your own key</li>
+        </ol>
+      </span>
+      <input
+        name="ipfs-token"
+        id="ipfs-token"
+        placeholder="Your IPFS Key"
+        type="text"
+        bind:value={$userIPFSToken} />
+    </div>
+  </Stack>
+
+  <Button slot="buttons" state={$stepsArray[$activeStep].state} leftIcon="arrow-up-circle" on:click={onStepSubmit} disabled={!buttonActive}>
+    {#if $stepsArray[$activeStep].state === "loading"}
+      Uploading to IPFS
+    {:else}
+      Upload to IPFS
+    {/if}
+  </Button>
+</GeneratorStepLayout>
 
 <style type="scss">
-  .main-wrapper {
+  .input-wrapper {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-between;
     width: 100%;
-    height: 100%;
-    gap: 2rem;
-
-    .drop-zones-wrapper {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      gap: 1.5rem;
-
-      .input-wrapper {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-  }
+  } 
 </style>

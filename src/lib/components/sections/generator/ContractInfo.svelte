@@ -1,88 +1,100 @@
 <script>
+	import { Button, Stack } from "$lib/components/atoms/index";
 	import PrismJS from "$lib/components/prism/PrismJS.svelte";
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 	import { createForm } from "felte";
 	import contractOptions from "$lib/config/contractOptions.js";
 	import floatOptions from "$lib/config/floatOptions.js";
+	import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
+	import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
 	const { form } = createForm({
 		onSubmit() {
-			onSubmitAction();
+			onNext();
 		},
 	});
 </script>
 
-<form use:form>
-	<div class="inputs-wrapper">
-		<h4>Contract Options</h4>
-		<span class="helper-text"
-			>Select the options you want to include in your contract.</span>
-		<div class="inputs">
-			<!-- Generate input values from the contractOptions object -->
-			{#each contractOptions as option}
-				<label
-					class="checkbox-label"
-					class:checkbox-label-with-number={option.withNumber}
-					for={option.bindValue}>
-					<input
-						name={option.bindValue}
-						id={option.bindValue}
-						type="checkbox"
-						bind:checked={$contractInfo[option.bindValue]} />
-					{option.name}
-					{#if option.withNumber}
-						<input
-							name={option.bindValue + "Number"}
-							id={option.bindValue + "Number"}
-							type="number"
-							disabled={$contractInfo[option.bindValue]
-								? !$contractInfo[option.bindValue]
-								: true}
-							placeholder="Number"
-							bind:value={$contractInfo[option.bindValue + "Number"]} />
-					{/if}
-				</label>
-			{/each}
-		</div>
-		<h4>FLOAT Options</h4>
-		<span class="helper-text"
-			>Select the options you want to include in your contract.</span>
-		<div class="inputs">
-			<!-- Generate input values from the floatOptions object -->
-			{#each floatOptions as option}
-				<label class="checkbox-label" for={option.bindValue}>
-					<input
-						name={option.bindValue}
-						id={option.bindValue}
-						type="checkbox"
-						bind:checked={$contractInfo[option.bindValue]} />
-					{option.name}
-				</label>
-				{#if option.withText}
-					<input
-						name={option.bindValue + "Text"}
-						id={option.bindValue + "Text"}
-						class="input-text"
-						type="text"
-						disabled={$contractInfo[option.bindValue]
-							? !$contractInfo[option.bindValue]
-							: true}
-						placeholder="https://floats.city/jacob.find/event/185382914"
-						bind:value={$contractInfo[option.bindValue + "Text"]} />
-				{/if}
-			{/each}
+<GeneratorStepLayout>
+	<div slot="main-content" class="main-container" >
+		<form use:form id="contract-info">
+			<div class="inputs-wrapper">
+				<h4>Contract Options</h4>
+				<span class="helper-text"
+					>Select the options you want to include in your contract.</span>
+				<div class="inputs">
+					<!-- Generate input values from the contractOptions object -->
+					{#each contractOptions as option}
+						<label
+							class="checkbox-label"
+							class:checkbox-label-with-number={option.withNumber}
+							for={option.bindValue}>
+							<input
+								name={option.bindValue}
+								id={option.bindValue}
+								type="checkbox"
+								bind:checked={$contractInfo[option.bindValue]} />
+							{option.name}
+							{#if option.withNumber}
+								<input
+									name={option.bindValue + "Number"}
+									id={option.bindValue + "Number"}
+									type="number"
+									disabled={$contractInfo[option.bindValue]
+										? !$contractInfo[option.bindValue]
+										: true}
+									placeholder="Number"
+									bind:value={$contractInfo[option.bindValue + "Number"]} />
+							{/if}
+						</label>
+					{/each}
+				</div>
+				<h4>FLOAT Options</h4>
+				<span class="helper-text"
+					>Select the options you want to include in your contract.</span>
+				<div class="inputs">
+					<!-- Generate input values from the floatOptions object -->
+					{#each floatOptions as option}
+						<label class="checkbox-label" for={option.bindValue}>
+							<input
+								name={option.bindValue}
+								id={option.bindValue}
+								type="checkbox"
+								bind:checked={$contractInfo[option.bindValue]} />
+							{option.name}
+						</label>
+						{#if option.withText}
+							<input
+								name={option.bindValue + "Text"}
+								id={option.bindValue + "Text"}
+								class="input-text"
+								type="text"
+								disabled={$contractInfo[option.bindValue]
+									? !$contractInfo[option.bindValue]
+									: true}
+								placeholder="https://floats.city/jacob.find/event/185382914"
+								bind:value={$contractInfo[option.bindValue + "Text"]} />
+						{/if}
+					{/each}
+				</div>
+			</div>
+		</form>
+
+		<div class="code">
+			<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 		</div>
 	</div>
 
-	<div class="code">
-		<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
-	</div>
-</form>
+	<Stack slot="buttons" direction="row">
+		<Button class="ghost" leftIcon="download" href={`data:text/plain;charset=utf-8, ${encodeURIComponent($contractCode)}`} download={`${$contractInfo.name}.cdc`}>Download Code</Button>
+		<Button type="submit" form="contract-info" rightIcon="arrow-forward-circle">Next</Button>
+	</Stack>
+</GeneratorStepLayout>
 
 <style type="scss">
 	@use "../../../styles/abstracts" as *;
 
-	form {
+	.main-container {
 		display: flex;
 		flex-direction: column;
 		overflow-y: hidden;

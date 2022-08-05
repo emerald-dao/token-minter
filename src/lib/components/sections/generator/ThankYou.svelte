@@ -1,7 +1,8 @@
 <script>
-  import Icon from "@iconify/svelte";
   import { dappTitle } from "$lib/config/config";
   import { Button, CollectionCard, Stack } from "$lib/components/atoms/index";
+  import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
+  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore"
 
   let collection = {
       name: "Hats NFT 6",
@@ -13,8 +14,8 @@
     }
 </script>
 
-<div>
-  <Stack direction="column" align="start">
+<GeneratorStepLayout>
+  <Stack slot="main-content" direction="column" align="start">
     <div>
       <h3>Thank You!</h3>
       <p>{`Thanks for uploading your collection with ${dappTitle}.`}</p>
@@ -26,7 +27,10 @@
       description={collection.description}
       owner={collection.owner} />
   </Stack>
-</div>
+  <Button slot="buttons" on:click={newCollection} leftIcon="add-circle">
+    Create new collection
+  </Button>
+</GeneratorStepLayout>
 
 <style type="scss">
   div {

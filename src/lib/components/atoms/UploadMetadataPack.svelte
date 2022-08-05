@@ -73,33 +73,33 @@
     </Stack>
       {#if uploadState === "to-upload" || uploadState === "error"}
         <Button class="small no-shadow" on:click={onUpload}>
-          Upload
           <Icon
             icon="ion:arrow-up-circle"
             color="var(--clr-font-text-inverse)"
             width={iconWidth} />
+          Upload
         </Button>
       {:else if uploadState === "waiting"}
         <Button class="small no-shadow waiting">
-          Waiting
           <Icon
             icon="ion:arrow-up-circle"
             color="var(--clr-font-text-inverse)"
             width={iconWidth} />
+          Waiting
         </Button>
       {:else if uploadState === "loading"}
         <Button class="small no-shadow loading">
-          Uploading
           <LoadingSpinner color="var(--clr-font-text-inverse)" {iconWidth} />
+          Uploading
         </Button>
       {:else if uploadState === "uploaded"}
         <Button class="small no-shadow waiting">
-        Uploaded
           <Icon
             icon="ion:checkmark-circle"
             color="var(--clr-font-text-inverse)"
             width={iconWidth}
           />
+        Uploaded
         </Button>
       {/if}
   </Stack>

@@ -4,7 +4,6 @@ let collectionOptions = [
     type: 'text',
     bindValue: 'name',
     placeholder: 'Your Awesome Collection',
-    // validation: [string(), required()],
     helperText: '',
   },
   {
@@ -12,14 +11,14 @@ let collectionOptions = [
     type: 'number',
     bindValue: 'payment',
     helperText: 'Define the price of each NFT in Flow tokens',
-    placeholder: '10.0'
+    placeholder: '10.0',
   },
   {
     name: 'Description',
     type: 'text',
     bindValue: 'description',
     helperText: 'Provide a description for your project',
-    placeholder: 'This is a super awesome example NFT Collection.'
+    placeholder: 'This is a super awesome example NFT Collection.',
   },
   {
     name: 'Image',
