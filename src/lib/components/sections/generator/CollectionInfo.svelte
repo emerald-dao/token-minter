@@ -17,7 +17,7 @@
 		),
 		description: string().required("Don't be shy, write a description 🤗"),
 		image: mixed().required("We also need an image! 📸"),
-		bannerImage: string(),
+		bannerImage: mixed(),
 		website: string().url(),
 		discord: string().url(),
 		twitter: string().url(),
