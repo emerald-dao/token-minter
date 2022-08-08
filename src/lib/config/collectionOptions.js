@@ -1,30 +1,57 @@
 let collectionOptions = [
   {
-    name: 'Collection Name',
+    name: 'Collection Name *',
     type: 'text',
     bindValue: 'name',
-    placeholder: 'Your Awesome Collection',
+    placeholder: 'My Awesome Collection',
     helperText: '',
   },
   {
-    name: 'Price',
+    name: 'Price *',
     type: 'number',
     bindValue: 'payment',
     helperText: 'Define the price of each NFT in Flow tokens',
     placeholder: '10.0',
   },
   {
-    name: 'Description',
+    name: 'Description *',
     type: 'text',
     bindValue: 'description',
     helperText: 'Provide a description for your project',
     placeholder: 'This is a super awesome example NFT Collection.',
   },
   {
-    name: 'Image',
+    name: 'Square Image *',
     type: 'file',
     bindValue: 'image',
-    helperText: 'Provide an image for your project',
+    helperText: 'Provide a square (main) image for your project',
+  },
+  {
+    name: 'Banner Image',
+    type: 'file',
+    bindValue: 'bannerImage',
+    helperText: 'Provide a banner image for your project',
+  },
+  {
+    name: 'Website',
+    type: 'text',
+    bindValue: 'website',
+    helperText: 'A link to your main website',
+    placeholder: 'https://ecdao.org',
+  },
+  {
+    name: 'Discord',
+    type: 'text',
+    bindValue: 'discord',
+    helperText: 'A link to your Discord community',
+    placeholder: 'https://discord.gg/emeraldcity',
+  },
+  {
+    name: 'Twitter',
+    type: 'text',
+    bindValue: 'twitter',
+    helperText: 'A link to your Twitter',
+    placeholder: 'https://twitter.com/emerald_dao',
   },
 ];
 

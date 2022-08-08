@@ -2,16 +2,9 @@
   import { dappTitle } from "$lib/config/config";
   import { Button, CollectionCard, Stack } from "$lib/components/atoms/index";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
-  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore"
-
-  let collection = {
-      name: "Hats NFT 6",
-      slug: "HatsNFT6",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "Hats NFT 6 created their collection on Touchstone. Founded in 2016, they have been OGs in the crypto space...!",
-      owner: "0x6c0d53c676256e8c",
-    }
+  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
+  import { contractInfo, user } from "../../../../flow/stores.js";
+  import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
 </script>
 
 <GeneratorStepLayout>
@@ -21,11 +14,11 @@
       <p>{`Thanks for uploading your collection with ${dappTitle}.`}</p>
     </div>
     <CollectionCard
-      name={collection.name}
-      url={`/${collection.owner}/${collection.slug}`}
-      thumbnailURL={collection.thumbnailURL}
-      description={collection.description}
-      owner={collection.owner} />
+      name={$contractInfo.name}
+      url={`/${$user.addr}/${$contractInfo.name.replace(/\s+/g, "")}`}
+      thumbnailURL={`https://nftstorage.link/ipfs/${$resultCID}/${$contractInfo.image.name}`}
+      description={$contractInfo.description}
+      owner={$user.addr} />
   </Stack>
   <Button slot="buttons" on:click={newCollection} leftIcon="add-circle">
     Create new collection
