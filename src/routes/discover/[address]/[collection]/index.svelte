@@ -3,7 +3,7 @@
     checkRequiredVerifiers,
     getCollectionInfo,
     purchaseNFT,
-  } from "../../flow/actions";
+  } from "../../../../flow/actions";
 
   import {
     Section,
@@ -13,7 +13,7 @@
     NFTCard,
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
-  import { user } from "../../flow/stores.js";
+  import { user } from "../../../../flow/stores.js";
   import Verifiers from "$lib/components/atoms/Verifiers.svelte";
 
   const purchaseFunction = (serial, price) => {
@@ -52,7 +52,8 @@
             )}
             extra={NFT.extra}
             serial={NFT.metadataId}
-            {purchaseFunction} />
+            {purchaseFunction}
+            withLink={true} />
         {/each}
       </AdaptableGrid>
     </Container>

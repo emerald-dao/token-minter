@@ -10,32 +10,68 @@
   export let serial;
   export let purchaseFunction;
   export let buy = false;
+  export let withLink = false;
+  
+  // TODO: make this dynamic
+  export let collection = {
+    name: "MyAwesomeCollection",
+    description: "Collection description",
+    address: "0x8f9e8e0dc951c5b9"
+  };
 </script>
 
 <TransparentCard padding="0.8em">
-  <div class="main-wrapper">
-    <img
+  {#if withLink}
+    <a href={`/discover/${collection.address}/${collection.name}/${serial}`}>
+      <div class="main-wrapper">
+        <img
+        src={thumbnailURL}
+        alt={`${name} image`}
+        style={`background-color: ${backgroundColor};`} />
+        <div class="content">
+          <h4>{name}</h4>
+          {#if description}
+          <p class="description">{description}</p>
+          {/if}
+          {#if price}
+          <p class="price">{price}</p>
+          {/if}
+        </div>
+        {#if buy}
+        <Button class="small" on:click={() => purchaseFunction(serial, price)}>
+          Buy
+        </Button>
+        {/if}
+      </div>
+    </a>
+  {:else}
+    <div class="main-wrapper">
+      <img
       src={thumbnailURL}
       alt={`${name} image`}
       style={`background-color: ${backgroundColor};`} />
-    <div class="content">
-      <h4>{name}</h4>
-      {#if description}
+      <div class="content">
+        <h4>{name}</h4>
+        {#if description}
         <p class="description">{description}</p>
-      {/if}
-      {#if price}
+        {/if}
+        {#if price}
         <p class="price">{price}</p>
-      {/if}
-    </div>
-    {#if buy}
+        {/if}
+      </div>
+      {#if buy}
       <Button class="small" on:click={() => purchaseFunction(serial, price)}>
         Buy
       </Button>
-    {/if}
-  </div>
+      {/if}
+    </div>
+  {/if}
 </TransparentCard>
 
 <style type="scss">
+  a {
+    text-decoration: none;
+  }
   .main-wrapper {
     display: flex;
     flex-direction: column;

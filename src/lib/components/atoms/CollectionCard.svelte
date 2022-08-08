@@ -15,7 +15,7 @@
   export let owner;
 </script>
 
-<a href={url}>
+<a href={`/discover${url}`}>
   <TransparentCard>
     <div class="main-wrapper" direction="row" align="flex-start">
       <img src={thumbnailURL} alt="Collection thumbnail" />
