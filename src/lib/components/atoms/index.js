@@ -25,3 +25,7 @@ export { default as CollectionCard } from './CollectionCard.svelte';
 export { default as WalletConnectModal } from './WalletConnectModal.svelte';
 export { default as CollectionPreview } from './CollectionPreview.svelte';
 export { default as DiscordInvite } from './DiscordInvite.svelte';
+export { default as TouchstoneIcon } from './TouchstoneIcon.svelte';
+export { default as MadeWithTouchstone } from './MadeWithTouchstone.svelte';
+export { default as WalletAddress } from './WalletAddress.svelte';
+export { default as NFTCardContent } from './NFTCardContent.svelte';

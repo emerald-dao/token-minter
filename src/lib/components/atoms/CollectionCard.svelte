@@ -1,11 +1,8 @@
 <script>
   import {
-    Section,
-    Container,
     Stack,
-    FlowConnect,
     TransparentCard,
-    NFTCard,
+    WalletAddress
   } from "$lib/components/atoms/index";
 
   export let name;
@@ -22,7 +19,7 @@
       <div class="content-wrapper">
         <Stack direction="column" align="left" gap="0.6em">
           <h2>{name}</h2>
-          <p class="owner">By {owner}</p>
+          <WalletAddress address={owner}>Made by</WalletAddress>
           <p class="description">
             {description}
           </p>
@@ -39,6 +36,7 @@
     text-decoration: none;
     color: var(--clr-font-text);
     max-width: 900px;
+    width: 100%;
 
     .main-wrapper {
       display: flex;
@@ -66,16 +64,6 @@
         h2 {
           color: var(--clr-accent-strong);
           font-size: var(--fs-600);
-        }
-        .owner {
-          color: var(--clr-accent-main);
-          background-color: var(--clr-accent-main-t8);
-          font-size: var(--fs-200);
-          font-weight: 500;
-          padding: 0.2em 0.9em;
-          border-radius: 0.8rem;
-          width: fit-content;
-          margin-bottom: 1em;
         }
         .description {
           font-size: var(--fs-300);

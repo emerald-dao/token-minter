@@ -98,7 +98,7 @@
     color: var(--clr-font-text-button);
     font-family: var(--font-mono);
     padding: 0.4em 1.5em;
-    border-radius: 0.4em;
+    border-radius: 0.6em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -106,6 +106,8 @@
     justify-content: center;
     gap: 0.7em;
     border: none;
+    outline: none;
+    cursor: pointer;
 
     @include mq(small) {
       width: fit-content;
@@ -127,9 +129,15 @@
   }
   
   .main-color {
-    color: var(--clr-primary-main);
+    background: var(--clr-primary-main);
     border-color: var(--clr-primary-main)
   }
+  
+  .accent-color {
+    background: var(--clr-accent-main);
+    border-color: var(--clr-accent-main)
+  }
+
   .ghost:hover {
     color: var(--clr-accent-main);
   }
@@ -191,5 +199,9 @@
       var(--clr-accent-soft-t6) 8px 8px;
     transition: 0.4s;
     color: var(--clr-font-text-inverse);
+  }
+
+  .full-width {
+    width: 100%;
   }
 </style>
