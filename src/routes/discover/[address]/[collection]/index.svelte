@@ -26,7 +26,7 @@
 
 <Section class="padding-top-small padding-bottom-small">
   {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
-    <Container class="x-large">
+    <Container>
       <AdaptableGrid>
         <TransparentCard accent={true}>
           <div class="image-wrapper">
