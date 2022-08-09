@@ -28,6 +28,10 @@ const contractData = {
     testnet: '0x73a19dd056affc4d',
     mainnet: '',
   },
+  TouchstoneContracts: {
+    testnet: '0x73a19dd056affc4d',
+    mainnet: '',
+  },
   FLOAT: {
     testnet: '0x0afe396ebc8eee65',
     mainnet: '0x2d4c3caffbeab845',
@@ -58,6 +62,7 @@ export const addresses = derived([network], ([$network]) => {
     FLOAT: contractData.FLOAT[$network],
     FIND: contractData.FIND[$network],
     FN: contractData.FN[$network],
+    TouchstoneContracts: contractData.TouchstoneContracts[$network]
   };
 });
 
@@ -65,6 +70,10 @@ export const contractInfo = persistentWritable('contractInfo', {
   name: '',
   description: '',
   image: null,
+  bannerImage: null,
+  website: '',
+  discord: '',
+  twitter: '',
   payment: null,
   startMinting: true,
   floatLink: false,

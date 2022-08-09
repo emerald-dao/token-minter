@@ -3,7 +3,7 @@ import MintVerifiers from "../MintVerifiers.cdc"
 
 pub fun main(potentialMinter: Address): [VerifierInfo] {
   let answer: [VerifierInfo] = []
-  let verifiers = ExampleNFT.getCollectionInfo().mintVerifiers
+  let verifiers = ExampleNFT.getMintVerifiers()
 
   let checks = MintVerifiers.checkPassing(
     verifiers: verifiers, 

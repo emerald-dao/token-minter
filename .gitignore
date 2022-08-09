@@ -8,5 +8,5 @@ node_modules
 .env.production
 .vercel
 .output
-package-lock.json
 .vercel_build_output
+package-lock.json

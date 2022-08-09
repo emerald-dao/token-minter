@@ -67,6 +67,7 @@ export const stepsArray = writable([
 ]);
 
 export async function newCollection() {
+  console.log("resetting...")
   restartStates();
   emptyCsvStore();
   emptyImagesStore();

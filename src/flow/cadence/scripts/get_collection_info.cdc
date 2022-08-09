@@ -1,5 +1,5 @@
 import ExampleNFT from "../ExampleNFT.cdc"
 
-pub fun main(): ExampleNFT.CollectionInfo {
+pub fun main(): {String: AnyStruct} {
   return ExampleNFT.getCollectionInfo()
 }

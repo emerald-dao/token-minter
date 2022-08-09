@@ -1,10 +1,20 @@
 <script>
-  import { Section, Container, Stack, AdaptableGrid, WalletAddress, NFTPrice, Button, MadeWithTouchstone } from "$lib/components/atoms/index";
+  import {
+    Section,
+    Container,
+    Stack,
+    AdaptableGrid,
+    WalletAddress,
+    NFTPrice,
+    Button,
+    MadeWithTouchstone,
+  } from "$lib/components/atoms/index";
+  import {
+    getCollectionInfo,
+    getNFTInfo,
+  } from "../../../../../flow/actions.js";
+  import { page } from "$app/stores";
 
-  export let name = "NFT name";
-  export let owner = "0x8f9e8e0dc951c5b9"
-  export let description = "This is the worlds most valuable NFT"
-  export let price = 400
   // TODO: Connect component to the blockchain
   export let metadata = {
     name: "Hello Flow",
@@ -12,28 +22,42 @@
     superPower: "Knowledge",
     hair: "Blue",
     personality: "Chill",
-  }
+  };
 
   const allMetadataArrays = Object.entries(metadata);
-  console.log(allMetadataArrays)
+  console.log(allMetadataArrays);
+
+  doShit();
+
+  async function doShit() {
+    const nftInfo = await getNFTInfo(
+      $page.params.collection,
+      $page.params.address,
+      $page.params.nft
+    );
+    const collectionInfo = await getCollectionInfo(
+      $page.params.collection,
+      $page.params.address
+    );
+    console.log({ collectionInfo, nftInfo });
+    return { collectionInfo, nftInfo };
+  }
 </script>
 
 <Section class="padding-top-small">
   <Container>
     <AdaptableGrid>
-      <Stack direction="column" align="flex-start">
-        <img src="/images/guide/ballerz.png" alt="Ballerz NFT">
-        {#if description}
+      {#await doShit() then info}
+        <Stack direction="column" align="flex-start">
+          <img src="/images/guide/ballerz.png" alt="Ballerz NFT" />
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Description</h4>
-            <p>{description}</p>
+            <p>{info.nftInfo.description}</p>
           </Stack>
-        {/if}
-        {#if metadata}
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Metadata</h4>
-            <table> 
-              {#each allMetadataArrays as metadataArray}
+            <table>
+              {#each Object.entries(info.nftInfo.extra) as metadataArray}
                 <tr>
                   {#each metadataArray as metadata, i}
                     {#if i === 0}
@@ -46,21 +70,26 @@
               {/each}
             </table>
           </Stack>
-        {/if}
-      </Stack>
-      <div class="sticky">
-        <Stack direction="column" align="flex-start">
-          <Stack direction="column" gap="0.6em" align="flex-start">
-            <MadeWithTouchstone/>
-            <WalletAddress address={owner}>By</WalletAddress>
-          </Stack>
-          <h1>{name}</h1>
-          {#if price}
-            <NFTPrice price={price} width="34px" fontSize="var(--fs-500)" currentPrice={true}/>
-            <Button>Buy NFT</Button>
-          {/if}
         </Stack>
-      </div>
+        <div class="sticky">
+          <Stack direction="column" align="flex-start">
+            <Stack direction="column" gap="0.6em" align="flex-start">
+              <MadeWithTouchstone />
+              <WalletAddress address={$page.params.address}>By</WalletAddress>
+            </Stack>
+            <h1>{info.nftInfo.name}</h1>
+
+            <NFTPrice
+              price={info.nftInfo.extra.price
+                ? info.nftInfo.extra.price
+                : info.collectionInfo.price}
+              width="34px"
+              fontSize="var(--fs-500)"
+              currentPrice={true} />
+            <Button>Buy NFT</Button>
+          </Stack>
+        </div>
+      {/await}
     </AdaptableGrid>
   </Container>
 </Section>
@@ -72,20 +101,20 @@
     width: 100%;
   }
   .sticky {
-		@include mq(medium) {
-			position: sticky;
-			top: 5rem;
-			height: fit-content;
-		}
-	}
+    @include mq(medium) {
+      position: sticky;
+      top: 5rem;
+      height: fit-content;
+    }
+  }
 
   h4 {
     padding-bottom: 0.2em;
   }
 
-  table { 
-    border-spacing: 1; 
-    border-collapse: collapse; 
+  table {
+    border-spacing: 1;
+    border-collapse: collapse;
     background: var(--clr-accent-soft-t9);
     border-radius: 0.4rem;
     overflow: hidden;
@@ -93,7 +122,7 @@
     margin: 0 auto;
     position: relative;
 
-    th { 
+    th {
       border: 1px var(--clr-accent-soft-t8) solid;
       padding-inline: 1em;
       padding-block: 0.4em;

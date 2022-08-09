@@ -9,20 +9,12 @@ import MintVerifiers from "./MintVerifiers.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
-	// Collection Info
-	pub var name: String
-	pub var description: String
-	pub var image: MetadataViews.IPFSFile
-	pub var ipfsCID: String
-	// A default price for the collection
-	pub var price: UFix64
-	pub let dateCreated: UFix64
+	// Collection Information
+	access(self) let collectionInfo: {String: AnyStruct}
 
-	// Contract Info
+	// Contract Information
 	pub var nextMetadataId: UInt64
 	pub var totalSupply: UInt64
-	pub var minting: Bool
-	access(self) var mintVerifiers: [{MintVerifiers.IVerifier}]
 
 	// Events
 	pub event ContractInitialized()
@@ -57,40 +49,12 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.name = _name
 			self.description = _description
 			self.thumbnail = MetadataViews.IPFSFile(
-				cid: ExampleNFT.ipfsCID,
+				cid: ExampleNFT.getCollectionAttribute(key: "ipfsCID") as! String,
 				path: _thumbnailPath
 			)
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
-		}
-	}
-
-	pub struct CollectionInfo {
-		pub let name: String
-		pub let description: String
-		pub let image: MetadataViews.IPFSFile
-		pub let price: UFix64
-		pub let dateCreated: UFix64
-		pub let totalSupply: UInt64
-		pub let ipfsCID: String
-		pub let minting: Bool
-		pub let metadatas: {UInt64: NFTMetadata}
-		pub let primaryBuyers: {UInt64: Address}
-		pub let mintVerifiers: [{MintVerifiers.IVerifier}]
-
-		init() {
-			self.name = ExampleNFT.name
-			self.description = ExampleNFT.description
-			self.image = ExampleNFT.image
-			self.price = ExampleNFT.price
-			self.dateCreated = ExampleNFT.dateCreated
-			self.totalSupply = ExampleNFT.totalSupply
-			self.ipfsCID = ExampleNFT.ipfsCID
-			self.minting = ExampleNFT.minting
-			self.metadatas = ExampleNFT.getNFTMetadatas()
-			self.primaryBuyers = ExampleNFT.getPrimaryBuyers()
-			self.mintVerifiers = ExampleNFT.mintVerifiers
 		}
 	}
 
@@ -141,20 +105,21 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.ExternalURL>():
           return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
-					let media = MetadataViews.Media(
-						file: ExampleNFT.image,
+					let squareMedia = MetadataViews.Media(
+						file: ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile,
+						mediaType: "image"
+					)
+					let bannerMedia = MetadataViews.Media(
+						file: ExampleNFT.getCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile,
 						mediaType: "image"
 					)
 					return MetadataViews.NFTCollectionDisplay(
-						name: ExampleNFT.name,
-						description: ExampleNFT.description,
+						name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
+						description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
 						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
-						squareImage: media,
-						bannerImage: media,
-						socials: {
-							"twitter": MetadataViews.ExternalURL("https://twitter.com/emerald_dao"),
-							"discord": MetadataViews.ExternalURL("https://discord.gg/emeraldcity")
-						}
+						squareImage: squareMedia,
+						bannerImage: bannerMedia,
+						socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}
 					)
 				case Type<MetadataViews.Royalties>():
 					return MetadataViews.Royalties([
@@ -258,13 +223,13 @@ pub contract ExampleNFT: NonFungibleToken {
 	// is currently active.
 	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
 		pre {
-			self.minting: "Minting is currently closed by the Administrator!"
+			self.canMint(): "Minting is currently closed by the Administrator!"
 			payment.balance == self.getPriceOfNFT(metadataId): 
 				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId).toString())
 		}
 
 		// Confirm recipient passes all verifiers
-		for verifier in ExampleNFT.mintVerifiers {
+		for verifier in ExampleNFT.getMintVerifiers() {
 			let params = {"minter": recipient.owner!.address}
 			if let error = verifier.verify(params) {
 				panic(error)
@@ -312,33 +277,9 @@ pub contract ExampleNFT: NonFungibleToken {
 			return <- create Administrator()
 		}
 
-		// turn minting on/off
-		pub fun toggleMinting(): Bool {
-			ExampleNFT.minting = !ExampleNFT.minting
-			return ExampleNFT.minting
-		}
-
-		pub fun changePrice(newPrice: UFix64) {
-			ExampleNFT.price = newPrice
-		}
-
-		pub fun changeName(newName: String) {
-			ExampleNFT.name = newName
-		}
-
-		pub fun changeDescription(newDescription: String) {
-			ExampleNFT.description = newDescription
-		}
-
-		pub fun changeImage(cid: String, path: String?) {
-			ExampleNFT.image = MetadataViews.IPFSFile(
-				cid: cid,
-				path: path
-			)
-		}
-
-		pub fun changeVerifiers(mintVerifiers: [{MintVerifiers.IVerifier}]) {
-			ExampleNFT.mintVerifiers = mintVerifiers
+		// change piece of collection info
+		pub fun changeField(key: String, value: AnyStruct) {
+			ExampleNFT.collectionInfo[key] = value
 		}
 	}
 
@@ -360,38 +301,59 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.primaryBuyers
 	}
 
-	pub fun getCollectionInfo(): CollectionInfo {
-		return CollectionInfo()
+	pub fun getCollectionInfo(): {String: AnyStruct} {
+		let collectionInfo = self.collectionInfo
+		collectionInfo["metadatas"] = self.metadatas
+		collectionInfo["primaryBuyers"] = self.primaryBuyers
+		return collectionInfo
+	}
+
+	pub fun getCollectionAttribute(key: String): AnyStruct {
+		return self.collectionInfo[key] ?? panic(key.concat(" is not an attribute in this collection."))
+	}
+
+	pub fun getMintVerifiers(): [{MintVerifiers.IVerifier}] {
+		return self.getCollectionAttribute(key: "mintVerifiers") as! [{MintVerifiers.IVerifier}]
+	}
+
+	pub fun canMint(): Bool {
+		return self.getCollectionAttribute(key: "minting") as! Bool
 	}
 
 	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
 		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
-		return (metadata.extra["price"] as? UFix64) ?? self.price
+		return (metadata.extra["price"] as? UFix64) ?? (self.getCollectionAttribute(key: "price") as! UFix64)
 	}
 
 	init(
 		_name: String, 
 		_description: String, 
 		_imagePath: String, 
+		_bannerImagePath: String?,
 		_minting: Bool, 
 		_price: UFix64,
 		_ipfsCID: String,
+		_socials: {String: MetadataViews.ExternalURL?},
 		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
-		self.name = _name
-		self.description = _description
-		self.image = MetadataViews.IPFSFile(
+		self.collectionInfo = {}
+		self.collectionInfo["name"] = _name
+		self.collectionInfo["description"] = _description
+		self.collectionInfo["image"] = MetadataViews.IPFSFile(
 			cid: _ipfsCID,
 			path: _imagePath
 		)
-		self.ipfsCID = _ipfsCID
-
-		// Initialize default info
-		self.minting = _minting
-		self.price = _price
-		self.dateCreated = getCurrentBlock().timestamp
-		self.mintVerifiers = _mintVerifiers
+		self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
+			cid: _ipfsCID,
+			path: _bannerImagePath ?? _imagePath
+		)
+		self.collectionInfo["ipfsCID"] = _ipfsCID
+		self.collectionInfo["socials"] = _socials
+		self.collectionInfo["minting"] = _minting
+		self.collectionInfo["price"] = _price
+		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
+		self.collectionInfo["mintVerifiers"] = _mintVerifiers
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0

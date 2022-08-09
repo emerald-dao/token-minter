@@ -27,6 +27,7 @@ import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?r
 import getContractsScript from './cadence/scripts/get_contracts.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
+import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
 // Transactions
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
@@ -93,6 +94,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"./utility/FlowToken.cdc"', addressList.FlowToken)
     .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
     .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
@@ -106,6 +108,7 @@ async function deployContract() {
 
   initTransactionState();
 
+  // Singular FLOAT Verifier
   let eventOwner = null;
   let eventId = null;
   if (info.floatLink) {
@@ -115,8 +118,6 @@ async function deployContract() {
     eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
   }
 
-  console.log('[Verifier: FLOAT] Event Owner', eventOwner);
-  console.log('[Verifier: FLOAT] Event Id', eventId);
   try {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(deployContractTx),
@@ -125,12 +126,18 @@ async function deployContract() {
         arg(info.name, t.String),
         arg(info.description, t.String),
         arg(info.image.name, t.String),
+        arg(info.bannerImage ? info.bannerImage.name : null, t.Optional(t.String)),
         arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
         arg(get(resultCID), t.String),
+        // Socials
+        arg(info.discord ? info.discord : null, t.Optional(t.String)),
+        arg(info.twitter ? info.twitter : null, t.Optional(t.String)),
+        // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
+        // Contract Code
         arg(hexCode, t.String),
       ],
       payer: fcl.authz,
@@ -202,12 +209,15 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     thumbnails.push(image);
     let extra = [];
     for (const attribute in rest) {
-      extra.push({ key: attribute, value: rest[attribute] });
+      if (rest[attribute]) {
+        extra.push({ key: attribute, value: rest[attribute] });
+      }
     }
     extras.push(extra);
   }
 
   console.log('Uploading ' + batchSize + ' NFTs to the contract.');
+  console.log(extras);
 
   const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr).replaceAll('500', batchSize);
 
@@ -289,11 +299,10 @@ export const getContracts = async (address) => {
     createdByTouchstone.forEach((contract, i) => {
       imports += `import ${contract.name} from ${address}\n`;
       displays += `
-      let display${i} = ${contract.name}.getCollectionInfo()
       answer.append(CollectionDisplay(
-        _name: display${i}.name,
-        _description: display${i}.description,
-        _image: display${i}.image
+        _name: ${contract.name}.getCollectionAttribute(key: "name") as! String,
+        _description: ${contract.name}.getCollectionAttribute(key: "description") as! String,
+        _image: ${contract.name}.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile
       ))\n
       `;
     });
@@ -352,6 +361,19 @@ export async function checkRequiredVerifiers(contractName, contractAddress, user
     const response = await fcl.query({
       cadence: replaceWithProperValues(checkRequiredVerifiersScript, contractName, contractAddress),
       args: (arg, t) => [arg(userAddress, t.Address)],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getNFTInfo(contractName, contractAddress, metadataId) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getNFTInfoScript, contractName, contractAddress),
+      args: (arg, t) => [arg(metadataId, t.UInt64)],
     });
 
     return response;

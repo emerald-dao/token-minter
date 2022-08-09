@@ -8,6 +8,7 @@
 		Marquee,
 		Stack,
 	} from "$lib/components/atoms/index";
+	import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
 </script>
 
 <Section class="padding-top-small">
@@ -23,7 +24,10 @@
 					Create your own NFT Collections without knowing any code. Learn all
 					about NFTs on the Flow Blockchain.
 				</p>
-				<Button href="/collection-generator" rightIcon="arrow-forward-circle">Start</Button>
+				<Button
+					href="/collection-generator"
+					rightIcon="arrow-forward-circle"
+					on:click={newCollection}>Start</Button>
 			</Stack>
 			<Stack align="center" justify="center">
 				<video width="100%" height="100%" autoplay loop muted>

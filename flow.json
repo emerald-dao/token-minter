@@ -55,6 +55,12 @@
 			"aliases": {
 				"testnet": "0x73a19dd056affc4d"
 			}
+		},
+		"TouchstoneContracts": {
+			"source": "./src/flow/cadence/TouchstoneContracts.cdc",
+			"aliases": {
+				"testnet": "0x73a19dd056affc4d"
+			}
 		}
 	},
 	"networks": {
@@ -90,7 +96,7 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"MintVerifiers"
+				"TouchstoneContracts"
 			]
 		}
 	}
