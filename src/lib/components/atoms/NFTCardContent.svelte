@@ -1,5 +1,5 @@
 <script>
-  import { Stack } from "$lib/components/atoms/index";
+  import { NFTPrice } from "$lib/components/atoms/index";
 
   export let thumbnailURL;
   export let name;
@@ -20,10 +20,7 @@
     <p class="description">{description}</p>
     {/if}
     {#if price}
-    <Stack direction="row" gap="0.4em">
-      <img src="/flow-logo.png" alt="flow coin logo" class="flow-logo">
-      <p class="price">{price}</p>
-    </Stack>
+      <NFTPrice price={price}/>
     {/if}
   </div>
 </div>
@@ -54,16 +51,6 @@
         font-size: var(--fs-300);
         color: var(--clr-font-text-soft);
         margin-bottom: 1em;
-      }
-
-      .flow-logo {
-        width: 20px;
-      }
-
-      .price {
-        font-size: var(--fs-300);
-        color: var(--clr-font-text-soft);
-        font-weight: 600;
       }
     }
   }

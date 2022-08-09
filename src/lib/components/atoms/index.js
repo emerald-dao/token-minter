@@ -29,3 +29,4 @@ export { default as TouchstoneIcon } from './TouchstoneIcon.svelte';
 export { default as MadeWithTouchstone } from './MadeWithTouchstone.svelte';
 export { default as WalletAddress } from './WalletAddress.svelte';
 export { default as NFTCardContent } from './NFTCardContent.svelte';
+export { default as NFTPrice } from './NFTPrice.svelte';

@@ -20,7 +20,7 @@
   };
 </script>
 
-<TransparentCard padding="0.8em" accent={true}>
+<TransparentCard padding="0.8em">
   {#if withLink}
     <a href={`/discover/${collection.address}/${collection.name}/${serial}`}>
       <NFTCardContent thumbnailURL={thumbnailURL} name={name} description={description} backgroundColor={backgroundColor} price={price}/>
