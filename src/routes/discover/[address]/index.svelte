@@ -1,5 +1,5 @@
 <script>
-  import { getContracts } from "../../flow/actions";
+  import { getContracts } from "../../../flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,

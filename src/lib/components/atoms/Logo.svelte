@@ -1,14 +1,11 @@
 <script>
-	import Icon from "@iconify/svelte";
-	import { Stack } from "$lib/components/atoms/index";
+	import { Stack, TouchstoneIcon } from "$lib/components/atoms/index";
   import { dappTitle  } from '$lib/config/config';
 </script>
 
 <a href="/">
   <Stack direction="row" gap="0.35em">
-    <div class="icon-wrapper">
-      <Icon icon="ion:diamond" color="var(--clr-font-text-inverse)"/>
-    </div>
+    <TouchstoneIcon/>
     <span>{dappTitle}</span>
   </Stack>
 </a>
@@ -17,17 +14,9 @@
   a {
     text-decoration: none;
 
-    .icon-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.4em;
-      border-radius: 9999px;
-      background-color: var(--clr-accent-main);
-    }
     span {
       font-family: var(--font-primary);
-      font-size: 18px;
+      font-size: var(--fs-400);
       color: var(--clr-accent-main);
       text-transform: uppercase;
       font-weight: 900;

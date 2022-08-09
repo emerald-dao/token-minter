@@ -1,3 +1,7 @@
+<script>
+import { TransparentCard } from "$lib/components/atoms/index";
+
+</script>
 <div class="component-container">
   <div class="component-wrapper">
     <slot name="main-content"/>
@@ -20,6 +24,10 @@
 
   .component-wrapper {
     overflow-y: auto;
+    height: 100%;
+    background-color: var(--clr-accent-soft-t9);
+    padding: 2em;
+    border-radius: 1em;
   }
 
   .step-buttons {
@@ -27,6 +35,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
+    height: fit-content;
 
     @include mq(small) {
       margin-top: 2rem;

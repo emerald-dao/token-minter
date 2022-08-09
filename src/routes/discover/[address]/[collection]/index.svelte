@@ -3,7 +3,7 @@
     checkRequiredVerifiers,
     getCollectionInfo,
     purchaseNFT,
-  } from "../../flow/actions";
+  } from "../../../../flow/actions";
 
   import {
     Section,
@@ -11,9 +11,12 @@
     Stack,
     AdaptableGrid,
     NFTCard,
+    MadeWithTouchstone,
+    TransparentCard,
+    WalletAddress,
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
-  import { user } from "../../flow/stores.js";
+  import { user } from "../../../../flow/stores.js";
   import Verifiers from "$lib/components/atoms/Verifiers.svelte";
 
   const purchaseFunction = (serial, price) => {
@@ -23,19 +26,33 @@
 
 <Section class="padding-top-small padding-bottom-small">
   {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
-    <Container class="width-small">
-      <Stack>
-        <img
-          src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
-          alt="Collection main" />
-        <h1>{collectionInfo.name}</h1>
-        <p>{collectionInfo.description}</p>
-      </Stack>
+    <Container>
+      <AdaptableGrid>
+        <TransparentCard accent={true}>
+          <div class="image-wrapper">
+            <img
+            src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
+            alt="Collection main" />
+          </div>
+        </TransparentCard>
+        <Stack direction="column" align="flex-start" gap="0.8em">
+          <h1>{collectionInfo.name}</h1>
+          <Stack direction="column" gap="0.6em" align="flex-start">
+            <MadeWithTouchstone/>
+            <WalletAddress address={$page.params.address}>
+              By
+            </WalletAddress>
+          </Stack>
+          <p>{collectionInfo.description}</p>
+        </Stack>
+      </AdaptableGrid>
     </Container>
     {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
-      <Container>
-        <Verifiers {verifiers} />
-      </Container>
+      {#if verifiers.length > 0}
+        <Container>
+          <Verifiers {verifiers} />
+        </Container>
+      {/if}
     {/await}
     <Container>
       <AdaptableGrid minWidth="12em" gap="1.2em">
@@ -52,26 +69,33 @@
             )}
             extra={NFT.extra}
             serial={NFT.metadataId}
-            {purchaseFunction} />
+            {purchaseFunction}
+            withLink={true} />
         {/each}
       </AdaptableGrid>
     </Container>
   {/await}
 </Section>
 
-<style type="scss">
-  img {
-    width: 200px;
-    aspect-ratio: 1/1;
-    border-radius: 1.5em;
-    border: 2px var(--clr-accent-soft) solid;
+<style type="scss"> 
+  .image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+    img {
+      padding: auto;
+      width: 200px;
   }
+  }
+
   h1 {
     font-size: var(--fs-600);
-    text-align: center;
+    text-align: left;
   }
   p {
     font-size: var(--fs-300);
-    text-align: center;
+    text-align: left;
   }
 </style>

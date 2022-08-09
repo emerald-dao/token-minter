@@ -1,6 +1,6 @@
 <script>
-  import { user } from "../flow/stores";
-  import { getContracts } from "../flow/actions";
+  import { user } from "../../flow/stores";
+  import { getContracts } from "../../flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
@@ -53,7 +53,7 @@
         type="text"
         bind:value={address}
         placeholder="0x5643fd47a29770e7" />
-      <Button href={`${address}`}>Search</Button>
+      <Button href={`discover/${address}`}>Search</Button>
     </div>
 
     <Stack direction="column">
