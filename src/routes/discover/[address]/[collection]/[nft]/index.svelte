@@ -12,24 +12,11 @@
   import {
     getCollectionInfo,
     getNFTInfo,
+    purchaseNFT,
   } from "../../../../../flow/actions.js";
   import { page } from "$app/stores";
 
-  // TODO: Connect component to the blockchain
-  export let metadata = {
-    name: "Hello Flow",
-    color: "Red",
-    superPower: "Knowledge",
-    hair: "Blue",
-    personality: "Chill",
-  };
-
-  const allMetadataArrays = Object.entries(metadata);
-  console.log(allMetadataArrays);
-
-  doShit();
-
-  async function doShit() {
+  async function getInfo() {
     const nftInfo = await getNFTInfo(
       $page.params.collection,
       $page.params.address,
@@ -47,7 +34,7 @@
 <Section class="padding-top-small">
   <Container>
     <AdaptableGrid>
-      {#await doShit() then info}
+      {#await getInfo() then info}
         <Stack direction="column" align="flex-start">
           <img src="/images/guide/ballerz.png" alt="Ballerz NFT" />
           <Stack direction="column" align="flex-start" gap="0.4em">
@@ -86,7 +73,16 @@
               width="34px"
               fontSize="var(--fs-500)"
               currentPrice={true} />
-            <Button>Buy NFT</Button>
+            <Button
+              on:click={() =>
+                purchaseNFT(
+                  $page.params.nft,
+                  info.nftInfo.extra.price
+                    ? info.nftInfo.extra.price
+                    : info.collectionInfo.price,
+                  $page.params.collection,
+                  $page.params.address
+                )}>Buy NFT</Button>
           </Stack>
         </div>
       {/await}

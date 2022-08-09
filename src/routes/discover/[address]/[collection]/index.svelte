@@ -18,6 +18,7 @@
   import { page } from "$app/stores";
   import { user } from "../../../../flow/stores.js";
   import Verifiers from "$lib/components/atoms/Verifiers.svelte";
+  import { params } from "@onflow/fcl";
 
   const purchaseFunction = (serial, price) => {
     purchaseNFT(serial, price, $page.params.collection, $page.params.address);
@@ -31,17 +32,15 @@
         <TransparentCard accent={true}>
           <div class="image-wrapper">
             <img
-            src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
-            alt="Collection main" />
+              src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
+              alt="Collection main" />
           </div>
         </TransparentCard>
         <Stack direction="column" align="flex-start" gap="0.8em">
           <h1>{collectionInfo.name}</h1>
           <Stack direction="column" gap="0.6em" align="flex-start">
-            <MadeWithTouchstone/>
-            <WalletAddress address={$page.params.address}>
-              By
-            </WalletAddress>
+            <MadeWithTouchstone />
+            <WalletAddress address={$page.params.address}>By</WalletAddress>
           </Stack>
           <p>{collectionInfo.description}</p>
         </Stack>
@@ -70,6 +69,7 @@
             extra={NFT.extra}
             serial={NFT.metadataId}
             {purchaseFunction}
+            url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
             withLink={true} />
         {/each}
       </AdaptableGrid>
@@ -77,17 +77,16 @@
   {/await}
 </Section>
 
-<style type="scss"> 
+<style type="scss">
   .image-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    
     img {
       padding: auto;
       width: 200px;
-  }
+    }
   }
 
   h1 {

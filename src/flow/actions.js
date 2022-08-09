@@ -24,7 +24,7 @@ import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 ///////////////
 // Scripts
 import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
-import getContractsScript from './cadence/scripts/get_contracts.cdc?raw';
+import getContractsInBookScript from './cadence/scripts/get_contracts_in_book.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
 import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
@@ -278,25 +278,13 @@ export const getAllContractNames = async (address) => {
 export const getContracts = async (address) => {
   try {
     const response1 = await fcl.query({
-      cadence: getContractsScript,
+      cadence: replaceWithProperValues(getContractsInBookScript),
       args: (arg, t) => [arg(address, t.Address)],
-    });
-
-    const createdByTouchstone = response1.filter((contract) => {
-      const contractCode = Buffer.from(contract.code, 'hex').toString();
-      return (
-        contractCode.includes(
-          '// CREATED BY: Touchstone (https://touchstone.city/), a platform crafted by your best friends at Emerald City DAO (https://ecdao.org/).'
-        ) &&
-        contractCode.includes(
-          '// STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.'
-        )
-      );
     });
 
     let imports = '';
     let displays = '';
-    createdByTouchstone.forEach((contract, i) => {
+    response1.forEach((contract, i) => {
       imports += `import ${contract.name} from ${address}\n`;
       displays += `
       answer.append(CollectionDisplay(
