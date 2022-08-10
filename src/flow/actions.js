@@ -32,6 +32,7 @@ import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
 import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
+import removeContractFromBookTx from './cadence/transactions/remove_contract_from_book.cdc?raw';
 import { resolveAddressObject } from './utils';
 
 if (browser) {
@@ -201,12 +202,14 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   let names = [];
   let descriptions = [];
   let thumbnails = [];
+  let prices = [];
   let extras = [];
   for (var i = 0; i < metadatas.length; i++) {
-    const { name, description, image, ...rest } = metadatas[i];
+    const { name, description, image, price, ...rest } = metadatas[i];
     names.push(name);
     descriptions.push(description);
     thumbnails.push(image);
+    prices.push(price);
     let extra = [];
     for (const attribute in rest) {
       if (rest[attribute]) {
@@ -230,6 +233,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
         arg(names, t.Array(t.String)),
         arg(descriptions, t.Array(t.String)),
         arg(thumbnails, t.Array(t.String)),
+        arg(prices, t.Array(t.Optional(t.UFix64))),
         arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
       ],
       payer: fcl.authz,
@@ -257,6 +261,33 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     return { success: false, error: e };
   }
 }
+
+export const removeContractFromBook = async (contractName) => {
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(removeContractFromBookTx),
+      args: (arg, t) => [arg(contractName, t.String)],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+};
 
 // ****** Scripts ****** //
 

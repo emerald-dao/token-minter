@@ -42,9 +42,11 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let name: String
 		pub let description: String 
 		pub let thumbnail: MetadataViews.IPFSFile
+		// If price is nil, defaults to the collection price
+		pub let price: UFix64?
 		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _extra: {String: AnyStruct}) {
+		init(_name: String, _description: String, _thumbnailPath: String, _price: UFix64?, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
@@ -52,6 +54,7 @@ pub contract ExampleNFT: NonFungibleToken {
 				cid: ExampleNFT.getCollectionAttribute(key: "ipfsCID") as! String,
 				path: _thumbnailPath
 			)
+			self.price = _price
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
@@ -257,11 +260,12 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, extra: {String: AnyStruct}) {
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, price: UFix64?, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
 				_thumbnailPath: thumbnailPath,
+				_price: price,
 				_extra: extra
 			)
 		}
@@ -322,7 +326,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
 		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
-		return (metadata.extra["price"] as? UFix64) ?? (self.getCollectionAttribute(key: "price") as! UFix64)
+		return metadata.price ?? (self.getCollectionAttribute(key: "price") as! UFix64)
 	}
 
 	init(
@@ -331,7 +335,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_imagePath: String, 
 		_bannerImagePath: String?,
 		_minting: Bool, 
-		_price: UFix64,
+		_defaultPrice: UFix64,
 		_ipfsCID: String,
 		_socials: {String: MetadataViews.ExternalURL?},
 		_mintVerifiers: [{MintVerifiers.IVerifier}]
@@ -351,7 +355,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["ipfsCID"] = _ipfsCID
 		self.collectionInfo["socials"] = _socials
 		self.collectionInfo["minting"] = _minting
-		self.collectionInfo["price"] = _price
+		self.collectionInfo["price"] = _defaultPrice
 		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
 		self.collectionInfo["mintVerifiers"] = _mintVerifiers
 

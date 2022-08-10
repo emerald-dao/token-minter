@@ -2,7 +2,7 @@ import ExampleNFT from "../ExampleNFT.cdc"
 
 // Put a batch of up to 500 NFT Metadatas inside the contract
 
-transaction(names: [String], descriptions: [String], thumbnails: [String], extras: [{String: String}]) {
+transaction(names: [String], descriptions: [String], thumbnails: [String], prices: [UFix64?], extras: [{String: String}]) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
     self.Administrator = deployer.borrow<&ExampleNFT.Administrator>(from: ExampleNFT.AdministratorStoragePath)
@@ -23,6 +23,7 @@ transaction(names: [String], descriptions: [String], thumbnails: [String], extra
         name: names[i], 
         description: descriptions[i], 
         thumbnailPath: thumbnails[i],
+        price: prices[i],
         extra: extras[i]
       )
       i = i + 1

@@ -67,8 +67,8 @@
             <h1>{info.nftInfo.name}</h1>
 
             <NFTPrice
-              price={info.nftInfo.extra.price
-                ? info.nftInfo.extra.price
+              price={info.nftInfo.price
+                ? info.nftInfo.price
                 : info.collectionInfo.price}
               width="34px"
               fontSize="var(--fs-500)"
@@ -77,8 +77,8 @@
               on:click={() =>
                 purchaseNFT(
                   $page.params.nft,
-                  info.nftInfo.extra.price
-                    ? info.nftInfo.extra.price
+                  info.nftInfo.price
+                    ? info.nftInfo.price
                     : info.collectionInfo.price,
                   $page.params.collection,
                   $page.params.address
