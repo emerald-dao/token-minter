@@ -28,7 +28,7 @@
             </div>
             <div class="dao-invite">
               <h5>Join us</h5>
-              <Button class="small" leftIcon="logo-discord">Emerald City DAO</Button>
+              <Button class="small" leftIcon="logo-discord" href="https://discord.com/invite/emeraldcity" target="_blank">Emerald City DAO</Button>
             </div>
           </div>  
         </nav>
