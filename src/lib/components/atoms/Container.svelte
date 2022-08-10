@@ -4,9 +4,10 @@
   }
 
   export let height = "auto";
+  export let background;
 </script>
 
-<div {...containerProps} style="height: {height};">
+<div {...containerProps} style="height: {height}; background: {background}">
   <slot/>
 </div>
 
@@ -15,6 +16,7 @@
     margin-inline: auto;
     width: min(90%, 65rem);
     padding-block: 1.5rem;
+    position: relative;
   }
 
   .width {

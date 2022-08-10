@@ -2,9 +2,11 @@
   let sectionProps = {
     class:[$$restProps.class]
   }
+
+  export let background;
 </script>
 
-<section {...sectionProps}>
+<section {...sectionProps} style={`background: ${background}`}>
   <slot/>
 </section>
 

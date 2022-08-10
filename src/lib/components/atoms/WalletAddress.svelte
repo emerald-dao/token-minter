@@ -16,6 +16,5 @@
     padding: 0.2em 0.9em;
     border-radius: 0.8rem;
     width: fit-content;
-    margin-bottom: 1em;
   }
 </style>

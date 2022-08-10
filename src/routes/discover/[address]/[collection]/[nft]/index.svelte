@@ -36,7 +36,7 @@
     <AdaptableGrid>
       {#await getInfo() then info}
         <Stack direction="column" align="flex-start">
-          <img src="/images/guide/ballerz.png" alt="Ballerz NFT" />
+          <img src={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`} alt="Ballerz NFT" />
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Description</h4>
             <p>{info.nftInfo.description}</p>
@@ -95,6 +95,8 @@
 
   img {
     width: 100%;
+    border-radius: 0.4rem;
+    border: 1px var(--clr-accent-soft-t5) solid;
   }
   .sticky {
     @include mq(medium) {
@@ -104,8 +106,17 @@
     }
   }
 
+  h1 {
+    font-size: var(--fs-700)
+  }
+
   h4 {
     padding-bottom: 0.2em;
+    font-size: var(--fs-400)
+  }
+
+  p {
+    color: var(--clr-font-text-soft)
   }
 
   table {
