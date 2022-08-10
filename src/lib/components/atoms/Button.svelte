@@ -12,6 +12,7 @@
   export let leftIcon;
   export let state = "active";
   export let form;
+  export let target;
 </script>
 
 {#if href}
@@ -46,6 +47,7 @@
       on:focus
       on:mouseenter
       on:mouseleave
+      target={target}
       {disabled}
       {...buttonProps}>
       {#if leftIcon}
