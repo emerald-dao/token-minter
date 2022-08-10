@@ -1,7 +1,7 @@
 <script>
 	import Icon from "@iconify/svelte";
 
-  export let width = "1em"
+  export let width = "1.2em"
   export let padding = "0.4em"
 </script>
 
