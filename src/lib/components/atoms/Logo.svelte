@@ -4,7 +4,7 @@
 </script>
 
 <a href="/">
-  <Stack direction="row" gap="0.35em">
+  <Stack direction="row" gap="0.4em">
     <TouchstoneIcon/>
     <span>{dappTitle}</span>
   </Stack>
@@ -16,7 +16,7 @@
 
     span {
       font-family: var(--font-primary);
-      font-size: var(--fs-400);
+      font-size: 22px;
       color: var(--clr-accent-main);
       text-transform: uppercase;
       font-weight: 900;

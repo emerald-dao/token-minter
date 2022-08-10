@@ -30,3 +30,5 @@ export { default as MadeWithTouchstone } from './MadeWithTouchstone.svelte';
 export { default as WalletAddress } from './WalletAddress.svelte';
 export { default as NFTCardContent } from './NFTCardContent.svelte';
 export { default as NFTPrice } from './NFTPrice.svelte';
+export { default as Socials } from './Socials.svelte';
+export { default as EmeraldTools } from './EmeraldTools.svelte';

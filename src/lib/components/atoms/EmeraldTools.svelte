@@ -1,20 +1,19 @@
 <script>
-  import { navItems } from '$lib/config/config'
+  import { emeraldTools } from '$lib/config/config'
 
   export let gap = "3em"
   export let color = "var(--clr-accent-main)"
 </script>
 
 <ul style={`gap: ${gap}`}>
-  {#each navItems as navItem }
+  {#each emeraldTools as tool }
     <li>
       <a 
-        href={navItem.route} 
-        sveltekit:prefetch={navItem.prefetch}
-        target={navItem.target}
+        href={tool.url} 
+        target="_blank"
         style={`color: ${color}`}
       >
-        {navItem.title}
+        {tool.title}
       </a>
     </li>
   {/each}
