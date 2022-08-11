@@ -105,7 +105,14 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
 
 async function deployContract() {
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
-  const info = get(contractInfo);
+  let info = get(contractInfo);
+  contractInfo.set({
+    ...info,
+    contractName: 'Touchstone' + info.name.replace(/\s+/g, '')
+  });
+  info = get(contractInfo);
+
+  console.log(info);
 
   initTransactionState();
 
@@ -123,7 +130,7 @@ async function deployContract() {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(deployContractTx),
       args: (arg, t) => [
-        arg(info.name.replace(/\s+/g, ''), t.String),
+        arg(info.contractName, t.String),
         arg(info.name, t.String),
         arg(info.description, t.String),
         arg(info.image.name, t.String),
