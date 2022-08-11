@@ -83,6 +83,7 @@
   .banner {
     height: 280px;
     background-size: cover;
+    background-position: center center;
     background-color: var(--clr-background-primary);
     border-radius: 1rem 1rem 0 0;
   }
