@@ -1,5 +1,5 @@
 import { browser } from '$app/env';
-import { get, set } from 'svelte/store';
+import { get } from 'svelte/store';
 import { Buffer } from 'buffer';
 import { onNext } from '$lib/stores/generator/updateFunctions';
 
