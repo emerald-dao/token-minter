@@ -5,26 +5,28 @@
   export let steps;
   
   const goToStep = (i) => {
-    // Allow navigation only to previous steps
-    if (i < step) step = i;
+    // Allow navigation only to eligible steps
+    if ((step - steps[step].allowToGoBack) === i) step = i;
   };
 </script>
 
 <div class="main-wrapper">
   <TransparentCard accent={true} height={"fit-content"}>
+
     <ul>
       {#each steps as _step, i}
-        <NavigationStep 
-          active={step === i} 
-          passed={step > i}
-          number={i + 1}
-          on:click={() => goToStep(i)}
-        >
-          {#if i === step}
-            {_step.emoji}
-          {/if}
-          {_step.title}
-        </NavigationStep>
+          <NavigationStep 
+            active={step === i} 
+            passed={step > i}
+            number={i + 1}
+            clickable={(step - steps[step].allowToGoBack) === i}
+            on:click={() => goToStep(i)}
+          >
+            {#if i === step}
+              {_step.emoji}
+            {/if}
+            {_step.title}
+          </NavigationStep>
       {/each}
     </ul>
   </TransparentCard>
