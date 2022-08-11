@@ -1,5 +1,6 @@
 <script>
-  import { StepInstructions, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
+  import { StepInstructions, NavigationStep, TransparentCard, Button } from "$lib/components/atoms/index"
+  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
 
   export let step;
   export let steps;
@@ -12,7 +13,6 @@
 
 <div class="main-wrapper">
   <TransparentCard accent={true} height={"fit-content"}>
-
     <ul>
       {#each steps as _step, i}
           <NavigationStep 
@@ -29,6 +29,7 @@
           </NavigationStep>
       {/each}
     </ul>
+    <Button class="small transparent" leftIcon="refresh-circle" on:click={newCollection}>Restart</Button>
   </TransparentCard>
   {#if steps[step].instructions}
     <StepInstructions instructions={steps[step].instructions} />
@@ -47,7 +48,8 @@
   }
 
   ul {
-    padding: 0;
-    margin: 0;
+    padding: 0 0 1rem 0;
+    margin: 0 0 1rem 0;
+    border-bottom: 2px var(--clr-accent-main-t9) solid;
   }
 </style>
