@@ -36,6 +36,7 @@ export const stepsArray = writable([
     instructions:
       "In the first box, upload a .csv file with your collection metadata. Metadata must include a 'name', 'description', and 'image' (file name) for each NFT. In the second box, upload a folder with your collection images.",
     state: 'inactive',
+    allowToGoBack: 1,
   },
   {
     title: 'Contract Information',
@@ -50,6 +51,7 @@ export const stepsArray = writable([
     emoji: '🚀',
     instructions: 'Deploy your contract to the blockchain.',
     state: 'inactive',
+    allowToGoBack: 1,
   },
   {
     title: 'Upload Metadata',
@@ -67,7 +69,7 @@ export const stepsArray = writable([
 ]);
 
 export async function newCollection() {
-  console.log("resetting...")
+  console.log('resetting...');
   restartStates();
   emptyCsvStore();
   emptyImagesStore();

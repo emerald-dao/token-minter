@@ -109,7 +109,7 @@
         margin-bottom: 1.7em;
         margin-top: 0;
         letter-spacing: 0.1em;
-        color: var(--clr-font-text-t6)
+        color: var(--clr-accent-main-t1)
       }
     }
   }

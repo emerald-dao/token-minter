@@ -1,12 +1,13 @@
 <script>
-  import { StepInstructions, NavigationStep, TransparentCard } from "$lib/components/atoms/index"
+  import { StepInstructions, NavigationStep, TransparentCard, Button } from "$lib/components/atoms/index"
+  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
 
   export let step;
   export let steps;
   
   const goToStep = (i) => {
-    // Allow navigation only to previous steps
-    if (i < step) step = i;
+    // Allow navigation only to eligible steps
+    if ((step - steps[step].allowToGoBack) === i) step = i;
   };
 </script>
 
@@ -14,20 +15,21 @@
   <TransparentCard accent={true} height={"fit-content"}>
     <ul>
       {#each steps as _step, i}
-        <NavigationStep 
-          active={step === i} 
-          clickable={step > i} 
-          passed={step > i}
-          number={i + 1}
-          on:click={() => goToStep(i)}
-        >
-          {#if i === step}
-            {_step.emoji}
-          {/if}
-          {_step.title}
-        </NavigationStep>
+          <NavigationStep 
+            active={step === i} 
+            passed={step > i}
+            number={i + 1}
+            clickable={(step - steps[step].allowToGoBack) === i}
+            on:click={() => goToStep(i)}
+          >
+            {#if i === step}
+              {_step.emoji}
+            {/if}
+            {_step.title}
+          </NavigationStep>
       {/each}
     </ul>
+    <Button class="small transparent" leftIcon="refresh-circle" on:click={newCollection}>Restart</Button>
   </TransparentCard>
   {#if steps[step].instructions}
     <StepInstructions instructions={steps[step].instructions} />
@@ -46,7 +48,8 @@
   }
 
   ul {
-    padding: 0;
-    margin: 0;
+    padding: 0 0 1rem 0;
+    margin: 0 0 1rem 0;
+    border-bottom: 2px var(--clr-accent-main-t9) solid;
   }
 </style>

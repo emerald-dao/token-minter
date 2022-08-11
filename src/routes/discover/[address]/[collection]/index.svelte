@@ -30,11 +30,10 @@
     <Container class="width-x-large">
       <TransparentCard padding="0">
         {#if collectionInfo.bannerImage}
-          <div class="banner" style={`background-image: url(https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path})`} />
+          <div class="banner" style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
         {/if}
         <Container>
           <div class="collection-info-wrapper" class:no-banner={!collectionInfo.bannerImage}>
-            
             <img
               src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
               alt="Collection main" />
@@ -84,6 +83,7 @@
   .banner {
     height: 280px;
     background-size: cover;
+    background-position: center center;
     background-color: var(--clr-background-primary);
     border-radius: 1rem 1rem 0 0;
   }
@@ -99,7 +99,7 @@
   }
 
   img {
-    width: 240px;
+    height: 240px;
     border-radius: 0.4rem;
     border: 2px var(--clr-accent-soft-t5) solid;
     background-color: var(--clr-background-primary);

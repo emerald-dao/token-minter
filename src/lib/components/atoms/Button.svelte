@@ -127,7 +127,16 @@
     background: transparent;
     border: 2px solid var(--clr-accent-main);
     color: var(--clr-accent-main);
-
+  }
+  .transparent {
+    background: transparent;
+    border: none;
+    color: var(--clr-font-text-t4);
+    padding: 0;
+  }
+  .transparent:hover {
+    box-shadow: none;
+    color: var(--clr-font-text-t3);
   }
   
   .main-color {
