@@ -16,7 +16,6 @@
       {#each steps as _step, i}
         <NavigationStep 
           active={step === i} 
-          clickable={step > i} 
           passed={step > i}
           number={i + 1}
           on:click={() => goToStep(i)}
