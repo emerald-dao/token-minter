@@ -365,13 +365,13 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.primaryBuyers = {}
 
 		// Set the named paths
-		// We prefix the paths with 'T' for "Touchstone". This is also
-		// to prevent clashing with existing Collection paths in the 
-		// ecosystem.
-		self.CollectionStoragePath = /storage/TExampleNFTCollectionUSER_ADDR
-		self.CollectionPublicPath = /public/TExampleNFTCollectionUSER_ADDR
-		self.CollectionPrivatePath = /private/TExampleNFTCollectionUSER_ADDR
-		self.AdministratorStoragePath = /storage/TExampleNFTAdministratorUSER_ADDR
+		// We include the user's address in the paths.
+		// This is to prevent clashing with existing 
+		// Collection paths in the ecosystem.
+		self.CollectionStoragePath = /storage/ExampleNFTCollectionUSER_ADDR
+		self.CollectionPublicPath = /public/ExampleNFTCollectionUSER_ADDR
+		self.CollectionPrivatePath = /private/ExampleNFTCollectionUSER_ADDR
+		self.AdministratorStoragePath = /storage/ExampleNFTAdministratorUSER_ADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()
