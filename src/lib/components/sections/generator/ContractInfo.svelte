@@ -17,7 +17,6 @@
 
 <GeneratorStepLayout>
 	<div slot="main-content" class="main-container" >
-		
 			<div class="inputs-wrapper">
 				<form use:form id="contract-info">
 				<h4>Contract Options</h4>
@@ -80,13 +79,10 @@
 				</div>
 				</form>
 			</div>
-		
-
 		<div class="code">
 			<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 		</div>
 	</div>
-
 	<Stack slot="buttons" direction="row">
 		<Button class="ghost" leftIcon="download" href={`data:text/plain;charset=utf-8, ${encodeURIComponent($contractCode)}`} download={`${$contractInfo.name}.cdc`}>Download Code</Button>
 		<Button type="submit" form="contract-info" rightIcon="arrow-forward-circle">Next</Button>
