@@ -15,6 +15,7 @@ transaction(
   // Socials
   discord: String?,
   twitter: String?,
+  website: String?,
   // Singular FLOAT Verifier
   singularFLOAT: Bool,
   eventOwner: Address?,
@@ -49,7 +50,8 @@ transaction(
 
     let socials = {
       "discord": discord == nil ? nil : MetadataViews.ExternalURL(discord!),
-      "twitter": twitter == nil ? nil : MetadataViews.ExternalURL(twitter!)
+      "twitter": twitter == nil ? nil : MetadataViews.ExternalURL(twitter!),
+      "website": website == nil ? nil : MetadataViews.ExternalURL(website!)
     }
 
     deployer.contracts.add(

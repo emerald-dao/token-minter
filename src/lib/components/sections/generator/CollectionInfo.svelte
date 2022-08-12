@@ -41,10 +41,18 @@
 		checkContracts($contractInfo.name);
 	}
 
-	let files;
-	$: if (files) {
-		const file = files[0];
+	let images;
+	$: if (images) {
+		console.log(images);
+		const file = images[0];
 		$contractInfo.image = file;
+	}
+
+	let bannerImages;
+	$: if (bannerImages) {
+		console.log(bannerImages);
+		const file = bannerImages[0];
+		$contractInfo.bannerImage = file;
 	}
 </script>
 
@@ -58,13 +66,22 @@
 				{#if option.helperText}
 					<span class="helper-text">{option.helperText}</span>
 				{/if}
-				{#if option.type === "file"}
+				{#if option.bindValue === "image"}
 					<input
 						name={option.bindValue}
 						id={option.bindValue}
 						placeholder={option.placeholder}
 						type="file"
-						bind:files
+						bind:files={images}
+						class:input-error={$errors[option.bindValue]}
+						class:input-ok={!$errors[option.bindValue]} />
+				{:else if option.bindValue === "bannerImage"}
+					<input
+						name={option.bindValue}
+						id={option.bindValue}
+						placeholder={option.placeholder}
+						type="file"
+						bind:files={bannerImages}
 						class:input-error={$errors[option.bindValue]}
 						class:input-ok={!$errors[option.bindValue]} />
 				{:else}
