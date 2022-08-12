@@ -26,6 +26,7 @@ import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
 import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
 import getContractsInBookScript from './cadence/scripts/get_contracts_in_book.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
+import getContractNames from './cadence/scripts/get_contracts.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
 import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
 // Transactions
@@ -301,7 +302,7 @@ export const removeContractFromBook = async (contractName) => {
 export const getAllContractNames = async (address) => {
   try {
     const response = await fcl.query({
-      cadence: getContractsScript,
+      cadence: getContractNames,
       args: (arg, t) => [
         arg(address, t.Address)
       ],
