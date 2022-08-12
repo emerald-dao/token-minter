@@ -12,7 +12,7 @@
 </script>
 
 <div class="main-wrapper">
-  <TransparentCard accent={true} height={"fit-content"}>
+  <TransparentCard accent={true} height={"fit-content"} paddingBlock="1.8rem">
     <ul>
       {#each steps as _step, i}
           <NavigationStep 

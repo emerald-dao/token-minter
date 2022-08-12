@@ -4,8 +4,6 @@
   import {
     Section,
     Container,
-    TransparentCard,
-    StepsButtons,
     WalletConnectModal,
   } from "$lib/components/atoms/index";
   import { GeneratorNav, GeneratorStepLayout } from "$lib/components/sections/generator/index";
@@ -27,10 +25,8 @@
             <GeneratorNav bind:step={$activeStep} {steps} />
           </div>
           <div class="main-container">
-            <TransparentCard padding="3rem" height="100%">
-              <svelte:component
-                this={steps[$activeStep].component} />
-            </TransparentCard>
+            <svelte:component
+              this={steps[$activeStep].component} />
           </div>
         </div>
       </Container>
@@ -69,7 +65,7 @@
         grid-area: main;
 
         @include mq(medium) {
-          height: 80vh;
+          height: 70vh;
         }
     }
   }

@@ -36,7 +36,10 @@
     <div class="input-wrapper">
       <label for="dropZoneCsv"> Collection Data </label>
       <span class="helper-text"
-        >Drop a CSV file containing all your collection metadata.</span>
+        >Drop a CSV file containing all your collection metadata.
+        <br/>Each NFT must have a 'name', 'description', and 'image' (file name) in it's metadata.
+        <br/>Download this <a href="/assets/metadata.csv" download>template</a> to have a basic CSV structure.
+      </span>
       <DropZone
         promptText="Drop CSV file"
         dropHandlingFunction={csvDropHandling}
@@ -49,7 +52,9 @@
     <div class="input-wrapper">
       <label for="dropZoneImages"> Collection Images </label>
       <span class="helper-text"
-        >Drop a folder containing all your collection images.</span>
+        >Drop a folder containing all your collection images.
+        <br/>Images file names must match the ones in the metadata CSV.
+      </span>
       <DropZone
         promptText="Drop Images folder"
         dropHandlingFunction={imagesDropHandling}

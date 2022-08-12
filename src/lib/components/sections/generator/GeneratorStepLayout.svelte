@@ -1,11 +1,13 @@
 <script>
-import { TransparentCard } from "$lib/components/atoms/index";
-
+  import { TransparentCard } from "$lib/components/atoms/index";
 </script>
+
 <div class="component-container">
-  <div class="component-wrapper">
-    <slot name="main-content"/>
-  </div>
+  <TransparentCard height="100%" paddingInline="2rem" paddingBlock="0.8rem">
+    <div class="component-wrapper">
+        <slot name="main-content"/>
+    </div>
+  </TransparentCard>
   <div class="step-buttons">
     <slot name="buttons"/>
   </div>
@@ -17,33 +19,30 @@ import { TransparentCard } from "$lib/components/atoms/index";
   .component-container {
     height: 100%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+    display: grid;
+    grid-template-rows: 100% auto;
 
-  .component-wrapper {
-    overflow-y: auto;
-    height: 100%;
-    background-color: var(--clr-accent-soft-t9);
-    padding: 2em;
-    border-radius: 1em;
-  }
+    .component-wrapper {
+      overflow-y: auto;
+      height: 100%;
+      padding-inline: 2rem;
+      padding-block: 1.8rem;
+    }
 
-  .step-buttons {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: fit-content;
-
-    @include mq(small) {
-      margin-top: 2rem;
-      position: static;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
+    .step-buttons {
+      position: fixed;
+      bottom: 0;
+      left: 0;
       width: 100%;
+
+      @include mq(small) {
+        margin-top: 2rem;
+        position: static;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        width: 100%;
+      }
     }
   }
 </style>

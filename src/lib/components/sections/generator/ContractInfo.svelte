@@ -17,8 +17,8 @@
 
 <GeneratorStepLayout>
 	<div slot="main-content" class="main-container" >
-		<form use:form id="contract-info">
 			<div class="inputs-wrapper">
+				<form use:form id="contract-info">
 				<h4>Contract Options</h4>
 				<span class="helper-text"
 					>Select the options you want to include in your contract.</span>
@@ -77,14 +77,12 @@
 						{/if}
 					{/each}
 				</div>
+				</form>
 			</div>
-		</form>
-
 		<div class="code">
 			<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 		</div>
 	</div>
-
 	<Stack slot="buttons" direction="row">
 		<Button class="ghost" leftIcon="download" href={`data:text/plain;charset=utf-8, ${encodeURIComponent($contractCode)}`} download={`${$contractInfo.name}.cdc`}>Download Code</Button>
 		<Button type="submit" form="contract-info" rightIcon="arrow-forward-circle">Next</Button>
@@ -107,18 +105,16 @@
 			grid-template-areas:
 				"inputs-wrapper code"
 				"buttons buttons";
-			gap: 3rem;
+			column-gap: 2rem;
 		}
 
 		.inputs-wrapper {
-			position: relative;
 			display: flex;
 			flex-direction: column;
 			width: 100%;
 
 			@include mq(medium) {
 				grid-area: inputs-wrapper;
-				height: 100%;
 				overflow-x: auto;
 			}
 
@@ -145,7 +141,7 @@
 		.code {
 			@include mq(medium) {
 				display: flex;
-				max-height: 60vh;
+				height: 100%;
 				overflow-y: auto;
 				grid-area: code;
 			}
