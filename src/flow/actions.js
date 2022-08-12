@@ -142,6 +142,7 @@ async function deployContract() {
         // Socials
         arg(info.discord ? info.discord : null, t.Optional(t.String)),
         arg(info.twitter ? info.twitter : null, t.Optional(t.String)),
+        arg(info.website ? info.website : null, t.Optional(t.String)),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
