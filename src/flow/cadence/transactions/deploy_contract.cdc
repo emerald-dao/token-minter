@@ -18,6 +18,8 @@ transaction(
   website: String?,
   // Singular FLOAT Verifier
   singularFLOAT: Bool,
+  // Has Emerald Pass Verifier
+  hasEmeraldPass: Bool,
   eventOwner: Address?,
   eventId: UInt64?,
   // Long Contract Code
@@ -46,6 +48,11 @@ transaction(
         _eventId: eventId!,
         _eventCap: eventCap
       ))
+    }
+
+    // Has Emerald Pass Verifier
+    if hasEmeraldPass {
+      mintVerifiers.append(MintVerifiers.HasEmeraldPass())
     }
 
     let socials = {

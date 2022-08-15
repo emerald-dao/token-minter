@@ -4,7 +4,7 @@
 	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
 	import { createForm } from "felte";
 	import contractOptions from "$lib/config/contractOptions.js";
-	import floatOptions from "$lib/config/floatOptions.js";
+	import verifierOptions from "$lib/config/verifierOptions.js";
 	import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 	import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
@@ -16,9 +16,9 @@
 </script>
 
 <GeneratorStepLayout>
-	<div slot="main-content" class="main-container" >
-			<div class="inputs-wrapper">
-				<form use:form id="contract-info">
+	<div slot="main-content" class="main-container">
+		<div class="inputs-wrapper">
+			<form use:form id="contract-info">
 				<h4>Contract Options</h4>
 				<span class="helper-text"
 					>Select the options you want to include in your contract.</span>
@@ -49,12 +49,12 @@
 						</label>
 					{/each}
 				</div>
-				<h4>FLOAT Options</h4>
+				<h4>Minting Verifiers</h4>
 				<span class="helper-text"
-					>Select the options you want to include in your contract.</span>
+					>Things the user must pass in order to mint your NFTs.</span>
 				<div class="inputs">
-					<!-- Generate input values from the floatOptions object -->
-					{#each floatOptions as option}
+					<!-- Generate input values from the verifierOptions object -->
+					{#each verifierOptions as option}
 						<label class="checkbox-label" for={option.bindValue}>
 							<input
 								name={option.bindValue}
@@ -77,15 +77,22 @@
 						{/if}
 					{/each}
 				</div>
-				</form>
-			</div>
+			</form>
+		</div>
 		<div class="code">
 			<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 		</div>
 	</div>
 	<Stack slot="buttons" direction="row">
-		<Button class="ghost" leftIcon="download" href={`data:text/plain;charset=utf-8, ${encodeURIComponent($contractCode)}`} download={`${$contractInfo.name}.cdc`}>Download Code</Button>
-		<Button type="submit" form="contract-info" rightIcon="arrow-forward-circle">Next</Button>
+		<Button
+			class="ghost"
+			leftIcon="download"
+			href={`data:text/plain;charset=utf-8, ${encodeURIComponent(
+				$contractCode
+			)}`}
+			download={`${$contractInfo.name}.cdc`}>Download Code</Button>
+		<Button type="submit" form="contract-info" rightIcon="arrow-forward-circle"
+			>Next</Button>
 	</Stack>
 </GeneratorStepLayout>
 

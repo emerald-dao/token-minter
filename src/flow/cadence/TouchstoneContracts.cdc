@@ -12,6 +12,7 @@ pub contract TouchstoneContracts {
 
     pub fun addContract(contractName: String) {
       self.contractNames[contractName] = true
+      TouchstoneContracts.addUser(user: self.owner!.address)
     }
 
     pub fun removeContract(contractName: String) {
@@ -39,9 +40,52 @@ pub contract TouchstoneContracts {
     return collections.getContracts()
   }
 
+  pub resource GlobalContractsBook {
+    pub let allUsers: {Address: Bool}
+    pub let reservedContractNames: {String: Address}
+
+    pub fun addUser(address: Address) {
+      self.allUsers[address] = true
+    }
+
+    pub fun getAllUsers(): [Address] {
+      return self.allUsers.keys
+    }
+
+    pub fun reserve(contractName: String, user: Address) {
+      self.reservedContractNames[contractName] = user
+    }
+
+    pub fun isReserved(contractName: String): Bool {
+      return self.reservedContractNames != nil
+    }
+
+    init() {
+      self.allUsers = {}
+      self.reservedContractNames = {}
+    }
+  }
+
+  access(contract) fun addUser(user: Address) {
+    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
+    globalContractsBook.addUser(address: user)
+  }
+
+  access(contract) fun reserve(contractName: String, user: Address) {
+    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
+    globalContractsBook.reserve(contractName: contractName, user: user)
+  }
+
+  pub fun getAllUsers(): [Address] {
+    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
+    return globalContractsBook.getAllUsers()
+  }
+
   init() {
     self.ContractsBookStoragePath = /storage/TouchstoneContractsBook
     self.ContractsBookPublicPath = /public/TouchstoneContractsBook
+
+    self.account.save(<- create GlobalContractsBook(), to: /storage/TouchstoneGlobalContractsBook)
   }
 
 }

@@ -21,6 +21,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
 	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile)
+	pub event Minted(id: UInt64, recipient: Address, metadataId: UInt64)
 
 	// Paths
 	pub let CollectionStoragePath: StoragePath
@@ -165,6 +166,8 @@ pub contract ExampleNFT: NonFungibleToken {
 
 			ExampleNFT.primaryBuyers[_metadataId] = _recipient
 			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
+
+			emit Minted(id: self.id, recipient: _recipient, metadataId: _metadataId)
 		}
 	}
 
@@ -240,9 +243,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 
 		// Handle Emerald City DAO royalty (5%)
-		let ecDAO = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
+		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-		ecDAO.deposit(from: <- payment.withdraw(amount: payment.balance * 0.05))
+		let royalty: UFix64 = 0.05
+		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: payment.balance * royalty))
 
 		// Give the rest to the collection owner
 		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
@@ -309,6 +313,8 @@ pub contract ExampleNFT: NonFungibleToken {
 		let collectionInfo = self.collectionInfo
 		collectionInfo["metadatas"] = self.metadatas
 		collectionInfo["primaryBuyers"] = self.primaryBuyers
+		collectionInfo["totalSupply"] = self.totalSupply
+		collectionInfo["nextMetadataId"] = self.nextMetadataId
 		return collectionInfo
 	}
 

@@ -1,4 +1,5 @@
 import FLOAT from "./utility/FLOAT.cdc"
+import EmeraldPass from "./utility/EmeraldPass.cdc"
 
 pub contract MintVerifiers {
 
@@ -20,12 +21,12 @@ pub contract MintVerifiers {
     pub fun verify(_ params: {String: AnyStruct}): String? {
       let minter: Address = params["minter"]! as! Address
 
-      let claimeeCollection = getAccount(minter).getCapability(FLOAT.FLOATCollectionPublicPath)
-                                .borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>()
-                                ?? panic("This account does not have a FLOAT Collection.")
-      
-      if claimeeCollection.ownedIdsFromEvent(eventId: self.eventId).length <= 0 {
-        return "The minter does not own a FLOAT from the required event."
+      if let minterCollection = getAccount(minter).getCapability(FLOAT.FLOATCollectionPublicPath).borrow<&FLOAT.Collection{FLOAT.CollectionPublic}>() {
+        if minterCollection.ownedIdsFromEvent(eventId: self.eventId).length <= 0 {
+          return "The minter does not own a FLOAT from the required event."
+        }
+      } else {
+        return "The minter does not have a FLOAT Collection set up."
       }
       
       return nil
@@ -37,6 +38,26 @@ pub contract MintVerifiers {
       self.eventOwner = _eventOwner
       self.eventId = _eventId
       self.eventCap = _eventCap
+    }
+  }
+
+  pub struct HasEmeraldPass: IVerifier {
+    pub let verifier: String
+    pub let type: Type
+
+    pub fun verify(_ params: {String: AnyStruct}): String? {
+      let minter: Address = params["minter"]! as! Address
+      
+      if !EmeraldPass.isActive(user: minter) {
+        return "The minter does not have an active Emerald Pass subscription."
+      }
+      
+      return nil
+    }
+
+    init() {
+      self.verifier = "Has Emerald Pass"
+      self.type = self.getType()
     }
   }
 

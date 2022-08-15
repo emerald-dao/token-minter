@@ -79,6 +79,7 @@ export const contractInfo = persistentWritable('contractInfo', {
   startMinting: true,
   floatLink: false,
   floatLinkText: '',
+  requireEmeraldPass: false
 });
 
 export const contractCode = derived([contractInfo, user, addresses], ([$contractInfo, $user]) => {

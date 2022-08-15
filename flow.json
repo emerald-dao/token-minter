@@ -61,6 +61,12 @@
 			"aliases": {
 				"testnet": "0x73a19dd056affc4d"
 			}
+		},
+		"EmeraldPass": {
+			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
+			"aliases": {
+				"testnet": "0x73a19dd056affc4d"
+			}
 		}
 	},
 	"networks": {
@@ -96,7 +102,8 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"TouchstoneContracts"
+				"EmeraldPass",
+				"MintVerifiers"
 			]
 		}
 	}

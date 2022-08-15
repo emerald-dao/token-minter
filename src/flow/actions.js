@@ -18,6 +18,7 @@ import {
 import { resultCID } from '$lib/stores/generator/IPFSstore.ts';
 
 import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
+import { resolveAddressObject } from './utils';
 
 ///////////////
 // Cadence code
@@ -34,7 +35,8 @@ import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
 import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
 import removeContractFromBookTx from './cadence/transactions/remove_contract_from_book.cdc?raw';
-import { resolveAddressObject } from './utils';
+import airdropTx from './cadence/transactions/airdrop.cdc?raw';
+import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -145,6 +147,8 @@ async function deployContract() {
         arg(info.website ? info.website : null, t.Optional(t.String)),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
+        // Has Emerald Pass Verifier
+        arg(info.requireEmeraldPass, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
         // Contract Code
@@ -279,6 +283,63 @@ export const removeContractFromBook = async (contractName) => {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(removeContractFromBookTx),
       args: (arg, t) => [arg(contractName, t.String)],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+};
+
+export const airdrop = async (recipients, metadataIds) => {
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(airdropTx),
+      args: (arg, t) => [
+        arg(recipients, t.Array(t.Address)),
+        arg(metadataIds, t.Array(t.UInt64))
+      ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+};
+
+export const toggleMinting = async () => {
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(toggleMintingTx),
+      args: (arg, t) => [],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
