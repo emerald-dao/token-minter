@@ -11,9 +11,9 @@
 				<p>
 					We are the first DAO on the Flow Blockchain 
 					<br/>
-					<b>Educate, build and goverm</b>
+					<b>Educate, build and govern</b>
 				</p>
-				<Button>Join Discord</Button>
+				<Button leftIcon="logo-discord" target="_blank" href="https://discord.com/invite/emeraldcity">Join Discord</Button>
 			</Stack>
 		</TransparentCard>
 	</Container>

@@ -31,7 +31,7 @@
 </script>
 
 <GeneratorStepLayout>
-  <Stack direction="column" slot="main-content">
+  <Stack direction="column" slot="main-content" gap="3.6rem">
     <!-- CSV DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneCsv"> Collection Data </label>
@@ -66,7 +66,8 @@
     <div class="form">
       <label for="ipfs-token">IPFS Key</label>
       <span class="helper-text">
-        To get your own IPFS Key:
+        To get your own IPFS Key
+        <span class="estimated-time">[3 minutes aprox.]</span>
         <ol>
           <li>
             Log in to <a href="https://nft.storage/login/" target="_blank"
@@ -100,4 +101,10 @@
     flex-direction: column;
     width: 100%;
   } 
+
+  .estimated-time {
+    font-size: var(--fs-100);
+    color: var(--clr-font-text-soft-t4);
+    margin-left: 0.4rem;
+  }
 </style>

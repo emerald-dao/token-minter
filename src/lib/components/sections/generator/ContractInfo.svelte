@@ -49,12 +49,12 @@
 						</label>
 					{/each}
 				</div>
-				<h4>Minting Verifiers</h4>
+				<h4>FLOAT Options</h4>
 				<span class="helper-text"
-					>Things the user must pass in order to mint your NFTs.</span>
+					>Select the options you want to include in your contract.</span>
 				<div class="inputs">
-					<!-- Generate input values from the verifierOptions object -->
-					{#each verifierOptions as option}
+					<!-- Generate input values from the floatOptions object -->
+					{#each floatOptions as option}
 						<label class="checkbox-label" for={option.bindValue}>
 							<input
 								name={option.bindValue}
@@ -112,7 +112,7 @@
 			grid-template-areas:
 				"inputs-wrapper code"
 				"buttons buttons";
-			column-gap: 2rem;
+			column-gap: 4.4rem;
 		}
 
 		.inputs-wrapper {
@@ -134,8 +134,9 @@
 			.inputs {
 				margin-top: 0.5rem;
 				padding: 1.5rem;
-				border: 1px var(--clr-primary-main) solid;
+				background-color: var(--clr-accent-main-t9);
 				border-radius: 1rem;
+				width: 100%;
 
 				.input-text {
 					margin-top: 10px;

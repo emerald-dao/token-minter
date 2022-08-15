@@ -2,6 +2,7 @@
   import { Stack, UploadMetadataPack } from "$lib/components/atoms/index";
   import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
   import { onNext } from "$lib/stores/generator/updateFunctions";
+  import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 
   console.log($csvMetadata);
   const BATCH_SIZE = 500;
@@ -42,13 +43,15 @@
   segments[0].uploadState = "to-upload";
 </script>
 
-<Stack direction="column" gap="1rem">
-  {#each segments as segment}
-    <UploadMetadataPack
-      initialToken={segment.initialToken}
-      lastToken={segment.lastToken}
-      batchSize={segment.lastToken - segment.initialToken + 1}
-      bind:uploadState={segment.uploadState} 
-      on:uploaded={updateSegments}/>
-  {/each}
-</Stack>
+<GeneratorStepLayout>
+  <Stack direction="column" gap="1rem" slot="main-content">
+    {#each segments as segment}
+      <UploadMetadataPack
+        initialToken={segment.initialToken}
+        lastToken={segment.lastToken}
+        batchSize={segment.lastToken - segment.initialToken + 1}
+        bind:uploadState={segment.uploadState} 
+        on:uploaded={updateSegments}/>
+    {/each}
+  </Stack>
+</GeneratorStepLayout>
