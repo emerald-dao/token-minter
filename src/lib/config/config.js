@@ -29,7 +29,7 @@ export const emeraldTools = [
     url: 'https://academy.ecdao.org/',
   },
   {
-    title: 'Float',
+    title: 'FLOAT',
     url: 'https://floats.city/',
   },
   {

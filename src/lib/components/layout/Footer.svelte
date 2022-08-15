@@ -1,42 +1,55 @@
 <script>
-  import Navigation from '$lib/components/modules/Navigation.svelte';
-  import { Container, Logo, Stack, Socials, EmeraldTools, Button } from "$lib/components/atoms/index.js";
+  import Navigation from "$lib/components/modules/Navigation.svelte";
+  import {
+    Container,
+    Logo,
+    Stack,
+    Socials,
+    EmeraldTools,
+    Button,
+  } from "$lib/components/atoms/index.js";
 
-  import { page } from '$app/stores';
+  import { page } from "$app/stores";
 </script>
 
-{#if !$page.url.pathname.includes("collection-generator") }             
+{#if !$page.url.pathname.includes("collection-generator")}
   <footer>
     <Container class="width-large">
       <Stack gap="3.8rem" justify="flex-start" align="flex-start">
-        <Logo/> 
+        <Logo />
         <nav>
           <div class="left-column">
             <Stack gap="0" align="flex-start">
               <h5>Pages</h5>
-              <Navigation color="var(--clr-font-text)" gap="0.7em"/>
+              <Navigation color="var(--clr-font-text)" gap="0.7em" />
             </Stack>
             <Stack gap="0" align="flex-start">
               <h5>Emerald City Tools</h5>
-              <EmeraldTools color="var(--clr-font-text)" gap="0.7em"/>
+              <EmeraldTools color="var(--clr-font-text)" gap="0.7em" />
             </Stack>
           </div>
           <div class="right-column">
             <div class="socials">
               <h5>Follow us</h5>
-              <Socials/>
+              <Socials />
             </div>
             <div class="dao-invite">
               <h5>Join us</h5>
-              <Button class="small" leftIcon="logo-discord" href="https://discord.com/invite/emeraldcity" target="_blank">Emerald City DAO</Button>
+              <Button
+                class="small"
+                leftIcon="logo-discord"
+                href="https://discord.com/invite/emeraldcity"
+                target="_blank">Emerald City DAO</Button>
             </div>
-          </div>  
+          </div>
         </nav>
       </Stack>
     </Container>
   </footer>
   <div class="signature">
-    <span>Built in <img src="/flow-logo.png" alt="Flow logo"/> Flow by Emerald City DAO</span>
+    <span
+      >Built on <img src="/flow-logo.png" alt="Flow logo" /> Flow by
+      <img src="/ec-logo.png" alt="Emerald logo" /> Emerald City DAO</span>
   </div>
 {/if}
 
@@ -46,10 +59,10 @@
   footer {
     padding-block: 2.8rem;
     background: linear-gradient(
-        to right,
-        var(--clr-primary-soft-t9),
-        var(--clr-accent-soft-t9)
-      );
+      to right,
+      var(--clr-primary-soft-t9),
+      var(--clr-accent-soft-t9)
+    );
 
     nav {
       flex-direction: column;
@@ -58,7 +71,7 @@
       align-items: flex-start;
       gap: 3em;
       width: 100%;
-      
+
       @include mq(medium) {
         padding-bottom: 10px;
         flex-direction: row;
@@ -109,7 +122,7 @@
         margin-bottom: 1.7em;
         margin-top: 0;
         letter-spacing: 0.1em;
-        color: var(--clr-accent-main-t1)
+        color: var(--clr-accent-main-t1);
       }
     }
   }
