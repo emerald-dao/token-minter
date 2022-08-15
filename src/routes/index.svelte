@@ -14,4 +14,4 @@
 <HeroSection/>
 <CreateCollectionSection/>
 <LearnSection/>
-<!-- <InvitationSection/> -->
+<InvitationSection/>

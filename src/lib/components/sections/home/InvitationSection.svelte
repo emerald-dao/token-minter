@@ -13,7 +13,7 @@
 					<br/>
 					<b>Educate, build and goverm</b>
 				</p>
-				<Button>Join Discord</Button>
+				<Button leftIcon="logo-discord" target="_blank" href="https://discord.com/invite/emeraldcity">Join Discord</Button>
 			</Stack>
 		</TransparentCard>
 	</Container>
