@@ -49,12 +49,12 @@
 						</label>
 					{/each}
 				</div>
-				<h4>FLOAT Options</h4>
+				<h4>Minting Verifiers</h4>
 				<span class="helper-text"
-					>Select the options you want to include in your contract.</span>
+					>Requirements users must meet to mint your NFTs.</span>
 				<div class="inputs">
-					<!-- Generate input values from the floatOptions object -->
-					{#each floatOptions as option}
+					<!-- Generate input values from the verifierOptions object -->
+					{#each verifierOptions as option}
 						<label class="checkbox-label" for={option.bindValue}>
 							<input
 								name={option.bindValue}
