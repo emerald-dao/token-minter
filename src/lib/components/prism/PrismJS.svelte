@@ -22,12 +22,12 @@
     border-radius: 0.4em;
 
     .code-header {
-      background-color: hsla(0, 0%, 0%, 1);
+      background-color: var(--clr-accent-main);
       padding: 0.6em 2em;
       margin: 0;
       position: sticky;
       top: 0;
-      color: var(--clr-primary-main);
+      color: var(--clr-font-text-inverse);
       font-family: var(--font-mono);
       font-size: 0.8rem;
     }
@@ -35,7 +35,7 @@
     pre {
       padding: 0;
       margin: 0;
-      background-color: hsla(0, 0%, 0%, 0.1);
+      background-color: var(--clr-accent-main-t9);
       white-space: pre-wrap;
       tab-size: 1em;
       padding-inline: 2em;

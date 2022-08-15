@@ -112,7 +112,7 @@
 
 <style type="scss">
 	form {
-		gap: 1em;
+		gap: 2.2rem;
 
 		.input {
 			display: flex;

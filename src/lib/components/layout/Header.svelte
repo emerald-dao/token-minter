@@ -51,14 +51,16 @@
       <div class="mobile-menu">
         <Logo/>
         <div class="mobile-options">
-          <DiscordInvite/>
-          <ThemeToggle/>
           <AnimatedHamburger {open} {onClick}/>
         </div>
       </div>
       {#if open}
         <div class="hamburger-navigation" transition:fly={{ y: -200, duration: 400 }}>
           <Navigation>
+            <Stack direction="row" gap="1rem">
+              <DiscordInvite/>
+              <ThemeToggle/>
+            </Stack>
             <div class="close-button">
               <AnimatedHamburger {open} {onClick}/>
             </div>
@@ -82,62 +84,63 @@
 
   header {
     padding: 0;
-  }
 
-  .hamburger-navigation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--clr-background-primary);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    z-index: 9999;
-  }
 
-  .desktop-menu {
-    display: none;
-  }
-
-  .close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px;
-  }
-
-  .mobile-menu {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    
-    @include mq(medium) {
-      display: none;    
+    .hamburger-navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--clr-background-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 10px;
+      z-index: 9999;
     }
 
-    .mobile-options {
-      display: flex;
-      flex-direction: row;
+    .desktop-menu {
+      display: none;
     }
-  }
 
-  .desktop-menu {
-    display: none;    
+    .close-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 10px;
+    }
 
-    @include mq(medium) {
+    .mobile-menu {
       display: flex;
+      width: 100%;
       flex-direction: row;
-      gap: 30px;
       justify-content: space-between;
       align-items: center;
-      width: 100%;
+      
+      @include mq(medium) {
+        display: none;    
+      }
+
+      .mobile-options {
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+    .desktop-menu {
+      display: none;    
+
+      @include mq(medium) {
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
     }
   }
 </style>
