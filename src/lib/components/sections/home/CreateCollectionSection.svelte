@@ -93,7 +93,11 @@
 
 	.buttons-group {
 		display: flex;
-		flex-direction: row;
+		flex-direction: column;
 		gap: 2rem;
+
+		@include mq(small) {
+			flex-direction: row;
+		}
 	}
 </style>
