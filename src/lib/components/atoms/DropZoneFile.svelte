@@ -37,7 +37,7 @@
     <h5>{file.name}</h5>
   </div>
   <div on:click|stopPropagation={() => dispatch('deleteFile')}>
-    <Icon icon=ion:close-circle color="var(--clr-primary-main)"/>
+    <Icon icon=ion:close-circle color="var(--clr-accent-main)"/>
   </div>
 </div>
 
@@ -54,8 +54,7 @@
     min-height: 5rem;
     width: 100%;
     border-radius: 0.6rem;
-    background-color: var(--clr-accent-soft-t9);
-    border: 0.5px var(--clr-accent-soft-t4) solid;
+    background-color: var(--clr-accent-main-t9);
     font-size: var(--fs-200);
     position: relative;
 

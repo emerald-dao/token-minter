@@ -31,7 +31,7 @@
 </script>
 
 <GeneratorStepLayout>
-  <Stack direction="column" slot="main-content">
+  <Stack direction="column" slot="main-content" gap="3.6rem">
     <!-- CSV DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneCsv"> Collection Data </label>

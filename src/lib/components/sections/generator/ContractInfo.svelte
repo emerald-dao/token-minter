@@ -17,68 +17,74 @@
 
 <GeneratorStepLayout>
 	<div slot="main-content" class="main-container" >
-			<div class="inputs-wrapper">
-				<form use:form id="contract-info">
-				<h4>Contract Options</h4>
-				<span class="helper-text"
-					>Select the options you want to include in your contract.</span>
-				<div class="inputs">
-					<!-- Generate input values from the contractOptions object -->
-					{#each contractOptions as option}
-						<label
-							class="checkbox-label"
-							class:checkbox-label-with-number={option.withNumber}
-							for={option.bindValue}>
-							<input
-								name={option.bindValue}
-								id={option.bindValue}
-								type="checkbox"
-								bind:checked={$contractInfo[option.bindValue]} />
-							{option.name}
-							{#if option.withNumber}
-								<input
-									name={option.bindValue + "Number"}
-									id={option.bindValue + "Number"}
-									type="number"
-									disabled={$contractInfo[option.bindValue]
-										? !$contractInfo[option.bindValue]
-										: true}
-									placeholder="Number"
-									bind:value={$contractInfo[option.bindValue + "Number"]} />
-							{/if}
-						</label>
-					{/each}
-				</div>
-				<h4>FLOAT Options</h4>
-				<span class="helper-text"
-					>Select the options you want to include in your contract.</span>
-				<div class="inputs">
-					<!-- Generate input values from the floatOptions object -->
-					{#each floatOptions as option}
-						<label class="checkbox-label" for={option.bindValue}>
-							<input
-								name={option.bindValue}
-								id={option.bindValue}
-								type="checkbox"
-								bind:checked={$contractInfo[option.bindValue]} />
-							{option.name}
-						</label>
-						{#if option.withText}
-							<input
-								name={option.bindValue + "Text"}
-								id={option.bindValue + "Text"}
-								class="input-text"
-								type="text"
-								disabled={$contractInfo[option.bindValue]
-									? !$contractInfo[option.bindValue]
-									: true}
-								placeholder="https://floats.city/jacob.find/event/185382914"
-								bind:value={$contractInfo[option.bindValue + "Text"]} />
-						{/if}
-					{/each}
-				</div>
-				</form>
-			</div>
+		<div class="inputs-wrapper">
+			<form use:form id="contract-info">
+				<Stack direction="column" align="flex-start" gap="2rem">
+					<Stack direction="column" align="flex-start" gap="0">
+						<h4>Contract Options</h4>
+						<span class="helper-text"
+							>Select the options you want to include in your contract.</span>
+						<div class="inputs">
+							<!-- Generate input values from the contractOptions object -->
+							{#each contractOptions as option}
+								<label
+									class="checkbox-label"
+									class:checkbox-label-with-number={option.withNumber}
+									for={option.bindValue}>
+									<input
+										name={option.bindValue}
+										id={option.bindValue}
+										type="checkbox"
+										bind:checked={$contractInfo[option.bindValue]} />
+									{option.name}
+									{#if option.withNumber}
+										<input
+											name={option.bindValue + "Number"}
+											id={option.bindValue + "Number"}
+											type="number"
+											disabled={$contractInfo[option.bindValue]
+												? !$contractInfo[option.bindValue]
+												: true}
+											placeholder="Number"
+											bind:value={$contractInfo[option.bindValue + "Number"]} />
+									{/if}
+								</label>
+							{/each}
+						</div>
+					</Stack>
+					<Stack direction="column" align="flex-start" gap="0">
+						<h4>FLOAT Options</h4>
+						<span class="helper-text"
+							>Select the options you want to include in your contract.</span>
+						<div class="inputs">
+							<!-- Generate input values from the floatOptions object -->
+							{#each floatOptions as option}
+								<label class="checkbox-label" for={option.bindValue}>
+									<input
+										name={option.bindValue}
+										id={option.bindValue}
+										type="checkbox"
+										bind:checked={$contractInfo[option.bindValue]} />
+									{option.name}
+								</label>
+								{#if option.withText}
+									<input
+										name={option.bindValue + "Text"}
+										id={option.bindValue + "Text"}
+										class="input-text"
+										type="text"
+										disabled={$contractInfo[option.bindValue]
+											? !$contractInfo[option.bindValue]
+											: true}
+										placeholder="https://floats.city/jacob.find/event/185382914"
+										bind:value={$contractInfo[option.bindValue + "Text"]} />
+								{/if}
+							{/each}
+						</div>
+					</Stack>
+				</Stack>
+			</form>
+		</div>
 		<div class="code">
 			<PrismJS code={$contractCode} title={`${$contractInfo.name} Contract`} />
 		</div>
@@ -105,7 +111,7 @@
 			grid-template-areas:
 				"inputs-wrapper code"
 				"buttons buttons";
-			column-gap: 2rem;
+			column-gap: 4.4rem;
 		}
 
 		.inputs-wrapper {
@@ -127,8 +133,9 @@
 			.inputs {
 				margin-top: 0.5rem;
 				padding: 1.5rem;
-				border: 1px var(--clr-primary-main) solid;
+				background-color: var(--clr-accent-main-t9);
 				border-radius: 1rem;
+				width: 100%;
 
 				.input-text {
 					margin-top: 10px;
