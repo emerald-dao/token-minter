@@ -1,5 +1,5 @@
 <script>
-  import { getContracts } from "../../../flow/actions";
+  import { getContractDisplays } from "../../../flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
@@ -18,12 +18,12 @@
     <p>
       Check out {owner}'s collections created with {dappTitle}!
     </p>
-    {#await getContracts(owner) then collections}
+    {#await getContractDisplays(owner) then collections}
       <Stack direction="column">
         {#each collections as collection}
           <CollectionCard
             name={collection.name}
-            url={`/${owner}/${collection.name.replace(/\s+/g, "")}`}
+            url={`/${owner}/${collection.contractName}`}
             thumbnailURL={`https://nftstorage.link/ipfs/${collection.image.cid}/${collection.image.path}`}
             description={collection.description}
             {owner} />

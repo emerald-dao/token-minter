@@ -376,7 +376,7 @@ export const getAllContractNames = async (address) => {
   }
 };
 
-export const getContracts = async (address) => {
+export const getContractDisplays = async (address) => {
   try {
     const response1 = await fcl.query({
       cadence: replaceWithProperValues(getContractsInBookScript),
@@ -389,6 +389,7 @@ export const getContracts = async (address) => {
       imports += `import ${contract.name} from ${address}\n`;
       displays += `
       answer.append(CollectionDisplay(
+        _contractName: "${contract.name}",
         _name: ${contract.name}.getCollectionAttribute(key: "name") as! String,
         _description: ${contract.name}.getCollectionAttribute(key: "description") as! String,
         _image: ${contract.name}.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile

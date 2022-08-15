@@ -1,6 +1,6 @@
 <script>
   import { user } from "../../flow/stores";
-  import { getContracts } from "../../flow/actions";
+  import { getContractDisplays } from "../../flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
@@ -37,7 +37,7 @@
     },
   ];
 
-  getContracts($user?.addr);
+  getContractDisplays($user?.addr);
 
   let address;
 </script>

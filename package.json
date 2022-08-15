@@ -5,7 +5,8 @@
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
     "package": "svelte-kit package",
-    "preview": "svelte-kit preview"
+    "preview": "svelte-kit preview",
+    "test": "npm run build && npm run preview"
   },
   "devDependencies": {
     "@iconify/svelte": "^2.2.1",
