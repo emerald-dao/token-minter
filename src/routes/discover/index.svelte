@@ -80,6 +80,7 @@
 
     input {
       margin-right: 5px;
+      margin-top: 0px;
     }
   }
   h1 {
