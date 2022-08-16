@@ -74,7 +74,7 @@
     {form}
     {...buttonProps}>
     {#if state === "loading"}
-      <LoadingSpinner color="var(--clr-font-text-inverse)" iconWidth="1.5em" />
+      <LoadingSpinner color="var(--clr-font-text-button)" iconWidth="1.5em" />
     {/if}
     {#if leftIcon && state != "loading"}
       <Icon icon={`ion:${leftIcon}`} width="1.5em" />

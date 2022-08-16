@@ -112,13 +112,14 @@
 			grid-template-areas:
 				"inputs-wrapper code"
 				"buttons buttons";
-			column-gap: 4.4rem;
+			column-gap: 3.4rem;
 		}
 
 		.inputs-wrapper {
 			display: flex;
 			flex-direction: column;
 			width: 100%;
+			padding-right: 1rem;
 
 			@include mq(medium) {
 				grid-area: inputs-wrapper;

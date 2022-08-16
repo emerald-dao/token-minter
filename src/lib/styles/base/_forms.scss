@@ -12,14 +12,14 @@ input {
   background-color: transparent;
   border: none;
   background-color: var(--clr-accent-main-t9);
-  border: 2px var(--clr-accent-main-t8) solid;
+  border: 2px var(--clr-accent-main-t7) solid;
   border-radius: 0.5rem;
   padding: 0.8em 1.4em;
   width: 100%;
   margin-top: 0.5rem;
 }
 input:focus {
-  border: 2px var(--clr-accent-main-t6) solid;
+  border: 2px var(--clr-accent-main-t4) solid;
   outline: none !important;
 }
 input::placeholder {
@@ -27,7 +27,7 @@ input::placeholder {
 }
 
 .input-ok {
-  border: 2px var(--clr-accent-main-t8) solid;
+  border: 2px var(--clr-accent-main-t7) solid;
 }
 .input-error {
   border: 2px red solid;
@@ -91,7 +91,7 @@ input[type='checkbox'] {
   padding: 0;
 
   font: inherit;
-  color: var(--clr-accent-main-t9);
+  color: var(--clr-accent-main-t7);
   background-color: var(--clr-accent-main-t9);
   width: 22px;
   aspect-ratio: 1/1;
