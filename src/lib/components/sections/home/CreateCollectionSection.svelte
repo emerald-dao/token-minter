@@ -6,12 +6,11 @@
 		Stack,
 		Tagline,
 		AdaptableGrid,
-		NumberBall
+		NumberBall,
+		Feature
 	} from "$lib/components/atoms/index";
-	import { dappTitle } from "$lib/config/config";
-import { each } from "svelte/internal";
 
-	export let steps = [
+	let steps = [
 		{
 			title: "Create Collection",
 			description: "Fill out basic information like a name, description, image, and price for your NFT Collection."
@@ -45,15 +44,9 @@ import { each } from "svelte/internal";
 				<Tagline>CREATE YOUR COLLECTION</Tagline>
 				<h2>Create an NFT collection without code</h2>
 				{#each steps as step, i}
-					<div class="feature">
-						<Stack direction="row" gap="0.5em" align="center" justify="flex-start">
-							<NumberBall>{i + 1}</NumberBall>
-							<h4>{step.title}</h4>
-						</Stack>
-						<p>
-							{step.description}
-						</p>
-					</div>
+					<Feature title={step.title} description={step.description}>
+						<NumberBall size="2.4rem">{i + 1}</NumberBall>
+					</Feature>
 				{/each}
 				<div class="buttons-group">
 					<Button class="medium ghost" href="/guide/en/welcome" leftIcon="document-text"
@@ -79,17 +72,6 @@ import { each } from "svelte/internal";
 
 	h2 {
 		margin-bottom: 2rem;
-	}
-
-	.feature {
-		h4 {
-			font-size: var(--fs-400);
-		}
-		p {
-			font-size: var(--fs-300);
-			margin-top: 1em;
-			margin-bottom: 2em;
-		}
 	}
 
 	.buttons-group {
