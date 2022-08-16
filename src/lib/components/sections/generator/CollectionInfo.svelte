@@ -28,8 +28,12 @@
 
 	async function checkContracts() {
 		const contracts = await getAllContractNames($user.addr);
-		if (contracts.includes("Touchstone" + $contractInfo.name.replace(/\s+/g, ""))) {
-			alert("This collection name is already deployed to your account. You cannot use it again.");
+		if (
+			contracts.includes("Touchstone" + $contractInfo.name.replace(/\s+/g, ""))
+		) {
+			alert(
+				"This collection name is already deployed to your account. You cannot use it again."
+			);
 		} else {
 			onNext();
 		}
@@ -39,13 +43,14 @@
 	$: if (images) {
 		console.log(images);
 		const file = images[0];
+		$contractInfo.imageName = file.name;
 		$contractInfo.image = file;
 	}
 
 	let bannerImages;
 	$: if (bannerImages) {
-		console.log(bannerImages);
 		const file = bannerImages[0];
+		$contractInfo.bannerImageName = file.name;
 		$contractInfo.bannerImage = file;
 	}
 </script>
