@@ -1,3 +1,5 @@
+import EmeraldPass from "./utility/EmeraldPass.cdc"
+
 pub contract TouchstoneContracts {
 
   pub let ContractsBookStoragePath: StoragePath
@@ -11,8 +13,13 @@ pub contract TouchstoneContracts {
     pub let contractNames: {String: Bool}
 
     pub fun addContract(contractName: String) {
+      let me: Address = self.owner!.address
       self.contractNames[contractName] = true
-      TouchstoneContracts.addUser(user: self.owner!.address)
+      TouchstoneContracts.addUser(user: me)
+
+      if EmeraldPass.isActive(user: me) {
+        TouchstoneContracts.reserve(contractName: contractName, user: me)
+      }
     }
 
     pub fun removeContract(contractName: String) {
@@ -48,16 +55,21 @@ pub contract TouchstoneContracts {
       self.allUsers[address] = true
     }
 
-    pub fun getAllUsers(): [Address] {
-      return self.allUsers.keys
-    }
-
     pub fun reserve(contractName: String, user: Address) {
       self.reservedContractNames[contractName] = user
     }
 
-    pub fun isReserved(contractName: String): Bool {
-      return self.reservedContractNames != nil
+    pub fun getAllUsers(): [Address] {
+      return self.allUsers.keys
+    }
+
+    pub fun getReservation(contractName: String): Address? {
+      let reservedBy = self.reservedContractNames[contractName]
+      if reservedBy == nil || !EmeraldPass.isActive(user: reservedBy!) {
+        return nil
+      } else {
+        return reservedBy!
+      }
     }
 
     init() {
@@ -79,6 +91,16 @@ pub contract TouchstoneContracts {
   pub fun getAllUsers(): [Address] {
     let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
     return globalContractsBook.getAllUsers()
+  }
+
+  pub fun getAllReservations(): {String: Address} {
+    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
+    return globalContractsBook.reservedContractNames
+  }
+
+  pub fun getReservation(contractName: String): Address? {
+    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
+    return globalContractsBook.getReservation(contractName: contractName)
   }
 
   init() {

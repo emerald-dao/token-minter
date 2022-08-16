@@ -109,12 +109,6 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
 async function deployContract() {
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
   let info = get(contractInfo);
-  contractInfo.set({
-    ...info,
-    contractName: 'Touchstone' + info.name.replace(/\s+/g, '')
-  });
-  info = get(contractInfo);
-
   console.log(info);
 
   initTransactionState();

@@ -28,12 +28,15 @@
 
 	async function checkContracts() {
 		const contracts = await getAllContractNames($user.addr);
-		if (
-			contracts.includes("Touchstone" + $contractInfo.name.replace(/\s+/g, ""))
-		) {
-			alert(
-				"This collection name is already deployed to your account. You cannot use it again."
-			);
+
+		// CHECK TO SEE IF THEY HAVE EMERALD PASS HERE
+		// If yes (not available yet):
+		// $contractInfo.contractName = $contractInfo.name.replace(/\s+/g, "");
+		// If no:
+		$contractInfo.contractName = "Touchstone" + $contractInfo.name.replace(/\s+/g, "");
+		
+		if (contracts.includes($contractInfo.contractName)) {
+			alert("This collection name is already deployed to your account. You cannot use it again.");
 		} else {
 			onNext();
 		}

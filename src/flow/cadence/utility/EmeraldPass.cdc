@@ -1,9 +1,9 @@
-import FlowToken from "./FlowToken.cdc"
 import FungibleToken from "./FungibleToken.cdc"
+import FUSD from "./FUSD.cdc"
 
 pub contract EmeraldPass {
 
-  access(self) let ECFlowTokenTreasury: Capability<&FlowToken.Vault{FungibleToken.Receiver}>
+  access(self) let ECFUSDTreasury: Capability<&FUSD.Vault{FungibleToken.Receiver}>
   access(self) var pricing: Pricing
 
   pub let VaultPublicPath: PublicPath
@@ -14,7 +14,7 @@ pub contract EmeraldPass {
   pub event Donation(by: Address, to: Address, time: String)
 
   pub struct Pricing {
-    // examples
+    // examples in $FUSD
     // "month" -> 10.0
     // "year" -> 100.0
     pub let timeToCost: {String: UFix64}
@@ -37,7 +37,7 @@ pub contract EmeraldPass {
 
   pub resource interface VaultPublic {
     pub var endDate: UFix64
-    pub fun addTime(time: String, payment: @FlowToken.Vault)
+    pub fun addTime(time: String, payment: @FUSD.Vault)
     pub fun active(): Bool
   }
 
@@ -45,7 +45,7 @@ pub contract EmeraldPass {
 
     pub var endDate: UFix64
 
-    pub fun addTime(time: String, payment: @FlowToken.Vault) {
+    pub fun addTime(time: String, payment: @FUSD.Vault) {
       pre {
         EmeraldPass.getPrice(time: time) != nil: "This is not a valid time period."
         EmeraldPass.getPrice(time: time) == payment.balance:
@@ -89,12 +89,12 @@ pub contract EmeraldPass {
 
   // A public function because, well, ... um ... you can
   // always call this if you want! :D ;) <3
-  pub fun depositToECTreasury(vault: @FlowToken.Vault) {
-    self.ECFlowTokenTreasury.borrow()!.deposit(from: <- vault)
+  pub fun depositToECTreasury(vault: @FUSD.Vault) {
+    self.ECFUSDTreasury.borrow()!.deposit(from: <- vault)
   }
 
   // A function you can call to donate subscription time to someone else
-  pub fun donate(nicePerson: Address, to: Address, time: String, payment: @FlowToken.Vault) {
+  pub fun donate(nicePerson: Address, to: Address, time: String, payment: @FUSD.Vault) {
     let userVault = getAccount(to).getCapability(EmeraldPass.VaultPublicPath)
                       .borrow<&Vault{VaultPublic}>()
                       ?? panic("Ths receiver has not set up a Vault for Emerald Pass yet.")
@@ -120,7 +120,7 @@ pub contract EmeraldPass {
   }
 
   init() {
-    self.ECFlowTokenTreasury = getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
+    self.ECFUSDTreasury = getAccount(0x5643fd47a29770e7).getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)
     self.pricing = Pricing({})
 
     self.VaultPublicPath = /public/EmeraldPass

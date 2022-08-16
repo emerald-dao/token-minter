@@ -85,7 +85,7 @@ export const contractInfo = persistentWritable('contractInfo', {
 });
 
 export const contractCode = derived([contractInfo, user, addresses], ([$contractInfo, $user]) => {
-  return replaceWithProperValues(contract, 'Touchstone' + $contractInfo.name.replace(/\s+/g, ''), undefined).replaceAll(
+  return replaceWithProperValues(contract, $contractInfo.contractName, undefined).replaceAll(
     'USER_ADDR',
     $user.addr
   );
