@@ -4,9 +4,10 @@
   }
 
   export let background;
+  export let height;
 </script>
 
-<section {...sectionProps} style={`background: ${background}`}>
+<section {...sectionProps} style={`background: ${background}; height: ${height}`}>
   <slot/>
 </section>
 

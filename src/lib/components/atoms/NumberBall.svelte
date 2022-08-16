@@ -1,21 +1,20 @@
 <script>
   export let active = false;
   export let passed = false;
+  export let size = "2rem";
 </script>
 
 <div 
   class="step-number" 
   class:step-number-active={active} 
   class:step-number-passed={passed}
+  style={`width:${size}; min-width:${size}; height:${size}`}
 >
   <slot/>
 </div>
 
 <style type="scss">
   .step-number {
-    width: 2rem;
-    min-width: 2rem;
-    height: 2rem;
     border-radius: 99px;
     display: flex;
     justify-content: center;

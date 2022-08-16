@@ -74,7 +74,7 @@
     {form}
     {...buttonProps}>
     {#if state === "loading"}
-      <LoadingSpinner color="var(--clr-font-text-inverse)" iconWidth="1.5em" />
+      <LoadingSpinner color="var(--clr-font-text-button)" iconWidth="1.5em" />
     {/if}
     {#if leftIcon && state != "loading"}
       <Icon icon={`ion:${leftIcon}`} width="1.5em" />
@@ -116,11 +116,16 @@
     }
   }
 
+  button:hover,
+  a:hover {
+    box-shadow: var(--clr-accent-soft) 4px 4px,
+      var(--clr-accent-soft-t6) 8px 8px;
+    transition: 0.4s;
+    color: var(--clr-font-text-button);
+  }
+
   a {
     text-decoration: none;
-  }
-  a:hover {
-    color: inherit;
   }
 
   .ghost {
@@ -202,14 +207,6 @@
 
   .no-shadow:hover {
     box-shadow: none;
-  }
-
-  button:hover,
-  a:hover {
-    box-shadow: var(--clr-accent-soft) 4px 4px,
-      var(--clr-accent-soft-t6) 8px 8px;
-    transition: 0.4s;
-    color: var(--clr-font-text-inverse);
   }
 
   .full-width {

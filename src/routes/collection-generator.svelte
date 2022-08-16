@@ -15,26 +15,25 @@
   const steps = $stepsArray;
 </script>
 
-<Section class="padding-top-none padding-bottom-none">
+<Section class="padding-top-none padding-bottom-none" height="100%">
   <div class="main-wrapper">
-    <!-- Display generator if user has loggedIn with wallet -->
-    {#if $user?.loggedIn}
-      <Container class="width-large gutter-y-none" height="100%">
-        <div class="main-layout">
-          <div class="sidebar-container">
-            <GeneratorNav bind:step={$activeStep} {steps} />
-          </div>
-          <div class="main-container">
-            <svelte:component
-              this={steps[$activeStep].component} />
-          </div>
+    <Container class="width-large gutter-y-none" height="100%">
+      <!-- Display generator if user has loggedIn with wallet -->
+      {#if $user?.loggedIn}
+      <div class="main-layout">
+        <div class="sidebar-container">
+          <GeneratorNav bind:step={$activeStep} {steps} />
         </div>
-      </Container>
-
-    <!-- If not connected, ask to connect wallet -->
-    {:else}
-      <WalletConnectModal/>
-    {/if}
+        <div class="main-container">
+          <svelte:component
+            this={steps[$activeStep].component} />
+        </div>
+      </div>
+      <!-- If not connected, ask to connect wallet -->
+      {:else}
+        <WalletConnectModal/>
+      {/if}
+    </Container>
   </div>
 </Section>
 
@@ -46,6 +45,7 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 1rem;
+    height: 100%;
 
     .main-layout {
       display: flex;

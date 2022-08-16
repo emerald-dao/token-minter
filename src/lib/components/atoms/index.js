@@ -32,3 +32,5 @@ export { default as NFTCardContent } from './NFTCardContent.svelte';
 export { default as NFTPrice } from './NFTPrice.svelte';
 export { default as Socials } from './Socials.svelte';
 export { default as EmeraldTools } from './EmeraldTools.svelte';
+export { default as IconBall } from './IconBall.svelte';
+export { default as Feature } from './Feature.svelte';

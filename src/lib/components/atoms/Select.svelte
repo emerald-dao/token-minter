@@ -17,7 +17,7 @@
     font-size: inherit;
     cursor: inherit;
     line-height: inherit;
-    color: var(--clr-primary-main);
+    color: var(--clr-accent-main);
 
     // Stack above custom arrow
     z-index: 1;
@@ -46,7 +46,7 @@
     // min-width: 15ch;
     // max-width: 30ch;
 
-    border: 1px solid var(--clr-primary-main);
+    border: 1px solid var(--clr-accent-main);
     border-radius: 0.2em;
     padding: 0.25em 0.5em;
 
@@ -60,7 +60,7 @@
       justify-self: end;
       width: 0.5em;
       height: 0.3em;
-      background-color: var(--clr-primary-main);
+      background-color: var(--clr-accent-main);
       clip-path: polygon(100% 0%, 0 0%, 50% 100%);
     }
   }

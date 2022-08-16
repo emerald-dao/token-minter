@@ -61,7 +61,7 @@
 
 <section>
   <TransparentCard>
-    <h2>{$t('toc.tocTitle')}</h2>
+    <h3>{$t('toc.tocTitle')}</h3>
     <ul>
       {#each toc as tocElement, i}
         <li class:active={active === i}>
@@ -84,15 +84,18 @@
   section {
     margin-bottom: 2em;
 
-    
     @include mq(medium) {
       margin-bottom: 0;
     }
   }
 
-  h2 {
-    font-size: var(--fs-400);
-    text-shadow: none;
+  h3 {
+    font-size: var(--fs-300);
+    color: var(--clr-accent-main-t4);
+    letter-spacing: 0.1em;
+    font-weight: 200;
+    text-transform: uppercase;
+    margin-bottom: 2em;
   }
 
   ul {
@@ -104,7 +107,7 @@
     padding-block: 0.4em;
     
     @include mq(medium) {
-      border-left: 0.2px solid var(--clr-font-text-soft);
+      border-left: 0.2px solid var(--clr-accent-strong);
     }
   }
 
@@ -118,25 +121,29 @@
     font-size: var(--fs-300);
     text-decoration: none;
     color: var(--clr-font-text-soft);
+    line-height: 1.4em;
   }
 
 
   @include mq(medium) {
-    a::before {
+    .link-wrapper::before {
       content: '•';
       position: relative;
-      left: -0.45ch;
+      left: -0.35ch;
       padding-right: 0.5em;
       font-size: var(--fs-400);
       vertical-align: middle;
+      font-family: var(--ff-main);
+      font-size: 35px;
+      color: var(--clr-accent-strong);
     }
    }
 
-  a:hover::before {
+  .link-wrapper:hover::before {
     color: var(--clr-primary-main);
   }
 
-	.active a::before{
+	.active .link-wrapper::before{
 		color: var(--clr-primary-main);
 	}
 </style>

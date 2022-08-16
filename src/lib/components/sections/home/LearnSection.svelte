@@ -5,7 +5,27 @@
 		Button,
 		AdaptableGrid,
 		Stack,
+		IconBall,
+		Feature
 	} from "$lib/components/atoms/index";
+
+	let tools = [
+		{
+			title: "Emerald Academy",
+			icon: "ion:school",
+			description: `Check out <a href="https://academy.ecdao.org/" target="_blank">Emerald Academy</a>, the most popular educational platform on the Flow Blockchain.`
+		},
+		{
+			title: "User Guide",
+			icon: "ion:document-text",
+			description: "Explore the User Guide, an educational experience around NFTs to teach you everything there is to know about metadata, smart contracts, decentralized storage, and more."
+		},
+		{
+			title: "Ask in Emerald City",
+			icon: "ion:chatbubbles",
+			description: `Want to join a community filled with developers who are also interested in developing NFT smart contracts on the Flow Blockchain? Join the <a href="https://discord.gg/emeraldcity" target="_blank">Emerald City Discord</a>!`
+		}
+	]
 </script>
 
 <Section>
@@ -21,32 +41,11 @@
 				</Stack>
 			</div>
 			<Stack>
-				<div>
-					<h4>Emerald Academy</h4>
-					<p>
-						Check out <a href="https://academy.ecdao.org/" target="_blank"
-							>Emerald Academy</a
-						>, the most popular educational platform on the Flow Blockchain.
-					</p>
-				</div>
-				<div>
-					<h4>User Guide</h4>
-					<p>
-						Explore the User Guide, an educational experience around NFTs to
-						teach you everything there is to know about metadata, smart
-						contracts, decentralized storage, and more.
-					</p>
-				</div>
-				<div>
-					<h4>Ask in Emerald City</h4>
-					<p>
-						Want to join a community filled with developers who are also
-						interested in developing NFT smart contracts on the Flow Blockchain?
-						Join the <a href="https://discord.gg/emeraldcity" target="_blank"
-							>Emerald City Discord</a
-						>!
-					</p>
-				</div>
+				{#each tools as tool}
+					<Feature title={tool.title} description={tool.description}>
+						<IconBall icon={tool.icon} size="2.4rem"/>
+					</Feature>
+				{/each}
 			</Stack>
 		</AdaptableGrid>
 	</Container>
@@ -55,15 +54,6 @@
 <style type="scss">
 	@use "../../../styles/abstracts" as *;
 
-	a {
-		text-decoration: none;
-	}
-
-	h4 {
-		font-size: var(--fs-400);
-		margin-bottom: 1em;
-		margin-top: 2em;
-	}
 	.sticky {
 		@include mq(medium) {
 			position: sticky;
