@@ -28,16 +28,12 @@
       {download}
       {...buttonProps}>
       {#if leftIcon}
-        <Icon
-          icon={`ion:${leftIcon}`}
-          width="1.5em" />
-      {/if}   
+        <Icon icon={`ion:${leftIcon}`} width="1.5em" />
+      {/if}
       <slot />
       {#if rightIcon}
-        <Icon
-          icon={`ion:${rightIcon}`}
-          width="1.5em" />
-      {/if}   
+        <Icon icon={`ion:${rightIcon}`} width="1.5em" />
+      {/if}
     </a>
   {:else}
     <a
@@ -47,22 +43,18 @@
       on:focus
       on:mouseenter
       on:mouseleave
-      target={target}
+      {target}
       {disabled}
       {...buttonProps}>
       {#if leftIcon}
-        <Icon
-          icon={`ion:${leftIcon}`}
-          width="1.5em" />
-      {/if}   
+        <Icon icon={`ion:${leftIcon}`} width="1.5em" />
+      {/if}
       <slot />
       {#if rightIcon}
-        <Icon
-          icon={`ion:${rightIcon}`}
-          width="1.5em" />
-      {/if}   
+        <Icon icon={`ion:${rightIcon}`} width="1.5em" />
+      {/if}
     </a>
-  {/if}   
+  {/if}
 {:else}
   <button
     on:click
@@ -143,15 +135,15 @@
     box-shadow: none;
     color: var(--clr-font-text-t3);
   }
-  
+
   .main-color {
     background: var(--clr-primary-main);
-    border-color: var(--clr-primary-main)
+    border-color: var(--clr-primary-main);
   }
-  
+
   .accent-color {
     background: var(--clr-accent-main);
-    border-color: var(--clr-accent-main)
+    border-color: var(--clr-accent-main);
   }
 
   .ghost:hover {
@@ -197,10 +189,12 @@
     cursor: not-allowed;
   }
 
+  button:disabled,
   .disabled {
     background: gray;
     cursor: not-allowed;
   }
+  button:disabled:hover,
   .disabled:hover {
     box-shadow: none;
   }

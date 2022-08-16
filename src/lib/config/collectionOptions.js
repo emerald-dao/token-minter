@@ -10,7 +10,7 @@ let collectionOptions = [
     name: 'Price *',
     type: 'number',
     bindValue: 'payment',
-    helperText: 'Define the price of each NFT in Flow tokens',
+    helperText: 'Define the default price of your NFTs in $FLOW tokens (this will get overwritten if you supply a `price` attribute in your CSV file in the next step)',
     placeholder: '10.0',
   },
   {

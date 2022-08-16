@@ -1,14 +1,18 @@
 <script>
   import { DropZone, Button, Stack } from "$lib/components/atoms/index";
   import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
-  import { csvState, csvFile, csvMetadata } from "$lib/stores/generator/CsvStore.ts";
+  import {
+    csvState,
+    csvFile,
+    csvMetadata,
+  } from "$lib/stores/generator/CsvStore.ts";
   import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
   import {
     csvDropHandling,
     imagesDropHandling,
   } from "$lib/generator/dropHandling";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
-  import { uploadToIPFS } from '$lib/utilities/uploadToIPFS';
+  import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
   import { onNext } from "$lib/stores/generator/updateFunctions";
   import {
     activeStep,
@@ -25,7 +29,7 @@
     } else {
       alert("Missing assets");
     }
-	}
+  };
 
   $: buttonActive = $csvFile && $imagesFiles && $userIPFSToken ? true : false;
 </script>
@@ -37,8 +41,10 @@
       <label for="dropZoneCsv"> Collection Data </label>
       <span class="helper-text"
         >Drop a CSV file containing all your collection metadata.
-        <br/>Each NFT must have a 'name', 'description', and 'image' (file name) in it's metadata.
-        <br/>Download this <a href="/assets/metadata.csv" download>template</a> to have a basic CSV structure.
+        <br />Each NFT must have a 'name', 'description', and 'image' (file
+        name) in it's metadata.
+        <br />Download this <a href="/assets/metadata.csv" download>template</a>
+        to have a basic CSV structure.
       </span>
       <DropZone
         promptText="Drop CSV file"
@@ -53,7 +59,7 @@
       <label for="dropZoneImages"> Collection Images </label>
       <span class="helper-text"
         >Drop a folder containing all your collection images.
-        <br/>Images file names must match the ones in the metadata CSV.
+        <br />Images file names must match the ones in the metadata CSV.
       </span>
       <DropZone
         promptText="Drop Images folder"
@@ -86,7 +92,12 @@
     </div>
   </Stack>
 
-  <Button slot="buttons" state={$stepsArray[$activeStep].state} leftIcon="arrow-up-circle" on:click={onStepSubmit} disabled={!buttonActive}>
+  <Button
+    slot="buttons"
+    state={$stepsArray[$activeStep].state}
+    leftIcon="arrow-up-circle"
+    on:click={onStepSubmit}
+    disabled={!buttonActive}>
     {#if $stepsArray[$activeStep].state === "loading"}
       Uploading to IPFS
     {:else}
@@ -100,7 +111,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-  } 
+  }
 
   .estimated-time {
     font-size: var(--fs-100);

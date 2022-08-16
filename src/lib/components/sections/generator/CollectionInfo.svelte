@@ -9,7 +9,6 @@
 	import { Button, Stack } from "$lib/components/atoms/index";
 	import { onNext } from "$lib/stores/generator/updateFunctions.js";
 
-	// TODO: Make dynamic schema
 	const schema = object({
 		name: string().required("Of course your collection needs a name! 🤷‍♂️"),
 		payment: number().required(
@@ -24,21 +23,16 @@
 	});
 
 	const { form, errors } = createForm({
-		onSubmit() {
-			onNext();
-		},
 		extend: [validator({ schema })],
 	});
 
-	async function checkContracts(proposedName) {
-		let contracts = await getAllContractNames($user.addr);
-		if (contracts.includes(proposedName.replace(/\s+/g, ""))) {
-			$errors["name"] = "This contract name is already taken :(";
+	async function checkContracts() {
+		const contracts = await getAllContractNames($user.addr);
+		if (contracts.includes("Touchstone" + $contractInfo.name.replace(/\s+/g, ""))) {
+			alert("This collection name is already deployed to your account. You cannot use it again.");
+		} else {
+			onNext();
 		}
-	}
-
-	$: if ($contractInfo.name) {
-		checkContracts($contractInfo.name);
 	}
 
 	let images;
@@ -107,7 +101,8 @@
 		slot="buttons"
 		type="submit"
 		form="collection-info"
-		rightIcon="arrow-forward-circle">Next</Button>
+		rightIcon="arrow-forward-circle"
+		on:click={checkContracts}>Next</Button>
 </GeneratorStepLayout>
 
 <style type="scss">

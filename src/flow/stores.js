@@ -92,6 +92,7 @@ export const contractCode = derived([contractInfo, user, addresses], ([$contract
 export const restartContractInfo = () => {
   contractInfo.set({
     name: '',
+    contractName: '',
     description: '',
     image: null,
     bannerImage: null,
@@ -102,5 +103,6 @@ export const restartContractInfo = () => {
     startMinting: true,
     floatLink: false,
     floatLinkText: '',
+    requireEmeraldPass: false
   });
 };
