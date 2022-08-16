@@ -5,6 +5,12 @@ pub contract TouchstoneContracts {
   pub let ContractsBookStoragePath: StoragePath
   pub let ContractsBookPublicPath: PublicPath
 
+  pub enum ReservationStatus: UInt8 {
+    pub case notFound // was never made
+    pub case expired // this means someone made it but their Emerald Pass expired
+    pub case active // is currently active
+  }
+
   pub resource interface ContractsBookPublic {
     pub fun getContracts(): [String]
   }
@@ -63,12 +69,14 @@ pub contract TouchstoneContracts {
       return self.allUsers.keys
     }
 
-    pub fun getReservation(contractName: String): Address? {
+    pub fun getReservation(contractName: String): ReservationStatus {
       let reservedBy = self.reservedContractNames[contractName]
-      if reservedBy == nil || !EmeraldPass.isActive(user: reservedBy!) {
-        return nil
+      if reservedBy == nil {
+        return ReservationStatus.notFound
+      } else if !EmeraldPass.isActive(user: reservedBy!) {
+        return ReservationStatus.expired
       } else {
-        return reservedBy!
+        return ReservationStatus.active
       }
     }
 
@@ -98,7 +106,7 @@ pub contract TouchstoneContracts {
     return globalContractsBook.reservedContractNames
   }
 
-  pub fun getReservation(contractName: String): Address? {
+  pub fun getReservation(contractName: String): ReservationStatus {
     let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
     return globalContractsBook.getReservation(contractName: contractName)
   }

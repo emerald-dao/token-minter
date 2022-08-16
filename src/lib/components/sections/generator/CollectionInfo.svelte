@@ -1,6 +1,6 @@
 <script>
 	import { createForm } from "felte";
-	import { getAllContractNames } from "../../../../flow/actions.js";
+	import { canMakeReservation, getAllContractNames, hasEmeraldPass } from "../../../../flow/actions.js";
 	import { contractInfo, user } from "../../../../flow/stores.js";
 	import collectionOptions from "$lib/config/collectionOptions.js";
 	import { object, string, number, mixed } from "yup";
@@ -30,16 +30,22 @@
 		const contracts = await getAllContractNames($user.addr);
 
 		// CHECK TO SEE IF THEY HAVE EMERALD PASS HERE
-		// If yes (not available yet):
-		// $contractInfo.contractName = $contractInfo.name.replace(/\s+/g, "");
-		// If no:
-		$contractInfo.contractName = "Touchstone" + $contractInfo.name.replace(/\s+/g, "");
+		const activeEmeraldPass = await hasEmeraldPass($user.addr);
+
+		$contractInfo.contractName = activeEmeraldPass ? $contractInfo.name.replace(/\s+/g, "") : "Touchstone" + $contractInfo.name.replace(/\s+/g, "");
 		
 		if (contracts.includes($contractInfo.contractName)) {
 			alert("This collection name is already deployed to your account. You cannot use it again.");
-		} else {
-			onNext();
 		}
+
+		if (activeEmeraldPass) {
+			const userCanMakeReservation = await canMakeReservation($contractInfo.contractName);
+			if (!userCanMakeReservation) {
+				alert("Someone has already used this Collection Name. Please choose another.")
+			}
+		}
+
+		onNext();
 	}
 
 	let images;

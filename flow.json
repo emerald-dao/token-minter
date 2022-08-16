@@ -72,7 +72,7 @@
 		"EmeraldPass": {
 			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
 			"aliases": {
-				"testnet": "0x73a19dd056affc4d"
+				"testnet": "0x17d543d71f554199"
 			}
 		}
 	},
@@ -87,13 +87,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x73a19dd056affc4d",
+			"address": "0x17d543d71f554199",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "d1c36bb6ed2d3900fbd47ce36a44446b1be9cfa78f34f2521a4b680a7835a16c"
+				"privateKey": "23404c2f6ff3abd354d329ef220b9aee906639fa300473eb2b638e334d920d15"
 			}
 		}
 	},
@@ -109,8 +109,7 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"EmeraldPass",
-				"MintVerifiers"
+				"EmeraldPass"
 			]
 		}
 	}

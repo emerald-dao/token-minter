@@ -30,6 +30,8 @@ import getContractDisplaysScript from './cadence/scripts/get_contract_displays.c
 import getContractNames from './cadence/scripts/get_contracts.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
 import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
+import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
+import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc?raw';
 // Transactions
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
@@ -100,6 +102,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
     .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
+    .replace('"../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
@@ -465,3 +468,30 @@ export async function getNFTInfo(contractName, contractAddress, metadataId) {
     console.log(e);
   }
 }
+
+export async function hasEmeraldPass(user) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(hasEmeraldPassScript),
+      args: (arg, t) => [arg(user, t.Address)],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function canMakeReservation(contractName) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(canMakeReservationScript),
+      args: (arg, t) => [arg(contractName, t.String)],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
