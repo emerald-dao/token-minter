@@ -1,6 +1,6 @@
 <script>
   import { theme } from "$lib/stores/ThemeStore"
-  import { TransparentCard, AdaptableGrid, NumberBall, Stack } from "$lib/components/atoms/index";
+  import { TransparentCard, AdaptableGrid, Ball, Stack } from "$lib/components/atoms/index";
   
   let steps = [
     {
@@ -38,7 +38,7 @@
           {/if} 
         </div>
         <div class="step-wrapper">
-          <NumberBall>{i + 1}</NumberBall>
+          <Ball>{i + 1}</Ball>
           <span>{step.description}</span>
         </div>
       </div>

@@ -6,7 +6,7 @@
 		Stack,
 		Tagline,
 		AdaptableGrid,
-		NumberBall,
+		Ball,
 		Feature
 	} from "$lib/components/atoms/index";
 
@@ -45,7 +45,7 @@
 				<h2>Create an NFT collection without code</h2>
 				{#each steps as step, i}
 					<Feature title={step.title} description={step.description}>
-						<NumberBall size="2.4rem">{i + 1}</NumberBall>
+						<Ball size="2.4rem">{i + 1}</Ball>
 					</Feature>
 				{/each}
 				<div class="buttons-group">

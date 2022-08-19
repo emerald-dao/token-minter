@@ -1,7 +1,10 @@
 <script>
+  import Icon from "@iconify/svelte";
+
   export let active = false;
   export let passed = false;
   export let size = "2rem";
+  export let icon;
 </script>
 
 <div 
@@ -10,6 +13,11 @@
   class:step-number-passed={passed}
   style={`width:${size}; min-width:${size}; height:${size}`}
 >
+  {#if icon}
+    <div class="icon-wrapper">
+      <Icon icon={`${icon}`} width="100%" />
+    </div>
+  {/if}
   <slot/>
 </div>
 
@@ -31,5 +39,13 @@
   .step-number-active {
     background-color: var(--clr-primary-main);
     color: var(--clr-font-text-inverse);
+  }
+  .icon-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 </style>
