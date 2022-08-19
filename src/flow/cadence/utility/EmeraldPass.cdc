@@ -158,8 +158,8 @@ pub contract EmeraldPass {
       })
     }
 
-    self.VaultPublicPath = /public/EmeraldPass
-    self.VaultStoragePath = /storage/EmeraldPass
+    self.VaultPublicPath = /public/EmeraldPassv2
+    self.VaultStoragePath = /storage/EmeraldPassv2
 
     self.account.save(<- create Admin(), to: /storage/EmeraldPassAdmin)
   }

@@ -112,9 +112,9 @@ pub contract TouchstoneContracts {
   }
 
   init() {
-    self.ContractsBookStoragePath = /storage/TouchstoneContractsBook
-    self.ContractsBookPublicPath = /public/TouchstoneContractsBook
-    self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBook
+    self.ContractsBookStoragePath = /storage/TouchstoneContractsBookv2
+    self.ContractsBookPublicPath = /public/TouchstoneContractsBookv2
+    self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBookv2
 
     self.account.save(<- create GlobalContractsBook(), to: TouchstoneContracts.GlobalContractsBookStoragePath)
   }

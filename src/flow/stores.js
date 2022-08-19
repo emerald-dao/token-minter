@@ -29,7 +29,7 @@ const contractData = {
     mainnet: '',
   },
   TouchstoneContracts: {
-    testnet: '0xc0eb53fca755377d',
+    testnet: '0xd24f69d0e1865520',
     mainnet: '',
   },
   FLOAT: {
@@ -45,7 +45,7 @@ const contractData = {
     mainnet: '0x233eb012d34b0070',
   },
   EmeraldPass: {
-    testnet: '0xc0eb53fca755377d',
+    testnet: '0xd24f69d0e1865520',
     mainnet: '',
   },
 };
