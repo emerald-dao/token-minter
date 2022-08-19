@@ -7,7 +7,7 @@ pub contract EmeraldPass {
   access(self) var treasury: ECTreasury
   // Maps the type of a token to its pricing
   access(self) var pricing: {Type: Pricing}
-  access(self) let time: {String: UFix64}
+  access(self) var time: {String: UFix64}
 
   pub let VaultPublicPath: PublicPath
   pub let VaultStoragePath: StoragePath
@@ -54,7 +54,7 @@ pub contract EmeraldPass {
 
     pub fun addTime(time: String, payment: @FungibleToken.Vault) {
       pre {
-        EmeraldPass.getPricing()[payment.getType()] != nil: "This is not a supported form of payment."
+        EmeraldPass.getPricing().containsKey(payment.getType()): "This is not a supported form of payment."
         EmeraldPass.getPrice(vaultType: payment.getType(), time: time) != nil: "Could not fetch a price for this payment type and time."
         EmeraldPass.getPrice(vaultType: payment.getType(), time: time) == payment.balance:
           "The cost is ".concat(EmeraldPass.getPrice(vaultType: payment.getType(), time: time)!.toString()).concat(" but you passed in ").concat(payment.balance.toString()).concat(".")
@@ -80,7 +80,9 @@ pub contract EmeraldPass {
     }
 
     init() {
-      self.endDate = getCurrentBlock().timestamp
+      // We take away 1.0 to make sure users can't execute "active" status
+      // in the same transaction.
+      self.endDate = getCurrentBlock().timestamp - 1.0
     }
 
   }
@@ -89,6 +91,10 @@ pub contract EmeraldPass {
 
     pub fun changePricing(newPricing: {Type: Pricing}) {
       EmeraldPass.pricing = newPricing
+    }
+
+    pub fun changeTime(newTimes: {String: UFix64}) {
+      EmeraldPass.time = newTimes
     }
   
   }
@@ -114,10 +120,7 @@ pub contract EmeraldPass {
 
   // Checks to see if a user is currently subscribed to Emerald Pass
   pub fun isActive(user: Address): Bool {
-    if let userVault = getAccount(user).getCapability(EmeraldPass.VaultPublicPath).borrow<&Vault{VaultPublic}>() {
-      return userVault.active()
-    }
-    return false
+    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath).borrow<&Vault{VaultPublic}>()?.active() == true
   }
 
   pub fun getPricing(): {Type: Pricing} {
@@ -141,16 +144,18 @@ pub contract EmeraldPass {
 
   init() {
     self.treasury = ECTreasury()
-    self.pricing = {
-      Type<@FUSD.Vault>(): Pricing({
-        // PUT DEFAULT PRICING IN HERE FOR FUSD ONLY.
-      })
-    }
     self.time = {
       "day": 86400.0,
       "week": 604800.0,
       "month": 2629743.0,
+      "6months": 15778458.0,
       "year": 31556926.0
+    }
+    self.pricing = {
+      Type<@FUSD.Vault>(): Pricing({
+        "month": 100.0,
+        "year": 1000.0
+      })
     }
 
     self.VaultPublicPath = /public/EmeraldPass

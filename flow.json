@@ -66,13 +66,13 @@
 		"TouchstoneContracts": {
 			"source": "./src/flow/cadence/TouchstoneContracts.cdc",
 			"aliases": {
-				"testnet": "0x73a19dd056affc4d"
+				"testnet": "0xc0eb53fca755377d"
 			}
 		},
 		"EmeraldPass": {
 			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
 			"aliases": {
-				"testnet": "0x17d543d71f554199"
+				"testnet": "0xc0eb53fca755377d"
 			}
 		}
 	},
@@ -87,13 +87,13 @@
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
 		},
 		"testnet-account": {
-			"address": "0x17d543d71f554199",
+			"address": "0xc0eb53fca755377d",
 			"key": {
 				"type": "hex",
 				"index": 0,
 				"signatureAlgorithm": "ECDSA_P256",
 				"hashAlgorithm": "SHA3_256",
-				"privateKey": "23404c2f6ff3abd354d329ef220b9aee906639fa300473eb2b638e334d920d15"
+				"privateKey": "2b4a329dee3166ed0c7655e762dc63aca57b407507607127f8f03e31160f3655"
 			}
 		}
 	},
@@ -109,7 +109,8 @@
 		},
 		"testnet": {
 			"testnet-account": [
-				"EmeraldPass"
+				"EmeraldPass",
+				"TouchstoneContracts"
 			]
 		}
 	}
