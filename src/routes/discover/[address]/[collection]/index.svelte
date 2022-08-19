@@ -81,7 +81,7 @@
 
 <style type="scss">
   .banner {
-    height: 280px;
+    height: 220px;
     background-size: cover;
     background-position: center center;
     background-color: var(--clr-background-primary);
@@ -91,7 +91,7 @@
   .collection-info-wrapper {
     margin-bottom: -80px;
     position: relative;
-    top: -150px;
+    top: -120px;
   }
   .no-banner {
     top: 0px;
@@ -99,9 +99,9 @@
   }
 
   img {
-    height: 240px;
+    height: 200px;
     border-radius: 0.4rem;
-    border: 2px var(--clr-accent-soft-t5) solid;
+    border: 6px var(--clr-accent-soft-t7) solid;
     background-color: var(--clr-background-primary);
     margin-bottom: 50px;
   }
