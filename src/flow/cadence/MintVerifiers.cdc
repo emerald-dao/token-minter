@@ -32,12 +32,13 @@ pub contract MintVerifiers {
       return nil
     }
 
-    init(_eventOwner: Address, _eventId: UInt64, _eventCap: Capability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>) {
+    init(_eventOwner: Address, _eventId: UInt64) {
       self.verifier = "Singular FLOAT"
       self.type = self.getType()
       self.eventOwner = _eventOwner
       self.eventId = _eventId
-      self.eventCap = _eventCap
+      self.eventCap = getAccount(_eventOwner).getCapability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>(FLOAT.FLOATEventsPublicPath)
+      assert(self.eventCap.check(), message: "This is not a valid FLOAT Event.")
     }
   }
 
