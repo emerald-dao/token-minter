@@ -1,7 +1,21 @@
-import FUSD from "./src/flow/cadence/utility/FUSD.cdc"
-import FungibleToken from "./src/flow/cadence/utility/FungibleToken.cdc"
+import FIND from 0x097bafa4e0b48eef
+        pub fun main(address: Address): Profile? {
+            if let name = FIND.reverseLookup(address) {
+              let profile = FIND.lookup(name)!
+              return Profile(_name: name, _address: address, _avatar: profile.getAvatar())
+            }
+            
+            return nil
+        }
 
-pub fun main() {
+        pub struct Profile {
+          pub let name: String
+          pub let address: Address
+          pub let avatar: String
 
-  let thing = getAccount(0x5643fd47a29770e7).getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver).borrow()!
-}
+          init(_name: String, _address: Address, _avatar: String) {
+            self.name = _name
+            self.address = _address
+            self.avatar = _avatar
+          }
+        }

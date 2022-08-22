@@ -94,6 +94,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"../utility/FungibleToken.cdc"', addressList.FungibleToken)
     .replace('"./utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
@@ -135,13 +136,17 @@ async function deployContract() {
         arg(info.description, t.String),
         arg(info.imageName, t.String),
         arg(info.bannerImageName ? info.bannerImageName : null, t.Optional(t.String)),
-        arg(info.startMinting, t.Bool),
         arg(Number(info.payment).toFixed(2), t.UFix64),
         arg(get(resultCID), t.String),
         // Socials
         arg(info.discord ? info.discord : null, t.Optional(t.String)),
         arg(info.twitter ? info.twitter : null, t.Optional(t.String)),
         arg(info.website ? info.website : null, t.Optional(t.String)),
+        // Contract Options
+        arg(info.startMinting, t.Bool),
+        arg(info.royalty, t.Bool),
+        arg(info.royalty ? info.royaltyText : null, t.Optional(t.Address)),
+        arg(info.royalty ? info.royaltyNumber : null, t.Optional(t.UFix64)),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
         // Has Emerald Pass Verifier

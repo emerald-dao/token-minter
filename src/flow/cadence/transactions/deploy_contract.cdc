@@ -2,6 +2,8 @@ import MintVerifiers from "../MintVerifiers.cdc"
 import FLOAT from "../utility/FLOAT.cdc"
 import MetadataViews from "../utility/MetadataViews.cdc"
 import TouchstoneContracts from "../TouchstoneContracts.cdc"
+import FlowToken from "../utility/FlowToken.cdc"
+import FungibleToken from "../utility/FungibleToken.cdc"
 
 transaction(
   contractName: String,
@@ -9,13 +11,17 @@ transaction(
   description: String,
   imagePath: String,
   bannerImagePath: String?,
-  minting: Bool,
   price: UFix64,
   ipfsCID: String,
   // Socials
   discord: String?,
   twitter: String?,
   website: String?,
+  // Contract Options
+  minting: Bool,
+  royalty: Bool,
+  royaltyAddress: Address?,
+  royaltyAmount: UFix64?,
   // Singular FLOAT Verifier
   singularFLOAT: Bool,
   // Has Emerald Pass Verifier
@@ -56,6 +62,12 @@ transaction(
       "website": website == nil ? nil : MetadataViews.ExternalURL(website!)
     }
 
+    let royaltyInfo: MetadataViews.Royalty? = royalty ? MetadataViews.Royalty(
+      recepient: getAccount(royaltyAddress!).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+      cut: royaltyAmount!,
+      description: "This is a royalty cut on primary sales."
+    ) : nil
+
     deployer.contracts.add(
       name: contractName, 
       code: contractCode.decodeHex(),
@@ -64,6 +76,7 @@ transaction(
       _imagePath: imagePath,
       _bannerImagePath: bannerImagePath,
       _minting: minting,
+      _royalty: royaltyInfo,
       _price: price,
       _ipfsCID: ipfsCID,
       _socials: socials,
