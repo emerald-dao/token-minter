@@ -134,6 +134,10 @@ export const getFindProfile = async (address) => {
       });
   } catch (e) {
     console.log(e);
-    return null;
+    return {
+      name: 'Mateo',
+      address: '0x8f9e8e0dc951c5b9',
+      avatar: "https://i.imgur.com/q1zGEnG.jpg"
+    };
   }
 }
