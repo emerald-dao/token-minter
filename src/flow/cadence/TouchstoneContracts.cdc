@@ -4,6 +4,7 @@ pub contract TouchstoneContracts {
 
   pub let ContractsBookStoragePath: StoragePath
   pub let ContractsBookPublicPath: PublicPath
+  pub let GlobalContractsBookStoragePath: StoragePath
 
   pub enum ReservationStatus: UInt8 {
     pub case notFound // was never made
@@ -21,10 +22,12 @@ pub contract TouchstoneContracts {
     pub fun addContract(contractName: String) {
       let me: Address = self.owner!.address
       self.contractNames[contractName] = true
-      TouchstoneContracts.addUser(user: me)
+      
+      let globalContractsBook = TouchstoneContracts.account.borrow<&GlobalContractsBook>(from: TouchstoneContracts.GlobalContractsBookStoragePath)!
+      globalContractsBook.addUser(address: me)
 
       if EmeraldPass.isActive(user: me) {
-        TouchstoneContracts.reserve(contractName: contractName, user: me)
+        globalContractsBook.reserve(contractName: contractName, user: me)
       }
     }
 
@@ -41,6 +44,57 @@ pub contract TouchstoneContracts {
     }
   }
 
+  pub resource interface GlobalContractsBookPublic {
+    pub fun getAllUsers(): [Address]
+    pub fun getAllReservations(): {String: Address}
+    pub fun getReservation(contractName: String): ReservationStatus
+  }
+
+  pub resource GlobalContractsBook: GlobalContractsBookPublic {
+    pub let allUsers: {Address: Bool}
+    pub let reservedContractNames: {String: Address}
+
+    pub fun addUser(address: Address) {
+      self.allUsers[address] = true
+    }
+
+    pub fun reserve(contractName: String, user: Address) {
+      pre {
+        self.getReservation(contractName: contractName) != ReservationStatus.active: contractName.concat(" is already taken!")
+        EmeraldPass.isActive(user: user): "This user does not have an active Emerald Pass subscription."
+      }
+      self.reservedContractNames[contractName] = user
+    }
+
+    pub fun getAllUsers(): [Address] {
+      return self.allUsers.keys
+    }
+
+    pub fun getAllReservations(): {String: Address} {
+      return self.reservedContractNames
+    }
+
+    pub fun getReservation(contractName: String): ReservationStatus {
+      let reservedBy = self.reservedContractNames[contractName]
+      if reservedBy == nil {
+        return ReservationStatus.notFound
+      } else if !EmeraldPass.isActive(user: reservedBy!) {
+        let userEmeraldPass = getAccount(reservedBy!).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>() ?? panic("This account no longer has an Emerald Pass Vault for some reason.")
+        
+        // If the user's Emerald Pass has been expired for more than a month, allow replacement
+        if userEmeraldPass.endDate + 2629743.0 < getCurrentBlock().timestamp {
+          return ReservationStatus.expired
+        }
+      }
+      return ReservationStatus.active
+    }
+
+    init() {
+      self.allUsers = {}
+      self.reservedContractNames = {}
+    }
+  }
+
   pub fun createContractsBook(): @ContractsBook {
     return <- create ContractsBook()
   }
@@ -53,69 +107,16 @@ pub contract TouchstoneContracts {
     return collections.getContracts()
   }
 
-  pub resource GlobalContractsBook {
-    pub let allUsers: {Address: Bool}
-    pub let reservedContractNames: {String: Address}
-
-    pub fun addUser(address: Address) {
-      self.allUsers[address] = true
-    }
-
-    pub fun reserve(contractName: String, user: Address) {
-      self.reservedContractNames[contractName] = user
-    }
-
-    pub fun getAllUsers(): [Address] {
-      return self.allUsers.keys
-    }
-
-    pub fun getReservation(contractName: String): ReservationStatus {
-      let reservedBy = self.reservedContractNames[contractName]
-      if reservedBy == nil {
-        return ReservationStatus.notFound
-      } else if !EmeraldPass.isActive(user: reservedBy!) {
-        return ReservationStatus.expired
-      } else {
-        return ReservationStatus.active
-      }
-    }
-
-    init() {
-      self.allUsers = {}
-      self.reservedContractNames = {}
-    }
-  }
-
-  access(contract) fun addUser(user: Address) {
-    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
-    globalContractsBook.addUser(address: user)
-  }
-
-  access(contract) fun reserve(contractName: String, user: Address) {
-    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
-    globalContractsBook.reserve(contractName: contractName, user: user)
-  }
-
-  pub fun getAllUsers(): [Address] {
-    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
-    return globalContractsBook.getAllUsers()
-  }
-
-  pub fun getAllReservations(): {String: Address} {
-    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
-    return globalContractsBook.reservedContractNames
-  }
-
-  pub fun getReservation(contractName: String): ReservationStatus {
-    let globalContractsBook = self.account.borrow<&GlobalContractsBook>(from: /storage/TouchstoneGlobalContractsBook)!
-    return globalContractsBook.getReservation(contractName: contractName)
+  pub fun getGlobalContractsBook(): &GlobalContractsBook{GlobalContractsBookPublic} {
+    return self.account.borrow<&GlobalContractsBook{GlobalContractsBookPublic}>(from: TouchstoneContracts.GlobalContractsBookStoragePath)!
   }
 
   init() {
-    self.ContractsBookStoragePath = /storage/TouchstoneContractsBook
-    self.ContractsBookPublicPath = /public/TouchstoneContractsBook
+    self.ContractsBookStoragePath = /storage/TouchstoneContractsBookv2
+    self.ContractsBookPublicPath = /public/TouchstoneContractsBookv2
+    self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBookv2
 
-    self.account.save(<- create GlobalContractsBook(), to: /storage/TouchstoneGlobalContractsBook)
+    self.account.save(<- create GlobalContractsBook(), to: TouchstoneContracts.GlobalContractsBookStoragePath)
   }
 
 }

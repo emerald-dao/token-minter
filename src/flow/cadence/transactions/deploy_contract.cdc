@@ -39,14 +39,9 @@ transaction(
 
     // Singular FLOAT Verifier
     if singularFLOAT {
-      let eventCap = getAccount(eventOwner!).getCapability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>(FLOAT.FLOATEventsPublicPath)
-      if eventCap.borrow()?.borrowPublicEventRef(eventId: eventId!) == nil {
-        panic("This is not a valid FLOAT Event.")
-      }
       mintVerifiers.append(MintVerifiers.SingularFLOAT(
         _eventOwner: eventOwner!,
-        _eventId: eventId!,
-        _eventCap: eventCap
+        _eventId: eventId!
       ))
     }
 

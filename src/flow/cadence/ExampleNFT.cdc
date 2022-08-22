@@ -235,7 +235,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 
 		// Confirm recipient passes all verifiers
-		for verifier in ExampleNFT.getMintVerifiers() {
+		for verifier in self.getMintVerifiers() {
 			let params = {"minter": recipient.owner!.address}
 			if let error = verifier.verify(params) {
 				panic(error)
@@ -261,6 +261,8 @@ pub contract ExampleNFT: NonFungibleToken {
 		
 		// Deposit nft
 		recipient.deposit(token: <- nft)
+
+		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + self.getPriceOfNFT(metadataId)
 	}
 
 	pub resource Administrator {
@@ -364,6 +366,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["price"] = _defaultPrice
 		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
 		self.collectionInfo["mintVerifiers"] = _mintVerifiers
+		self.collectionInfo["profit"] = 0.0
 
 		self.nextMetadataId = 0
 		self.totalSupply = 0
