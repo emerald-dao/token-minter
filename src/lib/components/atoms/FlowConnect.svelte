@@ -2,13 +2,21 @@
   import Button from "./Button.svelte"
   import { logIn, unauthenticate } from "../../../flow/actions.js";
   import { user } from "../../../flow/stores.js";
-</script>
+  import { getFindProfile } from "../../../flow/utils";
 
+  let findProfile = getFindProfile("TODO: Change address");
+</script>
 
 {#if $user?.loggedIn}
   <Button class="medium ghost" on:click={unauthenticate}>
     <div class="conection-circle pulse"/>
-    Connected
+    {#await findProfile then profile}
+      {#if profile}
+        {profile.name}
+      {:else}
+        {$user.addr}
+      {/if}
+    {/await}
   </Button>
 {:else}
   <Button class="medium" on:click={logIn}>

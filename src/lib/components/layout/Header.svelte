@@ -1,11 +1,14 @@
 <script>
   import { fly } from 'svelte/transition'
   import { navigating, page } from '$app/stores';
-
   import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select, DiscordInvite } from "$lib/components/atoms/index.js";
   import Navigation from '$lib/components/modules/Navigation.svelte';
   import { t, locales, locale } from '$lib/guide/translations';
   import { goto } from '$app/navigation';
+  import { getFindProfile } from "../../../flow/utils";
+  import { user } from "../../../flow/stores.js";
+
+  let findProfile = getFindProfile("TODO: Change address");
 
   export let open = false
   export let onClick = () => {
@@ -44,6 +47,17 @@
             </Select>
           {/if}
           <FlowConnect/>
+          {#if $user?.loggedIn}
+            {#await findProfile then profile}
+              <a href="/my-collections" sveltekit:prefetch>
+                {#if profile}
+                  <img class="avatar" src={profile.avatar} alt={`${profile.name} avatar`}>
+                {:else}
+                  <img class="avatar" src="https://find.xyz/assets/img/avatars/avatar16.png" alt="default avatar">
+                {/if}
+              </a>
+            {/await}
+          {/if}
         </Stack>
       </div>
 
@@ -52,6 +66,17 @@
         <Logo/>
         <div class="mobile-options">
           <AnimatedHamburger {open} {onClick}/>
+          {#if $user?.loggedIn}
+            {#await findProfile then profile}
+              <a href="/my-collections" sveltekit:prefetch>
+                {#if profile}
+                  <img class="avatar" src={profile.avatar} alt={`${profile.name} avatar`}>
+                {:else}
+                  <img class="avatar" src="https://find.xyz/assets/img/avatars/avatar16.png" alt="default avatar">
+                {/if}
+              </a>
+            {/await}
+          {/if}
         </div>
       </div>
       {#if open}
@@ -61,6 +86,7 @@
               <DiscordInvite/>
               <ThemeToggle/>
             </Stack>
+            
             <div class="close-button">
               <AnimatedHamburger {open} {onClick}/>
             </div>
@@ -84,7 +110,6 @@
 
   header {
     padding: 0;
-
 
     .hamburger-navigation {
       position: fixed;
@@ -142,5 +167,12 @@
         width: 100%;
       }
     }
+  }
+
+  .avatar {
+    height: 42px;
+    border-radius: 0.6rem;
+    border: 2px var(--clr-accent-main) solid;
+    margin-left: 0.4rem
   }
 </style>

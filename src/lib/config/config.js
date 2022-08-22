@@ -21,11 +21,6 @@ export const navItems = [
     route: '/discover',
     prefetch: true,
   },
-  {
-    title: 'My Collections',
-    route: '/my-collections',
-    prefetch: true,
-  },
 ];
 
 export const emeraldTools = [
