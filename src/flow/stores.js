@@ -83,7 +83,12 @@ export const contractInfo = persistentWritable('contractInfo', {
   discord: '',
   twitter: '',
   payment: null,
+  // Contract Options
   startMinting: true,
+  royalty: false,
+  royaltyText: '',
+  royaltyNumber: '',
+  // Verifier Options
   floatLink: false,
   floatLinkText: '',
   requireEmeraldPass: false
@@ -110,6 +115,9 @@ export const restartContractInfo = () => {
     twitter: '',
     payment: null,
     startMinting: true,
+    royalty: false,
+    royaltyText: '',
+    royaltyNumber: 0,
     floatLink: false,
     floatLinkText: '',
     requireEmeraldPass: false

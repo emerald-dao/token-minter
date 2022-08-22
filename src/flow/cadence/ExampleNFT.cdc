@@ -2,10 +2,10 @@
 // STATEMENT: This contract promises to keep the 5% royalty off of primary sales to Emerald City DAO or risk permanent suspension from participation in the DAO and its tools.
 
 import NonFungibleToken from "./utility/NonFungibleToken.cdc"
-import MetadataViews from "./utility/MetadataViews.cdc"
+import MetadataViews from "./utility/MetadataViews.cdc" 
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
-import MintVerifiers from "./MintVerifiers.cdc"
+import MintVerifiers from "./MintVerifiers.cdc" 
 
 pub contract ExampleNFT: NonFungibleToken {
 
@@ -127,6 +127,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					)
 				case Type<MetadataViews.Royalties>():
 					return MetadataViews.Royalties([
+						// This is for Emerald City in favor of producing Touchstone, a free platform for our users. Failure to keep this in the contract may result in permanent suspension from Emerald City.
 						MetadataViews.Royalty(
 							recepient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
 							cut: 0.025, // 2.5% royalty on secondary sales
@@ -142,13 +143,13 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.NFTView>():
 					return MetadataViews.NFTView(
 						id: self.id,
-            uuid: self.uuid,
-            display: self.resolveView(Type<MetadataViews.Display>()) as! MetadataViews.Display?,
-            externalURL: self.resolveView(Type<MetadataViews.ExternalURL>()) as! MetadataViews.ExternalURL?,
-            collectionData: self.resolveView(Type<MetadataViews.NFTCollectionData>()) as! MetadataViews.NFTCollectionData?,
-            collectionDisplay: self.resolveView(Type<MetadataViews.NFTCollectionDisplay>()) as! MetadataViews.NFTCollectionDisplay?,
-            royalties: self.resolveView(Type<MetadataViews.Royalties>()) as! MetadataViews.Royalties?,
-            traits: self.resolveView(Type<MetadataViews.Traits>()) as! MetadataViews.Traits?
+						uuid: self.uuid,
+						display: self.resolveView(Type<MetadataViews.Display>()) as! MetadataViews.Display?,
+						externalURL: self.resolveView(Type<MetadataViews.ExternalURL>()) as! MetadataViews.ExternalURL?,
+						collectionData: self.resolveView(Type<MetadataViews.NFTCollectionData>()) as! MetadataViews.NFTCollectionData?,
+						collectionDisplay: self.resolveView(Type<MetadataViews.NFTCollectionDisplay>()) as! MetadataViews.NFTCollectionDisplay?,
+						royalties: self.resolveView(Type<MetadataViews.Royalties>()) as! MetadataViews.Royalties?,
+						traits: self.resolveView(Type<MetadataViews.Traits>()) as! MetadataViews.Traits?
 					)
 			}
 			return nil
@@ -245,8 +246,14 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Handle Emerald City DAO royalty (5%)
 		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-		let royalty: UFix64 = 0.05
-		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: payment.balance * royalty))
+		let emeraldCityCut: UFix64 = 0.05 * payment.balance
+
+		// Handle royalty to user that was configured upon creation
+		if let royalty = ExampleNFT.getOptionalCollectionAttribute(key: "royalty") as! MetadataViews.Royalty? {
+			royalty.receiver.borrow()!.deposit(from: <- payment.withdraw(amount: payment.balance * royalty.cut))
+		}
+
+		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: emeraldCityCut))
 
 		// Give the rest to the collection owner
 		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
@@ -324,6 +331,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.collectionInfo[key] ?? panic(key.concat(" is not an attribute in this collection."))
 	}
 
+	pub fun getOptionalCollectionAttribute(key: String): AnyStruct? {
+		return self.collectionInfo[key]
+	}
+
 	pub fun getMintVerifiers(): [{MintVerifiers.IVerifier}] {
 		return self.getCollectionAttribute(key: "mintVerifiers") as! [{MintVerifiers.IVerifier}]
 	}
@@ -343,6 +354,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_imagePath: String, 
 		_bannerImagePath: String?,
 		_minting: Bool, 
+		_royalty: MetadataViews.Royalty?,
 		_defaultPrice: UFix64,
 		_ipfsCID: String,
 		_socials: {String: MetadataViews.ExternalURL?},
@@ -363,6 +375,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["ipfsCID"] = _ipfsCID
 		self.collectionInfo["socials"] = _socials
 		self.collectionInfo["minting"] = _minting
+		if let royalty = _royalty {
+			assert(royalty.cut <= 0.95, message: "The royalty cut cannot be bigger than 95% because 5% goes to Emerald City treasury for primary sales.")
+			self.collectionInfo["royalty"] = royalty
+		}
 		self.collectionInfo["price"] = _defaultPrice
 		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
 		self.collectionInfo["mintVerifiers"] = _mintVerifiers

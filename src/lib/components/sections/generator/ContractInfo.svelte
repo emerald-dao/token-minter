@@ -20,38 +20,47 @@
 		<div class="inputs-wrapper">
 			<form use:form id="contract-info">
 				<h4>Contract Options</h4>
-				<span class="helper-text"
-					>Select the options you want to include in your contract.</span>
+				<span class="helper-text">Select the options you want to include in your contract.</span>
 				<div class="inputs">
 					<!-- Generate input values from the contractOptions object -->
 					{#each contractOptions as option}
-						<label
-							class="checkbox-label"
-							class:checkbox-label-with-number={option.withNumber}
-							for={option.bindValue}>
+						<label class="checkbox-label" for={option.bindValue}>
 							<input
 								name={option.bindValue}
 								id={option.bindValue}
 								type="checkbox"
 								bind:checked={$contractInfo[option.bindValue]} />
 							{option.name}
-							{#if option.withNumber}
+						</label>
+						{#if option.withDouble}
+							<div class="double-grid">
+								<input
+									name={option.bindValue + "Text"}
+									id={option.bindValue + "Text"}
+									type="text"
+									disabled={$contractInfo[option.bindValue]
+										? !$contractInfo[option.bindValue]
+										: true}
+									placeholder={option.firstPlaceholder}
+									bind:value={$contractInfo[option.bindValue + "Text"]} />
 								<input
 									name={option.bindValue + "Number"}
 									id={option.bindValue + "Number"}
 									type="number"
+									min="0.0"
+									max="1.0"
+									step="0.01"
 									disabled={$contractInfo[option.bindValue]
 										? !$contractInfo[option.bindValue]
 										: true}
-									placeholder="Number"
+									placeholder={option.secondPlaceholder}
 									bind:value={$contractInfo[option.bindValue + "Number"]} />
-							{/if}
-						</label>
+							</div>
+						{/if}
 					{/each}
 				</div>
 				<h4>Minting Verifiers</h4>
-				<span class="helper-text"
-					>Requirements users must meet to mint your NFTs.</span>
+				<span class="helper-text">Requirements users must meet to mint your NFTs.</span>
 				<div class="inputs">
 					<!-- Generate input values from the verifierOptions object -->
 					{#each verifierOptions as option}
@@ -72,7 +81,7 @@
 								disabled={$contractInfo[option.bindValue]
 									? !$contractInfo[option.bindValue]
 									: true}
-								placeholder="https://floats.city/jacob.find/event/185382914"
+								placeholder={option.placeholder}
 								bind:value={$contractInfo[option.bindValue + "Text"]} />
 						{/if}
 					{/each}
@@ -143,6 +152,17 @@
 					margin-top: 10px;
 					position: relative;
 					font-size: 12px;
+				}
+
+				.double-grid {
+					display: grid;
+					grid-template-columns: 1fr .6fr;
+					gap: 10px;
+					
+					input {
+						padding: 10px;
+						font-size: 12px;
+					}
 				}
 			}
 		}
