@@ -1,16 +1,21 @@
 <script>
+  import Icon from "@iconify/svelte";
   import {
     Stack,
     TransparentCard,
-    WalletAddress
   } from "$lib/components/atoms/index";
 </script>
 
 <a href={`/collection-generator`}>
-  <TransparentCard>
-    <div class="main-wrapper" direction="row" align="flex-start">
-      Create Collection
-    </div>
+  <TransparentCard accent={true}>
+    <Stack direction="row" gap="0.5em" justify="center">
+      <Icon icon="ion:add-circle" width="1.4em" color="var(--clr-accent-main)"/>
+      <div class="main-wrapper" direction="row" align="flex-start">
+        <span>
+          Create Collection
+        </span>
+      </div>
+    </Stack>
   </TransparentCard>
 </a>
 
@@ -32,6 +37,12 @@
 
       @include mq(small) {
         flex-direction: row;
+      }
+
+      span {
+        font-size: var(--fs-400);
+        font-weight: 700;
+        color: var(--clr-accent-main);
       }
     }
   }

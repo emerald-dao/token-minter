@@ -9,6 +9,7 @@
   export let icon;
 </script>
 
+<!-- TODO: change li for better html element -->
 <li 
   class:li-active={active} 
   class:li-clickable={clickable}
