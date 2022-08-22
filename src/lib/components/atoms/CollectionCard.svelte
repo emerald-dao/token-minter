@@ -2,7 +2,8 @@
   import {
     Stack,
     TransparentCard,
-    WalletAddress
+    WalletAddress,
+    NftImage
   } from "$lib/components/atoms/index";
 
   export let name;
@@ -15,7 +16,7 @@
 <a href={`/discover${url}`}>
   <TransparentCard>
     <div class="main-wrapper" direction="row" align="flex-start">
-      <img src={thumbnailURL} alt="Collection thumbnail" />
+      <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
       <div class="content-wrapper">
         <Stack direction="column" align="left" gap="0.6em">
           <h2>{name}</h2>
@@ -41,32 +42,26 @@
     .main-wrapper {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
       gap: 1.8rem;
+      align-items: center;
+      justify-content: center;
 
       @include mq(small) {
-        flex-direction: row;
-      }
-
-      img {
-        border-radius: 1em;
-        width: 100%;
-
-        @include mq(small) {
-          width: 30%;
-        }
+        display: grid;
+        grid-template-columns: 14rem 1fr;
+        gap: 1.8rem;
       }
 
       .content-wrapper {
         padding-block: 2em;
 
         h2 {
-          color: var(--clr-accent-strong);
+          // color: var(--clr-accent-main);
           font-size: var(--fs-600);
         }
         .description {
           font-size: var(--fs-300);
+          color: var(--clr-font-text-t3)
         }
       }
     }

@@ -8,6 +8,7 @@
     NFTPrice,
     Button,
     MadeWithTouchstone,
+    NftImage
   } from "$lib/components/atoms/index";
   import {
     getCollectionInfo,
@@ -36,7 +37,9 @@
     <AdaptableGrid>
       {#await getInfo() then info}
         <Stack direction="column" align="flex-start">
-          <img src={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`} alt="Ballerz NFT" />
+          <div class="image-wrapper">
+            <NftImage thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`} name={`${info.nftInfo.name} NFT`}/>
+          </div>
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Description</h4>
             <p>{info.nftInfo.description}</p>
@@ -93,10 +96,9 @@
 <style type="scss">
   @use "../../../../../lib/styles/abstracts" as *;
 
-  img {
-    width: 100%;
+  .image-wrapper {
     border-radius: 0.4rem;
-    border: 1px var(--clr-accent-soft-t5) solid;
+    border: 3px var(--clr-accent-soft-t8) solid;
   }
   .sticky {
     @include mq(medium) {

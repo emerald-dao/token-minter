@@ -37,3 +37,5 @@ export { default as CreateCollectionCard } from './CreateCollectionCard.svelte';
 export { default as MyCollectionsNav } from './MyCollectionsNav.svelte';
 export { default as Divider } from './Divider.svelte';
 export { default as EditCollectionNav } from './EditCollectionNav.svelte';
+export { default as CollectionSocials } from './CollectionSocials.svelte';
+export { default as NftImage } from './NftImage.svelte';
