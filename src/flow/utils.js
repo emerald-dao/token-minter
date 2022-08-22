@@ -136,7 +136,7 @@ export const getFindProfile = async (address) => {
     console.log(e);
     return {
       name: 'Mateo',
-      address: '0x8f9e8e0dc951c5b9',
+      address: address,
       avatar: "https://i.imgur.com/q1zGEnG.jpg"
     };
   }
