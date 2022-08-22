@@ -129,7 +129,7 @@ export const getFindProfile = async (address) => {
         }
         `,
         args: (arg, t) => [
-          arg(lookup, t.Address)
+          arg(address, t.Address)
         ]
       });
   } catch (e) {
