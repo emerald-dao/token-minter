@@ -10,3 +10,6 @@ node_modules
 .output
 .vercel_build_output
 package-lock.json
+
+/assets/set3_clean
+/assets/set3_clean.csv
