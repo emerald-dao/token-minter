@@ -101,3 +101,23 @@ export const resolveAddressObject = async (lookup) => {
     return lookup;
   }
 }
+
+export const getFindName = async (address) => {
+  try {
+      return await fcl.query({
+        cadence: `
+        import FIND from ${get(addresses).FIND}
+        pub fun main(address: Address): String? {
+            let name = FIND.reverseLookup(address)
+            return name?.concat(".find")
+        }
+        `,
+        args: (arg, t) => [
+          arg(lookup, t.Address)
+        ]
+      });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
