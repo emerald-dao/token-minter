@@ -5,7 +5,7 @@
 		Button,
 		AdaptableGrid,
 		Stack,
-		IconBall,
+		Ball,
 		Feature
 	} from "$lib/components/atoms/index";
 
@@ -43,7 +43,7 @@
 			<Stack>
 				{#each tools as tool}
 					<Feature title={tool.title} description={tool.description}>
-						<IconBall icon={tool.icon} size="2.4rem"/>
+						<Ball icon={tool.icon} size="2.4rem"/>
 					</Feature>
 				{/each}
 			</Stack>

@@ -1,21 +1,27 @@
 <script>
-  import { NumberBall } from './index'
+  import { Ball } from './index'
 
   export let active = false;
   export let clickable = false;
   export let passed = false;
-  export let number
+  export let danger = false;
+  export let number;
+  export let icon;
 </script>
 
+<!-- TODO: change li for better html element -->
 <li 
   class:li-active={active} 
   class:li-clickable={clickable}
   class:li-passed={passed}
+  class:li-danger={danger}
   on:click
 >
-  <NumberBall active={active} passed={passed}>
-    {number}
-  </NumberBall>
+  <Ball active={active} passed={passed} icon={icon}>
+    {#if number}
+      {number}
+    {/if}
+  </Ball>
   <slot/>
 </li>
 
@@ -55,5 +61,8 @@
   }
   .li-passed {
     color: var(--clr-primary-main-t6);
+  }
+  .li-danger {
+    color: red;
   }
 </style>

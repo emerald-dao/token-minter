@@ -16,7 +16,7 @@
 
     span {
       font-family: var(--font-primary);
-      font-size: 22px;
+      font-size: 20px;
       color: var(--clr-accent-main);
       text-transform: uppercase;
       font-weight: 900;

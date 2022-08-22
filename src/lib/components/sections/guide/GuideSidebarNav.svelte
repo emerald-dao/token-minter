@@ -1,5 +1,5 @@
 <script>
-  import { Select, NavigationStep, TransparentCard } from '$lib/components/atoms/index'
+  import { Select, BallButton, TransparentCard } from '$lib/components/atoms/index'
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   
@@ -23,7 +23,7 @@
     <div class="desktop-nav">
       <ul>
         {#each chapters as { slug, title, index }}
-            <NavigationStep 
+            <BallButton 
               active={pathname === `/guide/${lang}/${slug}`} 
               clickable={true} 
               passed={selectedChapter > index}
@@ -31,7 +31,7 @@
               on:click={() => changeChapter(slug, index)}
             >
               {title}  
-            </NavigationStep>
+            </BallButton>
         {/each}
       </ul>
     </div>

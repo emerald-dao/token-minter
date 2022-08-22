@@ -1,6 +1,6 @@
 <script>
-  import { NFTPrice } from "$lib/components/atoms/index";
-
+  import { NFTPrice, NftImage, Divider } from "$lib/components/atoms/index";
+  
   export let thumbnailURL;
   export let name;
   export let description;
@@ -9,11 +9,8 @@
 </script>
 
 <div class="main-wrapper">
-  <img
-  class="thumbnail"
-  src={thumbnailURL}
-  alt={`${name} image`}
-  style={`background-color: ${backgroundColor};`} />
+  <NftImage thumbnailURL={thumbnailURL} name={name} backgroundColor={backgroundColor} />
+  <Divider space="2rem"/>
   <div class="content">
     <h4>{name}</h4>
     {#if description}
@@ -30,11 +27,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-
-    .thumbnail {
-      margin-bottom: 1.2em;
-      border-radius: 0.4rem;
-    }
 
     .content {
       margin-bottom: 1.2em;

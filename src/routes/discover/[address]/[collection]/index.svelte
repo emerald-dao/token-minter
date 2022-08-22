@@ -14,6 +14,9 @@
     MadeWithTouchstone,
     TransparentCard,
     WalletAddress,
+    Divider,
+    NftImage,
+    CollectionSocials
   } from "$lib/components/atoms/index";
   import { page } from "$app/stores";
   import { user } from "../../../../flow/stores.js";
@@ -34,14 +37,26 @@
         {/if}
         <Container>
           <div class="collection-info-wrapper" class:no-banner={!collectionInfo.bannerImage}>
-            <img
-              src={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
-              alt="Collection main" />
-            <Stack direction="column" align="flex-start" gap="1.2em">
-              <Stack direction="row" gap="0.8em" align="center" justify="flex-start">
-                <MadeWithTouchstone />
-                <WalletAddress address={$page.params.address}>By</WalletAddress>
+            <Stack direction="row" align="flex-end" justify="space-between">
+              <Stack direction="row" align="flex-end">
+                <div class="image-wrapper">
+                  <NftImage thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`} name={`${collectionInfo.name} main image`} />
+                </div>
+                <Stack direction="column" gap="0.8em" align="center" justify="flex-start">
+                  <MadeWithTouchstone />
+                  <WalletAddress address={$page.params.address}>By</WalletAddress>
+                  <Divider space="1px"/>
+                </Stack>
               </Stack>
+                {#if collectionInfo.socials}
+                  <Stack direction="row" gap="1.5rem">
+                    <CollectionSocials collectionSocials={collectionInfo.socials} />
+                    <Divider space="1px"/>
+                  </Stack>
+                {/if}
+            </Stack>
+            <Divider space="30px"/>
+            <Stack direction="column" align="flex-start" gap="1.2em">
               <h1>{collectionInfo.name}</h1>
               <p>{collectionInfo.description}</p>
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
@@ -50,7 +65,6 @@
                 {/if}
               {/await}
             </Stack>
-           
             <div class="nft-list-wrapper">
               <AdaptableGrid minWidth="12em" gap="1.2em">
                 {#each Object.values(collectionInfo.metadatas) as NFT}
@@ -81,7 +95,7 @@
 
 <style type="scss">
   .banner {
-    height: 280px;
+    height: 220px;
     background-size: cover;
     background-position: center center;
     background-color: var(--clr-background-primary);
@@ -91,19 +105,18 @@
   .collection-info-wrapper {
     margin-bottom: -80px;
     position: relative;
-    top: -150px;
+    top: -120px;
   }
   .no-banner {
     top: 0px;
     margin-bottom: 40px;
   }
 
-  img {
-    height: 240px;
+  .image-wrapper {
+    height: 200px;
     border-radius: 0.4rem;
-    border: 2px var(--clr-accent-soft-t5) solid;
+    border: 3px var(--clr-accent-soft-t4) solid;
     background-color: var(--clr-background-primary);
-    margin-bottom: 50px;
   }
 
   h1 {
@@ -116,6 +129,6 @@
   }
 
   .nft-list-wrapper {
-    margin-top: 5rem
+    margin-top: 2.8rem
   }
 </style>

@@ -1,6 +1,6 @@
 <script>
   import { theme } from "$lib/stores/ThemeStore"
-  import { TransparentCard, AdaptableGrid, NumberBall, Stack } from "$lib/components/atoms/index";
+  import { TransparentCard, AdaptableGrid, Ball, Stack } from "$lib/components/atoms/index";
   
   let steps = [
     {
@@ -30,7 +30,7 @@
   {#each steps as step, i}
     <TransparentCard padding="0.8em">
       <Stack direction="column" align="center" gap="0.3em">
-        <NumberBall>{i + 1}</NumberBall>
+        <Ball>{i + 1}</Ball>
         <div class="image-container">
           {#if $theme === "dark"}
           <img src={step.thumbnailURLWhite} alt={step.name}>
