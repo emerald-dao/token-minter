@@ -7,11 +7,15 @@ const types = new Map([
 ]);
 
 const getFileTypeFromURL = (urlPath) => {
-  const url = new URL(urlPath);
-  const extension = url.pathname.split('.')[1];
+  try {
+    const url = new URL(urlPath);
+    const extension = url.pathname.split('.')[1];
 
-  const fileType = types.get(extension);
-  return fileType;
+    const fileType = types.get(extension);
+    return fileType;
+  } catch (_) {
+    return 'image';
+  }
 };
 
 export default getFileTypeFromURL;
