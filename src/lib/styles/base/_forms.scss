@@ -12,7 +12,7 @@ input {
   background-color: transparent;
   border: none;
   background-color: var(--clr-accent-main-t9);
-  border: 2px var(--clr-accent-main-t7) solid;
+  border: 2px var(--clr-accent-main-t5) solid;
   border-radius: 0.5rem;
   padding: 0.8em 1.4em;
   width: 100%;
@@ -27,7 +27,7 @@ input::placeholder {
 }
 
 .input-ok {
-  border: 2px var(--clr-accent-main-t7) solid;
+  border: 2px var(--clr-accent-main-t5) solid;
 }
 .input-error {
   border: 2px red solid;

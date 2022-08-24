@@ -3,6 +3,7 @@
 
   export let active = false;
   export let passed = false;
+  export let accent = false;
   export let size = "2rem";
   export let icon;
 </script>
@@ -11,6 +12,7 @@
   class="step-number" 
   class:step-number-active={active} 
   class:step-number-passed={passed}
+  class:accent={accent}
   style={`width:${size}; min-width:${size}; height:${size}`}
 >
   {#if icon}
@@ -30,14 +32,18 @@
     font-weight: 600;
     transition: 0.8s;
     background-color: var(--clr-accent-main-t7);
-    color: var(--clr-accent-main-t2);
+    color: var(--clr-accent-main);
   }
   .step-number-passed {
-    background-color: var(--clr-primary-main-t7);
-    color: var(--clr-primary-main-t6);
+    background-color: var(--clr-primary-main-t8);
+    color: var(--clr-primary-main-t4);
   }
   .step-number-active {
     background-color: var(--clr-primary-main);
+    color: var(--clr-font-text-inverse);
+  }
+  .accent {
+    background-color: var(--clr-accent-main);
     color: var(--clr-font-text-inverse);
   }
   .icon-wrapper {

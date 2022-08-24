@@ -28,37 +28,28 @@
 	]
 </script>
 
-<Section>
-	<Container width="large">
-		<AdaptableGrid>
-			<div class="sticky">
-				<Stack align="start">
-					<h2>Learn to develop NFTs</h2>
-					<Stack direction="row">
-						<Button href="https://academy.ecdao.org/" leftIcon="school" target="_blank"
-							>Emerald Academy</Button>
-					</Stack>
-				</Stack>
-			</div>
+<div class="background">
+	<Section>
+		<Container width="large">
 			<Stack>
-				{#each tools as tool}
-					<Feature title={tool.title} description={tool.description}>
-						<Ball icon={tool.icon} size="2.4rem"/>
-					</Feature>
-				{/each}
+				<h2>Learn to develop NFTs</h2>
+				<AdaptableGrid minWidth="18rem">
+					{#each tools as tool}
+						<Feature title={tool.title} description={tool.description} background={true} center={true}>
+							<Ball accent={true} icon={tool.icon} size="2.4rem"/>
+						</Feature>
+					{/each}
+				</AdaptableGrid>
 			</Stack>
-		</AdaptableGrid>
-	</Container>
-</Section>
+		</Container>
+	</Section>
+</div>
 
 <style type="scss">
-	@use "../../../styles/abstracts" as *;
-
-	.sticky {
-		@include mq(medium) {
-			position: sticky;
-			top: 4rem;
-			height: fit-content;
-		}
+	h2 {
+		padding-bottom: 2rem;
+	}
+	.background {
+		border-top: 4px var(--clr-accent-main-t8) solid;
 	}
 </style>

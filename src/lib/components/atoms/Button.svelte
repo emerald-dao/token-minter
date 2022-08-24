@@ -89,7 +89,7 @@
       var(--clr-primary-main),
       var(--clr-accent-main)
     );
-    color: var(--clr-font-text-button);
+    color: var(--clr-font-text-inverse);
     font-family: var(--font-mono);
     padding: 0.4em 1.5em;
     border-radius: 0.6em;
@@ -102,6 +102,7 @@
     border: none;
     outline: none;
     cursor: pointer;
+    transition: 0.4s;
 
     @include mq(small) {
       width: fit-content;
@@ -110,10 +111,9 @@
 
   button:hover,
   a:hover {
-    box-shadow: var(--clr-accent-soft) 4px 4px,
-      var(--clr-accent-soft-t6) 8px 8px;
-    transition: 0.4s;
-    color: var(--clr-font-text-button);
+    box-shadow: var(--clr-accent-main) 4px 4px;
+    color: var(--clr-font-text-inverse);
+    transform: translateY(-3px);
   }
 
   a {

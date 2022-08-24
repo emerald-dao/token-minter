@@ -10,7 +10,7 @@ $light: (
   accent: (
     soft: map-deep-get($colors, blue, 100),
     main: map-deep-get($colors, blue, 200),
-    strong: map-deep-get($colors, blue, 400),
+    strong: map-deep-get($colors, blue, 300),
   ),
   background: (
     primary: map-deep-get($colors, neutral, 100),

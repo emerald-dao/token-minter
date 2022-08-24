@@ -14,7 +14,7 @@
 </script>
 
 <a href={`/discover${url}`}>
-  <TransparentCard>
+  <TransparentCard border={true} hoverShadow={true}>
     <div class="main-wrapper" direction="row" align="flex-start">
       <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
       <div class="content-wrapper">

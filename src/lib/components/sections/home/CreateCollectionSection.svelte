@@ -30,34 +30,36 @@
 	]
 </script>
 
-<Section>
-	<Container>
-		<AdaptableGrid>
-			<div class="video sticky">
-				<video width="100%" height="100%" autoplay loop muted>
-					<source src="emerald2.webm" type="video/webm" />
-					<track kind="captions" />
-					Your browser does not support the video tag.
-				</video>
-			</div>
-			<Stack align="flex-start" justify="center">
-				<Tagline>CREATE YOUR COLLECTION</Tagline>
-				<h2>Create an NFT collection without code</h2>
-				{#each steps as step, i}
-					<Feature title={step.title} description={step.description}>
-						<Ball size="2.4rem">{i + 1}</Ball>
-					</Feature>
-				{/each}
-				<div class="buttons-group">
-					<Button class="medium ghost" href="/guide/en/welcome" leftIcon="document-text"
-						>Guide</Button>
-					<Button class="medium" href="/collection-generator" leftIcon="add-circle"
-						>Generate Collection</Button>
+<div class="background">
+	<Section>
+		<Container class="width-large">
+			<AdaptableGrid>
+				<div class="video sticky">
+					<video width="100%" height="100%" autoplay loop muted>
+						<source src="emerald2.webm" type="video/webm" />
+						<track kind="captions" />
+						Your browser does not support the video tag.
+					</video>
 				</div>
-			</Stack>
-		</AdaptableGrid>
-	</Container>
-</Section>
+				<Stack align="flex-start" justify="center">
+					<Tagline>CREATE YOUR COLLECTION</Tagline>
+					<h2>Create an NFT collection without code</h2>
+					{#each steps as step, i}
+						<Feature title={step.title} description={step.description}>
+							<Ball accent={true} size="2.4rem">{i + 1}</Ball>
+						</Feature>
+					{/each}
+					<div class="buttons-group">
+						<Button class="medium ghost" href="/guide/en/welcome" leftIcon="document-text"
+							>Guide</Button>
+						<Button class="medium" href="/collection-generator" leftIcon="add-circle"
+							>Generate Collection</Button>
+					</div>
+				</Stack>
+			</AdaptableGrid>
+		</Container>
+	</Section>
+</div>
 
 <style type="scss">
 	@use "../../../styles/abstracts" as *;
@@ -65,7 +67,7 @@
 	.sticky {
 		@include mq(medium) {
 			position: sticky;
-			top: 4rem;
+			top: 16vh;
 			height: fit-content;
 		}
 	}
@@ -82,5 +84,11 @@
 		@include mq(small) {
 			flex-direction: row;
 		}
+	}
+
+	.background {
+			background: 
+				radial-gradient(ellipse at bottom, var(--clr-primary-soft-t9), transparent);
+			backdrop-filter: blur(10px);
 	}
 </style>
