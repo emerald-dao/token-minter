@@ -1,5 +1,4 @@
 <script>
-	import Icon from "@iconify/svelte";
 	import {
 		Section,
 		Container,
@@ -7,11 +6,13 @@
 		AdaptableGrid,
 		Marquee,
 		Stack,
+		TouchstoneIcon
 	} from "$lib/components/atoms/index";
 	import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
 </script>
 
-<Section class="padding-top-small">
+<div class="background">
+<Section>
 	<Container class="width-large">
 		<AdaptableGrid>
 			<Stack align="start">
@@ -39,20 +40,20 @@
 		</AdaptableGrid>
 	</Container>
 </Section>
+</div>
 <Marquee repeat={10}>
 	<div class="marquee-element">
 		<span>CRAFTED WITH 💜 BY&nbsp;</span> EMERALD CITY DAO
 	</div>
 	<div class="marquee-element emerald-wrapper">
-		<Icon icon="ion:diamond-outline" />
+		<TouchstoneIcon/>
 	</div>
 </Marquee>
 
 <style type="scss">
 	h1 {
 		font-size: var(--fs-700);
-		font-weight: 600;
-		text-shadow: none;
+		font-weight: 900;
 
 		span {
 			color: var(--clr-accent-main);
@@ -66,14 +67,17 @@
 		margin-inline: 3rem;
 		letter-spacing: 0.3em;
 		font-size: var(--fs-200);
+		padding-block: 0.4rem;
+		font-weight: 500;
 
 		span {
 			font-style: italic;
 		}
 	}
 
-	.emerald-wrapper {
-		margin-top: -0.3rem;
-		color: var(--clr-primary-main);
+	.background {
+		background: 
+      radial-gradient(ellipse at right, var(--clr-primary-main-t8), transparent);
+		backdrop-filter: blur(50px);
 	}
 </style>

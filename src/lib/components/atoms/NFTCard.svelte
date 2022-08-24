@@ -18,7 +18,7 @@
   export let url;
 </script>
 
-<TransparentCard padding="0.8em">
+<TransparentCard padding="0.8em" hoverShadow={true} border={true}>
   {#if withLink}
     <a href={url}>
       <NFTCardContent

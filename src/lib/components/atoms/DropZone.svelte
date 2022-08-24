@@ -85,7 +85,7 @@
     text-align: center;
     cursor: pointer;
     color: var(--clr-font-text);
-    border: 2px solid var(--clr-accent-main-t7);
+     border: 2px var(--clr-accent-main-t5) solid;
     background-color: var(--clr-accent-main-t9);
     border-radius: 10px;
     transition: 0.5s;

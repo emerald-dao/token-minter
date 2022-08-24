@@ -45,7 +45,7 @@
 </script>
 
 <Section class="padding-top-small padding-bottom-small">
-<Container class="width-large">
+  <Container class="width-large">
     <div class="main-wrapper">
       <nav>
         <GuideSidebarNav chapters={chapters}/>
@@ -64,7 +64,6 @@
   .main-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
     
     @include mq(medium) {
       display: grid;

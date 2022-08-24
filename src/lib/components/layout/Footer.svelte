@@ -8,61 +8,55 @@
     EmeraldTools,
     Button,
   } from "$lib/components/atoms/index.js";
-
-  import { page } from "$app/stores";
 </script>
 
-{#if !$page.url.pathname.includes("collection-generator")}
-  <footer>
-    <Container class="width-large">
-      <Stack gap="3.8rem" justify="flex-start" align="flex-start">
-        <Logo />
-        <nav>
-          <div class="left-column">
-            <Stack gap="0" align="flex-start">
-              <h5>Pages</h5>
-              <Navigation color="var(--clr-font-text)" gap="0.7em" />
-            </Stack>
-            <Stack gap="0" align="flex-start">
-              <h5>Emerald City Tools</h5>
-              <EmeraldTools color="var(--clr-font-text)" gap="0.7em" />
-            </Stack>
+
+<footer>
+  <Container class="width-x-large">
+    <Stack gap="3.8rem" justify="flex-start" align="flex-start">
+      <Logo />
+      <nav>
+        <div class="left-column">
+          <Stack gap="0" align="flex-start">
+            <h5>Pages</h5>
+            <Navigation color="var(--clr-font-text)" gap="0.7em" />
+          </Stack>
+          <Stack gap="0" align="flex-start">
+            <h5>Emerald City Tools</h5>
+            <EmeraldTools color="var(--clr-font-text)" gap="0.7em" />
+          </Stack>
+        </div>
+        <div class="right-column">
+          <div class="socials">
+            <h5>Follow us</h5>
+            <Socials />
           </div>
-          <div class="right-column">
-            <div class="socials">
-              <h5>Follow us</h5>
-              <Socials />
-            </div>
-            <div class="dao-invite">
-              <h5>Join us</h5>
-              <Button
-                class="small"
-                leftIcon="logo-discord"
-                href="https://discord.com/invite/emeraldcity"
-                target="_blank">Emerald City DAO</Button>
-            </div>
+          <div class="dao-invite">
+            <h5>Join us</h5>
+            <Button
+              class="small"
+              leftIcon="logo-discord"
+              href="https://discord.com/invite/emeraldcity"
+              target="_blank">Emerald City DAO</Button>
           </div>
-        </nav>
-      </Stack>
-    </Container>
-  </footer>
-  <div class="signature">
-    <span
-      >Built on <img src="/flow-logo.png" alt="Flow logo" /> Flow by
-      <img src="/ec-logo.png" alt="Emerald logo" /> Emerald City DAO</span>
-  </div>
-{/if}
+        </div>
+      </nav>
+    </Stack>
+  </Container>
+</footer>
+<div class="signature">
+  <span
+    >Built on <img src="/flow-logo.png" alt="Flow logo" /> Flow by
+    <img src="/ec-logo.png" alt="Emerald logo" /> Emerald City DAO</span>
+</div>
 
 <style type="scss">
   @use "../../styles/abstracts" as *;
 
   footer {
     padding-block: 2.8rem;
-    background: linear-gradient(
-      to right,
-      var(--clr-primary-soft-t9),
-      var(--clr-accent-soft-t9)
-    );
+    background-color: var(--clr-accent-soft-t8);
+    border-top: 2px var(--clr-accent-main-t8) solid;
 
     nav {
       flex-direction: column;
@@ -129,11 +123,8 @@
 
   .signature {
     padding-block: 1rem;
-    background: linear-gradient(
-      to right,
-      var(--clr-primary-soft-t8),
-      var(--clr-accent-soft-t8)
-    );
+    background-color: var(--clr-accent-soft-t7);
+    border-top: 2px var(--clr-accent-main-t8) solid;
 
     span {
       font-size: var(--fs-300);

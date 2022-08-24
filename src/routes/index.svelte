@@ -3,7 +3,8 @@
 		HeroSection, 
 		CreateCollectionSection, 
 		LearnSection, 
-		InvitationSection 
+		InvitationSection,
+		FeaturedCollections
 	} from "$lib/components/sections/home/index";
 </script>
 
@@ -13,5 +14,6 @@
 
 <HeroSection/>
 <CreateCollectionSection/>
+<FeaturedCollections/>
 <LearnSection/>
 <InvitationSection/>

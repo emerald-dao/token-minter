@@ -17,10 +17,10 @@
   .wrapper {
     overflow: hidden; 
     width: 100vw;
-    border: 1px solid #ccc;
-    border-width: 1px 0 1px 0;
-    padding-block: 0.3rem;
-    margin-block: 2rem;
+    border: 2px var(--clr-accent-main-t7) solid;
+    border-width: 3px 0 3px 0;
+    padding-block: 0.5rem;
+    background-color: var(--clr-accent-main-t9);
   }
   .content {
     width: 10000px;

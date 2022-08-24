@@ -30,7 +30,7 @@
 </script>
 
 <header>
-  <Container class="width-x-large">
+  <Container class="width-x-large gutter-y-none">
     <nav>
       <!-- Desktop menu -->
       <div class="desktop-menu">
@@ -109,7 +109,17 @@
   @use "../../styles/abstracts" as *;
 
   header {
-    padding: 0;
+    padding: 10px 0 10px 0;
+
+    @include mq(medium) {
+      z-index: 9999;
+      position: sticky;
+      background-color: var(--clr-background-primary-t4);
+      backdrop-filter: blur(20px);
+      width: 100%;
+      top: 0;
+      border-bottom: 2px var(--clr-accent-main-t7) solid;
+    }
 
     .hamburger-navigation {
       position: fixed;
@@ -173,6 +183,12 @@
     height: 42px;
     border-radius: 0.6rem;
     border: 2px var(--clr-accent-main) solid;
-    margin-left: 0.4rem
+    margin-left: 0.4rem;
+    transition: 0.4s;
+  }
+  .avatar:hover {
+    box-shadow: var(--clr-accent-main) 4px 4px;
+    color: var(--clr-font-text-inverse);
+    transform: translateY(-3px);
   }
 </style>

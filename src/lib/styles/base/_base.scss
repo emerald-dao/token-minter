@@ -7,3 +7,28 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--clr-accent-strong-t9);
+  border: 1px var(--clr-accent-main-t8) solid;
+  border-radius: 0.1rem;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--clr-accent-main-t6);
+  border-radius: 0.2rem;
+  transition: 0.7s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--clr-accent-main-t5);
+}

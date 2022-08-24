@@ -41,7 +41,7 @@
 
     transition: 0.4s;
     width: 100%;
-    color: var(--clr-accent-main-t4);
+    color: var(--clr-accent-main-t1);
     padding-block: 0.6em;
     transition: 1s;
     font-size: var(--fs-200);
@@ -60,7 +60,7 @@
     cursor: pointer;
   }
   .li-passed {
-    color: var(--clr-primary-main-t6);
+    color: var(--clr-primary-main-t5);
   }
   .li-danger {
     color: red;
