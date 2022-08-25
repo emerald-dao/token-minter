@@ -8,6 +8,10 @@
 	import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 	import { Button, Stack } from "$lib/components/atoms/index";
 	import { onNext } from "$lib/stores/generator/updateFunctions.js";
+	import {
+    activeStep,
+    stepsArray,
+  } from "$lib/stores/generator/GeneratorGeneralStore";
 
 	const schema = object({
 		name: string().required("Of course your collection needs a name! 🤷‍♂️"),
@@ -24,6 +28,10 @@
 
 	const { form, errors } = createForm({
 		extend: [validator({ schema })],
+
+		onSubmit(){
+			onNext(checkContracts)
+		}
 	});
 
 	async function checkContracts() {
@@ -35,17 +43,21 @@
 		$contractInfo.contractName = activeEmeraldPass ? $contractInfo.name.replace(/\s+/g, "") : "Touchstone" + $contractInfo.name.replace(/\s+/g, "");
 		
 		if (contracts.includes($contractInfo.contractName)) {
-			alert("This collection name is already deployed to your account. You cannot use it again.");
+			return {
+				error: "This collection name is already deployed to your account. You cannot use it again."
+			};
 		}
 
 		if (activeEmeraldPass) {
 			const userCanMakeReservation = await canMakeReservation($contractInfo.contractName);
 			if (!userCanMakeReservation) {
-				alert("Someone has already used this Collection Name. Please choose another.")
+				return {
+					error:	"Someone has already used this Collection Name. Please choose another."
+				}
 			}
 		}
 
-		onNext();
+		return true;
 	}
 
 	let images;
@@ -116,7 +128,14 @@
 		type="submit"
 		form="collection-info"
 		rightIcon="arrow-forward-circle"
-		on:click={checkContracts}>Next</Button>
+		state={$stepsArray[$activeStep].state}
+	>
+		{#if $stepsArray[$activeStep].state === "loading"}
+      Checking Collection Availability
+    {:else}
+			Next
+		{/if}
+	</Button>
 </GeneratorStepLayout>
 
 <style type="scss">
