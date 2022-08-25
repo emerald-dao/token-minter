@@ -74,6 +74,7 @@
 		$contractInfo.bannerImageName = file.name;
 		$contractInfo.bannerImage = file;
 	}
+	$: buttonActive = $contractInfo.name.length > 0 && $contractInfo.payment.length > 0 && $contractInfo.description.length > 0 && $contractInfo.image ? true : false;
 </script>
 
 <GeneratorStepLayout>
@@ -128,6 +129,7 @@
 		type="submit"
 		form="collection-info"
 		rightIcon="arrow-forward-circle"
+		disabled={!buttonActive}
 		state={$stepsArray[$activeStep].state}
 	>
 		{#if $stepsArray[$activeStep].state === "loading"}
