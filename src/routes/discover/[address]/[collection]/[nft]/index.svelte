@@ -28,8 +28,9 @@
       $page.params.collection,
       $page.params.address
     );
-    console.log({ collectionInfo, nftInfo });
-    return { collectionInfo, nftInfo };
+    const owner = collectionInfo.primaryBuyers[nftInfo.metadataId];
+    console.log({ collectionInfo, nftInfo, owner });
+    return { collectionInfo, nftInfo, owner };
   }
 </script>
 
@@ -72,24 +73,28 @@
             </Stack>
             <h1>{info.nftInfo.name}</h1>
 
-            <NFTPrice
-              price={info.nftInfo.price
-                ? info.nftInfo.price
-                : info.collectionInfo.price}
-              width="34px"
-              fontSize="var(--fs-500)"
-              currentPrice={true} />
-            <Button
-              state={$transactionInProgress === true ? "loading" : "active"}
-              on:click={() =>
-                purchaseNFT(
-                  $page.params.nft,
-                  info.nftInfo.price
-                    ? info.nftInfo.price
-                    : info.collectionInfo.price,
-                  $page.params.collection,
-                  $page.params.address
-                )}>Buy NFT</Button>
+            {#if !info.owner}
+              <NFTPrice
+                price={info.nftInfo.price
+                  ? info.nftInfo.price
+                  : info.collectionInfo.price}
+                width="34px"
+                fontSize="var(--fs-500)"
+                currentPrice={true} />
+              <Button
+                state={$transactionInProgress === true ? "loading" : "active"}
+                on:click={() =>
+                  purchaseNFT(
+                    $page.params.nft,
+                    info.nftInfo.price
+                      ? info.nftInfo.price
+                      : info.collectionInfo.price,
+                    $page.params.collection,
+                    $page.params.address
+                  )}>Buy NFT</Button>
+            {:else}
+              <Button>Bought by: {info.owner}</Button>
+            {/if}
           </Stack>
         </div>
       {/await}
