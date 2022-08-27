@@ -39,6 +39,7 @@ import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
 import removeContractFromBookTx from './cadence/transactions/remove_contract_from_book.cdc?raw';
 import airdropTx from './cadence/transactions/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
+import proposeNFTToCatalogTx from './cadence/transactions/propose_nft_to_catalog.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -104,6 +105,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
     .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
     .replace('"../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
+    .replace('"../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
@@ -127,6 +129,11 @@ async function deployContract() {
     eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
   }
 
+  let socials = [];
+  if (info.discord) socials.push({ key: "discord", value: info.discord });
+  if (info.twitter) socials.push({ key: "twitter", value: info.twitter });
+  if (info.website) socials.push({ key: "website", value: info.website });
+
   try {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(deployContractTx),
@@ -139,9 +146,7 @@ async function deployContract() {
         arg(Number(info.payment).toFixed(2), t.UFix64),
         arg(get(resultCID), t.String),
         // Socials
-        arg(info.discord ? info.discord : null, t.Optional(t.String)),
-        arg(info.twitter ? info.twitter : null, t.Optional(t.String)),
-        arg(info.website ? info.website : null, t.Optional(t.String)),
+        arg(socials, t.Dictionary({ key: t.String, value: t.String })),
         // Contract Options
         arg(info.startMinting, t.Bool),
         arg(info.royalty, t.Bool),
@@ -154,7 +159,7 @@ async function deployContract() {
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
         // Contract Code
-        arg(hexCode, t.String),
+        arg(hexCode, t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -342,6 +347,46 @@ export const toggleMinting = async () => {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(toggleMintingTx),
       args: (arg, t) => [],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+};
+
+export const proposeNFTToCatalog = async (contractName, contractAddress) => {
+
+  initTransactionState();
+
+  const { NonFungibleToken, MetadataViews } = get(addresses);
+  const publicLinkedTypeRestrictions = [
+    `A.${NonFungibleToken.slice(2)}.NonFungibleToken.CollectionPublic`,
+    `A.${NonFungibleToken.slice(2)}.NonFungibleToken.Receiver`,
+    `A.${MetadataViews.slice(2)}.MetadataViews.ResolverCollection`
+  ];
+  const privateLinkedTypeRestrictions = publicLinkedTypeRestrictions.concat(`A.${NonFungibleToken.slice(2)}.NonFungibleToken.Provider`);
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(proposeNFTToCatalogTx),
+      args: (arg, t) => [
+        arg(contractName, t.String),
+        arg(contractAddress, t.String),
+        arg(publicLinkedTypeRestrictions, t.Array(t.String)),
+        arg(privateLinkedTypeRestrictions, t.Array(t.String))
+      ],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],

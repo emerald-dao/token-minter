@@ -44,15 +44,16 @@ pub contract EmeraldPass {
 
   pub resource interface VaultPublic {
     pub var endDate: UFix64
-    pub fun addTime(time: String, payment: @FungibleToken.Vault)
-    pub fun active(): Bool
+    pub fun purchase(time: String, payment: @FungibleToken.Vault)
+    access(account) fun addTime(time: String)
+    pub fun isActive(): Bool
   }
 
   pub resource Vault: VaultPublic {
 
     pub var endDate: UFix64
 
-    pub fun addTime(time: String, payment: @FungibleToken.Vault) {
+    pub fun purchase(time: String, payment: @FungibleToken.Vault) {
       pre {
         EmeraldPass.getPricing().containsKey(payment.getType()): "This is not a supported form of payment."
         EmeraldPass.getPrice(vaultType: payment.getType(), time: time) != nil: "Could not fetch a price for this payment type and time."
@@ -62,21 +63,24 @@ pub contract EmeraldPass {
 
       EmeraldPass.depositToECTreasury(vault: <- payment)
 
-      let addedTime: UFix64 = EmeraldPass.getTime()[time]!
-
-      // If you're already active, just add more time to the end date.
-      // Otherwise, start the subscription now and set the end date.
-      if self.active() {
-        self.endDate = self.endDate + addedTime
-      } else {
-        self.endDate = getCurrentBlock().timestamp + addedTime
-      }
+      self.addTime(time: time)
 
       emit Purchased(subscriber: self.owner!.address, time: time)
     }
 
-    pub fun active(): Bool {
+    pub fun isActive(): Bool {
       return getCurrentBlock().timestamp <= self.endDate
+    }
+
+    access(account) fun addTime(time: String) {
+      let addedTime: UFix64 = EmeraldPass.getTime()[time]!
+      // If you're already active, just add more time to the end date.
+      // Otherwise, start the subscription now and set the end date.
+      if self.isActive() {
+        self.endDate = self.endDate + addedTime
+      } else {
+        self.endDate = getCurrentBlock().timestamp + addedTime
+      }
     }
 
     init() {
@@ -96,6 +100,13 @@ pub contract EmeraldPass {
     pub fun changeTime(newTimes: {String: UFix64}) {
       EmeraldPass.time = newTimes
     }
+
+    pub fun giveUserTime(user: Address, time: String) {
+      let userVault = getAccount(user).getCapability(EmeraldPass.VaultPublicPath)
+                      .borrow<&Vault{VaultPublic}>()
+                      ?? panic("Ths receiver has not set up a Vault for Emerald Pass yet.")
+      userVault.addTime(time: time)
+    }
   
   }
 
@@ -113,14 +124,14 @@ pub contract EmeraldPass {
     let userVault = getAccount(to).getCapability(EmeraldPass.VaultPublicPath)
                       .borrow<&Vault{VaultPublic}>()
                       ?? panic("Ths receiver has not set up a Vault for Emerald Pass yet.")
-    userVault.addTime(time: time, payment: <- payment)
+    userVault.purchase(time: time, payment: <- payment)
 
     emit Donation(by: nicePerson, to: to, time: time)
   }
 
   // Checks to see if a user is currently subscribed to Emerald Pass
   pub fun isActive(user: Address): Bool {
-    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath).borrow<&Vault{VaultPublic}>()?.active() == true
+    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath).borrow<&Vault{VaultPublic}>()?.isActive() == true
   }
 
   pub fun getPricing(): {Type: Pricing} {

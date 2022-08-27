@@ -357,7 +357,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_royalty: MetadataViews.Royalty?,
 		_defaultPrice: UFix64,
 		_ipfsCID: String,
-		_socials: {String: MetadataViews.ExternalURL?},
+		_socials: {String: MetadataViews.ExternalURL},
 		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
@@ -393,10 +393,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// We include the user's address in the paths.
 		// This is to prevent clashing with existing 
 		// Collection paths in the ecosystem.
-		self.CollectionStoragePath = /storage/ExampleNFTCollectionUSER_ADDR
-		self.CollectionPublicPath = /public/ExampleNFTCollectionUSER_ADDR
-		self.CollectionPrivatePath = /private/ExampleNFTCollectionUSER_ADDR
-		self.AdministratorStoragePath = /storage/ExampleNFTAdministratorUSER_ADDR
+		self.CollectionStoragePath = /storage/ExampleNFTCollection_USER_ADDR
+		self.CollectionPublicPath = /public/ExampleNFTCollection_USER_ADDR
+		self.CollectionPrivatePath = /private/ExampleNFTCollection_USER_ADDR
+		self.AdministratorStoragePath = /storage/ExampleNFTAdministrator_USER_ADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()

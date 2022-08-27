@@ -6,17 +6,15 @@ import FlowToken from "../utility/FlowToken.cdc"
 import FungibleToken from "../utility/FungibleToken.cdc"
 
 transaction(
-  contractName: String,
-  collectionName: String,
+  contractName: String, // TouchstoneExampleNFT
+  collectionName: String, // Example NFT
   description: String,
   imagePath: String,
   bannerImagePath: String?,
   price: UFix64,
   ipfsCID: String,
   // Socials
-  discord: String?,
-  twitter: String?,
-  website: String?,
+  socials: {String: String},
   // Contract Options
   minting: Bool,
   royalty: Bool,
@@ -31,8 +29,11 @@ transaction(
   // Long Contract Code
   contractCode: String
 ) {
+
   prepare(deployer: AuthAccount) {
-    log(contractCode)
+    /**************************************************************************************/
+    /************************************* DEPLOYMENT *************************************/
+    /**************************************************************************************/
 
     if deployer.borrow<&TouchstoneContracts.ContractsBook>(from: TouchstoneContracts.ContractsBookStoragePath) == nil {
       deployer.save(<- TouchstoneContracts.createContractsBook(), to: TouchstoneContracts.ContractsBookStoragePath)
@@ -56,17 +57,16 @@ transaction(
       mintVerifiers.append(MintVerifiers.HasEmeraldPass())
     }
 
-    let socials = {
-      "discord": discord == nil ? nil : MetadataViews.ExternalURL(discord!),
-      "twitter": twitter == nil ? nil : MetadataViews.ExternalURL(twitter!),
-      "website": website == nil ? nil : MetadataViews.ExternalURL(website!)
-    }
-
     let royaltyInfo: MetadataViews.Royalty? = royalty ? MetadataViews.Royalty(
       recepient: getAccount(royaltyAddress!).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
       cut: royaltyAmount!,
       description: "This is a royalty cut on primary sales."
     ) : nil
+
+    let socialsStruct: {String: MetadataViews.ExternalURL} = {}
+    for key in socials.keys {
+        socialsStruct[key] =  MetadataViews.ExternalURL(socials[key]!)
+    }
 
     deployer.contracts.add(
       name: contractName, 
@@ -79,8 +79,9 @@ transaction(
       _royalty: royaltyInfo,
       _price: price,
       _ipfsCID: ipfsCID,
-      _socials: socials,
+      _socials: socialsStruct,
       _mintVerifiers: mintVerifiers
     )
   }
+
 }

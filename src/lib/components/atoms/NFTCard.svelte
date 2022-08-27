@@ -40,7 +40,7 @@
     <Button
       class="small full-width no-shadow ghost"
       on:click={() => purchaseFunction(serial, price)}>
-      Buy
+      See Metadata
     </Button>
   {/if}
 </TransparentCard>
