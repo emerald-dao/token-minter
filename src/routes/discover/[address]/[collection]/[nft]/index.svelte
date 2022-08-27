@@ -8,13 +8,14 @@
     NFTPrice,
     Button,
     MadeWithTouchstone,
-    NftImage
+    NftImage,
   } from "$lib/components/atoms/index";
   import {
     getCollectionInfo,
     getNFTInfo,
     purchaseNFT,
   } from "../../../../../flow/actions.js";
+  import { transactionInProgress } from "../../../../../flow/stores.js";
   import { page } from "$app/stores";
 
   async function getInfo() {
@@ -38,7 +39,9 @@
       {#await getInfo() then info}
         <Stack direction="column" align="flex-start">
           <div class="image-wrapper">
-            <NftImage thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`} name={`${info.nftInfo.name} NFT`}/>
+            <NftImage
+              thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`}
+              name={`${info.nftInfo.name} NFT`} />
           </div>
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Description</h4>
@@ -77,6 +80,7 @@
               fontSize="var(--fs-500)"
               currentPrice={true} />
             <Button
+              state={$transactionInProgress === true ? "loading" : "active"}
               on:click={() =>
                 purchaseNFT(
                   $page.params.nft,
@@ -109,16 +113,16 @@
   }
 
   h1 {
-    font-size: var(--fs-700)
+    font-size: var(--fs-700);
   }
 
   h4 {
     padding-bottom: 0.2em;
-    font-size: var(--fs-400)
+    font-size: var(--fs-400);
   }
 
   p {
-    color: var(--clr-font-text-soft)
+    color: var(--clr-font-text-soft);
   }
 
   table {
