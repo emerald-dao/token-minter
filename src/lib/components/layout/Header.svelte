@@ -1,32 +1,41 @@
 <script>
-  import { fly } from 'svelte/transition'
-  import { navigating, page } from '$app/stores';
-  import { Container, Logo, ThemeToggle, AnimatedHamburger, FlowConnect, Stack, Select, DiscordInvite } from "$lib/components/atoms/index.js";
-  import Navigation from '$lib/components/modules/Navigation.svelte';
-  import { t, locales, locale } from '$lib/guide/translations';
-  import { goto } from '$app/navigation';
+  import { fly } from "svelte/transition";
+  import { navigating, page } from "$app/stores";
+  import {
+    Container,
+    Logo,
+    ThemeToggle,
+    AnimatedHamburger,
+    FlowConnect,
+    Stack,
+    Select,
+    DiscordInvite,
+  } from "$lib/components/atoms/index.js";
+  import Navigation from "$lib/components/modules/Navigation.svelte";
+  import { t, locales, locale } from "$lib/guide/translations";
+  import { goto } from "$app/navigation";
   import { getFindProfile } from "../../../flow/utils";
   import { user } from "../../../flow/stores.js";
 
-  let findProfile = getFindProfile("TODO: Change address");
+  let findProfile = getFindProfile($user?.addr);
 
-  export let open = false
+  export let open = false;
   export let onClick = () => {
-    open = !open
+    open = !open;
 
     if (open) {
-      document.body.style.overflowY = "hidden"
+      document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflowY = "scroll"
+      document.body.style.overflowY = "scroll";
     }
-  }
+  };
 
   let onPageChange = () => {
-    open = false
-    document.body.style.overflowY = "scroll"
-  }
+    open = false;
+    document.body.style.overflowY = "scroll";
+  };
 
-  $: if($navigating) onPageChange()
+  $: if ($navigating) onPageChange();
 </script>
 
 <header>
@@ -34,26 +43,34 @@
     <nav>
       <!-- Desktop menu -->
       <div class="desktop-menu">
-        <Logo/>
-        <Navigation/>
+        <Logo />
+        <Navigation />
         <Stack direction="row" gap="0.5em">
-          <DiscordInvite/>
-          <ThemeToggle/>
-          {#if $page.url.pathname.includes("guide") }
-            <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+          <DiscordInvite />
+          <ThemeToggle />
+          {#if $page.url.pathname.includes("guide")}
+            <Select
+              on:change={({ target }) => goto(`/guide${target.value}/welcome`)}>
               {#each $locales as lc}
-                <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}.flag`)}</option>
+                <option value="/{lc}" selected={lc === $locale}
+                  >{$t(`lang.${lc}.flag`)}</option>
               {/each}
             </Select>
           {/if}
-          <FlowConnect/>
+          <FlowConnect />
           {#if $user?.loggedIn}
             {#await findProfile then profile}
               <a href="/my-collections" sveltekit:prefetch>
                 {#if profile}
-                  <img class="avatar" src={profile.avatar} alt={`${profile.name} avatar`}>
+                  <img
+                    class="avatar"
+                    src={profile.avatar}
+                    alt={`${profile.name} avatar`} />
                 {:else}
-                  <img class="avatar" src="https://find.xyz/assets/img/avatars/avatar16.png" alt="default avatar">
+                  <img
+                    class="avatar"
+                    src="https://find.xyz/assets/img/avatars/avatar16.png"
+                    alt="default avatar" />
                 {/if}
               </a>
             {/await}
@@ -63,16 +80,22 @@
 
       <!-- Mobile menu -->
       <div class="mobile-menu">
-        <Logo/>
+        <Logo />
         <div class="mobile-options">
-          <AnimatedHamburger {open} {onClick}/>
+          <AnimatedHamburger {open} {onClick} />
           {#if $user?.loggedIn}
             {#await findProfile then profile}
               <a href="/my-collections" sveltekit:prefetch>
                 {#if profile}
-                  <img class="avatar" src={profile.avatar} alt={`${profile.name} avatar`}>
+                  <img
+                    class="avatar"
+                    src={profile.avatar}
+                    alt={`${profile.name} avatar`} />
                 {:else}
-                  <img class="avatar" src="https://find.xyz/assets/img/avatars/avatar16.png" alt="default avatar">
+                  <img
+                    class="avatar"
+                    src="https://find.xyz/assets/img/avatars/avatar16.png"
+                    alt="default avatar" />
                 {/if}
               </a>
             {/await}
@@ -80,24 +103,29 @@
         </div>
       </div>
       {#if open}
-        <div class="hamburger-navigation" transition:fly={{ y: -200, duration: 400 }}>
+        <div
+          class="hamburger-navigation"
+          transition:fly={{ y: -200, duration: 400 }}>
           <Navigation>
             <Stack direction="row" gap="1rem">
-              <DiscordInvite/>
-              <ThemeToggle/>
+              <DiscordInvite />
+              <ThemeToggle />
             </Stack>
-            
+
             <div class="close-button">
-              <AnimatedHamburger {open} {onClick}/>
+              <AnimatedHamburger {open} {onClick} />
             </div>
-            {#if $page.url.pathname.includes("guide") }
-              <Select on:change="{({ target }) => goto(`/guide${target.value}/welcome`)}">
+            {#if $page.url.pathname.includes("guide")}
+              <Select
+                on:change={({ target }) =>
+                  goto(`/guide${target.value}/welcome`)}>
                 {#each $locales as lc}
-                  <option value="/{lc}" selected="{lc === $locale}">{$t(`lang.${lc}.flag`)}</option>
+                  <option value="/{lc}" selected={lc === $locale}
+                    >{$t(`lang.${lc}.flag`)}</option>
                 {/each}
               </Select>
             {/if}
-            <FlowConnect/>
+            <FlowConnect />
           </Navigation>
         </div>
       {/if}
@@ -154,9 +182,9 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      
+
       @include mq(medium) {
-        display: none;    
+        display: none;
       }
 
       .mobile-options {
@@ -166,7 +194,7 @@
     }
 
     .desktop-menu {
-      display: none;    
+      display: none;
 
       @include mq(medium) {
         display: flex;
