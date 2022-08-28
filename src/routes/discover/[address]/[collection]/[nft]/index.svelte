@@ -84,7 +84,7 @@
                 on:click={() =>
                   purchaseNFT(
                     $page.params.nft,
-                    Number(info.nftInfo).price,
+                    Number(info.nftInfo.price).toFixed(3),
                     $page.params.collection,
                     $page.params.address
                   )}>Buy NFT</Button>

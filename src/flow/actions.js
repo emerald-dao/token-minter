@@ -230,7 +230,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     names.push(name);
     descriptions.push(description);
     thumbnails.push(image);
-    prices.push(Number(price).toFixed(3));
+    prices.push(price ? Number(price).toFixed(3) : null);
     let extra = [];
     for (const attribute in rest) {
       if (rest[attribute]) {
