@@ -144,7 +144,7 @@ async function deployContract() {
         arg(info.description, t.String),
         arg(info.imageName, t.String),
         arg(info.bannerImageName ? info.bannerImageName : null, t.Optional(t.String)),
-        arg(Number(info.payment).toFixed(2), t.UFix64),
+        arg(Number(info.payment).toFixed(3), t.UFix64),
         arg(get(resultCID), t.String),
         // Socials
         arg(socials, t.Dictionary({ key: t.String, value: t.String })),
@@ -230,7 +230,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     names.push(name);
     descriptions.push(description);
     thumbnails.push(image);
-    prices.push(price);
+    prices.push(Number(price).toFixed(3));
     let extra = [];
     for (const attribute in rest) {
       if (rest[attribute]) {
