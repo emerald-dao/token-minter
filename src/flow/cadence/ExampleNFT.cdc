@@ -45,18 +45,15 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let description: String 
 		pub let thumbnail: MetadataViews.IPFSFile
 		// If price is nil, defaults to the collection price
-		pub let price: UFix64?
+		pub let price: UFix64
 		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _price: UFix64?, _extra: {String: AnyStruct}) {
+		init(_name: String, _description: String, _thumbnail: MetadataViews.IPFSFile, _price: UFix64?, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
-			self.thumbnail = MetadataViews.IPFSFile(
-				cid: ExampleNFT.getCollectionAttribute(key: "ipfsCID") as! String,
-				path: _thumbnailPath
-			)
-			self.price = _price
+			self.thumbnail = _thumbnail
+			self.price = _price ?? ExampleNFT.getCollectionAttribute(key: "price") as! UFix64
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
@@ -274,11 +271,14 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, price: UFix64?, extra: {String: AnyStruct}) {
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
-				_thumbnailPath: thumbnailPath,
+				_thumbnail: MetadataViews.IPFSFile(
+					cid: ipfsCID,
+					path: thumbnailPath
+				),
 				_price: price,
 				_extra: extra
 			)
@@ -364,7 +364,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
 		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
-		return metadata.price ?? (self.getCollectionAttribute(key: "price") as! UFix64)
+		return metadata.price
 	}
 
 	init(
