@@ -40,6 +40,7 @@ import removeContractFromBookTx from './cadence/transactions/remove_contract_fro
 import airdropTx from './cadence/transactions/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
 import proposeNFTToCatalogTx from './cadence/transactions/propose_nft_to_catalog.cdc?raw';
+import setupCollectionTx from './cadence/transactions/setup_collection.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -387,6 +388,33 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
         arg(publicLinkedTypeRestrictions, t.Array(t.String)),
         arg(privateLinkedTypeRestrictions, t.Array(t.String))
       ],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res.status);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionStatus.set(99);
+  }
+};
+
+export const setupCollection = async (contractName, contractAddress) => {
+
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(setupCollectionTx, contractName, contractAddress),
+      args: (arg, t) => [],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
