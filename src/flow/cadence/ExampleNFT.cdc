@@ -230,7 +230,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pre {
 			self.canMint(): "Minting is currently closed by the Administrator!"
 			payment.balance == self.getPriceOfNFT(metadataId): 
-				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId).toString())
+				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId)!.toString())
 		}
 
 		// Confirm recipient passes all verifiers
@@ -267,7 +267,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Deposit nft
 		recipient.deposit(token: <- nft)
 
-		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + self.getPriceOfNFT(metadataId)
+		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + metadata.price
 	}
 
 	pub resource Administrator {
@@ -362,9 +362,9 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.getCollectionAttribute(key: "minting") as! Bool
 	}
 
-	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
-		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
-		return metadata.price
+	// Returns nil if an NFT with this metadataId doesn't exist
+	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64? {
+		return self.getNFTMetadata(metadataId)?.price
 	}
 
 	init(
