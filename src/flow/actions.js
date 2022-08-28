@@ -144,7 +144,7 @@ async function deployContract() {
         arg(info.description, t.String),
         arg(info.imageName, t.String),
         arg(info.bannerImageName ? info.bannerImageName : null, t.Optional(t.String)),
-        arg(Number(info.payment).toFixed(2), t.UFix64),
+        arg(Number(info.payment).toFixed(), t.UFix64),
         arg(get(resultCID), t.String),
         // Socials
         arg(socials, t.Dictionary({ key: t.String, value: t.String })),

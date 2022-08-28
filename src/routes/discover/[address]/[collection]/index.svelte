@@ -78,9 +78,7 @@
                     thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
                     name={NFT.name}
                     description={NFT.description}
-                    price={NFT.price
-                      ? parseFloat(NFT.price).toFixed(2)
-                      : parseFloat(collectionInfo.price).toFixed(2)}
+                    price={NFT.price.toFixed(4)}
                     buy={!Object.keys(collectionInfo.primaryBuyers).includes(
                       NFT.metadataId
                     )}

@@ -75,9 +75,7 @@
 
             {#if !info.owner}
               <NFTPrice
-                price={info.nftInfo.price
-                  ? info.nftInfo.price
-                  : info.collectionInfo.price}
+                price={info.nftInfo.price}
                 width="34px"
                 fontSize="var(--fs-500)"
                 currentPrice={true} />
@@ -86,9 +84,7 @@
                 on:click={() =>
                   purchaseNFT(
                     $page.params.nft,
-                    info.nftInfo.price
-                      ? info.nftInfo.price
-                      : info.collectionInfo.price,
+                    info.nftInfo.price,
                     $page.params.collection,
                     $page.params.address
                   )}>Buy NFT</Button>
