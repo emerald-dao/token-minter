@@ -1,11 +1,11 @@
 ---
-title: Token Minter Guide
+title: Collection Generator Guide
 author: Jacob Tucker
 index: 5
 language: en
 ---
 
-# Token Minter Guide
+# Collection Generator Guide
 
 There are 6 steps to creating your own NFT Collection using Touchstone. We will walk you through all of them in detail below.
 
