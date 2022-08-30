@@ -8,13 +8,14 @@
     NFTPrice,
     Button,
     MadeWithTouchstone,
-    NftImage
+    NftImage,
   } from "$lib/components/atoms/index";
   import {
     getCollectionInfo,
     getNFTInfo,
     purchaseNFT,
   } from "../../../../../flow/actions.js";
+  import { transactionInProgress } from "../../../../../flow/stores.js";
   import { page } from "$app/stores";
 
   async function getInfo() {
@@ -27,8 +28,9 @@
       $page.params.collection,
       $page.params.address
     );
-    console.log({ collectionInfo, nftInfo });
-    return { collectionInfo, nftInfo };
+    const owner = collectionInfo.primaryBuyers[nftInfo.metadataId];
+    console.log({ collectionInfo, nftInfo, owner });
+    return { collectionInfo, nftInfo, owner };
   }
 </script>
 
@@ -38,7 +40,9 @@
       {#await getInfo() then info}
         <Stack direction="column" align="flex-start">
           <div class="image-wrapper">
-            <NftImage thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`} name={`${info.nftInfo.name} NFT`}/>
+            <NftImage
+              thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`}
+              name={`${info.nftInfo.name} NFT`} />
           </div>
           <Stack direction="column" align="flex-start" gap="0.4em">
             <h4>Description</h4>
@@ -69,23 +73,24 @@
             </Stack>
             <h1>{info.nftInfo.name}</h1>
 
-            <NFTPrice
-              price={info.nftInfo.price
-                ? info.nftInfo.price
-                : info.collectionInfo.price}
-              width="34px"
-              fontSize="var(--fs-500)"
-              currentPrice={true} />
-            <Button
-              on:click={() =>
-                purchaseNFT(
-                  $page.params.nft,
-                  info.nftInfo.price
-                    ? info.nftInfo.price
-                    : info.collectionInfo.price,
-                  $page.params.collection,
-                  $page.params.address
-                )}>Buy NFT</Button>
+            {#if !info.owner}
+              <NFTPrice
+                price={info.nftInfo.price}
+                width="34px"
+                fontSize="var(--fs-500)"
+                currentPrice={true} />
+              <Button
+                state={$transactionInProgress === true ? "loading" : "active"}
+                on:click={() =>
+                  purchaseNFT(
+                    $page.params.nft,
+                    Number(info.nftInfo.price).toFixed(3),
+                    $page.params.collection,
+                    $page.params.address
+                  )}>Buy NFT</Button>
+            {:else}
+              <Button>Bought by: {info.owner}</Button>
+            {/if}
           </Stack>
         </div>
       {/await}
@@ -109,16 +114,16 @@
   }
 
   h1 {
-    font-size: var(--fs-700)
+    font-size: var(--fs-700);
   }
 
   h4 {
     padding-bottom: 0.2em;
-    font-size: var(--fs-400)
+    font-size: var(--fs-400);
   }
 
   p {
-    color: var(--clr-font-text-soft)
+    color: var(--clr-font-text-soft);
   }
 
   table {

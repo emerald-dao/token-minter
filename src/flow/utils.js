@@ -104,8 +104,8 @@ export const resolveAddressObject = async (lookup) => {
 
 export const getFindProfile = async (address) => {
   try {
-      return await fcl.query({
-        cadence: `
+    return await fcl.query({
+      cadence: `
         import FIND from ${get(addresses).FIND}
         pub fun main(address: Address): Profile? {
             if let name = FIND.reverseLookup(address) {
@@ -128,16 +128,12 @@ export const getFindProfile = async (address) => {
           }
         }
         `,
-        args: (arg, t) => [
-          arg(address, t.Address)
-        ]
-      });
+      args: (arg, t) => [
+        arg(address, t.Address)
+      ]
+    });
   } catch (e) {
     console.log(e);
-    return {
-      name: 'Mateo',
-      address: address,
-      avatar: "https://i.imgur.com/q1zGEnG.jpg"
-    };
+    return null;
   }
 }

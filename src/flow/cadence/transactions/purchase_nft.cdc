@@ -1,6 +1,7 @@
 import ExampleNFT from "../ExampleNFT.cdc"
 import FlowToken from "../utility/FlowToken.cdc"
 import NonFungibleToken from "../utility/NonFungibleToken.cdc"
+import MetadataViews from "../utility/MetadataViews.cdc"
 
 transaction(metadataId: UInt64, price: UFix64) {
   let FlowTokenVault: &FlowToken.Vault
@@ -10,7 +11,7 @@ transaction(metadataId: UInt64, price: UFix64) {
 
     if signer.borrow<&ExampleNFT.Collection>(from: ExampleNFT.CollectionStoragePath) == nil {
       signer.save(<- ExampleNFT.createEmptyCollection(), to: ExampleNFT.CollectionStoragePath)
-      signer.link<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver}>(ExampleNFT.CollectionPublicPath, target: ExampleNFT.CollectionStoragePath)
+      signer.link<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(ExampleNFT.CollectionPublicPath, target: ExampleNFT.CollectionStoragePath)
     }
 
     self.CollectionPublic = signer.getCapability(ExampleNFT.CollectionPublicPath)

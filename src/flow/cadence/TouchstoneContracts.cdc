@@ -5,6 +5,7 @@ pub contract TouchstoneContracts {
   pub let ContractsBookStoragePath: StoragePath
   pub let ContractsBookPublicPath: PublicPath
   pub let GlobalContractsBookStoragePath: StoragePath
+  pub let GlobalContractsBookPublicPath: PublicPath
 
   pub enum ReservationStatus: UInt8 {
     pub case notFound // was never made
@@ -47,7 +48,8 @@ pub contract TouchstoneContracts {
   pub resource interface GlobalContractsBookPublic {
     pub fun getAllUsers(): [Address]
     pub fun getAllReservations(): {String: Address}
-    pub fun getReservation(contractName: String): ReservationStatus
+    pub fun getAddressFromContractName(contractName: String): Address?
+    pub fun getReservationStatus(contractName: String): ReservationStatus
   }
 
   pub resource GlobalContractsBook: GlobalContractsBookPublic {
@@ -60,10 +62,14 @@ pub contract TouchstoneContracts {
 
     pub fun reserve(contractName: String, user: Address) {
       pre {
-        self.getReservation(contractName: contractName) != ReservationStatus.active: contractName.concat(" is already taken!")
+        self.getReservationStatus(contractName: contractName) != ReservationStatus.active: contractName.concat(" is already taken!")
         EmeraldPass.isActive(user: user): "This user does not have an active Emerald Pass subscription."
       }
       self.reservedContractNames[contractName] = user
+    }
+
+    pub fun removeReservation(contractName: String) {
+      self.reservedContractNames.remove(key: contractName)
     }
 
     pub fun getAllUsers(): [Address] {
@@ -74,7 +80,7 @@ pub contract TouchstoneContracts {
       return self.reservedContractNames
     }
 
-    pub fun getReservation(contractName: String): ReservationStatus {
+    pub fun getReservationStatus(contractName: String): ReservationStatus {
       let reservedBy = self.reservedContractNames[contractName]
       if reservedBy == nil {
         return ReservationStatus.notFound
@@ -87,6 +93,13 @@ pub contract TouchstoneContracts {
         }
       }
       return ReservationStatus.active
+    }
+
+    pub fun getAddressFromContractName(contractName: String): Address? {
+      if self.getReservationStatus(contractName: contractName) == ReservationStatus.active {
+        return self.reservedContractNames[contractName]
+      }
+      return nil
     }
 
     init() {
@@ -108,15 +121,19 @@ pub contract TouchstoneContracts {
   }
 
   pub fun getGlobalContractsBook(): &GlobalContractsBook{GlobalContractsBookPublic} {
-    return self.account.borrow<&GlobalContractsBook{GlobalContractsBookPublic}>(from: TouchstoneContracts.GlobalContractsBookStoragePath)!
+    return self.account.getCapability(TouchstoneContracts.GlobalContractsBookPublicPath)
+            .borrow<&GlobalContractsBook{GlobalContractsBookPublic}>()!
   }
 
   init() {
     self.ContractsBookStoragePath = /storage/TouchstoneContractsBookv2
     self.ContractsBookPublicPath = /public/TouchstoneContractsBookv2
     self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBookv2
+    self.GlobalContractsBookPublicPath = /public/TouchstoneGlobalContractsBookv2
 
     self.account.save(<- create GlobalContractsBook(), to: TouchstoneContracts.GlobalContractsBookStoragePath)
+    self.account.link<&GlobalContractsBook{GlobalContractsBookPublic}>(TouchstoneContracts.GlobalContractsBookPublicPath, target: TouchstoneContracts.GlobalContractsBookStoragePath)
   }
 
 }
+ 

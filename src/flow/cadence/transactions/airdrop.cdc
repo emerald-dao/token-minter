@@ -13,14 +13,7 @@ transaction(recipients: [Address], metadataIds: [UInt64]) {
   }
 
   execute {
-    var i = 0
-
-    while i < recipients.length {
-      if let recipient = getAccount(recipients[i]).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
-        self.Administrator.mintNFT(metadataId: metadataIds[i], recipient: recipient)
-      }
-    }
-
-    i = i + 1
+    self.Administrator.mintBatch(metadataIds: metadataIds, recipients: recipients)
   }
 }
+ 

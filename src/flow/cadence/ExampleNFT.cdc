@@ -22,6 +22,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub event Deposit(id: UInt64, to: Address?)
 	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile)
 	pub event Minted(id: UInt64, recipient: Address, metadataId: UInt64)
+	pub event MintBatch(metadataIds: [UInt64], intendedRecipients: [Address], notSetup: [Address])
 
 	// Paths
 	pub let CollectionStoragePath: StoragePath
@@ -44,18 +45,15 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let description: String 
 		pub let thumbnail: MetadataViews.IPFSFile
 		// If price is nil, defaults to the collection price
-		pub let price: UFix64?
+		pub let price: UFix64
 		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnailPath: String, _price: UFix64?, _extra: {String: AnyStruct}) {
+		init(_name: String, _description: String, _thumbnail: MetadataViews.IPFSFile, _price: UFix64?, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
-			self.thumbnail = MetadataViews.IPFSFile(
-				cid: ExampleNFT.getCollectionAttribute(key: "ipfsCID") as! String,
-				path: _thumbnailPath
-			)
-			self.price = _price
+			self.thumbnail = _thumbnail
+			self.price = _price ?? ExampleNFT.getCollectionAttribute(key: "price") as! UFix64
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
@@ -232,7 +230,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pre {
 			self.canMint(): "Minting is currently closed by the Administrator!"
 			payment.balance == self.getPriceOfNFT(metadataId): 
-				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId).toString())
+				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId)!.toString())
 		}
 
 		// Confirm recipient passes all verifiers
@@ -269,15 +267,18 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Deposit nft
 		recipient.deposit(token: <- nft)
 
-		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + self.getPriceOfNFT(metadataId)
+		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + metadata.price
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, price: UFix64?, extra: {String: AnyStruct}) {
+		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
-				_thumbnailPath: thumbnailPath,
+				_thumbnail: MetadataViews.IPFSFile(
+					cid: ipfsCID,
+					path: thumbnailPath
+				),
 				_price: price,
 				_extra: extra
 			)
@@ -287,6 +288,24 @@ pub contract ExampleNFT: NonFungibleToken {
 		// it in the recipients collection
 		pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
 			recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
+		}
+
+		pub fun mintBatch(metadataIds: [UInt64], recipients: [Address]) {
+			pre {
+				metadataIds.length == recipients.length: "You need to pass in an equal number of metadataIds and recipients."
+			}
+			var i = 0
+			var notSetup: [Address] = []
+			while i < metadataIds.length {
+				if let recipientCollection = getAccount(recipients[i]).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
+					self.mintNFT(metadataId: metadataIds[i], recipient: recipientCollection)
+				} else {
+					notSetup.append(recipients[i])
+				}
+				i = i + 1
+			}
+
+			emit MintBatch(metadataIds: metadataIds, intendedRecipients: recipients, notSetup: notSetup)
 		}
 
 		// create a new Administrator resource
@@ -343,9 +362,9 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.getCollectionAttribute(key: "minting") as! Bool
 	}
 
-	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64 {
-		let metadata = self.getNFTMetadata(metadataId) ?? panic("This metadata does not exist!")
-		return metadata.price ?? (self.getCollectionAttribute(key: "price") as! UFix64)
+	// Returns nil if an NFT with this metadataId doesn't exist
+	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64? {
+		return self.getNFTMetadata(metadataId)?.price
 	}
 
 	init(
@@ -357,7 +376,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_royalty: MetadataViews.Royalty?,
 		_defaultPrice: UFix64,
 		_ipfsCID: String,
-		_socials: {String: MetadataViews.ExternalURL?},
+		_socials: {String: MetadataViews.ExternalURL},
 		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
@@ -393,10 +412,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// We include the user's address in the paths.
 		// This is to prevent clashing with existing 
 		// Collection paths in the ecosystem.
-		self.CollectionStoragePath = /storage/ExampleNFTCollectionUSER_ADDR
-		self.CollectionPublicPath = /public/ExampleNFTCollectionUSER_ADDR
-		self.CollectionPrivatePath = /private/ExampleNFTCollectionUSER_ADDR
-		self.AdministratorStoragePath = /storage/ExampleNFTAdministratorUSER_ADDR
+		self.CollectionStoragePath = /storage/ExampleNFTCollection_USER_ADDR
+		self.CollectionPublicPath = /public/ExampleNFTCollection_USER_ADDR
+		self.CollectionPrivatePath = /private/ExampleNFTCollection_USER_ADDR
+		self.AdministratorStoragePath = /storage/ExampleNFTAdministrator_USER_ADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()

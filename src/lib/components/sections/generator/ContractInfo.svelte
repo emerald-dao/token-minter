@@ -20,7 +20,8 @@
 		<div class="inputs-wrapper">
 			<form use:form id="contract-info">
 				<h4>Contract Options</h4>
-				<span class="helper-text">Select the options you want to include in your contract.</span>
+				<span class="helper-text"
+					>Select the options you want to include in your contract.</span>
 				<div class="inputs">
 					<!-- Generate input values from the contractOptions object -->
 					{#each contractOptions as option}
@@ -48,7 +49,7 @@
 									id={option.bindValue + "Number"}
 									type="number"
 									min="0.0"
-									max="1.0"
+									max="0.95"
 									step="0.01"
 									disabled={$contractInfo[option.bindValue]
 										? !$contractInfo[option.bindValue]
@@ -60,7 +61,8 @@
 					{/each}
 				</div>
 				<h4>Minting Verifiers</h4>
-				<span class="helper-text">Requirements users must meet to mint your NFTs.</span>
+				<span class="helper-text"
+					>Requirements users must meet to mint your NFTs.</span>
 				<div class="inputs">
 					<!-- Generate input values from the verifierOptions object -->
 					{#each verifierOptions as option}
@@ -156,9 +158,9 @@
 
 				.double-grid {
 					display: grid;
-					grid-template-columns: 1fr .6fr;
+					grid-template-columns: 1fr 0.6fr;
 					gap: 10px;
-					
+
 					input {
 						padding: 10px;
 						font-size: 12px;

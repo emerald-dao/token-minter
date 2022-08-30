@@ -74,6 +74,13 @@
 			"aliases": {
 				"testnet": "0xc0eb53fca755377d"
 			}
+		},
+		"NFTCatalog": {
+			"source": "./src/flow/cadence/utility/NFTCatalog.cdc",
+			"aliases": {
+				"testnet": "0x324c34e1c517e4db",
+				"mainnet": "0x49a7cda3a1eecc29"
+			}
 		}
 	},
 	"networks": {

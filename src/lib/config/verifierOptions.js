@@ -6,7 +6,7 @@ let verifierOptions = [
     placeholder: "https://floats.city/jacob.find/event/185382914"
   },
   {
-    name: 'Require Emerald Pass Subscription',
+    name: 'Require Emerald Pass subscription',
     bindValue: 'requireEmeraldPass'
   }
 ];

@@ -10,9 +10,6 @@
   export let description;
   export let backgroundColor;
   export let price;
-  export let extra;
-  export let serial;
-  export let purchaseFunction;
   export let buy = false;
   export let withLink = false;
   export let url;
@@ -27,6 +24,9 @@
         {description}
         {backgroundColor}
         {price} />
+      {#if buy}
+        <Button class="small full-width no-shadow ghost">Buy Now</Button>
+      {/if}
     </a>
   {:else}
     <NFTCardContent
@@ -35,13 +35,6 @@
       {description}
       {backgroundColor}
       {price} />
-  {/if}
-  {#if buy}
-    <Button
-      class="small full-width no-shadow ghost"
-      on:click={() => purchaseFunction(serial, price)}>
-      Buy
-    </Button>
   {/if}
 </TransparentCard>
 
