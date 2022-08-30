@@ -15,11 +15,14 @@
     Divider,
     NftImage,
     CollectionSocials,
+    HtmlHead
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
   import { Verifiers } from "$atoms";
 </script>
+
+<HtmlHead title="Discover"/>
 
 {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
   <Section class="padding-top-small padding-bottom-small">

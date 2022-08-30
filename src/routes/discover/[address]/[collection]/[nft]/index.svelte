@@ -9,6 +9,7 @@
     Button,
     MadeWithTouchstone,
     NftImage,
+    HtmlHead
   } from "$atoms";
   import {
     getCollectionInfo,
@@ -33,6 +34,8 @@
     return { collectionInfo, nftInfo, owner };
   }
 </script>
+
+<HtmlHead title="Discover"/>
 
 <Section class="padding-top-small">
   <Container>

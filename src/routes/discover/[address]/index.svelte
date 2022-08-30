@@ -6,11 +6,14 @@
     Container,
     Stack,
     CollectionCard,
+    HtmlHead
   } from "$atoms";
   import { page } from "$app/stores";
 
   const owner = $page.params.address;
 </script>
+
+<HtmlHead title="Discover"/>
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>

@@ -90,7 +90,6 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      // TODO: Add top offset variable
       top: 5rem;
       max-height: 100vh;
       padding-bottom: 2em;
