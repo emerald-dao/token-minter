@@ -45,7 +45,7 @@ const contractData = {
     mainnet: '0x233eb012d34b0070',
   },
   EmeraldPass: {
-    testnet: '0xd24f69d0e1865520',
+    testnet: '0x5a2114f5b8c53b0d',
     mainnet: '',
   },
   NFTCatalog: {
