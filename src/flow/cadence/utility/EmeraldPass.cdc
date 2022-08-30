@@ -91,6 +91,10 @@ pub contract EmeraldPass {
 
   }
 
+  pub fun createVault(): @Vault {
+    return <- create Vault()
+  }
+
   pub resource Admin {
 
     pub fun changePricing(newPricing: {Type: Pricing}) {
@@ -151,6 +155,11 @@ pub contract EmeraldPass {
 
   pub fun getTime(): {String: UFix64} {
     return self.time
+  }
+
+  pub fun getUserVault(user: Address): &Vault{VaultPublic}? {
+    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath)
+            .borrow<&Vault{VaultPublic}>()
   }
 
   init() {
