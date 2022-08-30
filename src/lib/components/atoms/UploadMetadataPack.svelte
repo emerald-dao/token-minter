@@ -4,14 +4,15 @@
     Stack,
     LoadingSpinner,
     Button,
-  } from "$lib/components/atoms/index";
+  } from "$atoms";
   import Icon from "@iconify/svelte";
   import {
     uploadMetadataToContract,
     getNextMetadataId,
-  } from "../../../flow/actions";
-  import { contractInfo, user } from "../../../flow/stores";
-  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
+  } from "$flow/actions";
+  import { user } from "$stores/FlowStore";
+  import { contractInfo } from "$stores/ContractStore";
+  import { csvStore } from "$stores/CollectionFilesStore";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -37,7 +38,7 @@
       return;
     }
     // Gets the batch of metadata we want to upload
-    const metadatas = $csvMetadata.slice(initialToken, lastToken + 1);
+    const metadatas = $csvStore.metadata.slice(initialToken, lastToken + 1);
     const uploadResult = await uploadMetadataToContract(
       $contractInfo.contractName,
       metadatas,

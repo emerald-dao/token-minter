@@ -1,23 +1,12 @@
 import { browser } from '$app/env';
 import { get } from 'svelte/store';
 import { Buffer } from 'buffer';
-import { onNext } from '$lib/stores/generator/updateFunctions';
-
+import { activeStep } from '$stores/ActiveStepStore';
 import * as fcl from '@onflow/fcl';
 import './config';
-
-import {
-  user,
-  transactionStatus,
-  transactionInProgress,
-  contractInfo,
-  contractCode,
-  addresses,
-  network,
-} from './stores';
-import { resultCID } from '$lib/stores/generator/IPFSstore.ts';
-
-import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
+import { user, transactionStatus, transactionInProgress, addresses, network } from '$stores/FlowStore';
+import { contractInfo, contractCode } from '$stores/ContractStore';
+import { resultCID } from '$stores/IPFSstore';
 import { resolveAddressObject } from './utils';
 
 ///////////////
@@ -63,14 +52,14 @@ function switchNetwork(newNetwork) {
     fcl
       .config()
       .put('accessNode.api', 'https://rest-testnet.onflow.org')
-      .put('discovery.wallet', "https://fcl-discovery.onflow.org/testnet/authn")
+      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
   } else if (newNetwork === 'mainnet') {
     fcl
       .config()
       .put('accessNode.api', 'https://rest-mainnet.onflow.org')
       .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
   }
-  saveFileInStore(network, newNetwork);
+  network.set(newNetwork);
 }
 
 export const deployToTestnet = async () => {
@@ -131,9 +120,9 @@ async function deployContract() {
   }
 
   let socials = [];
-  if (info.discord) socials.push({ key: "discord", value: info.discord });
-  if (info.twitter) socials.push({ key: "twitter", value: info.twitter });
-  if (info.website) socials.push({ key: "website", value: info.website });
+  if (info.discord) socials.push({ key: 'discord', value: info.discord });
+  if (info.twitter) socials.push({ key: 'twitter', value: info.twitter });
+  if (info.website) socials.push({ key: 'website', value: info.website });
 
   try {
     const transactionId = await fcl.mutate({
@@ -160,7 +149,7 @@ async function deployContract() {
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
         // Contract Code
-        arg(hexCode, t.String)
+        arg(hexCode, t.String),
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -177,7 +166,7 @@ async function deployContract() {
         if (res.statusCode === 0) {
           console.log('Successfully deployed the contract.');
           // TODO: Take outside the onNext from this function
-          onNext();
+          activeStep.onNext();
         }
         setTimeout(() => transactionInProgress.set(false), 2000);
       }
@@ -284,7 +273,6 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
 }
 
 export const removeContractFromBook = async (contractName) => {
-
   initTransactionState();
 
   try {
@@ -311,16 +299,12 @@ export const removeContractFromBook = async (contractName) => {
 };
 
 export const airdrop = async (recipients, metadataIds) => {
-
   initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
       cadence: replaceWithProperValues(airdropTx),
-      args: (arg, t) => [
-        arg(recipients, t.Array(t.Address)),
-        arg(metadataIds, t.Array(t.UInt64))
-      ],
+      args: (arg, t) => [arg(recipients, t.Array(t.Address)), arg(metadataIds, t.Array(t.UInt64))],
       payer: fcl.authz,
       proposer: fcl.authz,
       authorizations: [fcl.authz],
@@ -341,7 +325,6 @@ export const airdrop = async (recipients, metadataIds) => {
 };
 
 export const toggleMinting = async () => {
-
   initTransactionState();
 
   try {
@@ -368,16 +351,17 @@ export const toggleMinting = async () => {
 };
 
 export const proposeNFTToCatalog = async (contractName, contractAddress) => {
-
   initTransactionState();
 
   const { NonFungibleToken, MetadataViews } = get(addresses);
   const publicLinkedTypeRestrictions = [
     `A.${NonFungibleToken.slice(2)}.NonFungibleToken.CollectionPublic`,
     `A.${NonFungibleToken.slice(2)}.NonFungibleToken.Receiver`,
-    `A.${MetadataViews.slice(2)}.MetadataViews.ResolverCollection`
+    `A.${MetadataViews.slice(2)}.MetadataViews.ResolverCollection`,
   ];
-  const privateLinkedTypeRestrictions = publicLinkedTypeRestrictions.concat(`A.${NonFungibleToken.slice(2)}.NonFungibleToken.Provider`);
+  const privateLinkedTypeRestrictions = publicLinkedTypeRestrictions.concat(
+    `A.${NonFungibleToken.slice(2)}.NonFungibleToken.Provider`
+  );
 
   try {
     const transactionId = await fcl.mutate({
@@ -386,7 +370,7 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
         arg(contractName, t.String),
         arg(contractAddress, t.String),
         arg(publicLinkedTypeRestrictions, t.Array(t.String)),
-        arg(privateLinkedTypeRestrictions, t.Array(t.String))
+        arg(privateLinkedTypeRestrictions, t.Array(t.String)),
       ],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -408,7 +392,6 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
 };
 
 export const setupCollection = async (contractName, contractAddress) => {
-
   initTransactionState();
 
   try {
@@ -440,12 +423,10 @@ export const getAllContractNames = async (address) => {
   try {
     const response = await fcl.query({
       cadence: getContractNames,
-      args: (arg, t) => [
-        arg(address, t.Address)
-      ],
+      args: (arg, t) => [arg(address, t.Address)],
     });
 
-    return response.map(element => element.name);
+    return response.map((element) => element.name);
   } catch (e) {
     console.log(e);
   }
@@ -572,4 +553,3 @@ export async function canMakeReservation(contractName) {
     console.log(e);
   }
 }
-

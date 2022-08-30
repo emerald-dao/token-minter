@@ -1,37 +1,24 @@
 <script>
-  import { DropZone, Button, Stack } from "$lib/components/atoms/index";
-  import { userIPFSToken } from "$lib/stores/generator/IPFSstore";
-  import {
-    csvState,
-    csvFile,
-    csvMetadata,
-  } from "$lib/stores/generator/CsvStore.ts";
-  import { imagesState, imagesFiles } from "$lib/stores/generator/ImagesStore";
-  import {
-    csvDropHandling,
-    imagesDropHandling,
-  } from "$lib/generator/dropHandling";
+  import { DropZone, Button, Stack } from "$atoms";
+  import { userIPFSToken } from "$stores/IPFSstore";
+  import { imagesStore, csvStore } from "$stores/CollectionFilesStore";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
-  import { onNext } from "$lib/stores/generator/updateFunctions";
-  import {
-    activeStep,
-    stepsArray,
-  } from "$lib/stores/generator/GeneratorGeneralStore";
+  import { activeStep } from "$stores/ActiveStepStore";
 
   const onStepSubmit = async () => {
-    if ($csvFile && $imagesFiles && $userIPFSToken) {
+    if ($csvStore.files && $imagesStore.files && $userIPFSToken) {
       // TODO: Any simpler way to do it?
       async function uploadAssetsToIpfs() {
-        return await uploadToIPFS($csvMetadata, $imagesFiles, $userIPFSToken);
+        return await uploadToIPFS($csvStore.files, $imagesStore.files, $userIPFSToken);
       }
-      onNext(uploadAssetsToIpfs);
+      activeStep.onNext(uploadAssetsToIpfs);
     } else {
       alert("Missing assets");
     }
   };
 
-  $: buttonActive = $csvFile && $imagesFiles && $userIPFSToken ? true : false;
+  $: buttonActive = $imagesStore.files && $csvStore.files && $userIPFSToken ? true : false;
 </script>
 
 <GeneratorStepLayout>
@@ -47,11 +34,15 @@
         to have a basic CSV structure.
       </span>
       <DropZone
-        promptText="Drop CSV file"
-        dropHandlingFunction={csvDropHandling}
-        bind:fileStore={$csvFile}
-        fileState={$csvState}
-        type="csv" />
+        name="csv"
+        id="csv"
+        type="csv"
+        placeholder="Drop CSV file"
+        errors={$csvStore.errors}
+        fileStore={$csvStore.files} 
+        saveFunction={csvStore.saveFiles} 
+        deleteFileFromStore={csvStore.deleteAllFiles}
+        deleteAllFilesFromStore={csvStore.deleteAllFiles} />
     </div>
 
     <!-- Images DropZone -->
@@ -62,11 +53,15 @@
         <br />Images file names must match the ones in the metadata CSV.
       </span>
       <DropZone
-        promptText="Drop Images folder"
-        dropHandlingFunction={imagesDropHandling}
-        bind:fileStore={$imagesFiles}
-        fileState={$imagesState}
-        type="image" />
+        name="images"
+        id="images"
+        type="images-folder"
+        placeholder="Drop Images folder"
+        fileStore={$imagesStore.files} 
+        errors={$imagesStore.errors}
+        saveFunction={imagesStore.saveFiles}
+        deleteFileFromStore={imagesStore.deleteFile}
+        deleteAllFilesFromStore={imagesStore.deleteAllFiles} />
     </div>
 
     <div class="form">
@@ -94,11 +89,11 @@
 
   <Button
     slot="buttons"
-    state={$stepsArray[$activeStep].state}
+    loading={$activeStep.loading}
     leftIcon="arrow-up-circle"
     on:click={onStepSubmit}
     disabled={!buttonActive}>
-    {#if $stepsArray[$activeStep].state === "loading"}
+    {#if $activeStep.loading}
       Uploading to IPFS
     {:else}
       Upload to IPFS

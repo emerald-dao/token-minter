@@ -7,7 +7,6 @@
     signUp, 
     initAccount, 
   } from '$flow/actions';
-  
   import UserAddress from './UserAddress.svelte';
   import Profile from './Profile.svelte';
 </script>

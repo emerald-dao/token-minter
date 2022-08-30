@@ -1,16 +1,16 @@
 <script>
-	import { Button, Stack } from "$lib/components/atoms/index";
-	import PrismJS from "$lib/components/prism/PrismJS.svelte";
-	import { contractCode, contractInfo, user } from "../../../../flow/stores.js";
+	import { Button, Stack } from "$atoms";
+	import PrismJS from "$components/prism/PrismJS.svelte";
+	import { contractCode, contractInfo } from "$stores/ContractStore";
 	import { createForm } from "felte";
 	import contractOptions from "$lib/config/contractOptions.js";
 	import verifierOptions from "$lib/config/verifierOptions.js";
 	import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
-	import { onNext } from "$lib/stores/generator/updateFunctions.js";
+	import { activeStep } from "$stores/ActiveStepStore.js";
 
 	const { form } = createForm({
 		onSubmit() {
-			onNext();
+			activeStep.onNext();
 		},
 	});
 </script>
