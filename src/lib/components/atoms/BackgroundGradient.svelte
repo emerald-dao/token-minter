@@ -1,11 +1,10 @@
 <div class="background-gradient"/>
 
-
 <style>  
   .background-gradient {
     background: 
-      radial-gradient(ellipse at right, var(--clr-primary-soft-t7), transparent),
-      radial-gradient(ellipse at bottom, var(--clr-accent-soft-t6), transparent);
+      radial-gradient(ellipse at right, var(--clr-primary-soft-t9), transparent),
+      radial-gradient(ellipse at bottom, var(--clr-accent-soft-t7), transparent);
     backdrop-filter: blur(200px);
     height: 100%;
     width: 100%;
