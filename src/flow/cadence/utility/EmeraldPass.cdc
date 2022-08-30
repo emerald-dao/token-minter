@@ -153,6 +153,11 @@ pub contract EmeraldPass {
     return self.time
   }
 
+  pub fun getUserVault(user: Address): &Vault{VaultPublic}? {
+    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath)
+            .borrow<&Vault{VaultPublic}>()
+  }
+
   init() {
     self.treasury = ECTreasury()
     self.time = {
