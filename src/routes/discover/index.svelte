@@ -8,6 +8,7 @@
     Stack,
     CollectionCard,
     Button,
+    HtmlHead
   } from "$atoms";
 
   let collections = [
@@ -41,6 +42,8 @@
 
   let address;
 </script>
+
+<HtmlHead title="Discover"/>
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>

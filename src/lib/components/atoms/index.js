@@ -17,6 +17,7 @@ export { default as EditCollectionNav } from './EditCollectionNav.svelte';
 export { default as EmeraldTools } from './EmeraldTools.svelte';
 export { default as Feature } from './Feature.svelte';
 export { default as FlowConnect } from './FlowConnect.svelte';
+export { default as HtmlHead } from './HtmlHead.svelte';
 export { default as Input } from './Input.svelte';
 export { default as LoadingSpinner } from './LoadingSpinner.svelte';
 export { default as Logo } from './Logo.svelte';

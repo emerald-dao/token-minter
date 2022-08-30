@@ -10,7 +10,6 @@
   import { user } from '$stores/FlowStore'
 </script>
 
-
 {#if $user?.loggedIn}
   <SidebarMainLayout>
     <EditCollectionNav slot="sidebar" collectionName="Awesome Collection"/>

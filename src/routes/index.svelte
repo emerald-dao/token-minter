@@ -1,4 +1,5 @@
 <script>
+	import { HtmlHead } from '$atoms'
 	import { 
 		HeroSection, 
 		CreateCollectionSection, 
@@ -8,9 +9,7 @@
 	} from "$components/sections/home/index";
 </script>
 
-<svelte:head>
-	<title>Home</title>
-</svelte:head>
+<HtmlHead title="Home"/>
 
 <HeroSection/>
 <CreateCollectionSection/>

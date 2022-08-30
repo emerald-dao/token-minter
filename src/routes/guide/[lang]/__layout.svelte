@@ -36,13 +36,15 @@
 <script>
   import '$lib/styles/base/guide.scss';
 
-  import { Section, Container } from "$atoms";
+  import { Section, Container, HtmlHead } from "$atoms";
   
   import GuideSidebarNav from "$components/sections/guide/GuideSidebarNav.svelte";
   import GuideFooterNav from "$components/sections/guide/GuideFooterNav.svelte";
 
   export let chapters
 </script>
+
+<HtmlHead title="Guide"/>
 
 <Section class="padding-top-small padding-bottom-small">
   <Container class="width-large">

@@ -1,12 +1,14 @@
 <!-- Page that dynamically renders each step of the Collection Generation process -->
 <script>
   import { user } from "$stores/FlowStore";
-  import { WalletConnectModal } from "$atoms";
+  import { WalletConnectModal, HtmlHead } from "$atoms";
   import { GeneratorNav } from "$components/sections/generator/index";
   import { activeStep } from "$stores/ActiveStepStore";
   import SidebarMainLayout from "$components/layout/SidebarMainLayout.svelte";
   import generatorSteps from "$lib/config/generatorSteps.js";
 </script>
+
+<HtmlHead title="Collection Generator"/>
 
 <!-- Display generator if user has loggedIn with wallet -->
 {#if $user?.loggedIn}
