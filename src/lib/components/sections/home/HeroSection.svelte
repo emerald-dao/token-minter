@@ -7,8 +7,8 @@
 		Marquee,
 		Stack,
 		TouchstoneIcon
-	} from "$lib/components/atoms/index";
-	import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
+	} from "$atoms";
+	import { newCollection } from "$stores/ActiveStepStore";
 </script>
 
 <div class="background">

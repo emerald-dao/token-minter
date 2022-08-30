@@ -1,16 +1,15 @@
 <script>
+	import { HtmlHead } from '$atoms'
 	import { 
 		HeroSection, 
 		CreateCollectionSection, 
 		LearnSection, 
 		InvitationSection,
 		FeaturedCollections
-	} from "$lib/components/sections/home/index";
+	} from "$components/sections/home/index";
 </script>
 
-<svelte:head>
-	<title>Home</title>
-</svelte:head>
+<HtmlHead title="Home"/>
 
 <HeroSection/>
 <CreateCollectionSection/>

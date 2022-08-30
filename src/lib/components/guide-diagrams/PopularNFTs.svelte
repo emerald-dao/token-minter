@@ -1,5 +1,5 @@
 <script>
-  import { NFTGuideGrid } from "$lib/components/atoms/index";
+  import { NFTGuideGrid } from "$atoms";
 
   export let flowText = "NFTs stored in the Flow Blockchain";
   export let ethereumText = "NFTs stored in the Ethereum Blockchain";

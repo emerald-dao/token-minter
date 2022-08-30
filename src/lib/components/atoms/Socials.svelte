@@ -1,8 +1,7 @@
 <script>
   import { socialMedia } from '$lib/config/config'
-
   import Icon from "@iconify/svelte";
-  import { Stack } from "$lib/components/atoms/index.js";
+  import { Stack } from "$atoms";
 </script>
 
 <Stack direction="row">

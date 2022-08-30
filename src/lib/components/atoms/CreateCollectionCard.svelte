@@ -1,9 +1,6 @@
 <script>
   import Icon from "@iconify/svelte";
-  import {
-    Stack,
-    TransparentCard,
-  } from "$lib/components/atoms/index";
+  import { Stack, TransparentCard } from "$atoms";
 </script>
 
 <a href={`/collection-generator`}>

@@ -8,7 +8,7 @@
 		AdaptableGrid,
 		Ball,
 		Feature
-	} from "$lib/components/atoms/index";
+	} from "$atoms";
 
 	let steps = [
 		{

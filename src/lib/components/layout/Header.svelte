@@ -10,12 +10,12 @@
     Stack,
     Select,
     DiscordInvite,
-  } from "$lib/components/atoms/index.js";
-  import Navigation from "$lib/components/modules/Navigation.svelte";
+  } from "$atoms";
+  import Navigation from "$components/modules/Navigation.svelte";
   import { t, locales, locale } from "$lib/guide/translations";
   import { goto } from "$app/navigation";
-  import { getFindProfile } from "../../../flow/utils";
-  import { user } from "../../../flow/stores.js";
+  import { getFindProfile } from "$flow/utils";
+  import { user } from "$stores/FlowStore";
 
   let findProfile = getFindProfile($user?.addr);
 

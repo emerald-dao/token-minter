@@ -1,5 +1,5 @@
 <script>
-  import Navigation from "$lib/components/modules/Navigation.svelte";
+  import Navigation from "$components/modules/Navigation.svelte";
   import {
     Container,
     Logo,
@@ -7,7 +7,7 @@
     Socials,
     EmeraldTools,
     Button,
-  } from "$lib/components/atoms/index.js";
+  } from "$atoms";
 </script>
 
 

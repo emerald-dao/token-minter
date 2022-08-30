@@ -1,7 +1,7 @@
 <script>
-  import { NFTCard } from "$lib/components/atoms/index";
-  import { resultCID } from "$lib/stores/generator/IPFSstore";
-  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
+  import { NFTCard } from "$atoms";
+  import { resultCID } from "$stores/IPFSstore";
+  import { csvStore } from "$stores/CollectionFilesStore";
 
   function getTemplates(assets, ipfsCID) {
     const response = assets.reduce((a, asset) => {
@@ -15,7 +15,7 @@
     return response;
   }
 
-  let NFTs = getTemplates($csvMetadata, $resultCID);
+  let NFTs = getTemplates($csvStore.metadata, $resultCID);
 </script>
 
 <div class="main-wrapper">

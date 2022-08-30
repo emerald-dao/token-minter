@@ -6,7 +6,7 @@ language: en
 ---
 
 <script>
-  import { Diagram, ProcessStep, ContractExample, IpfsFlow } from "$lib/components/guide-diagrams/index"
+  import { Diagram, ProcessStep, ContractExample, IpfsFlow } from "$components/guide-diagrams/index"
 </script>
 
 # What goes into making an NFT?

@@ -1,5 +1,5 @@
 <script>
-  import { Section, Container, TransparentCard } from "$lib/components/atoms/index";
+  import { Section, Container, TransparentCard } from "$atoms";
 </script>
 
 <Section class="padding-top-small padding-bottom-small"height="100%">

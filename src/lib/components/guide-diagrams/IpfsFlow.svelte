@@ -1,6 +1,6 @@
 <script>
-  import { theme } from "$lib/stores/ThemeStore"
-  import { TransparentCard, AdaptableGrid, Ball, Stack } from "$lib/components/atoms/index";
+  import { theme } from "$stores/ThemeStore"
+  import { TransparentCard, AdaptableGrid, Ball, Stack } from "$atoms";
   
   let steps = [
     {

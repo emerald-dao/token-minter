@@ -3,7 +3,7 @@
     TransparentCard,
     Button,
     NFTCardContent,
-  } from "$lib/components/atoms/index";
+  } from "$atoms";
 
   export let thumbnailURL;
   export let name;

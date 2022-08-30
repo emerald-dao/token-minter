@@ -1,13 +1,12 @@
 <script>
-  import { profile, user } from "../../../flow/stores";
+  import { profile, user } from "$stores/FlowStore";
   import { 
     sendQuery, 
     unauthenticate, 
     logIn, 
     signUp, 
     initAccount, 
-  } from '../../../flow/actions';
-  
+  } from '$flow/actions';
   import UserAddress from './UserAddress.svelte';
   import Profile from './Profile.svelte';
 </script>

@@ -1,6 +1,6 @@
 <script>
-  import { StepInstructions, BallButton, TransparentCard, Button, Divider } from "$lib/components/atoms/index"
-  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
+  import { BallButton, Button, Divider } from "$atoms"
+  import { newCollection } from "$stores/ActiveStepStore";
 
   export let step;
   export let steps;
@@ -17,9 +17,9 @@
       active={step === i} 
       passed={step > i}
       number={i + 1}
-      clickable={(step - steps[step].allowToGoBack) === i}
       on:click={() => goToStep(i)}
-    >
+      clickable={(step - steps[step].allowToGoBack) === i}
+      >
       {#if i === step}
         {_step.emoji}
       {/if}
@@ -29,9 +29,6 @@
 </ul>
 <Divider line={true} lineWidth="2px" space="2rem" lineColor="var(--clr-accent-main-t9)"/>
 <Button class="small transparent" leftIcon="refresh-circle" on:click={newCollection}>Restart</Button>
-{#if steps[step].instructions}
-  <StepInstructions instructions={steps[step].instructions} />
-{/if}
 
 <style type="scss">
   ul {

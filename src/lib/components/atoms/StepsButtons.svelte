@@ -1,13 +1,12 @@
 <script>
-  import { Button, LoadingSpinner } from "$lib/components/atoms/index";
-  import { onNext } from "$lib/stores/generator/updateFunctions.js";
+  import { Button, LoadingSpinner } from "$atoms";
   import {
     activeStep,
-    stepsArray,
-  } from "$lib/stores/generator/GeneratorGeneralStore";
+  } from "$stores/ActiveStepStore";
   import Icon from "@iconify/svelte";
+  import generatorSteps from '$lib/config/generatorSteps'
 
-  $: step = $stepsArray[$activeStep];
+  $: step = generatorSteps[$activeStep];
   export let errors;
   export let submit = false;
 
@@ -36,7 +35,7 @@
     {/if}
     <!-- Buttons that do not submit forms -->
   {:else if step.state === "active" || step.state === "inactive"}
-    <Button on:click={onNext}>
+    <Button on:click={activeStep.onNext}>
       <Icon
         color="var(--clr-font-text-inverse)"
         icon={`ion:${step.button.active.icon}`}
@@ -44,15 +43,15 @@
       {step.button.active.text}
     </Button>
   {:else if step.state === "ready"}
-    <Button on:click={onNext}>
+    <Button on:click={activeStep.onNext}>
       {step.button.active.text}
     </Button>
   {:else if step.state === "loading"}
-    <Button on:click={onNext} disabled class="loading">
+    <Button on:click={activeStep.onNext} disabled class="loading">
       <LoadingSpinner color="var(--clr-font-text-inverse)" {iconWidth} />
       {step.button.loading.text}
     </Button>
   {:else if step.state === "success"}
-    <Button on:click={onNext} disabled class="disabled">Uploaded</Button>
+    <Button on:click={activeStep.onNext} disabled class="disabled">Uploaded</Button>
   {/if}
 {/if}

@@ -9,13 +9,14 @@
     Button,
     MadeWithTouchstone,
     NftImage,
-  } from "$lib/components/atoms/index";
+    HtmlHead
+  } from "$atoms";
   import {
     getCollectionInfo,
     getNFTInfo,
     purchaseNFT,
-  } from "../../../../../flow/actions.js";
-  import { transactionInProgress } from "../../../../../flow/stores.js";
+  } from "$flow/actions.js";
+  import { transactionInProgress } from "$stores/FlowStore";
   import { page } from "$app/stores";
 
   async function getInfo() {
@@ -33,6 +34,8 @@
     return { collectionInfo, nftInfo, owner };
   }
 </script>
+
+<HtmlHead title="Discover"/>
 
 <Section class="padding-top-small">
   <Container>

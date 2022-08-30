@@ -1,14 +1,13 @@
 <script>
-  import { Stack, UploadMetadataPack } from "$lib/components/atoms/index";
-  import { csvMetadata } from "$lib/stores/generator/CsvStore.ts";
-  import { onNext } from "$lib/stores/generator/updateFunctions";
+  import { Stack, UploadMetadataPack } from "$atoms";
+  import { csvStore } from "$stores/CollectionFilesStore";
+  import { activeStep } from '$stores/ActiveStepStore';
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 
-  console.log($csvMetadata);
   const BATCH_SIZE = 500;
   function calculateSegments() {
     // This is the exact amount of elements to upload
-    const amount = $csvMetadata.length;
+    const amount = $csvStore.metadata.length;
     const array = new Array(Math.floor(amount / BATCH_SIZE))
       .fill(BATCH_SIZE)
       .concat(amount % BATCH_SIZE);
@@ -33,7 +32,7 @@
     // If all packs are uploaded, go to the next step
     if (uploadedPacks === segments.length) {
       console.log("All metadata is uploaded")
-      onNext();
+      activeStep.onNext();
     } else {
       segments[uploadedPacks].uploadState = "to-upload";
     }

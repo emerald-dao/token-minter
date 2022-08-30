@@ -3,9 +3,8 @@
 		Section,
 		Container,
 		CollectionCard,
-		AdaptableGrid,
 		Stack,
-	} from "$lib/components/atoms/index";
+	} from "$atoms";
 
   let collections = [
     {

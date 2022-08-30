@@ -1,5 +1,5 @@
 <script>
-  import { Select, BallButton, TransparentCard } from '$lib/components/atoms/index'
+  import { Select, BallButton, TransparentCard } from '$atoms'
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
   

@@ -1,5 +1,5 @@
 <script>
-  import { Stack } from "$lib/components/atoms/index";
+  import { Stack } from "$atoms";
 
   export let price;
   export let width = "20px";

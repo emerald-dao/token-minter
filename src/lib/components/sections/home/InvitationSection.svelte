@@ -1,5 +1,5 @@
 <script>
-	import { Section, Container, Button, Stack, Tagline, TransparentCard } from "$lib/components/atoms/index";
+	import { Section, Container, Button, Stack, Tagline } from "$atoms";
 </script>
 
 <div class="background">

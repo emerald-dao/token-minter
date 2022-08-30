@@ -2,8 +2,7 @@
   import {
     checkRequiredVerifiers,
     getCollectionInfo,
-  } from "../../../../flow/actions";
-
+  } from "$flow/actions";
   import {
     Section,
     Container,
@@ -16,11 +15,14 @@
     Divider,
     NftImage,
     CollectionSocials,
-  } from "$lib/components/atoms/index";
+    HtmlHead
+  } from "$atoms";
   import { page } from "$app/stores";
-  import { user } from "../../../../flow/stores.js";
-  import Verifiers from "$lib/components/atoms/Verifiers.svelte";
+  import { user } from "$stores/FlowStore";
+  import { Verifiers } from "$atoms";
 </script>
+
+<HtmlHead title="Discover"/>
 
 {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
   <Section class="padding-top-small padding-bottom-small">

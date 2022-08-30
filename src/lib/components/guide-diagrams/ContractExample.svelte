@@ -1,5 +1,5 @@
 <script>
-  import PrismJS from "$lib/components/prism/PrismJS.svelte";
+  import PrismJS from "$components/prism/PrismJS.svelte";
 
   let contract = `pub contract HelloWorld {
 

@@ -1,5 +1,5 @@
 <script>
-  import { BallButton } from "$lib/components/atoms/index";
+  import { BallButton } from "$atoms";
 
   export let collectionSocials;
 </script>

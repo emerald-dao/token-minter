@@ -1,8 +1,8 @@
 <script>
   import Button from "./Button.svelte";
-  import { logIn, unauthenticate } from "../../../flow/actions.js";
-  import { user } from "../../../flow/stores.js";
-  import { getFindProfile } from "../../../flow/utils";
+  import { logIn, unauthenticate } from "$flow/actions.js";
+  import { getFindProfile } from "$flow/utils";
+  import { user } from "$stores/FlowStore";
 
   let findProfile = getFindProfile($user?.addr);
 </script>

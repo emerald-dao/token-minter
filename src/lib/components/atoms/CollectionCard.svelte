@@ -4,7 +4,7 @@
     TransparentCard,
     WalletAddress,
     NftImage
-  } from "$lib/components/atoms/index";
+  } from "$atoms";
 
   export let name;
   export let url;

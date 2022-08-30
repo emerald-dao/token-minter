@@ -1,12 +1,12 @@
 <script>
-  import { user } from "../../../flow/stores";
+  import { user } from "$stores/FlowStore";
   import {
     Divider,
     BallButton,
     Button,
     Stack,
-  } from "$lib/components/atoms/index";
-  import { getFindProfile } from "../../../flow/utils";
+  } from "$atoms";
+  import { getFindProfile } from "$flow/utils";
 
   let findProfile = getFindProfile($user?.addr);
 </script>

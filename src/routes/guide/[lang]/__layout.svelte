@@ -36,13 +36,15 @@
 <script>
   import '$lib/styles/base/guide.scss';
 
-  import { Section, Container } from "$lib/components/atoms/index";
+  import { Section, Container, HtmlHead } from "$atoms";
   
-  import GuideSidebarNav from "$lib/components/sections/guide/GuideSidebarNav.svelte";
-  import GuideFooterNav from "$lib/components/sections/guide/GuideFooterNav.svelte";
+  import GuideSidebarNav from "$components/sections/guide/GuideSidebarNav.svelte";
+  import GuideFooterNav from "$components/sections/guide/GuideFooterNav.svelte";
 
   export let chapters
 </script>
+
+<HtmlHead title="Guide"/>
 
 <Section class="padding-top-small padding-bottom-small">
   <Container class="width-large">
@@ -88,7 +90,6 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      // TODO: Add top offset variable
       top: 5rem;
       max-height: 100vh;
       padding-bottom: 2em;

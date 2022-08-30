@@ -1,10 +1,11 @@
 <script>
   import { dappTitle } from "$lib/config/config";
-  import { Button, CollectionCard, Stack } from "$lib/components/atoms/index";
+  import { Button, CollectionCard, Stack } from "$atoms";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
-  import { newCollection } from "$lib/stores/generator/GeneratorGeneralStore";
-  import { contractInfo, user } from "../../../../flow/stores.js";
-  import { resultCID } from "$lib/stores/generator/IPFSstore.ts";
+  import { newCollection } from "$stores/ActiveStepStore";
+  import { user } from "$stores/FlowStore";
+  import { contractInfo } from "$stores/ContractStore";
+  import { resultCID } from "$stores/IPFSstore";
 </script>
 
 <GeneratorStepLayout>

@@ -1,6 +1,6 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { LoadingSpinner } from "$lib/components/atoms/index";
+  import { LoadingSpinner } from "$atoms";
 
   let buttonProps = {
     class: [$$restProps.class],
@@ -10,7 +10,7 @@
   export let download = false;
   export let rightIcon;
   export let leftIcon;
-  export let state = "active";
+  export let loading = false;
   export let form;
   export let target;
 </script>
@@ -62,17 +62,17 @@
     on:focus
     on:mouseenter
     on:mouseleave
-    disabled={disabled || state === "loading"}
+    disabled={disabled || loading}
     {form}
     {...buttonProps}>
-    {#if state === "loading"}
+    {#if loading}
       <LoadingSpinner color="var(--clr-font-text-button)" iconWidth="1.5em" />
     {/if}
-    {#if leftIcon && state != "loading"}
+    {#if leftIcon && !loading}
       <Icon icon={`ion:${leftIcon}`} width="1.5em" />
     {/if}
     <slot />
-    {#if rightIcon && state != "loading"}
+    {#if rightIcon && !loading}
       <Icon icon={`ion:${rightIcon}`} width="1.5em" />
     {/if}
   </button>
@@ -152,6 +152,10 @@
 
   .small {
     font-size: var(--fs-200);
+  }
+
+  .x-small {
+    font-size: var(--fs-100);
   }
 
   .medium {

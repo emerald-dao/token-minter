@@ -4,7 +4,7 @@
     FlowConnect,
     Stack,
     TransparentCard,
-  } from "$lib/components/atoms/index";
+  } from "$atoms";
 </script>
 
 <div class="connection-wrapper">

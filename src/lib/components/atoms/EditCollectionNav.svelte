@@ -1,6 +1,5 @@
 <script>
-  import { user } from "../../../flow/stores";
-  import { Divider, BallButton, Button } from "$lib/components/atoms/index";
+  import { Divider, BallButton, Button } from "$atoms";
 
   export let collectionName;
 </script>

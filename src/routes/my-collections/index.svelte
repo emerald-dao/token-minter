@@ -4,14 +4,16 @@
     CollectionCard,
     WalletConnectModal,
     CreateCollectionCard,
-    MyCollectionsNav
-	} from "$lib/components/atoms/index";
-  import { GeneratorStepLayout } from '$lib/components/sections/generator/index'
-  import SidebarMainLayout from "$lib/components/layout/SidebarMainLayout.svelte";
-  import { getContractDisplays } from "../../flow/actions";
-  import { user } from '../../flow/stores'
+    MyCollectionsNav,
+    HtmlHead
+	} from "$atoms";
+  import { GeneratorStepLayout } from '$components/sections/generator/index'
+  import SidebarMainLayout from "$components/layout/SidebarMainLayout.svelte";
+  import { getContractDisplays } from "$flow/actions";
+  import { user } from '$stores/FlowStore'
 </script>
 
+<HtmlHead title="My Collections"/>
 
 {#if $user?.loggedIn}
   <SidebarMainLayout>

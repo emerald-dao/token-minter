@@ -3,9 +3,8 @@ import { packToBlob } from 'ipfs-car/pack/blob';
 import { unpack } from 'ipfs-car/unpack';
 import { MemoryBlockStore } from 'ipfs-car/blockstore/memory';
 import { TreewalkCarSplitter } from 'carbites/treewalk';
-import { saveFileInStore } from '$lib/stores/generator/updateFunctions';
-import { resultCID } from '$lib/stores/generator/IPFSstore';
-import { contractInfo } from '../../flow/stores';
+import { resultCID } from '$stores/IPFSstore';
+import { contractInfo } from '$stores/ContractStore';
 import { get } from 'svelte/store';
 
 export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
@@ -36,7 +35,7 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   let result_cid = await uploadCar(car, IPFSToken);
   if (result_cid === root.toString()) {
     console.log('Resulting IPFS CID', result_cid);
-    saveFileInStore(resultCID, result_cid);
+    resultCID.set(result_cid);
     return true;
   } else {
     return {

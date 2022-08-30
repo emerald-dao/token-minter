@@ -1,7 +1,4 @@
-import { persistentWritable } from '$lib/stores/ThemeStore';
-import { writable, get, derived } from 'svelte/store';
-import { replaceWithProperValues } from './actions';
-import contract from './cadence/ExampleNFT.cdc?raw';
+import { writable, derived } from 'svelte/store';
 
 const contractData = {
   NonFungibleToken: {
@@ -48,10 +45,6 @@ const contractData = {
     testnet: '0x5a2114f5b8c53b0d',
     mainnet: '',
   },
-  NFTCatalog: {
-    testnet: "0x324c34e1c517e4db",
-    mainnet: "0x49a7cda3a1eecc29"
-  }
 };
 
 export const user = writable(null);
@@ -72,59 +65,5 @@ export const addresses = derived([network], ([$network]) => {
     FN: contractData.FN[$network],
     TouchstoneContracts: contractData.TouchstoneContracts[$network],
     EmeraldPass: contractData.EmeraldPass[$network],
-    NFTCatalog: contractData.NFTCatalog[$network]
   };
 });
-
-export const contractInfo = persistentWritable('contractInfo', {
-  name: '',
-  contractName: '',
-  description: '',
-  image: null,
-  imageName: '',
-  bannerImage: null,
-  bannerImageName: '',
-  website: '',
-  discord: '',
-  twitter: '',
-  payment: null,
-  // Contract Options
-  startMinting: true,
-  royalty: false,
-  royaltyText: '',
-  royaltyNumber: '',
-  // Verifier Options
-  floatLink: false,
-  floatLinkText: '',
-  requireEmeraldPass: false
-});
-
-export const contractCode = derived([contractInfo, user, addresses], ([$contractInfo, $user]) => {
-  return replaceWithProperValues(contract, $contractInfo.contractName, undefined).replaceAll(
-    'USER_ADDR',
-    $user.addr
-  );
-});
-
-export const restartContractInfo = () => {
-  contractInfo.set({
-    name: '',
-    contractName: '',
-    description: '',
-    image: null,
-    imageName: '',
-    bannerImage: null,
-    bannerImageName: '',
-    website: '',
-    discord: '',
-    twitter: '',
-    payment: null,
-    startMinting: true,
-    royalty: false,
-    royaltyText: '',
-    royaltyNumber: 0,
-    floatLink: false,
-    floatLinkText: '',
-    requireEmeraldPass: false
-  });
-};

@@ -1,8 +1,6 @@
 <script>
-  import { profile } from '../../../flow/stores';
-  import { 
-    executeTransaction 
-  } from '../../../flow/actions';
+  import { profile } from '$stores/FlowStore';
+  import { executeTransaction } from '$flow/actions';
 
   /**
    * Example profile object:

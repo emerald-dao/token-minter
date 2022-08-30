@@ -62,6 +62,10 @@
       flex-direction: row;
     }
 
+    h5 {
+      color: var(--clr-accent-main)
+    }
+
     .thumbnailElement {
       display: none;
     }
