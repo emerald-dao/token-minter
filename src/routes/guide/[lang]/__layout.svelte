@@ -36,10 +36,10 @@
 <script>
   import '$lib/styles/base/guide.scss';
 
-  import { Section, Container } from "$lib/components/atoms/index";
+  import { Section, Container } from "$atoms";
   
-  import GuideSidebarNav from "$lib/components/sections/guide/GuideSidebarNav.svelte";
-  import GuideFooterNav from "$lib/components/sections/guide/GuideFooterNav.svelte";
+  import GuideSidebarNav from "$components/sections/guide/GuideSidebarNav.svelte";
+  import GuideFooterNav from "$components/sections/guide/GuideFooterNav.svelte";
 
   export let chapters
 </script>

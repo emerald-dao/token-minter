@@ -14,6 +14,12 @@ const config = {
   // See the available options at https://github.com/sveltejs/vite-plugin-svelte/blob/main/docs/config.md
   kit: {
     adapter: adapter(),
+    alias: {
+      $atoms: 'src/lib/components/atoms/index.js',
+      $components: 'src/lib/components/',
+      $stores: 'src/lib/stores/',
+      $flow: 'src/flow/',
+    },
   },
 };
 

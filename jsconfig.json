@@ -2,25 +2,12 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "$lib": [
-        "src/lib"
-      ],
-      "$lib/*": [
-        "src/lib/*"
-      ],
-      "$flow": [
-        "src/flow"
-      ],
-      "$flow/*": [
-        "src/flow/*"
-      ]
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$flow": ["src/flow"],
+      "$flow/*": ["src/flow/*"]
     }
   },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.js",
-    "src/**/*.svelte",
-    "src/lib/stores/generator/IPFSstore.ts"
-  ],
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "src/lib/stores/IPFSstore.js"],
   "extends": "./.svelte-kit/tsconfig.json"
 }

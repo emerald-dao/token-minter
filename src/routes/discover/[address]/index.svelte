@@ -6,7 +6,7 @@
     Container,
     Stack,
     CollectionCard,
-  } from "$lib/components/atoms/index";
+  } from "$atoms";
   import { page } from "$app/stores";
 
   const owner = $page.params.address;

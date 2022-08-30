@@ -1,7 +1,7 @@
 <script>  
   import { t } from '$lib/guide/translations'; 
 	import { onMount, tick } from 'svelte'
-  import { TransparentCard } from '$lib/components/atoms/index'
+  import { TransparentCard } from '$atoms'
 
 	let elements = []
 	function grabElements() {

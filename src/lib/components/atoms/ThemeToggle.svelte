@@ -1,6 +1,6 @@
 <script>  
   import { onMount } from "svelte";
-  import { theme } from "$lib/stores/ThemeStore.js";
+  import { theme } from "$stores/ThemeStore.js";
   import { draw } from "svelte/transition";
 
   let toggleTheme;

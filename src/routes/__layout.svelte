@@ -1,7 +1,7 @@
 <script>
-  import BackgroundGradient from "$lib/components/atoms/BackgroundGradient.svelte";
-  import Header from "$lib/components/layout/Header.svelte";
-  import Footer from "$lib/components/layout/Footer.svelte";
+  import { BackgroundGradient } from "$atoms";
+  import Header from "$components/layout/Header.svelte";
+  import Footer from "$components/layout/Footer.svelte";
   import '$lib/styles/app.scss'
   import { page } from "$app/stores";
 

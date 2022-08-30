@@ -5,7 +5,7 @@
 		LearnSection, 
 		InvitationSection,
 		FeaturedCollections
-	} from "$lib/components/sections/home/index";
+	} from "$components/sections/home/index";
 </script>
 
 <svelte:head>

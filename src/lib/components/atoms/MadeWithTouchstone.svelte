@@ -1,5 +1,5 @@
 <script>
-  import { Stack, TouchstoneIcon } from "$lib/components/atoms/index";
+  import { Stack, TouchstoneIcon } from "$atoms";
   import { dappTitle } from "$lib/config/config";
 </script>
 

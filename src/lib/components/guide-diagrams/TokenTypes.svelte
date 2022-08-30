@@ -1,5 +1,5 @@
 <script>
-  import { NFTGuideGrid } from "$lib/components/atoms/index";
+  import { NFTGuideGrid } from "$atoms";
 
   export let money = "Money";
   export let gold = "Gold";

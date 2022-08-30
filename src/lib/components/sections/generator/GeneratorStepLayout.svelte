@@ -1,5 +1,5 @@
 <script>
-  import { TransparentCard } from "$lib/components/atoms/index";
+  import { TransparentCard } from "$atoms";
 </script>
 
 <div class="component-container">

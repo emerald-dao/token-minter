@@ -6,7 +6,7 @@ language: es
 ---
 
 <script>
-  import { PopularNFTs, Diagram, TokenTypes } from "$lib/components/guide-diagrams/index"
+  import { PopularNFTs, Diagram, TokenTypes } from "$components/guide-diagrams/index"
 </script>
 
 # Introducción a los Tokens No Fungibles (NFTs en inglés)

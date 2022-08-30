@@ -1,14 +1,13 @@
 <script>
 	import { 
     Stack,
-    CollectionCard,
     WalletConnectModal,
     CreateCollectionCard,
     EditCollectionNav
-	} from "$lib/components/atoms/index";
-  import { GeneratorStepLayout } from '$lib/components/sections/generator/index'
-  import SidebarMainLayout from "$lib/components/layout/SidebarMainLayout.svelte";
-  import { user } from '../../../flow/stores'
+	} from "$atoms";
+  import { GeneratorStepLayout } from '$components/sections/generator/index'
+  import SidebarMainLayout from "$components/layout/SidebarMainLayout.svelte";
+  import { user } from '$stores/FlowStore'
 </script>
 
 

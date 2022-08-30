@@ -1,14 +1,14 @@
 <script>
-  import { user } from "../../flow/stores";
-  import { getContractDisplays } from "../../flow/actions";
+  import { user } from "$stores/FlowStore";
+  import { getContractDisplays } from "$flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
     Container,
     Stack,
     CollectionCard,
-  } from "$lib/components/atoms/index";
-  import Button from "$lib/components/atoms/Button.svelte";
+    Button,
+  } from "$atoms";
 
   let collections = [
     {

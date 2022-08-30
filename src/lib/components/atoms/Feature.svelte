@@ -1,7 +1,7 @@
 <script>
   import {
 		Stack
-	} from "$lib/components/atoms/index";
+	} from "$atoms";
 
   export let title;
   export let description;

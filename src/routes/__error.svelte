@@ -10,7 +10,7 @@
 </script>
 
 <script>
-  import { Section, Container, Stack } from "$lib/components/atoms"
+  import { Section, Container, Stack } from "$components/atoms"
   export let error;
   export let status;
 </script>

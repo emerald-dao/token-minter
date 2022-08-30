@@ -1,14 +1,14 @@
 import { get } from 'svelte/store';
-import { addresses } from './stores';
+import { addresses } from '$stores/FlowStore';
 import * as fcl from '@onflow/fcl';
 
 export const resolveAddressObject = async (lookup) => {
   let answer = {
     resolvedNames: {
-      find: "",
-      fn: ""
+      find: '',
+      fn: '',
     },
-    address: ""
+    address: '',
   };
   let rootLookup = lookup.split('.')[0];
   try {
@@ -22,9 +22,7 @@ export const resolveAddressObject = async (lookup) => {
             return name?.concat(".find")
         }
         `,
-        args: (arg, t) => [
-          arg(lookup, t.Address)
-        ]
+        args: (arg, t) => [arg(lookup, t.Address)],
       });
 
       answer.resolvedNames.fn = await fcl.query({
@@ -56,9 +54,7 @@ export const resolveAddressObject = async (lookup) => {
           return flownsName
         }
         `,
-        args: (arg, t) => [
-          arg(lookup, t.Address)
-        ]
+        args: (arg, t) => [arg(lookup, t.Address)],
       });
     } else if (lookup.includes('.find')) {
       answer.resolvedNames.find = lookup;
@@ -70,10 +66,8 @@ export const resolveAddressObject = async (lookup) => {
           return FIND.lookupAddress(name)
         }
         `,
-        args: (arg, t) => [
-          arg(rootLookup, t.String)
-        ]
-      })
+        args: (arg, t) => [arg(rootLookup, t.String)],
+      });
     } else if (lookup.includes('.fn')) {
       answer.resolvedNames.fn = lookup;
       answer.address = await fcl.query({
@@ -90,17 +84,15 @@ export const resolveAddressObject = async (lookup) => {
           return address
         }
         `,
-        args: (arg, t) => [
-          arg(rootLookup, t.String)
-        ]
-      })
+        args: (arg, t) => [arg(rootLookup, t.String)],
+      });
     }
     return answer;
   } catch (e) {
     console.log(e);
     return lookup;
   }
-}
+};
 
 export const getFindProfile = async (address) => {
   try {
@@ -128,12 +120,10 @@ export const getFindProfile = async (address) => {
           }
         }
         `,
-      args: (arg, t) => [
-        arg(address, t.Address)
-      ]
+      args: (arg, t) => [arg(address, t.Address)],
     });
   } catch (e) {
     console.log(e);
     return null;
   }
-}
+};

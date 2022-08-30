@@ -1,8 +1,8 @@
 <script>
-  import { Button, CollectionPreview, Stack } from "$lib/components/atoms/index";
-  import DeploymentTransaction from '$lib/components/sections/generator/DeploymentTransaction.svelte';
-  import { deployToMainnet, deployToTestnet } from "../../../../flow/actions.js";
-	import { transactionInProgress } from "../../../../flow/stores";
+  import { Button, CollectionPreview, Stack } from "$atoms";
+  import DeploymentTransaction from '$components/sections/generator/DeploymentTransaction.svelte';
+  import { deployToMainnet, deployToTestnet } from "$flow/actions.js";
+	import { transactionInProgress } from "$stores/FlowStore";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 </script>
 

@@ -1,6 +1,6 @@
 <script>
-  import { Container, Section} from "$lib/components/atoms/index";
-  import Transaction from "$lib/components/flow/Transaction.svelte";
+  import { Container, Section} from "$atoms";
+  import Transaction from "$components/flow/Transaction.svelte";
 </script>
 
 <Section>

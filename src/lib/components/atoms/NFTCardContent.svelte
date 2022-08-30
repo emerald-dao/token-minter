@@ -1,5 +1,5 @@
 <script>
-  import { NFTPrice, NftImage, Divider } from "$lib/components/atoms/index";
+  import { NFTPrice, NftImage, Divider } from "$atoms";
   
   export let thumbnailURL;
   export let name;
