@@ -91,6 +91,10 @@ pub contract EmeraldPass {
 
   }
 
+  pub fun createVault(): @Vault {
+    return <- create Vault()
+  }
+
   pub resource Admin {
 
     pub fun changePricing(newPricing: {Type: Pricing}) {
