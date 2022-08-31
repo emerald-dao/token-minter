@@ -75,7 +75,7 @@ export const deployToMainnet = async () => {
 
 function initTransactionState() {
   transactionInProgress.set(true);
-  transactionStatus.set(-1);
+  transactionStatus.set({ status: -1 });
 }
 
 export function replaceWithProperValues(script, contractName = '', contractAddress = '') {
@@ -159,7 +159,7 @@ async function deployContract() {
     console.log({ transactionId });
 
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         // If deployment is successful
@@ -169,11 +169,13 @@ async function deployContract() {
           activeStep.onNext();
         }
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 }
 
@@ -193,15 +195,17 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
@@ -253,10 +257,11 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     });
 
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
 
@@ -267,7 +272,8 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     return { success: false, error: errorMessage };
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
     return { success: false, error: e };
   }
 }
@@ -286,15 +292,17 @@ export const removeContractFromBook = async (contractName) => {
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
@@ -312,15 +320,17 @@ export const airdrop = async (recipients, metadataIds) => {
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
@@ -338,15 +348,17 @@ export const toggleMinting = async () => {
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
@@ -379,15 +391,17 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
@@ -405,15 +419,17 @@ export const setupCollection = async (contractName, contractAddress) => {
     });
     console.log({ transactionId });
     fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res.status);
+      transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set(null), 5000);
       }
     });
   } catch (e) {
     console.log(e);
-    transactionStatus.set(99);
+    transactionInProgress.set(false)
+    transactionStatus.set(null);
   }
 };
 
