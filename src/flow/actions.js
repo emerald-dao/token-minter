@@ -174,7 +174,7 @@ async function deployContract() {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 }
@@ -184,29 +184,33 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
 
   initTransactionState();
 
-  try {
-    const transactionId = await fcl.mutate({
-      cadence: transaction,
-      args: (arg, t) => [arg(serial, t.UInt64), arg(price, t.UFix64)],
-      payer: fcl.authz,
-      proposer: fcl.authz,
-      authorizations: [fcl.authz],
-      limit: 9999,
-    });
-    console.log({ transactionId });
-    fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res);
-      console.log(res);
-      if (res.status === 4) {
-        setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set({}), 5000);
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    transactionInProgress.set(false)
-    transactionStatus.set({});
-  }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transactionId = await fcl.mutate({
+        cadence: transaction,
+        args: (arg, t) => [arg(serial, t.UInt64), arg(price, t.UFix64)],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 9999,
+      });
+      console.log({ transactionId });
+      fcl.tx(transactionId).subscribe((res) => {
+        transactionStatus.set(res);
+        console.log(res);
+        if (res.status === 4) {
+          setTimeout(() => transactionInProgress.set(false), 2000);
+          setTimeout(() => transactionStatus.set({}), 5000);
+          resolve(true);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      transactionInProgress.set(false);
+      transactionStatus.set({});
+      reject(false);
+    }
+  });
 };
 
 // Function to upload metadata to the contract in batches of 500
@@ -272,7 +276,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
     return { success: false, error: errorMessage };
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
     return { success: false, error: e };
   }
@@ -301,7 +305,7 @@ export const removeContractFromBook = async (contractName) => {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 };
@@ -329,7 +333,7 @@ export const airdrop = async (recipients, metadataIds) => {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 };
@@ -357,7 +361,7 @@ export const toggleMinting = async () => {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 };
@@ -400,7 +404,7 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 };
@@ -428,7 +432,7 @@ export const setupCollection = async (contractName, contractAddress) => {
     });
   } catch (e) {
     console.log(e);
-    transactionInProgress.set(false)
+    transactionInProgress.set(false);
     transactionStatus.set({});
   }
 };

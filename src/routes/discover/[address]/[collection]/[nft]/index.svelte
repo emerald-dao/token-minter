@@ -18,6 +18,7 @@
   } from "$flow/actions.js";
   import { transactionInProgress } from "$stores/FlowStore";
   import { page } from "$app/stores";
+  import { user } from "$stores/FlowStore"
 
   async function getInfo() {
     const nftInfo = await getNFTInfo(
@@ -33,6 +34,19 @@
     console.log({ collectionInfo, nftInfo, owner });
     return { collectionInfo, nftInfo, owner };
   }
+
+  let checkNftInfo = getInfo();
+
+  async function buyNft(price) {
+    const transactionResult = await purchaseNFT($page.params.nft, price, $page.params.collection, $page.params.address)
+    if(transactionResult === true) reCheckNftInfo();
+  }
+
+  function reCheckNftInfo() {
+    setTimeout(() => checkNftInfo = getInfo(), 2000);
+    alert("recheck")
+    console.log(checkNftInfo);
+  }
 </script>
 
 <HtmlHead title="Discover"/>
@@ -40,7 +54,7 @@
 <Section class="padding-top-small">
   <Container>
     <AdaptableGrid>
-      {#await getInfo() then info}
+      {#await checkNftInfo then info}
         <Stack direction="column" align="flex-start">
           <div class="image-wrapper">
             <NftImage
@@ -83,16 +97,25 @@
                 fontSize="var(--fs-500)"
                 currentPrice={true} />
               <Button
-                state={$transactionInProgress === true ? "loading" : "active"}
-                on:click={() =>
-                  purchaseNFT(
-                    $page.params.nft,
-                    Number(info.nftInfo.price).toFixed(3),
-                    $page.params.collection,
-                    $page.params.address
-                  )}>Buy NFT</Button>
+                leftIcon="wallet"
+                loading={$transactionInProgress}
+                on:click={() => buyNft(Number(info.nftInfo.price).toFixed(3))} >
+                {#if $transactionInProgress}  
+                  Loading Transaction
+                {:else}
+                  Buy NFT
+                {/if} 
+              </Button>
             {:else}
-              <Button>Bought by: {info.owner}</Button>
+              {#if info.owner === $user.addr}
+                <Button leftIcon="checkmark-circle" done={true}>
+                  Bought by you
+                </Button>
+              {:else}
+                <Button done={true}>
+                  Bought by: {info.owner}
+                </Button>
+              {/if}
             {/if}
           </Stack>
         </div>
