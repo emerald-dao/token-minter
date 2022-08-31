@@ -1,8 +1,5 @@
 <script>
-  import {
-    checkRequiredVerifiers,
-    getCollectionInfo,
-  } from "$flow/actions";
+  import { checkRequiredVerifiers, getCollectionInfo } from "$flow/actions";
   import {
     Section,
     Container,
@@ -15,14 +12,39 @@
     Divider,
     NftImage,
     CollectionSocials,
-    HtmlHead
+    HtmlHead,
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
   import { Verifiers } from "$atoms";
+
+  async function getStats(metadatas, purchasedIndexes) {
+    return new Promise(async (resolve, reject) => {
+      let min = Number.POSITIVE_INFINITY;
+      let highestBuy = 0.0;
+      for (const index in metadatas) {
+        if (!purchasedIndexes.includes(index) && metadatas[index].price < min) {
+          min = metadatas[index].price;
+        }
+        if (
+          purchasedIndexes.includes(index) &&
+          metadatas[index].price > highestBuy
+        ) {
+          highestBuy = metadatas[index].price;
+        }
+      }
+      resolve({
+        floorPrice: Number(min).toFixed(3),
+        highestBuy: Number(highestBuy).toFixed(3),
+        totalItems: metadatas.length,
+        numPurchased: purchasedIndexes.length,
+        available: metadatas.length - purchasedIndexes.length,
+      });
+    });
+  }
 </script>
 
-<HtmlHead title="Discover"/>
+<HtmlHead title="Discover" />
 
 {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
   <Section class="padding-top-small padding-bottom-small">
@@ -67,6 +89,42 @@
             <Stack direction="column" align="flex-start" gap="1.2em">
               <h1>{collectionInfo.name}</h1>
               <p>{collectionInfo.description}</p>
+              {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers)) then stats}
+                <AdaptableGrid minWidth="5em" gap="1.2em">
+                  <div>
+                    <strong>
+                      {stats.totalItems}
+                    </strong>
+                    <p>total items</p>
+                  </div>
+                  <div>
+                    <strong>
+                      {stats.numPurchased}
+                    </strong>
+                    <p>purchased</p>
+                  </div>
+                  <div>
+                    <strong>
+                      {stats.available}
+                    </strong>
+                    <p>available</p>
+                  </div>
+                  <div>
+                    <strong>
+                      <img src="/flow-logo.png" alt="flow logo" />
+                      {stats.floorPrice}
+                    </strong>
+                    <p>floor price</p>
+                  </div>
+                  <div>
+                    <strong>
+                      <img src="/flow-logo.png" alt="flow logo" />
+                      {stats.highestBuy}
+                    </strong>
+                    <p>highest buy</p>
+                  </div>
+                </AdaptableGrid>
+              {/await}
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
@@ -123,12 +181,21 @@
   }
 
   h1 {
-    font-size: var(--fs-700);
+    font-size: var(--fs-500);
     text-align: left;
   }
   p {
     font-size: var(--fs-300);
     text-align: left;
+  }
+  strong {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 25px;
+      margin-right: 5px;
+    }
   }
 
   .nft-list-wrapper {
