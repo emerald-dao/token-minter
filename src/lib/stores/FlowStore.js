@@ -50,7 +50,7 @@ const contractData = {
 export const user = writable(null);
 export const network = writable('testnet');
 export const profile = writable(null);
-export const transactionStatus = writable(null);
+export const transactionStatus = writable({});
 export const transactionInProgress = writable(false);
 export const addresses = derived([network], ([$network]) => {
   return {

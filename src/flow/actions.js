@@ -169,13 +169,13 @@ async function deployContract() {
           activeStep.onNext();
         }
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 }
 
@@ -199,13 +199,13 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
@@ -261,7 +261,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
 
@@ -273,7 +273,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
     return { success: false, error: e };
   }
 }
@@ -296,13 +296,13 @@ export const removeContractFromBook = async (contractName) => {
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
@@ -324,13 +324,13 @@ export const airdrop = async (recipients, metadataIds) => {
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
@@ -352,13 +352,13 @@ export const toggleMinting = async () => {
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
@@ -395,13 +395,13 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
@@ -423,13 +423,13 @@ export const setupCollection = async (contractName, contractAddress) => {
       console.log(res);
       if (res.status === 4) {
         setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set(null), 5000);
+        setTimeout(() => transactionStatus.set({}), 5000);
       }
     });
   } catch (e) {
     console.log(e);
     transactionInProgress.set(false)
-    transactionStatus.set(null);
+    transactionStatus.set({});
   }
 };
 
