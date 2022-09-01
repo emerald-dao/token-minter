@@ -1,5 +1,5 @@
 <script>
-  import { DropZone, Button, Stack } from "$atoms";
+  import { DropZone, Button, Stack, TransactionModal } from "$atoms";
   import { userIPFSToken } from "$stores/IPFSstore";
   import { imagesStore, csvStore } from "$stores/CollectionFilesStore";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
@@ -21,6 +21,7 @@
   $: buttonActive = $imagesStore.files && $csvStore.files && $userIPFSToken ? true : false;
 </script>
 
+<TransactionModal logoUrl="/ipfs-logo.png" transactionName="IPFS" loading={$activeStep.loading}/>
 <GeneratorStepLayout>
   <Stack direction="column" slot="main-content" gap="3.6rem">
     <!-- CSV DropZone -->

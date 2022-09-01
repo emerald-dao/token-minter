@@ -68,9 +68,10 @@
               <h1>{collectionInfo.name}</h1>
               <p>{collectionInfo.description}</p>
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
-                {#if verifiers.length > 0}
+                <!-- TODO: APPLY VERIFIERS -->
+                <!-- {#if verifiers.length > 0} -->
                   <Verifiers {verifiers} />
-                {/if}
+                <!-- {/if} -->
               {/await}
             </Stack>
             <div class="nft-list-wrapper">

@@ -1,4 +1,6 @@
 <script>
+  import { Stack, Verifier } from '$atoms'
+
   export let verifiers;
 
   console.log(verifiers);
@@ -13,25 +15,7 @@
   }
 </script>
 
-<article>
-  {#each verifiers as verifier}
-    <span>
-      {verifier.passing ? "Check!" : "Failed."}
-      {@html convertToRequirement(verifier)}
-    </span>
-  {/each}
-</article>
-
-<style>
-  article {
-    border: 1px solid white;
-    padding: 10px;
-  }
-
-  span {
-    font-size: 12px;
-    display: flex;
-    justify-self: center;
-    align-items: center;
-  }
-</style>
+<Stack direction="row">
+  <Verifier name="Verifier 1" checked={false} href="https://google.com" tooltip={"You must have an active Emerald Pass subscription to mint."}/>
+  <Verifier name="Verifier 2" checked={true}/>
+</Stack>

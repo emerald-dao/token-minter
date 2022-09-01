@@ -9,14 +9,15 @@
     Button,
     MadeWithTouchstone,
     NftImage,
-    HtmlHead
+    HtmlHead,
+    TransactionModal
   } from "$atoms";
   import {
     getCollectionInfo,
     getNFTInfo,
     purchaseNFT,
   } from "$flow/actions.js";
-  import { transactionInProgress } from "$stores/FlowStore";
+  import { transactionInProgress, transactionStatus } from "$stores/FlowStore";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore"
 
@@ -36,21 +37,19 @@
   }
 
   let checkNftInfo = getInfo();
-
+  let purchased = false; // flag to check if user has bought the NFT
+  
   async function buyNft(price) {
     const transactionResult = await purchaseNFT($page.params.nft, price, $page.params.collection, $page.params.address)
-    if(transactionResult === true) reCheckNftInfo();
-  }
-
-  function reCheckNftInfo() {
-    setTimeout(() => checkNftInfo = getInfo(), 2000);
-    alert("recheck")
-    console.log(checkNftInfo);
+    if (transactionResult && $transactionStatus.status === 4 && $transactionStatus.statusCode === 0) {
+      purchased = true
+    };
   }
 </script>
 
 <HtmlHead title="Discover"/>
 
+<TransactionModal />
 <Section class="padding-top-small">
   <Container>
     <AdaptableGrid>
@@ -89,8 +88,8 @@
               <WalletAddress address={$page.params.address}>By</WalletAddress>
             </Stack>
             <h1>{info.nftInfo.name}</h1>
-
-            {#if !info.owner}
+            <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
+            {#if !info.owner && !purchased}
               <NFTPrice
                 price={info.nftInfo.price}
                 width="34px"
@@ -105,6 +104,10 @@
                 {:else}
                   Buy NFT
                 {/if} 
+              </Button>
+            {:else if !info.owner && purchased}
+              <Button leftIcon="checkmark-circle" done={true}>
+                Bought by you
               </Button>
             {:else}
               {#if info.owner === $user.addr}
