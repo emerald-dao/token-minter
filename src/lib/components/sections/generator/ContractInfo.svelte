@@ -1,7 +1,7 @@
 <script>
 	import { Button, Stack } from "$atoms";
 	import PrismJS from "$components/prism/PrismJS.svelte";
-	import { contractCode, contractInfo } from "$stores/ContractStore";
+	import { contractCode, contractInfo, verifiersOptionsStore, contractOptionsStore } from "$stores/ContractStore";
 	import { createForm } from "felte";
 	import contractOptions from "$lib/config/contractOptions.js";
 	import verifierOptions from "$lib/config/verifierOptions.js";
@@ -30,7 +30,7 @@
 								name={option.bindValue}
 								id={option.bindValue}
 								type="checkbox"
-								bind:checked={$contractInfo[option.bindValue]} />
+								bind:checked={$contractOptionsStore[option.bindValue]} />
 							{option.name}
 						</label>
 						{#if option.withDouble}
@@ -39,11 +39,11 @@
 									name={option.bindValue + "Text"}
 									id={option.bindValue + "Text"}
 									type="text"
-									disabled={$contractInfo[option.bindValue]
-										? !$contractInfo[option.bindValue]
+									disabled={$contractOptionsStore[option.bindValue]
+										? !$contractOptionsStore[option.bindValue]
 										: true}
 									placeholder={option.firstPlaceholder}
-									bind:value={$contractInfo[option.bindValue + "Text"]} />
+									bind:value={$contractOptionsStore[option.bindValue + "Text"]} />
 								<input
 									name={option.bindValue + "Number"}
 									id={option.bindValue + "Number"}
@@ -51,11 +51,11 @@
 									min="0.0"
 									max="0.95"
 									step="0.01"
-									disabled={$contractInfo[option.bindValue]
-										? !$contractInfo[option.bindValue]
+									disabled={$contractOptionsStore[option.bindValue]
+										? !$contractOptionsStore[option.bindValue]
 										: true}
 									placeholder={option.secondPlaceholder}
-									bind:value={$contractInfo[option.bindValue + "Number"]} />
+									bind:value={$contractOptionsStore[option.bindValue + "Number"]} />
 							</div>
 						{/if}
 					{/each}
@@ -71,7 +71,7 @@
 								name={option.bindValue}
 								id={option.bindValue}
 								type="checkbox"
-								bind:checked={$contractInfo[option.bindValue]} />
+								bind:checked={$verifiersOptionsStore[option.bindValue]} />
 							{option.name}
 						</label>
 						{#if option.withText}
@@ -80,11 +80,11 @@
 								id={option.bindValue + "Text"}
 								class="input-text"
 								type="text"
-								disabled={$contractInfo[option.bindValue]
-									? !$contractInfo[option.bindValue]
+								disabled={$verifiersOptionsStore[option.bindValue]
+									? !$verifiersOptionsStore[option.bindValue]
 									: true}
 								placeholder={option.placeholder}
-								bind:value={$contractInfo[option.bindValue + "Text"]} />
+								bind:value={$verifiersOptionsStore[option.bindValue + "Text"]} />
 						{/if}
 					{/each}
 				</div>
