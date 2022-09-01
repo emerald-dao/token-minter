@@ -9,15 +9,17 @@
     Button,
     MadeWithTouchstone,
     NftImage,
-    HtmlHead
+    HtmlHead,
+    TransactionModal
   } from "$atoms";
   import {
     getCollectionInfo,
     getNFTInfo,
     purchaseNFT,
   } from "$flow/actions.js";
-  import { transactionInProgress } from "$stores/FlowStore";
+  import { transactionInProgress, transactionStatus } from "$stores/FlowStore";
   import { page } from "$app/stores";
+  import { user } from "$stores/FlowStore"
 
   async function getInfo() {
     const nftInfo = await getNFTInfo(
@@ -33,14 +35,25 @@
     console.log({ collectionInfo, nftInfo, owner });
     return { collectionInfo, nftInfo, owner };
   }
+
+  let checkNftInfo = getInfo();
+  let purchased = false; // flag to check if user has bought the NFT
+  
+  async function buyNft(price) {
+    const transactionResult = await purchaseNFT($page.params.nft, price, $page.params.collection, $page.params.address)
+    if (transactionResult && $transactionStatus.status === 4 && $transactionStatus.statusCode === 0) {
+      purchased = true
+    };
+  }
 </script>
 
 <HtmlHead title="Discover"/>
 
+<TransactionModal />
 <Section class="padding-top-small">
   <Container>
     <AdaptableGrid>
-      {#await getInfo() then info}
+      {#await checkNftInfo then info}
         <Stack direction="column" align="flex-start">
           <div class="image-wrapper">
             <NftImage
@@ -75,24 +88,37 @@
               <WalletAddress address={$page.params.address}>By</WalletAddress>
             </Stack>
             <h1>{info.nftInfo.name}</h1>
-
-            {#if !info.owner}
+            <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
+            {#if !info.owner && !purchased}
               <NFTPrice
                 price={info.nftInfo.price}
                 width="34px"
                 fontSize="var(--fs-500)"
                 currentPrice={true} />
               <Button
-                state={$transactionInProgress === true ? "loading" : "active"}
-                on:click={() =>
-                  purchaseNFT(
-                    $page.params.nft,
-                    Number(info.nftInfo.price).toFixed(3),
-                    $page.params.collection,
-                    $page.params.address
-                  )}>Buy NFT</Button>
+                leftIcon="wallet"
+                loading={$transactionInProgress}
+                on:click={() => buyNft(Number(info.nftInfo.price).toFixed(3))} >
+                {#if $transactionInProgress}  
+                  Loading Transaction
+                {:else}
+                  Buy NFT
+                {/if} 
+              </Button>
+            {:else if !info.owner && purchased}
+              <Button leftIcon="checkmark-circle" done={true}>
+                Bought by you
+              </Button>
             {:else}
-              <Button>Bought by: {info.owner}</Button>
+              {#if info.owner === $user.addr}
+                <Button leftIcon="checkmark-circle" done={true}>
+                  Bought by you
+                </Button>
+              {:else}
+                <Button done={true}>
+                  Bought by: {info.owner}
+                </Button>
+              {/if}
             {/if}
           </Stack>
         </div>

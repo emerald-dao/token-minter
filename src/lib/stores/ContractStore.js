@@ -25,13 +25,13 @@ export const collectionSocials = createObjectStore('collectionSocials', {
   discord: '',
   twitter: '',
 });
-export const contractOptions = createObjectStore('contractOptions', {
+export const contractOptionsStore = createObjectStore('contractOptionsStore', {
   startMinting: true,
   royalty: false,
   royaltyText: '',
   royaltyNumber: '',
 });
-export const verifierOptions = createObjectStore('verifierOptions', {
+export const verifiersOptionsStore = createObjectStore('verifiersOptionsStore', {
   floatLink: false,
   floatLinkText: '',
   requireEmeraldPass: false,
@@ -45,8 +45,8 @@ export const contractInfo = derived(
     collectionBannerImage,
     collectionBannerImageName,
     collectionSocials,
-    contractOptions,
-    verifierOptions,
+    contractOptionsStore,
+    verifiersOptionsStore,
   ],
   ([
     $collectionInfo,
@@ -55,8 +55,8 @@ export const contractInfo = derived(
     $collectionBannerImage,
     $collectionBannerImageName,
     $collectionSocials,
-    $contractOptions,
-    $verifierOptions,
+    $contractOptionsStore,
+    $verifiersOptionsStore,
   ]) => {
     return {
       name: $collectionInfo.name,
@@ -72,14 +72,14 @@ export const contractInfo = derived(
       discord: $collectionSocials.discord,
       twitter: $collectionSocials.twitter,
       // Contract Options
-      startMinting: $contractOptions.startMinting,
-      royalty: $contractOptions.royalty,
-      royaltyText: $contractOptions.royaltyText,
-      royaltyNumber: $contractOptions.royaltyNumber,
+      startMinting: $contractOptionsStore.startMinting,
+      royalty: $contractOptionsStore.royalty,
+      royaltyText: $contractOptionsStore.royaltyText,
+      royaltyNumber: $contractOptionsStore.royaltyNumber,
       // Verifier Options
-      floatLink: $verifierOptions.floatLink,
-      floatLinkText: $verifierOptions.floatLinkText,
-      requireEmeraldPass: $verifierOptions.requireEmeraldPass,
+      floatLink: $verifiersOptionsStore.floatLink,
+      floatLinkText: $verifiersOptionsStore.floatLinkText,
+      requireEmeraldPass: $verifiersOptionsStore.requireEmeraldPass,
     };
   }
 );
@@ -93,6 +93,6 @@ export const restartContractInfo = () => {
   collectionImage.deleteAllFiles();
   collectionBannerImage.deleteAllFiles();
   collectionSocials.reset();
-  contractOptions.reset();
-  verifierOptions.reset();
+  contractOptionsStore.reset();
+  verifiersOptionsStore.reset();
 };
