@@ -11,6 +11,7 @@
   export let rightIcon;
   export let leftIcon;
   export let loading = false;
+  export let done = false;
   export let form;
   export let target;
 </script>
@@ -62,11 +63,14 @@
     on:focus
     on:mouseenter
     on:mouseleave
-    disabled={disabled || loading}
+    class:loading={loading}
+    class:done={done}
+    class:disabled={disabled}
+    disabled={disabled || loading || done}
     {form}
     {...buttonProps}>
     {#if loading}
-      <LoadingSpinner color="var(--clr-font-text-button)" iconWidth="1.5em" />
+      <LoadingSpinner color="inherit" iconWidth="1.5em" />
     {/if}
     {#if leftIcon && !loading}
       <Icon icon={`ion:${leftIcon}`} width="1.5em" />
@@ -134,6 +138,7 @@
   .transparent:hover {
     box-shadow: none;
     color: var(--clr-font-text-t3);
+    
   }
 
   .main-color {
@@ -174,6 +179,10 @@
     );
     cursor: not-allowed;
   }
+  .loading:hover {
+    box-shadow: none;
+    transform: none;
+  }
 
   .done {
     background: linear-gradient(
@@ -182,6 +191,10 @@
       var(--clr-accent-main-t6)
     );
     cursor: not-allowed;
+  }
+  .done:hover {
+    box-shadow: none;
+    transform: none;
   }
 
   .waiting {
@@ -193,14 +206,15 @@
     cursor: not-allowed;
   }
 
-  button:disabled,
   .disabled {
     background: gray;
     cursor: not-allowed;
   }
+  
   button:disabled:hover,
   .disabled:hover {
     box-shadow: none;
+    transform: none;
   }
 
   .no-shadow:hover {

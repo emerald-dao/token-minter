@@ -6,7 +6,6 @@
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 </script>
 
-
 <GeneratorStepLayout>
   <div slot="main-content">    
     {#if $transactionInProgress}
