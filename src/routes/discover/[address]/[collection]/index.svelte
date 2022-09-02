@@ -17,6 +17,8 @@
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
   import { Verifiers } from "$atoms";
+  import Button from "$lib/components/atoms/Button.svelte";
+  import { authenticate } from "@onflow/fcl";
 
   async function getStats(metadatas, purchasedIndexes) {
     return new Promise(async (resolve, reject) => {
@@ -42,12 +44,6 @@
       });
     });
   }
-
-  let retrievedVerifiers = checkRequiredVerifiers(
-    $page.params.collection,
-    $page.params.address,
-    $user?.addr
-  );
 </script>
 
 <HtmlHead title="Discover" />
@@ -131,14 +127,17 @@
                   </div>
                 </AdaptableGrid>
               {/await}
-              {#await retrievedVerifiers then verifiers}
+              {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
                 <!-- TODO: APPLY VERIFIERS -->
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
                 {/if}
               {/await}
             </Stack>
-            {#await retrievedVerifiers then verifiers}
+            {#if !$user.loggedIn}
+              <Button on:click={() => authenticate()}>Connect</Button>
+            {/if}
+            {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
                   <AdaptableGrid minWidth="12em" gap="1.2em">
