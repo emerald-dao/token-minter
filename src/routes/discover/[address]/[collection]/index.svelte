@@ -128,7 +128,6 @@
                 </AdaptableGrid>
               {/await}
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
-                <!-- TODO: APPLY VERIFIERS -->
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
                 {/if}
