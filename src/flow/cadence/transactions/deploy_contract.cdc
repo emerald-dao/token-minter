@@ -22,10 +22,11 @@ transaction(
   royaltyAmount: UFix64?,
   // Singular FLOAT Verifier
   singularFLOAT: Bool,
-  // Has Emerald Pass Verifier
-  hasEmeraldPass: Bool,
   eventOwner: Address?,
   eventId: UInt64?,
+  eventURL: String?,
+  // Has Emerald Pass Verifier
+  hasEmeraldPass: Bool,
   // Long Contract Code
   contractCode: String
 ) {
@@ -48,7 +49,8 @@ transaction(
     if singularFLOAT {
       mintVerifiers.append(MintVerifiers.SingularFLOAT(
         _eventOwner: eventOwner!,
-        _eventId: eventId!
+        _eventId: eventId!,
+        _eventURL: eventURL!
       ))
     }
 

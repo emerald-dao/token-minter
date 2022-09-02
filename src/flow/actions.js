@@ -113,7 +113,7 @@ async function deployContract() {
   let eventOwner = null;
   let eventId = null;
   if (info.floatLink) {
-    const cutLink = info.floatLinkText.replace('https://floats.city/', ''); // jacob.find/event/376102041
+    const cutLink = info.floatLinkText.replace('https://floats.city/', '').replace('https://testnet.floats.city/', ''); // jacob.find/event/376102041
     eventOwner = cutLink.substring(0, cutLink.indexOf('/'));
     eventOwner = (await resolveAddressObject(eventOwner)).address;
     eventId = cutLink.substring(cutLink.indexOf('/event/') + 7);
@@ -144,10 +144,11 @@ async function deployContract() {
         arg(info.royalty ? info.royaltyNumber : null, t.Optional(t.UFix64)),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
-        // Has Emerald Pass Verifier
-        arg(info.requireEmeraldPass, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
+        arg(info.floatLinkText, t.Optional(t.String)),
+        // Has Emerald Pass Verifier
+        arg(info.requireEmeraldPass, t.Bool),
         // Contract Code
         arg(hexCode, t.String),
       ],
@@ -528,7 +529,6 @@ export async function checkRequiredVerifiers(contractName, contractAddress, user
       cadence: replaceWithProperValues(checkRequiredVerifiersScript, contractName, contractAddress),
       args: (arg, t) => [arg(userAddress, t.Address)],
     });
-
     return response;
   } catch (e) {
     console.log(e);

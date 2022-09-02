@@ -22,11 +22,11 @@ const contractData = {
     mainnet: '0x5643fd47a29770e7',
   },
   MintVerifiers: {
-    testnet: '0x73a19dd056affc4d',
+    testnet: '0xaf717f34dcb01af1',
     mainnet: '',
   },
   TouchstoneContracts: {
-    testnet: '0xd24f69d0e1865520',
+    testnet: '0xaf717f34dcb01af1',
     mainnet: '',
   },
   FLOAT: {

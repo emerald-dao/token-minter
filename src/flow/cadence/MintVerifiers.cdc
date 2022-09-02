@@ -16,6 +16,7 @@ pub contract MintVerifiers {
     pub let type: Type
     pub let eventOwner: Address
     pub let eventId: UInt64
+    pub let eventURL: String
     pub let eventCap: Capability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>
 
     pub fun verify(_ params: {String: AnyStruct}): String? {
@@ -32,11 +33,12 @@ pub contract MintVerifiers {
       return nil
     }
 
-    init(_eventOwner: Address, _eventId: UInt64) {
+    init(_eventOwner: Address, _eventId: UInt64, _eventURL: String) {
       self.verifier = "Singular FLOAT"
       self.type = self.getType()
       self.eventOwner = _eventOwner
       self.eventId = _eventId
+      self.eventURL = _eventURL
       self.eventCap = getAccount(_eventOwner).getCapability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>(FLOAT.FLOATEventsPublicPath)
       assert(self.eventCap.check(), message: "This is not a valid FLOAT Event.")
     }

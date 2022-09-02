@@ -42,6 +42,12 @@
       });
     });
   }
+
+  let retrievedVerifiers = checkRequiredVerifiers(
+    $page.params.collection,
+    $page.params.address,
+    $user?.addr
+  );
 </script>
 
 <HtmlHead title="Discover" />
@@ -125,29 +131,33 @@
                   </div>
                 </AdaptableGrid>
               {/await}
-              {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user.addr) then verifiers}
+              {#await retrievedVerifiers then verifiers}
                 <!-- TODO: APPLY VERIFIERS -->
-                <!-- {#if verifiers.length > 0} -->
+                {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
-                <!-- {/if} -->
+                {/if}
               {/await}
             </Stack>
-            <div class="nft-list-wrapper">
-              <AdaptableGrid minWidth="12em" gap="1.2em">
-                {#each Object.values(collectionInfo.metadatas) as NFT}
-                  <NFTCard
-                    thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
-                    name={NFT.name}
-                    description={NFT.description}
-                    price={Number(NFT.price).toFixed(3)}
-                    buy={!Object.keys(collectionInfo.primaryBuyers).includes(
-                      NFT.metadataId
-                    )}
-                    url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-                    withLink={true} />
-                {/each}
-              </AdaptableGrid>
-            </div>
+            {#await retrievedVerifiers then verifiers}
+              {#if !verifiers.some((verifier) => verifier.passing == false)}
+                <div class="nft-list-wrapper">
+                  <AdaptableGrid minWidth="12em" gap="1.2em">
+                    {#each Object.values(collectionInfo.metadatas) as NFT}
+                      <NFTCard
+                        thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+                        name={NFT.name}
+                        description={NFT.description}
+                        price={Number(NFT.price).toFixed(3)}
+                        buy={!Object.keys(
+                          collectionInfo.primaryBuyers
+                        ).includes(NFT.metadataId)}
+                        url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
+                        withLink={true} />
+                    {/each}
+                  </AdaptableGrid>
+                </div>
+              {/if}
+            {/await}
           </div>
         </Container>
       </TransparentCard>

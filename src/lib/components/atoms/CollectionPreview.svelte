@@ -12,6 +12,7 @@
       });
       return a;
     }, []);
+    console.log(assets);
     return response;
   }
 

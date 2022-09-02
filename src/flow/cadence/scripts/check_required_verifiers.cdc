@@ -19,7 +19,9 @@ pub fun main(potentialMinter: Address): [VerifierInfo] {
       case Type<MintVerifiers.SingularFLOAT>():
         let specific = verifier as! MintVerifiers.SingularFLOAT
         let event = specific.eventCap.borrow()!.borrowPublicEventRef(eventId: specific.eventId)!
-        metadata = {"eventImage": event.image, "eventName": event.name, "eventId": specific.eventId, "eventOwner": specific.eventOwner, "url": "https://testnet.floats.city/".concat(specific.eventOwner.toString()).concat("/event/").concat(specific.eventId.toString())}
+        metadata = {"name": "Own FLOAT", "description": "You must own a specific FLOAT to mint from this collection.", "eventImage": event.image, "eventName": event.name, "eventId": specific.eventId, "eventOwner": specific.eventOwner, "url": specific.eventURL}
+      case Type<MintVerifiers.HasEmeraldPass>():
+        metadata = {"name": "Active Emerald Pass", "description": "You must have an active Emerald Pass subscription to mint from this collection."}
     }
 
     answer.append(VerifierInfo(

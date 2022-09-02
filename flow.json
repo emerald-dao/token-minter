@@ -60,13 +60,13 @@
 		"MintVerifiers": {
 			"source": "./src/flow/cadence/MintVerifiers.cdc",
 			"aliases": {
-				"testnet": "0x73a19dd056affc4d"
+				"testnet": "0xaf717f34dcb01af1"
 			}
 		},
 		"TouchstoneContracts": {
 			"source": "./src/flow/cadence/TouchstoneContracts.cdc",
 			"aliases": {
-				"testnet": "0xc0eb53fca755377d"
+				"testnet": "0xaf717f34dcb01af1"
 			}
 		},
 		"EmeraldPass": {
@@ -112,6 +112,16 @@
 				"hashAlgorithm": "SHA3_256",
 				"privateKey": "337e6c09d647faf961372c48a3cece203a9bbb03b0649490354a11f9b8e274c9"
 			}
+		},
+		"touchstonecontracts-account": {
+			"address": "0xaf717f34dcb01af1",
+			"key": {
+				"type": "hex",
+				"index": 0,
+				"signatureAlgorithm": "ECDSA_P256",
+				"hashAlgorithm": "SHA3_256",
+				"privateKey": "5ec5f085ed54f64b0ad9c5cf35da29f9ffd8f107f0b9d3818c2e10d6b8830f4d"
+			}
 		}
 	},
 	"deployments": {
@@ -125,9 +135,8 @@
 			]
 		},
 		"testnet": {
-			"testnet-account": [
-				"EmeraldPass",
-				"TouchstoneContracts"
+			"touchstonecontracts-account": [
+				"MintVerifiers"
 			]
 		}
 	}
