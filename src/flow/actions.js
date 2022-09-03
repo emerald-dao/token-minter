@@ -15,6 +15,7 @@ import { resolveAddressObject } from './utils';
 // Scripts
 import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
 import getContractsInBookScript from './cadence/scripts/get_contracts_in_book.cdc?raw';
+import getContractFromNameScript from './cadence/scripts/get_contract_from_name.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
 import getContractNames from './cadence/scripts/get_contracts.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
@@ -499,6 +500,23 @@ export const getCollectionInfo = async (contractName, contractAddress) => {
 
     console.log(response);
     return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getCollectionAddressFromName = async (contractName) => {
+  try {
+    const contractAddress = await fcl.query({
+      cadence: replaceWithProperValues(getContractFromNameScript),
+      args: (arg, t) => [
+        arg(contractName, t.String)
+      ],
+    });
+
+    console.log(contractAddress);
+
+    return contractAddress;
   } catch (e) {
     console.log(e);
   }

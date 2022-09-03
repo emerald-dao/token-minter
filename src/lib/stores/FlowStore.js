@@ -42,7 +42,7 @@ const contractData = {
     mainnet: '0x233eb012d34b0070',
   },
   EmeraldPass: {
-    testnet: '0x5a2114f5b8c53b0d',
+    testnet: '0x88b6d0be84df0918',
     mainnet: '',
   },
 };
