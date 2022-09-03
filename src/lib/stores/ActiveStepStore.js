@@ -33,6 +33,7 @@ export function createActiveStep(key, initialValue) {
         } else {
           setLoading(false);
           setErrors([stepJob.error]);
+          window.alert(stepJob.error);
           reject(stepJob.error);
         }
       });
