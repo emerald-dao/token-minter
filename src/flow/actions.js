@@ -26,6 +26,7 @@ import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
 import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
+import purchaseRandomNFTTx from './cadence/transactions/purchase_random_nft.cdc?raw';
 import removeContractFromBookTx from './cadence/transactions/remove_contract_from_book.cdc?raw';
 import airdropTx from './cadence/transactions/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
@@ -143,6 +144,7 @@ async function deployContract() {
         arg(info.royalty, t.Bool),
         arg(info.royalty ? info.royaltyText : null, t.Optional(t.Address)),
         arg(info.royalty ? info.royaltyNumber : null, t.Optional(t.UFix64)),
+        arg(info.lotteryBuying, t.Bool),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),
@@ -191,6 +193,40 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
       const transactionId = await fcl.mutate({
         cadence: transaction,
         args: (arg, t) => [arg(serial, t.UInt64), arg(price, t.UFix64)],
+        payer: fcl.authz,
+        proposer: fcl.authz,
+        authorizations: [fcl.authz],
+        limit: 9999,
+      });
+      console.log({ transactionId });
+      fcl.tx(transactionId).subscribe((res) => {
+        transactionStatus.set(res);
+        console.log(res);
+        if (res.status === 4) {
+          setTimeout(() => transactionInProgress.set(false), 2000);
+          setTimeout(() => transactionStatus.set({}), 5000);
+          resolve(true);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+      transactionInProgress.set(false);
+      transactionStatus.set({});
+      reject(false);
+    }
+  });
+};
+
+export const purchaseRandomNFT = async (price, contractName, contractAddress) => {
+  const transaction = replaceWithProperValues(purchaseRandomNFTTx, contractName, contractAddress);
+
+  initTransactionState();
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transactionId = await fcl.mutate({
+        cadence: transaction,
+        args: (arg, t) => [arg(price, t.UFix64)],
         payer: fcl.authz,
         proposer: fcl.authz,
         authorizations: [fcl.authz],

@@ -364,7 +364,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	// Returns nil if an NFT with this metadataId doesn't exist
 	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64? {
-		return self.getNFTMetadata(metadataId)?.price
+		return self.getCollectionAttribute(key: "lotteryBuying") as! Bool == false ? self.getNFTMetadata(metadataId)?.price : self.getCollectionAttribute(key: "price") as! UFix64
 	}
 
 	init(
@@ -376,6 +376,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_royalty: MetadataViews.Royalty?,
 		_defaultPrice: UFix64,
 		_ipfsCID: String,
+		_lotteryBuying: Bool,
 		_socials: {String: MetadataViews.ExternalURL},
 		_mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
@@ -394,6 +395,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["ipfsCID"] = _ipfsCID
 		self.collectionInfo["socials"] = _socials
 		self.collectionInfo["minting"] = _minting
+		self.collectionInfo["lotteryBuying"] = _lotteryBuying
 		if let royalty = _royalty {
 			assert(royalty.cut <= 0.95, message: "The royalty cut cannot be bigger than 95% because 5% goes to Emerald City treasury for primary sales.")
 			self.collectionInfo["royalty"] = royalty

@@ -1,9 +1,5 @@
 <script>
-  import {
-    TransparentCard,
-    Button,
-    NFTCardContent,
-  } from "$atoms";
+  import { TransparentCard, Button, NFTCardContent } from "$atoms";
 
   export let thumbnailURL;
   export let name;
@@ -13,6 +9,7 @@
   export let buy = false;
   export let withLink = false;
   export let url;
+  export let purchase;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
@@ -35,6 +32,14 @@
       {description}
       {backgroundColor}
       {price} />
+    {#if buy}
+      {#if purchase}
+        <Button class="small full-width no-shadow ghost" on:click={purchase}
+          >Buy Now</Button>
+      {:else}
+        <Button class="small full-width no-shadow ghost">Buy Now</Button>
+      {/if}
+    {/if}
   {/if}
 </TransparentCard>
 

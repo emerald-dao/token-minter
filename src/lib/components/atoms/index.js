@@ -26,6 +26,7 @@ export { default as Marquee } from './Marquee.svelte';
 export { default as MyCollectionsNav } from './MyCollectionsNav.svelte';
 export { default as NFTCard } from './NFTCard.svelte';
 export { default as NFTCardContent } from './NFTCardContent.svelte';
+export { default as NFTCarousel } from './NFTCarousel.svelte';
 export { default as NFTGuideGrid } from './NFTGuideGrid.svelte';
 export { default as NftImage } from './NftImage.svelte';
 export { default as NFTPrice } from './NFTPrice.svelte';

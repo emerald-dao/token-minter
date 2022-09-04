@@ -20,6 +20,7 @@ transaction(
   royalty: Bool,
   royaltyAddress: Address?,
   royaltyAmount: UFix64?,
+  lotteryBuying: Bool,
   // Singular FLOAT Verifier
   singularFLOAT: Bool,
   eventOwner: Address?,
@@ -81,6 +82,7 @@ transaction(
       _royalty: royaltyInfo,
       _price: price,
       _ipfsCID: ipfsCID,
+      _lotteryBuying: lotteryBuying,
       _socials: socialsStruct,
       _mintVerifiers: mintVerifiers
     )

@@ -30,6 +30,7 @@ export const contractOptionsStore = createObjectStore('contractOptionsStore', {
   royalty: false,
   royaltyText: '',
   royaltyNumber: '',
+  lotteryBuying: false
 });
 export const verifiersOptionsStore = createObjectStore('verifiersOptionsStore', {
   floatLink: false,
@@ -76,6 +77,7 @@ export const contractInfo = derived(
       royalty: $contractOptionsStore.royalty,
       royaltyText: $contractOptionsStore.royaltyText,
       royaltyNumber: $contractOptionsStore.royaltyNumber,
+      lotteryBuying: $contractOptionsStore.lotteryBuying,
       // Verifier Options
       floatLink: $verifiersOptionsStore.floatLink,
       floatLinkText: $verifiersOptionsStore.floatLinkText,

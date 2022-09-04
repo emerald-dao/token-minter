@@ -13,12 +13,14 @@
     NftImage,
     CollectionSocials,
     HtmlHead,
+    Button,
+    NFTCarousel,
+    Verifiers,
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
-  import { Verifiers } from "$atoms";
-  import Button from "$lib/components/atoms/Button.svelte";
   import { authenticate } from "@onflow/fcl";
+  import TransactionModal from "$lib/components/atoms/TransactionModal.svelte";
 
   async function getStats(metadatas, purchasedIndexes) {
     return new Promise(async (resolve, reject) => {
@@ -47,6 +49,7 @@
 </script>
 
 <HtmlHead title="Discover" />
+<TransactionModal />
 
 {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
   <Section class="padding-top-small padding-bottom-small">
@@ -111,20 +114,31 @@
                     </strong>
                     <p>available</p>
                   </div>
-                  <div>
-                    <strong>
-                      <img src="/flow-logo.png" alt="flow logo" />
-                      {stats.floorPrice}
-                    </strong>
-                    <p>floor price</p>
-                  </div>
-                  <div>
-                    <strong>
-                      <img src="/flow-logo.png" alt="flow logo" />
-                      {stats.highestBuy}
-                    </strong>
-                    <p>highest buy</p>
-                  </div>
+
+                  {#if !collectionInfo.lotteryBuying}
+                    <div>
+                      <strong>
+                        <img src="/flow-logo.png" alt="flow logo" />
+                        {stats.floorPrice}
+                      </strong>
+                      <p>floor price</p>
+                    </div>
+                    <div>
+                      <strong>
+                        <img src="/flow-logo.png" alt="flow logo" />
+                        {stats.highestBuy}
+                      </strong>
+                      <p>highest buy</p>
+                    </div>
+                  {:else}
+                    <div>
+                      <strong>
+                        <img src="/flow-logo.png" alt="flow logo" />
+                        {Number(collectionInfo.price).toFixed(3)}
+                      </strong>
+                      <p>price</p>
+                    </div>
+                  {/if}
                 </AdaptableGrid>
               {/await}
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
@@ -141,18 +155,27 @@
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
                   <AdaptableGrid minWidth="12em" gap="1.2em">
-                    {#each Object.values(collectionInfo.metadatas) as NFT}
-                      <NFTCard
-                        thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
-                        name={NFT.name}
-                        description={NFT.description}
-                        price={Number(NFT.price).toFixed(3)}
-                        buy={!Object.keys(
-                          collectionInfo.primaryBuyers
-                        ).includes(NFT.metadataId)}
-                        url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-                        withLink={true} />
-                    {/each}
+                    {#if !collectionInfo.lotteryBuying}
+                      {#each Object.values(collectionInfo.metadatas) as NFT}
+                        <NFTCard
+                          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+                          name={NFT.name}
+                          description={NFT.description}
+                          price={Number(NFT.price).toFixed(3)}
+                          buy={!Object.keys(
+                            collectionInfo.primaryBuyers
+                          ).includes(NFT.metadataId)}
+                          url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
+                          withLink={true} />
+                      {/each}
+                    {:else}
+                      <NFTCarousel
+                        metadatas={collectionInfo.metadatas}
+                        price={collectionInfo.price}
+                        address={$page.params.address}
+                        contractName={$page.params.collection}
+                        number={Object.keys(collectionInfo.metadatas).length} />
+                    {/if}
                   </AdaptableGrid>
                 </div>
               {/if}
