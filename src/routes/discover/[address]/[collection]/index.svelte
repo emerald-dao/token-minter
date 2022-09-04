@@ -16,6 +16,7 @@
     Button,
     NFTCarousel,
     Verifiers,
+    MyNFTs,
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
@@ -46,6 +47,8 @@
       });
     });
   }
+
+  let seeMine = false;
 </script>
 
 <HtmlHead title="Discover" />
@@ -91,7 +94,7 @@
               {/if}
             </Stack>
             <Divider space="30px" />
-            <Stack direction="column" align="flex-start" gap="1.2em">
+            <Stack direction="column" align="flex-start" gap="1.7em">
               <h1>{collectionInfo.name}</h1>
               <p>{collectionInfo.description}</p>
               {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers)) then stats}
@@ -141,6 +144,14 @@
                   {/if}
                 </AdaptableGrid>
               {/await}
+              <label for="my-purchases" class="checkbox-label">
+                <input
+                  name="my-purchases"
+                  id="my-purchases"
+                  type="checkbox"
+                  bind:value={seeMine} />
+                View Your Purchases
+              </label>
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
                 <!-- TODO: APPLY VERIFIERS -->
                 {#if verifiers.length > 0}
@@ -155,7 +166,12 @@
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
                   <AdaptableGrid minWidth="12em" gap="1.2em">
-                    {#if !collectionInfo.lotteryBuying}
+                    {#if seeMine}
+                      <MyNFTs
+                        metadatas={collectionInfo.metadatas}
+                        primaryBuyers={collectionInfo.primaryBuyers}
+                        addr={$user?.addr} />
+                    {:else if !collectionInfo.lotteryBuying}
                       {#each Object.values(collectionInfo.metadatas) as NFT}
                         <NFTCard
                           thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
