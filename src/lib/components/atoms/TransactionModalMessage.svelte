@@ -6,10 +6,13 @@
   export let progress = "indeterminate";
   export let progressMessage = "Loading";
   export let icon;
+  export let error = false;
 </script>
 
 <span class="transaction-status">
-  {#if icon}
+  {#if icon && error}
+    <Icon icon={icon} color="red"/>
+  {:else}
     <Icon icon={icon}/>
   {/if}
   {title}
@@ -34,14 +37,17 @@
     color: var(--clr-font-text-inverse-t6);
     font-size: var(--fs-200);
     line-height: 2.6ch;
+    overflow-wrap: break-word;
   }
 
   .transaction-status {
     font-family: var(--font-mono);
+    font-size: var(--fs-400);
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    gap: 0.7ch;
   }
 
   span {
