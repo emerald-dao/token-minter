@@ -2,7 +2,7 @@
   import { Section, Container, TransparentCard } from "$atoms";
 </script>
 
-<Section class="padding-top-small padding-bottom-small"height="100%">
+<Section class="padding-top-none padding-bottom-none"height="100%">
   <Container class="width-large" height="100%">
     <div class="main-layout">
       <div class="sidebar-container">
@@ -40,7 +40,7 @@
       border-radius: 1.6rem;
 
       @include mq(medium) {
-        height: 70vh;
+        height: 75vh;
       }
     }
 

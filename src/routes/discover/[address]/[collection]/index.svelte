@@ -17,7 +17,8 @@
     NFTCarousel,
     Verifiers,
     MyNFTs,
-    CollectionStat
+    CollectionStat,
+    CollectionFilters
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
@@ -50,6 +51,8 @@
   }
 
   let seeMine = false;
+  let maxPrice;
+  let minPrice;
 </script>
 
 <HtmlHead title="Discover" />
@@ -123,18 +126,7 @@
             {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
-                  <div class="filters-wrapper">
-                    <TransparentCard height="fit-content">
-                      <label for="my-purchases" class="checkbox-label">
-                        <input
-                          name="my-purchases"
-                          id="my-purchases"
-                          type="checkbox"
-                          bind:checked={seeMine} />
-                        My Purchases
-                      </label>
-                    </TransparentCard>
-                  </div>
+                  <CollectionFilters bind:seeMine={seeMine} bind:maxPrice={maxPrice} bind:minPrice={minPrice}/>
                   <AdaptableGrid minWidth="12em" gap="1.2em">
                     {#if seeMine}
                       <MyNFTs
@@ -143,16 +135,18 @@
                         addr={$user?.addr} />
                     {:else if !collectionInfo.lotteryBuying}
                       {#each Object.values(collectionInfo.metadatas) as NFT}
-                        <NFTCard
-                          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
-                          name={NFT.name}
-                          description={NFT.description}
-                          price={Number(NFT.price).toFixed(3)}
-                          buy={!Object.keys(
-                            collectionInfo.primaryBuyers
-                          ).includes(NFT.metadataId)}
-                          url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-                          withLink={true} />
+                        {#if (maxPrice === undefined || maxPrice >= Number(NFT.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price).toFixed(3))}
+                          <NFTCard
+                            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+                            name={NFT.name}
+                            description={NFT.description}
+                            price={Number(NFT.price).toFixed(3)}
+                            buy={!Object.keys(
+                              collectionInfo.primaryBuyers
+                            ).includes(NFT.metadataId)}
+                            url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
+                            withLink={true} />
+                        {/if}
                       {/each}
                     {:else}
                       <NFTCarousel
@@ -212,15 +206,8 @@
 
   .nft-list-wrapper {
     display: grid;
-    grid-template-columns: 200px auto;
+    grid-template-columns: 240px auto;
     margin-top: 2.8rem;
     gap: 2rem;
-
-    .filters-wrapper {
-      position: sticky;
-      height: fit-content;
-      top: 6rem;
-      left: 0;
-    }
   }
 </style>

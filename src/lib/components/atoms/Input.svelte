@@ -9,6 +9,7 @@
   export let type;
   export let helperText;
   export let store;
+  export let bindValue;
 </script>
 
 <div class="input">
@@ -17,25 +18,49 @@
     <span class="helper-text">{helperText}</span>
   {/if}
   {#if type === "text"}
-    <input
-      name={name}
-      id={name}
-      placeholder={placeholder}
-      type="text"
-      class:input-error={errors[name]}
-      class:input-ok={!errors[name]} 
-      bind:value={$store[name]}  
-    />
+    {#if store}
+      <input
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        type="text"
+        class:input-error={errors[name]}
+        class:input-ok={!errors[name]} 
+        bind:value={$store[name]}  
+      />
+    {:else}
+      <input
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        type="text"
+        class:input-error={errors[name]}
+        class:input-ok={!errors[name]} 
+        bind:value={bindValue}  
+      />
+    {/if}
   {:else if type === "number"}
-    <input
-      name={name}
-      id={name}
-      placeholder={placeholder}
-      type="number"
-      class:input-error={errors[name]}
-      class:input-ok={!errors[name]} 
-      bind:value={$store[name]}  
-    />
+    {#if store}
+      <input
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        type="number"
+        class:input-error={errors[name]}
+        class:input-ok={!errors[name]} 
+        bind:value={$store[name]}  
+      />
+    {:else}
+      <input
+        name={name}
+        id={name}
+        placeholder={placeholder}
+        type="number"
+        class:input-error={errors[name]}
+        class:input-ok={!errors[name]} 
+        bind:value={bindValue}  
+      />
+    {/if}
   {:else if type === "image"}
     <DropZone
       name={name}
