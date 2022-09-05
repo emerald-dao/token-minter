@@ -5,7 +5,7 @@
   import {backInOut, linear} from 'svelte/easing';
 
 
-  let duration = 1200;
+  let duration = 1400;
   let easing = linear;
   let options = {duration, easing, times: 1}
   function spin(node, options) {
@@ -17,8 +17,8 @@
 			// and between one and zero during an "out" transition.
 			css(t) {
 				// Svelte takes care of applying the easing function.
-				const degrees = 360 * times; // through which to spin
-				return `transform: translate(${t * 10}px) rotate(${t * degrees}deg);`;
+				const degrees = 260 * times; // through which to spin
+				return `transform: translate(${(t - 1) * -20}px) rotate(${(t-1) * degrees}deg);`;
 			}
 		};
 	}
@@ -44,60 +44,60 @@
         </div>
       </div>
       <Stack direction="column" aling="center" justify="center" gap="0.6em">
-      {#if transactionName === "IPFS"}
-        <TransactionModalMessage 
-          title="Uploading Assets" 
-          description="Uploading your assets to IPFS."
-          progressMessage="Uploading..."/>
-      {:else if transactionName === "Flow"}
-        {#if $transactionStatus.status < 0}
+        {#if transactionName === "IPFS"}
           <TransactionModalMessage 
-            title="Initializing" 
-            description="Waiting for transaction approval."
-            progressMessage="Initializing..."/>
-        {:else if $transactionStatus.status < 2}
-          <TransactionModalMessage 
-            title="Pending" 
-            description="The transaction has been received by a collector but not yet finalized in a block."
-            progressMessage="Executing"/>
-        {:else if $transactionStatus.status === 2}
-          <TransactionModalMessage 
-            title="Finalized" 
-            description="The consensus nodes have finalized the block that the transaction is included in."
-            progressMessage="Executing..."/>
-        {:else if $transactionStatus.status === 3 && $transactionStatus.statusCode === 0}
-          <TransactionModalMessage 
-            title="Executed" 
-            description="The execution nodes have produced a result for the transaction."
-            progressMessage="Sealing..."
-            progress="80"/>
-        {:else if $transactionStatus.status === 4 && $transactionStatus.statusCode === 0}
-          <TransactionModalMessage 
-            title="Sealed" 
-            description="The verification nodes have verified the transaction, and the seal is included in the latest block."
-            progressMessage="Sealing..."
-            progress="100"
-            icon="ion:checkmark-circle"/>
-        {:else if $transactionStatus.status === 5 && $transactionStatus.statusCode === 0}
-          <TransactionModalMessage 
-            title="Expired" 
-            description="The transaction was submitted past its expiration block height."
-            progress={false}/>
-        {:else if $transactionStatus.errorMessage && $transactionStatus.statusCode === 1}
-          <TransactionModalMessage 
-            title="Failed" 
-            description={$transactionStatus.errorMessage}
-            progress={false}
-            icon="ion:close-circle"
-            error="true"/>
-        {:else}
-          <TransactionModalMessage 
-            title="Error" 
-            description="An error occured."
-            progress={false}
-            error="true"/>
+            title="Uploading Assets" 
+            description="Uploading your assets to IPFS."
+            progressMessage="Uploading..."/>
+        {:else if transactionName === "Flow"}
+          {#if $transactionStatus.status < 0}
+            <TransactionModalMessage 
+              title="Initializing" 
+              description="Waiting for transaction approval."
+              progressMessage="Initializing..."/>
+          {:else if $transactionStatus.status < 2}
+            <TransactionModalMessage 
+              title="Pending" 
+              description="The transaction has been received by a collector but not yet finalized in a block."
+              progressMessage="Executing"/>
+          {:else if $transactionStatus.status === 2}
+            <TransactionModalMessage 
+              title="Finalized" 
+              description="The consensus nodes have finalized the block that the transaction is included in."
+              progressMessage="Executing..."/>
+          {:else if $transactionStatus.status === 3 && $transactionStatus.statusCode === 0}
+            <TransactionModalMessage 
+              title="Executed" 
+              description="The execution nodes have produced a result for the transaction."
+              progressMessage="Sealing..."
+              progress="80"/>
+          {:else if $transactionStatus.status === 4 && $transactionStatus.statusCode === 0}
+            <TransactionModalMessage 
+              title="Sealed" 
+              description="The verification nodes have verified the transaction, and the seal is included in the latest block."
+              progressMessage="Sealing..."
+              progress="100"
+              icon="ion:checkmark-circle"/>
+          {:else if $transactionStatus.status === 5 && $transactionStatus.statusCode === 0}
+            <TransactionModalMessage 
+              title="Expired" 
+              description="The transaction was submitted past its expiration block height."
+              progress={false}/>
+          {:else if $transactionStatus.errorMessage && $transactionStatus.statusCode === 1}
+            <TransactionModalMessage 
+              title="Failed" 
+              description={$transactionStatus.errorMessage}
+              progress={false}
+              icon="ion:close-circle"
+              error="true"/>
+          {:else}
+            <TransactionModalMessage 
+              title="Error" 
+              description="An error occured."
+              progress={false}
+              error="true"/>
+          {/if}
         {/if}
-      {/if}
       </Stack>
     </Stack>
   </article>
@@ -196,5 +196,6 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
     animation-duration: 4s;
+    animation-delay: 1s;
   }
 </style>
