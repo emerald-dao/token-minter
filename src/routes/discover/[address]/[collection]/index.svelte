@@ -17,6 +17,7 @@
     NFTCarousel,
     Verifiers,
     MyNFTs,
+    CollectionStat
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
@@ -55,15 +56,15 @@
 <TransactionModal />
 
 {#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
-  <Section class="padding-top-small padding-bottom-small">
-    <Container class="width-x-large">
+  <Section class="padding-top-none padding-bottom-small">
+    <Container class="width-full">
       <TransparentCard padding="0">
         {#if collectionInfo.bannerImage}
           <div
             class="banner"
             style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
         {/if}
-        <Container>
+        <Container class="width-full">
           <div
             class="collection-info-wrapper"
             class:no-banner={!collectionInfo.bannerImage}>
@@ -96,62 +97,20 @@
             <Divider space="30px" />
             <Stack direction="column" align="flex-start" gap="1.7em">
               <h1>{collectionInfo.name}</h1>
-              <p>{collectionInfo.description}</p>
+              <p class="collection-description">{collectionInfo.description}</p>
               {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers)) then stats}
                 <AdaptableGrid minWidth="5em" gap="1.2em">
-                  <div>
-                    <strong>
-                      {stats.totalItems}
-                    </strong>
-                    <p>total items</p>
-                  </div>
-                  <div>
-                    <strong>
-                      {stats.numPurchased}
-                    </strong>
-                    <p>purchased</p>
-                  </div>
-                  <div>
-                    <strong>
-                      {stats.available}
-                    </strong>
-                    <p>available</p>
-                  </div>
-
+                    <CollectionStat title="total items" stat={stats.totalItems}/>
+                    <CollectionStat title="purchased" stat={stats.numPurchased}/>
+                    <CollectionStat title="available" stat={stats.available}/>
                   {#if !collectionInfo.lotteryBuying}
-                    <div>
-                      <strong>
-                        <img src="/flow-logo.png" alt="flow logo" />
-                        {stats.floorPrice}
-                      </strong>
-                      <p>floor price</p>
-                    </div>
-                    <div>
-                      <strong>
-                        <img src="/flow-logo.png" alt="flow logo" />
-                        {stats.highestBuy}
-                      </strong>
-                      <p>highest buy</p>
-                    </div>
+                    <CollectionStat title="floor price" flowLogo={true} stat={stats.floorPrice}/>
+                    <CollectionStat title="highest buy" flowLogo={true} stat={stats.highestBuy}/>
                   {:else}
-                    <div>
-                      <strong>
-                        <img src="/flow-logo.png" alt="flow logo" />
-                        {Number(collectionInfo.price).toFixed(3)}
-                      </strong>
-                      <p>price</p>
-                    </div>
+                    <CollectionStat title="price" flowLogo={true} stat={Number(collectionInfo.price).toFixed(3)}/>
                   {/if}
                 </AdaptableGrid>
               {/await}
-              <label for="my-purchases" class="checkbox-label">
-                <input
-                  name="my-purchases"
-                  id="my-purchases"
-                  type="checkbox"
-                  bind:value={seeMine} />
-                View Your Purchases
-              </label>
               {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
@@ -164,6 +123,18 @@
             {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
+                  <div class="filters-wrapper">
+                    <TransparentCard height="fit-content">
+                      <label for="my-purchases" class="checkbox-label">
+                        <input
+                          name="my-purchases"
+                          id="my-purchases"
+                          type="checkbox"
+                          bind:checked={seeMine} />
+                        My Purchases
+                      </label>
+                    </TransparentCard>
+                  </div>
                   <AdaptableGrid minWidth="12em" gap="1.2em">
                     {#if seeMine}
                       <MyNFTs
@@ -232,21 +203,24 @@
     font-size: var(--fs-500);
     text-align: left;
   }
-  p {
-    font-size: var(--fs-300);
-    text-align: left;
-  }
-  strong {
-    display: flex;
-    align-items: center;
 
-    img {
-      width: 25px;
-      margin-right: 5px;
-    }
+  .collection-description {
+    font-size: var(--fs-300);
+    max-width: 80ch;
+    color: var(--clr-font-text-t2)
   }
 
   .nft-list-wrapper {
+    display: grid;
+    grid-template-columns: 200px auto;
     margin-top: 2.8rem;
+    gap: 2rem;
+
+    .filters-wrapper {
+      position: sticky;
+      height: fit-content;
+      top: 6rem;
+      left: 0;
+    }
   }
 </style>

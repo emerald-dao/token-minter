@@ -39,7 +39,7 @@
 </script>
 
 <header>
-  <Container class="width-x-large gutter-y-none">
+  <Container class="width-full gutter-y-none">
     <nav>
       <!-- Desktop menu -->
       <div class="desktop-menu">
