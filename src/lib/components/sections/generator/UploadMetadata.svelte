@@ -1,5 +1,5 @@
 <script>
-  import { Stack, UploadMetadataPack } from "$atoms";
+  import { Stack, UploadMetadataPack, TransactionModal } from "$atoms";
   import { csvStore } from "$stores/CollectionFilesStore";
   import { activeStep } from '$stores/ActiveStepStore';
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
@@ -42,6 +42,7 @@
   segments[0].uploadState = "to-upload";
 </script>
 
+<TransactionModal />
 <GeneratorStepLayout>
   <Stack direction="column" gap="1rem" slot="main-content">
     {#each segments as segment}
