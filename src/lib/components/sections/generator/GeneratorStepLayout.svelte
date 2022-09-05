@@ -5,7 +5,7 @@
 <div class="component-container">
   <TransparentCard height="100%" paddingInline="2rem" paddingBlock="0.8rem">
     <div class="component-wrapper">
-        <slot name="main-content"/>
+      <slot name="main-content"/>
     </div>
   </TransparentCard>
   <div class="step-buttons">

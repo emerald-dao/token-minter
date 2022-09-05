@@ -138,7 +138,7 @@
   .transparent:hover {
     box-shadow: none;
     color: var(--clr-font-text-t3);
-    
+    transform: none;
   }
 
   .main-color {
