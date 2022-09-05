@@ -126,7 +126,9 @@
             {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
-                  <CollectionFilters bind:seeMine={seeMine} bind:maxPrice={maxPrice} bind:minPrice={minPrice}/>
+                  {#if !collectionInfo.lotteryBuying}
+                    <CollectionFilters bind:seeMine={seeMine} bind:maxPrice={maxPrice} bind:minPrice={minPrice}/>
+                  {/if}
                   <AdaptableGrid minWidth="12em" gap="1.2em">
                     {#if seeMine}
                       <MyNFTs

@@ -28,6 +28,8 @@
           id="min-price"
           type="number"
           placeholder="Min"
+          min="0"
+          max={`${maxPrice}`}
           bind:value={minPrice} />
         to
         <input 
@@ -35,6 +37,7 @@
           id="max-price"
           type="number"
           placeholder="Max"
+          min={`${minPrice === undefined ? 0 : minPrice}`}
           bind:value={maxPrice} />
       </Stack>
     </label>
