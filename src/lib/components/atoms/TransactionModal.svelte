@@ -5,8 +5,8 @@
   import {backInOut, linear} from 'svelte/easing';
 
 
-  let duration = 1400;
-  let easing = linear;
+  let duration = 2000;
+  let easing = backInOut;
   let options = {duration, easing, times: 1}
   function spin(node, options) {
 		const {times = 1} = options;
@@ -17,8 +17,8 @@
 			// and between one and zero during an "out" transition.
 			css(t) {
 				// Svelte takes care of applying the easing function.
-				const degrees = 260 * times; // through which to spin
-				return `transform: translate(${(t - 1) * -20}px) rotate(${(t-1) * degrees}deg);`;
+				const degrees = 100 * times; // through which to spin
+				return `transform: translate(${(t - 1) * -10}px) rotate(${(t-1) * degrees}deg); opacity: ${1 * t};`;
 			}
 		};
 	}
@@ -145,6 +145,7 @@
         width: 120px;
         padding: 0;
       }
+
       .touchstone-icon-container {
         border-radius: 9999px;
         position: absolute;
@@ -174,7 +175,7 @@
   .pulse {
     animation-name: pulse;
     animation-iteration-count: infinite;
-    animation-timing-function: ease-out;
+    animation-timing-function: ease-in-out;
     animation-duration: 1.8s;
     animation-delay: 1s;
   }
@@ -194,7 +195,7 @@
   .rotate {
     animation-name: rotate;
     animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    animation-timing-function: ease-in-out;
     animation-duration: 4s;
     animation-delay: 1s;
   }
