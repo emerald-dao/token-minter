@@ -76,7 +76,7 @@
 	}
 
 	.background {
-		background: 
+		background:
       radial-gradient(ellipse at right, var(--clr-primary-main-t8), transparent);
 		backdrop-filter: blur(50px);
 	}
