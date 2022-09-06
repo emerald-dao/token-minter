@@ -1,4 +1,5 @@
 import { writable, derived } from 'svelte/store';
+import persistentWritable from '$lib/utilities/persistentWritable';
 
 const contractData = {
   NonFungibleToken: {

@@ -1,4 +1,6 @@
 <script>
+  import flowPriceStore from "$stores/FlowPriceStore"
+  import { browser } from '$app/env';
   import { checkRequiredVerifiers, getCollectionInfo } from "$flow/actions";
   import {
     Section,
@@ -49,6 +51,8 @@
       });
     });
   }
+
+  const [flowPrice, loading, error] = flowPriceStore()
 
   let seeMine = false;
   let maxPrice;
@@ -138,16 +142,25 @@
                     {:else if !collectionInfo.lotteryBuying}
                       {#each Object.values(collectionInfo.metadatas) as NFT}
                         {#if (maxPrice === undefined || maxPrice >= Number(NFT.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price).toFixed(3))}
-                          <NFTCard
-                            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
-                            name={NFT.name}
-                            description={NFT.description}
-                            price={Number(NFT.price).toFixed(3)}
-                            buy={!Object.keys(
-                              collectionInfo.primaryBuyers
-                            ).includes(NFT.metadataId)}
-                            url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-                            withLink={true} />
+                          {#if $loading}
+                            Loading: {$loading}
+                          {:else if $error}
+                            Error: {$error}
+                          {:else}
+                            {#if browser}
+                              <NFTCard
+                                thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+                                name={NFT.name}
+                                description={NFT.description}
+                                price={Number(NFT.price).toFixed(3)}
+                                buy={!Object.keys(
+                                  collectionInfo.primaryBuyers
+                                ).includes(NFT.metadataId)}
+                                url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
+                                withLink={true}
+                                flowPrice={$flowPrice.price} />
+                            {/if}
+                          {/if}
                         {/if}
                       {/each}
                     {:else}

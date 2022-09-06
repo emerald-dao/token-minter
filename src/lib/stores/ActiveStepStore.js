@@ -2,7 +2,7 @@ import persistentWritable from '$lib/utilities/persistentWritable';
 import { csvStore, imagesStore } from '$stores/CollectionFilesStore';
 import { restartContractInfo } from '$stores/ContractStore';
 
-export function createActiveStep(key, initialValue) {
+function createActiveStep(key, initialValue) {
   const { subscribe, set, update } = persistentWritable(key, initialValue);
 
   function reset() {

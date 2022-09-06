@@ -10,12 +10,14 @@
   export let withLink = false;
   export let url;
   export let purchase;
+  export let flowPrice;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
   {#if withLink}
     <a href={url}>
       <NFTCardContent
+        {flowPrice}
         {thumbnailURL}
         {name}
         {description}
@@ -27,6 +29,7 @@
     </a>
   {:else}
     <NFTCardContent
+      {flowPrice}
       {thumbnailURL}
       {name}
       {description}

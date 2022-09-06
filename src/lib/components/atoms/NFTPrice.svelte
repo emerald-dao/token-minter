@@ -5,6 +5,7 @@
   export let width = "20px";
   export let fontSize = "var(--fs-300)";
   export let currentPrice = false;
+  export let flowPrice;
 </script>
 
 <div style={`font-size: ${fontSize}`}>
@@ -12,14 +13,21 @@
     {#if currentPrice}
       <span>Current price</span>
     {/if}
-    <Stack direction="row" gap="0.4em">
-      <img
-        src="/flow-logo.png"
-        alt="flow coin logo"
-        style={`width: ${width}`} />
-      <p class="price" style={`font-size: ${fontSize}`}>
-        {Number(price).toFixed(3)}
-      </p>
+    <Stack direction="row" gap="0.5em">
+      <Stack direction="row" gap="0.4em">
+        <img
+          src="/flow-logo.png"
+          alt="flow coin logo"
+          style={`width: ${width}`} />
+        <p class="price" style={`font-size: ${fontSize}`}>
+          {Number(price).toFixed(3)}
+        </p>
+      </Stack>
+      {#if flowPrice}
+        <p class="price-dollars">
+          {`(USD ${(Number(price).toFixed(3) * flowPrice).toFixed(1)})`} 
+        </p>
+      {/if}
     </Stack>
   </Stack>
 </div>
@@ -33,5 +41,11 @@
   .price {
     color: var(--clr-font-text);
     font-weight: 600;
+  }
+
+  .price-dollars {
+    color: var(--clr-accent-main-t3);
+    font-weight: 600;
+    font-size: var(--fs-100);
   }
 </style>

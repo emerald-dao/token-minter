@@ -6,6 +6,7 @@
   export let description;
   export let backgroundColor;
   export let price;
+  export let flowPrice;
 </script>
 
 <div class="main-wrapper">
@@ -17,7 +18,7 @@
     <p class="description">{description}</p>
     {/if}
     {#if price}
-      <NFTPrice price={price}/>
+      <NFTPrice price={price} flowPrice={flowPrice}/>
     {/if}
   </div>
 </div>

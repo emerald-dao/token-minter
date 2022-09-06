@@ -38,6 +38,7 @@
     "@felte/validator-yup": "^1.0.8",
     "buffer": "^6.0.3",
     "carbites": "^1.0.6",
+    "dotenv": "^16.0.2",
     "felte": "^1.2.2",
     "ipfs-car": "^0.7.0",
     "nft.storage": "^6.2.0",

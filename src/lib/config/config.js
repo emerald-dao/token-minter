@@ -58,3 +58,6 @@ export const socialMedia = [
     icon: 'ion:logo-github',
   },
 ];
+
+// Minutes before Flow price will be updated from CoinMarketCap API. This is to prevent various API calls.
+export const timeToUpdateFlowPrice = 15;
