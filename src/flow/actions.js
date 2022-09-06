@@ -22,6 +22,7 @@ import checkRequiredVerifiersScript from './cadence/scripts/check_required_verif
 import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
 import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
 import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc?raw';
+import getTouchstonePurchasesScript from './cadence/scripts/get_touchstone_purchases.cdc?raw';
 // Transactions
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
@@ -95,6 +96,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
+    .replace('"../TouchstonePurchases.cdc"', addressList.TouchstonePurchases)
     .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
     .replace('"../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
     .replace('"../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
@@ -192,7 +194,12 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress) 
     try {
       const transactionId = await fcl.mutate({
         cadence: transaction,
-        args: (arg, t) => [arg(serial, t.UInt64), arg(price, t.UFix64)],
+        args: (arg, t) => [
+          arg(serial, t.UInt64),
+          arg(price, t.UFix64),
+          arg(contractName, t.String),
+          arg(contractAddress, t.Address)
+        ],
         payer: fcl.authz,
         proposer: fcl.authz,
         authorizations: [fcl.authz],
@@ -226,7 +233,11 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress) =>
     try {
       const transactionId = await fcl.mutate({
         cadence: transaction,
-        args: (arg, t) => [arg(price, t.UFix64)],
+        args: (arg, t) => [
+          arg(price, t.UFix64),
+          arg(contractName, t.String),
+          arg(contractAddress, t.Address)
+        ],
         payer: fcl.authz,
         proposer: fcl.authz,
         authorizations: [fcl.authz],
@@ -627,3 +638,19 @@ export async function canMakeReservation(contractName) {
     console.log(e);
   }
 }
+
+export const getTouchstonePurchases = async (user) => {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getTouchstonePurchasesScript),
+      args: (arg, t) => [
+        arg(user, t.Address)
+      ],
+    });
+
+    console.log(response);
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
