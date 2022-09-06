@@ -47,17 +47,22 @@ transaction(
         mediaType: "image"
       )
       
-      let bannerMedia = MetadataViews.Media(
-        file: ExampleNFT.getCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile,
-        mediaType: "image"
-      )
+      // If a banner image exists, use it
+      // Otherwise, default to the main square image
+      var bannerMedia: MetadataViews.Media? = nil
+      if let bannerImage = ExampleNFT.getOptionalCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile? {
+        bannerMedia = MetadataViews.Media(
+            file: bannerImage,
+            mediaType: "image"
+        )
+      }
       
       let collectionDisplay = MetadataViews.NFTCollectionDisplay(
           name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
           description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
           externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat(contractAddress.toString()).concat("/ExampleNFT")),
           squareImage: squareMedia,
-          bannerImage: bannerMedia,
+          bannerImage: bannerMedia ?? squareMedia,
           socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}
       )
 

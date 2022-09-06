@@ -105,22 +105,28 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
+          return MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let squareMedia = MetadataViews.Media(
 						file: ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile,
 						mediaType: "image"
 					)
-					let bannerMedia = MetadataViews.Media(
-						file: ExampleNFT.getCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile,
-						mediaType: "image"
-					)
+
+					// If a banner image exists, use it
+					// Otherwise, default to the main square image
+					var bannerMedia: MetadataViews.Media? = nil
+					if let bannerImage = ExampleNFT.getOptionalCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile? {
+						bannerMedia = MetadataViews.Media(
+							file: bannerImage,
+							mediaType: "image"
+						)
+					}
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
 						description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
 						squareImage: squareMedia,
-						bannerImage: bannerMedia,
+						bannerImage: bannerMedia ?? squareMedia,
 						socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}
 					)
 				case Type<MetadataViews.Royalties>():
@@ -388,10 +394,12 @@ pub contract ExampleNFT: NonFungibleToken {
 			cid: _ipfsCID,
 			path: _imagePath
 		)
-		self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
-			cid: _ipfsCID,
-			path: _bannerImagePath ?? _imagePath
-		)
+		if let bannerImagePath = _bannerImagePath {
+			self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
+				cid: _ipfsCID,
+				path: _bannerImagePath
+			)
+		}
 		self.collectionInfo["ipfsCID"] = _ipfsCID
 		self.collectionInfo["socials"] = _socials
 		self.collectionInfo["minting"] = _minting
