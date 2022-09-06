@@ -69,6 +69,12 @@
 				"testnet": "0xaf717f34dcb01af1"
 			}
 		},
+		"TouchstonePurchases": {
+			"source": "./src/flow/cadence/TouchstonePurchases.cdc",
+			"aliases": {
+				"testnet": "0xaf717f34dcb01af1"
+			}
+		},
 		"EmeraldPass": {
 			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
 			"aliases": {
@@ -136,7 +142,7 @@
 		},
 		"testnet": {
 			"touchstonecontracts-account": [
-				"TouchstoneContracts"
+				"TouchstonePurchases"
 			]
 		}
 	}

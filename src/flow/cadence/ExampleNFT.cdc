@@ -20,7 +20,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
-	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile)
+	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile, price: UFix64)
 	pub event Minted(id: UInt64, recipient: Address, metadataId: UInt64)
 	pub event MintBatch(metadataIds: [UInt64], intendedRecipients: [Address], notSetup: [Address])
 
@@ -105,22 +105,28 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
+          return MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let squareMedia = MetadataViews.Media(
 						file: ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile,
 						mediaType: "image"
 					)
-					let bannerMedia = MetadataViews.Media(
-						file: ExampleNFT.getCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile,
-						mediaType: "image"
-					)
+
+					// If a banner image exists, use it
+					// Otherwise, default to the main square image
+					var bannerMedia: MetadataViews.Media? = nil
+					if let bannerImage = ExampleNFT.getOptionalCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile? {
+						bannerMedia = MetadataViews.Media(
+							file: bannerImage,
+							mediaType: "image"
+						)
+					}
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
 						description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
 						squareImage: squareMedia,
-						bannerImage: bannerMedia,
+						bannerImage: bannerMedia ?? squareMedia,
 						socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}
 					)
 				case Type<MetadataViews.Royalties>():
@@ -226,12 +232,13 @@ pub contract ExampleNFT: NonFungibleToken {
 	// A function to mint NFTs. 
 	// You can only call this function if minting
 	// is currently active.
-	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault) {
+	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault): UInt64 {
 		pre {
 			self.canMint(): "Minting is currently closed by the Administrator!"
 			payment.balance == self.getPriceOfNFT(metadataId): 
 				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId)!.toString())
 		}
+		let price: UFix64 = self.getPriceOfNFT(metadataId)!
 
 		// Confirm recipient passes all verifiers
 		for verifier in self.getMintVerifiers() {
@@ -244,11 +251,11 @@ pub contract ExampleNFT: NonFungibleToken {
 		// Handle Emerald City DAO royalty (5%)
 		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
 								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
-		let emeraldCityCut: UFix64 = 0.05 * payment.balance
+		let emeraldCityCut: UFix64 = 0.05 * price
 
 		// Handle royalty to user that was configured upon creation
 		if let royalty = ExampleNFT.getOptionalCollectionAttribute(key: "royalty") as! MetadataViews.Royalty? {
-			royalty.receiver.borrow()!.deposit(from: <- payment.withdraw(amount: payment.balance * royalty.cut))
+			royalty.receiver.borrow()!.deposit(from: <- payment.withdraw(amount: price * royalty.cut))
 		}
 
 		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: emeraldCityCut))
@@ -260,14 +267,17 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// Mint the nft 
 		let nft <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address)
+		let nftId: UInt64 = nft.id
 		let metadata = self.getNFTMetadata(metadataId)!
+		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + price
+
 		// Emit event
-		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail)
+		emit TouchstonePurchase(id: nftId, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail, price: price)
 		
 		// Deposit nft
 		recipient.deposit(token: <- nft)
 
-		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + metadata.price
+		return nftId
 	}
 
 	pub resource Administrator {
@@ -388,10 +398,12 @@ pub contract ExampleNFT: NonFungibleToken {
 			cid: _ipfsCID,
 			path: _imagePath
 		)
-		self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
-			cid: _ipfsCID,
-			path: _bannerImagePath ?? _imagePath
-		)
+		if let bannerImagePath = _bannerImagePath {
+			self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
+				cid: _ipfsCID,
+				path: _bannerImagePath
+			)
+		}
 		self.collectionInfo["ipfsCID"] = _ipfsCID
 		self.collectionInfo["socials"] = _socials
 		self.collectionInfo["minting"] = _minting

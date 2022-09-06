@@ -28,7 +28,7 @@
         <NFTCard
           name={NFT.name}
           description={NFT.description}
-          thumbnailURL={`https://cloudflare-ipfs.com/ipfs/${NFT.thumbnail}`} />
+          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`} />
       {/each}
     </div>
   {:catch error}

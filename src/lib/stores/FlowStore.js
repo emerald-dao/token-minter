@@ -29,6 +29,10 @@ const contractData = {
     testnet: '0xaf717f34dcb01af1',
     mainnet: '',
   },
+  TouchstonePurchases: {
+    testnet: '0xaf717f34dcb01af1',
+    mainnet: ''
+  },
   FLOAT: {
     testnet: '0x0afe396ebc8eee65',
     mainnet: '0x2d4c3caffbeab845',
@@ -64,6 +68,7 @@ export const addresses = derived([network], ([$network]) => {
     FIND: contractData.FIND[$network],
     FN: contractData.FN[$network],
     TouchstoneContracts: contractData.TouchstoneContracts[$network],
+    TouchstonePurchases: contractData.TouchstonePurchases[$network],
     EmeraldPass: contractData.EmeraldPass[$network],
   };
 });
