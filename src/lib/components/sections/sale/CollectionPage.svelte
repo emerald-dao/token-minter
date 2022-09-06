@@ -1,4 +1,6 @@
 <script>
+  import flowPriceStore from "$stores/FlowPriceStore"
+  import { browser } from '$app/env';
   import { checkRequiredVerifiers, getCollectionInfo } from "$flow/actions";
   import {
     Section,
@@ -18,14 +20,12 @@
     Verifiers,
     MyNFTs,
     CollectionStat,
-    CollectionFilters,
+    CollectionFilters
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
   import { authenticate } from "@onflow/fcl";
   import TransactionModal from "$lib/components/atoms/TransactionModal.svelte";
-
-  export let contractAddress = $page.params.address;
 
   async function getStats(metadatas, purchasedIndexes) {
     return new Promise(async (resolve, reject) => {
@@ -52,6 +52,8 @@
     });
   }
 
+  const [flowPrice, loading, error] = flowPriceStore()
+
   let seeMine = false;
   let maxPrice;
   let minPrice;
@@ -60,7 +62,7 @@
 <HtmlHead title="Discover" />
 <TransactionModal />
 
-{#await getCollectionInfo($page.params.collection, contractAddress) then collectionInfo}
+{#await getCollectionInfo($page.params.collection, $page.params.address) then collectionInfo}
   <Section class="padding-top-none padding-bottom-small">
     <Container class="width-full">
       <TransparentCard padding="0">
@@ -86,7 +88,8 @@
                   align="center"
                   justify="flex-start">
                   <MadeWithTouchstone />
-                  <WalletAddress address={contractAddress}>By</WalletAddress>
+                  <WalletAddress address={$page.params.address}
+                    >By</WalletAddress>
                   <Divider space="1px" />
                 </Stack>
               </Stack>
@@ -104,27 +107,18 @@
               <p class="collection-description">{collectionInfo.description}</p>
               {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers)) then stats}
                 <AdaptableGrid minWidth="5em" gap="1.2em">
-                  <CollectionStat title="total items" stat={stats.totalItems} />
-                  <CollectionStat title="purchased" stat={stats.numPurchased} />
-                  <CollectionStat title="available" stat={stats.available} />
+                    <CollectionStat title="total items" stat={stats.totalItems}/>
+                    <CollectionStat title="purchased" stat={stats.numPurchased}/>
+                    <CollectionStat title="available" stat={stats.available}/>
                   {#if !collectionInfo.lotteryBuying}
-                    <CollectionStat
-                      title="floor price"
-                      flowLogo={true}
-                      stat={stats.floorPrice} />
-                    <CollectionStat
-                      title="highest buy"
-                      flowLogo={true}
-                      stat={stats.highestBuy} />
+                    <CollectionStat title="floor price" flowLogo={true} stat={stats.floorPrice}/>
+                    <CollectionStat title="highest buy" flowLogo={true} stat={stats.highestBuy}/>
                   {:else}
-                    <CollectionStat
-                      title="price"
-                      flowLogo={true}
-                      stat={Number(collectionInfo.price).toFixed(3)} />
+                    <CollectionStat title="price" flowLogo={true} stat={Number(collectionInfo.price).toFixed(3)}/>
                   {/if}
                 </AdaptableGrid>
               {/await}
-              {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
+              {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
                 {/if}
@@ -133,10 +127,12 @@
             {#if !$user.loggedIn}
               <Button on:click={() => authenticate()}>Connect</Button>
             {/if}
-            {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
+            {#await checkRequiredVerifiers($page.params.collection, $page.params.address, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
                 <div class="nft-list-wrapper">
-                  <CollectionFilters bind:seeMine bind:maxPrice bind:minPrice />
+                  {#if !collectionInfo.lotteryBuying}
+                    <CollectionFilters bind:seeMine={seeMine} bind:maxPrice={maxPrice} bind:minPrice={minPrice}/>
+                  {/if}
                   <AdaptableGrid minWidth="12em" gap="1.2em">
                     {#if seeMine}
                       <MyNFTs
@@ -146,23 +142,32 @@
                     {:else if !collectionInfo.lotteryBuying}
                       {#each Object.values(collectionInfo.metadatas) as NFT}
                         {#if (maxPrice === undefined || maxPrice >= Number(NFT.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price).toFixed(3))}
-                          <NFTCard
-                            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
-                            name={NFT.name}
-                            description={NFT.description}
-                            price={Number(NFT.price).toFixed(3)}
-                            buy={!Object.keys(
-                              collectionInfo.primaryBuyers
-                            ).includes(NFT.metadataId)}
-                            url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
-                            withLink={true} />
+                          {#if $loading}
+                            Loading: {$loading}
+                          {:else if $error}
+                            Error: {$error}
+                          {:else}
+                            {#if browser}
+                              <NFTCard
+                                thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+                                name={NFT.name}
+                                description={NFT.description}
+                                price={Number(NFT.price).toFixed(3)}
+                                buy={!Object.keys(
+                                  collectionInfo.primaryBuyers
+                                ).includes(NFT.metadataId)}
+                                url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
+                                withLink={true}
+                                flowPrice={$flowPrice.price} />
+                            {/if}
+                          {/if}
                         {/if}
                       {/each}
                     {:else}
                       <NFTCarousel
                         metadatas={collectionInfo.metadatas}
                         price={collectionInfo.price}
-                        address={contractAddress}
+                        address={$page.params.address}
                         contractName={$page.params.collection}
                         number={Object.keys(collectionInfo.metadatas).length} />
                     {/if}
@@ -211,7 +216,7 @@
   .collection-description {
     font-size: var(--fs-300);
     max-width: 80ch;
-    color: var(--clr-font-text-t2);
+    color: var(--clr-font-text-t2)
   }
 
   .nft-list-wrapper {
