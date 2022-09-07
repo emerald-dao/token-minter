@@ -8,33 +8,33 @@
     Stack,
     CollectionCard,
     Button,
-    HtmlHead
+    HtmlHead,
   } from "$atoms";
 
   let collections = [
     {
-      name: "Hats NFT 6",
-      slug: "HatsNFT6",
+      name: "Test Collection 1",
+      slug: "jacob3",
       thumbnailURL: "/images/guide/ballerz.png",
       description:
-        "Hats NFT 6 created their collection on Touchstone. Founded in 2016, they have been OGs in the crypto space...!",
-      owner: "0x6c0d53c676256e8c",
+        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
+      owner: "0xfe10201e647ca718",
     },
     {
-      name: "Ballerz",
-      slug: "ballerz",
+      name: "Test Collection 1",
+      slug: "jacob3",
       thumbnailURL: "/images/guide/ballerz.png",
       description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
+        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
+      owner: "0xfe10201e647ca718",
     },
     {
-      name: "Ballerz",
-      slug: "ballerz",
+      name: "Test Collection 1",
+      slug: "jacob3",
       thumbnailURL: "/images/guide/ballerz.png",
       description:
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      owner: "0x0da118e8ae345d95",
+        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
+      owner: "0xfe10201e647ca718",
     },
   ];
 
@@ -43,7 +43,7 @@
   let address;
 </script>
 
-<HtmlHead title="Discover"/>
+<HtmlHead title="Discover" />
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>
