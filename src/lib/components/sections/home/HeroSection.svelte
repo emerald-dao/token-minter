@@ -6,47 +6,47 @@
 		AdaptableGrid,
 		Marquee,
 		Stack,
-		TouchstoneIcon
+		TouchstoneIcon,
 	} from "$atoms";
 	import { newCollection } from "$stores/ActiveStepStore";
 </script>
 
 <div class="background">
-<Section>
-	<Container class="width-large">
-		<AdaptableGrid>
-			<Stack align="start">
-				<h1>
-					Tools for creating
-					<span class="accent">NFT Collections and Contracts</span>
-					on the Flow Blockchain
-				</h1>
-				<p>
-					Create your own NFT Collections without knowing any code. Learn all
-					about NFTs on the Flow Blockchain.
-				</p>
-				<Button
-					href="/collection-generator"
-					rightIcon="arrow-forward-circle"
-					on:click={newCollection}>Start</Button>
-			</Stack>
-			<Stack align="center" justify="center">
-				<video width="100%" height="100%" autoplay loop muted>
-					<source src="emerald1.webm" type="video/webm" />
-					<track kind="captions" />
-					Your browser does not support the video tag.
-				</video>
-			</Stack>
-		</AdaptableGrid>
-	</Container>
-</Section>
+	<Section>
+		<Container class="width-large">
+			<AdaptableGrid>
+				<Stack align="start">
+					<h1>
+						Tools for creating
+						<span class="accent">NFT Collections and Contracts</span>
+						on the Flow Blockchain
+					</h1>
+					<p>
+						Create your own NFT Collections without knowing any code. Learn all
+						about NFTs on the Flow Blockchain.
+					</p>
+					<Button
+						href="/contract-generator"
+						rightIcon="arrow-forward-circle"
+						on:click={newCollection}>Start</Button>
+				</Stack>
+				<Stack align="center" justify="center">
+					<video width="100%" height="100%" autoplay loop muted>
+						<source src="emerald1.webm" type="video/webm" />
+						<track kind="captions" />
+						Your browser does not support the video tag.
+					</video>
+				</Stack>
+			</AdaptableGrid>
+		</Container>
+	</Section>
 </div>
 <Marquee repeat={10}>
 	<div class="marquee-element">
 		<span>CRAFTED WITH 💜 BY&nbsp;</span> EMERALD CITY DAO
 	</div>
 	<div class="marquee-element emerald-wrapper">
-		<TouchstoneIcon/>
+		<TouchstoneIcon />
 	</div>
 </Marquee>
 
@@ -76,8 +76,11 @@
 	}
 
 	.background {
-		background:
-      radial-gradient(ellipse at right, var(--clr-primary-main-t8), transparent);
+		background: radial-gradient(
+			ellipse at right,
+			var(--clr-primary-main-t8),
+			transparent
+		);
 		backdrop-filter: blur(50px);
 	}
 </style>

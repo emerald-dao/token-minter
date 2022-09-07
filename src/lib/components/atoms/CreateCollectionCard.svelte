@@ -3,14 +3,15 @@
   import { Stack, TransparentCard } from "$atoms";
 </script>
 
-<a href={`/collection-generator`}>
+<a href={`/contract-generator`}>
   <TransparentCard accent={true}>
     <Stack direction="row" gap="0.5em" justify="center">
-      <Icon icon="ion:add-circle" width="1.4em" color="var(--clr-accent-main)"/>
+      <Icon
+        icon="ion:add-circle"
+        width="1.4em"
+        color="var(--clr-accent-main)" />
       <div class="main-wrapper" direction="row" align="flex-start">
-        <span>
-          Create Collection
-        </span>
+        <span> Create Collection </span>
       </div>
     </Stack>
   </TransparentCard>

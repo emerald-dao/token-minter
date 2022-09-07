@@ -4,30 +4,28 @@
   export let collectionName;
 </script>
 
-<img src="/images/guide/ballerz.png" alt="Collection main"/>
+<img src="/images/guide/ballerz.png" alt="Collection main" />
 <h4>{collectionName}</h4>
-<Divider line={true} lineWidth="2px" space="2rem" lineColor="var(--clr-accent-main-t9)"/>
-<BallButton
-  icon="ion:settings"
->
-  General
-</BallButton>
-<a href="/collection-generator">
-  <BallButton
-    icon="ion:gift"
-  >
-    Airdrop
-  </BallButton>
+<Divider
+  line={true}
+  lineWidth="2px"
+  space="2rem"
+  lineColor="var(--clr-accent-main-t9)" />
+<BallButton icon="ion:settings">General</BallButton>
+<a href="/contract-generator">
+  <BallButton icon="ion:gift">Airdrop</BallButton>
 </a>
 <Divider space="3rem" />
-<BallButton
-  icon="ion:trash"
-  danger={true}
->
-  Remove
-</BallButton>
-<Divider line={true} lineWidth="2px" space="2rem" lineColor="var(--clr-accent-main-t9)"/>
-<Button class="small transparent" leftIcon="arrow-back-circle" href="/my-collections">Back to My Collections</Button>
+<BallButton icon="ion:trash" danger={true}>Remove</BallButton>
+<Divider
+  line={true}
+  lineWidth="2px"
+  space="2rem"
+  lineColor="var(--clr-accent-main-t9)" />
+<Button
+  class="small transparent"
+  leftIcon="arrow-back-circle"
+  href="/my-collections">Back to My Collections</Button>
 
 <style>
   img {
@@ -40,7 +38,7 @@
   h4 {
     font-size: var(--fs-400);
   }
-  
+
   a {
     text-decoration: none;
   }

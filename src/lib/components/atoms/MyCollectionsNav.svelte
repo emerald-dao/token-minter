@@ -1,12 +1,7 @@
 <script>
   import { user } from "$stores/FlowStore";
   import { page } from "$app/stores";
-  import {
-    Divider,
-    BallButton,
-    Button,
-    Stack,
-  } from "$atoms";
+  import { Divider, BallButton, Button, Stack } from "$atoms";
   import { getFindProfile } from "$flow/utils";
 
   let findProfile = getFindProfile($user?.addr);
@@ -36,14 +31,14 @@
   lineWidth="2px"
   space="3rem"
   lineColor="var(--clr-accent-main-t9)" />
-<BallButton 
-  active={$page.url.pathname === "/my-collections"} 
+<BallButton
+  active={$page.url.pathname === "/my-collections"}
   icon="ion:albums"
   href="/my-collections">
   My Collections
 </BallButton>
-<BallButton 
-  active={$page.url.pathname.includes("my-nfts")} 
+<BallButton
+  active={$page.url.pathname.includes("my-nfts")}
   icon="ion:diamond"
   href="/my-collections/my-nfts/">
   My NFTs
@@ -57,7 +52,7 @@
 <Button
   class="small transparent"
   leftIcon="add-circle"
-  href="/collection-generator">Create Collection</Button>
+  href="/contract-generator">Create Collection</Button>
 
 <style type="scss">
   img {
