@@ -69,7 +69,7 @@
                 {:else}
                   <img
                     class="avatar"
-                    src="https://find.xyz/assets/img/avatars/avatar16.png"
+                    src="https://cdn-icons-png.flaticon.com/512/168/168734.png"
                     alt="default avatar" />
                 {/if}
               </a>
@@ -208,12 +208,14 @@
   }
 
   .avatar {
-    height: 42px;
+    height: 38px;
+    width: 38px;
     border-radius: 0.6rem;
     border: 2px var(--clr-accent-main) solid;
     margin-left: 0.4rem;
     transition: 0.4s;
   }
+  
   .avatar:hover {
     box-shadow: var(--clr-accent-main) 4px 4px;
     color: var(--clr-font-text-inverse);

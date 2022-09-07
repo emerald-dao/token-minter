@@ -76,7 +76,7 @@
             class="collection-info-wrapper"
             class:no-banner={!collectionInfo.bannerImage}>
             <Stack direction="row" align="flex-end" justify="space-between">
-              <Stack direction="row" align="flex-end">
+              <div class="presentation-wrapper">
                 <div class="image-wrapper">
                   <NftImage
                     thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
@@ -92,7 +92,7 @@
                     >By</WalletAddress>
                   <Divider space="1px" />
                 </Stack>
-              </Stack>
+              </div>
               {#if collectionInfo.socials}
                 <Stack direction="row" gap="1.5rem">
                   <CollectionSocials
@@ -183,6 +183,8 @@
 {/await}
 
 <style type="scss">
+  @use "../../../../lib/styles/abstracts" as *;
+
   .banner {
     height: 220px;
     background-size: cover;
@@ -195,6 +197,18 @@
     margin-bottom: -80px;
     position: relative;
     top: -120px;
+
+    .presentation-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+      align-items: flex-start;
+
+      @include mq(small) {
+        flex-direction: row;
+        align-items: flex-end;
+      }
+    }
   }
   .no-banner {
     top: 0px;
@@ -220,9 +234,16 @@
   }
 
   .nft-list-wrapper {
-    display: grid;
-    grid-template-columns: 240px auto;
-    margin-top: 2.8rem;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+
+    @include mq(small) {
+      display: grid;
+      grid-template-columns: 240px auto;
+      margin-top: 2.8rem;
+      gap: 2rem;
+    }
   }
 </style>

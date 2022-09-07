@@ -3,7 +3,7 @@
 </script>
 
 <div class="component-container">
-  <TransparentCard height="100%" paddingInline="2rem" paddingBlock="0.8rem">
+  <TransparentCard height="100%" paddingInline="1.4rem" paddingBlock="1.4rem">
     <div class="component-wrapper">
       <slot name="main-content"/>
     </div>

@@ -54,12 +54,17 @@
 </div>
 
 <style type="scss">
-  div {
-    position: sticky;
-    height: fit-content;
-    top: 6rem;
-    left: 0;
+  @use "../../styles/abstracts" as *;
 
+  div {
+    height: fit-content;
+
+    @include mq(small) {
+      position: sticky;
+      top: 6rem;
+      left: 0;
+    }
+    
     h4 {
       font-size: var(--fs-400);
       color: var(--clr-accent-main-t3);

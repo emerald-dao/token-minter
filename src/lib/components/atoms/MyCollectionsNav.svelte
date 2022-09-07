@@ -20,7 +20,7 @@
       <h4>{profile.address}</h4>
     {:else}
       <img
-        src="https://find.xyz/assets/img/avatars/avatar16.png"
+        src="https://cdn-icons-png.flaticon.com/512/168/168734.png"
         alt="default avatar" />
       <h3 class="address">{$user.addr}</h3>
       <Button

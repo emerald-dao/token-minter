@@ -195,8 +195,7 @@
   .rotate {
     animation-name: rotate;
     animation-iteration-count: infinite;
-    animation-timing-function: ease-in-out;
-    animation-duration: 4s;
-    animation-delay: 1s;
+    animation-timing-function: ease-out;
+    animation-duration: 3s;
   }
 </style>
