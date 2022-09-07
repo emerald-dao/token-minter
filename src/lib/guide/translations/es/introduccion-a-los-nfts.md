@@ -1,6 +1,6 @@
 ---
 title: Introducción a los NFTs
-author: Jacob Tucker
+author: CuriosityFlow
 index: 2
 language: es
 ---

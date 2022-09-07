@@ -1,6 +1,6 @@
 ---
 title: Crear NFTs
-author: Jacob Tucker
+author: CuriosityFlow
 index: 3
 language: es
 ---
@@ -42,8 +42,10 @@ Los metadatos es un término usado para describir los detalles del NFT o cualqui
 
 ...pero existen una infinidad más de campos que pueden describir a un NFT. Es la decisión del creador(a) del NFT por completo describir cuales metadatos su NFT tiene. De igual manera, es la decisión del desarrollador del contrato inteligente almacenar o referirse a estos metadatos adecuadamente dentro del mismo NFT.  Sin embargo, el problema es el costo elevado de almacenar datos en el Blockchain. Así que debemos ser cuidadosos de almacenar únicamente información pequeña en el Blockchain y almacenar información más pesada en otras partes...
 
-Diagrama 2.3 Lista de metadatos de un NFT Flunkz
-
 ## Almacenamiento de Activos
 
 Pedazos de información pequeños de metadatos como el nombre y la descripción (las cuales son solo texto) son económicos de almacenar dentro del mismo NFT. No obstante, información como imágenes y videos se vuelven rápidamente más costosos de almacenar en el Blockchain. Para manejar esto, usamos servicios como [IPFS](https://ipfs.io/), la cual es una red de almacenaje descentralizada. Podemos subir nuestras imágenes al IPFS, lo que nos regresará un "CID" o "hash" (una serie de números y letras arbitrarias, _ej: 89d89wy8989dwq89d9qwydqw89_) que hacen referencia a estos datos. Luego, podemos almacenar este CID en el NFT que se encuentra en el Blockchain, volviéndolo súper barato mientras que accedemos datos más costosos usando el CID cuando queramos.
+
+<Diagram name="Flujo de datos hacia/desde IPFS" number="2.4">
+  <IpfsFlow/>
+</Diagram>

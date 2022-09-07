@@ -1,6 +1,6 @@
 ---
 title: Beneficios de Flow
-author: Jacob Tucker
+author: CuriosityFlow
 index: 4
 language: es
 ---
