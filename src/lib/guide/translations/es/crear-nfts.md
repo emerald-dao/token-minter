@@ -1,9 +1,13 @@
 ---
 title: Crear NFTs
-author: Jacob Tucker
+author: CuriosityFlow
 index: 3
 language: es
 ---
+
+<script>
+  import { Diagram, ProcessStep, ContractExample, IpfsFlow } from "$components/guide-diagrams/index"
+</script>
 
 # ¿De qué está hecho un NFT?
 
@@ -15,7 +19,9 @@ Para crear un NFT, debemos tener los siguientes componentes:
 
 Antes de profundizar, veamos el diagrama que provee una vista aérea de los componentes que forman un NFT:
 
-Diagrama 2.1 El proceso de principio a fin para desplegar un NFT
+<Diagram name="El proceso de principio a fin para desplegar un NFT" number="2.1">
+  <ProcessStep/>
+</Diagram>
 
 ## Contatos Inteligentes
 
@@ -25,7 +31,9 @@ La parte genial es que tenemos acceso completo y público al historial de cualqu
 
 En [el Blockchain de Flow](http://onflow.org), los contratos inteligentes están escritos en un lenguaje de programación computacional llamado Cadence, que es muy distinto al idioma de Solidity que se usa para contratos inteligentes en [el Blockchain de Ethereum](https://ethereum.org/en/). En la Sección 3, veremos las ventajas y desventajas de este idioma en contraste con otros como Solidity.
 
-Diagrama 2.2 Un ejemplo de un contrato inteligente escrito en Cadence
+<Diagram name="Un ejemplo de un contrato inteligente escrito en Cadence" number="2.2">
+  <ContractExample/>
+</Diagram>
 
 ## Los metadatos
 
@@ -42,8 +50,10 @@ Los metadatos es un término usado para describir los detalles del NFT o cualqui
 
 ...pero existen una infinidad más de campos que pueden describir a un NFT. Es la decisión del creador(a) del NFT por completo describir cuales metadatos su NFT tiene. De igual manera, es la decisión del desarrollador del contrato inteligente almacenar o referirse a estos metadatos adecuadamente dentro del mismo NFT.  Sin embargo, el problema es el costo elevado de almacenar datos en el Blockchain. Así que debemos ser cuidadosos de almacenar únicamente información pequeña en el Blockchain y almacenar información más pesada en otras partes...
 
-Diagrama 2.3 Lista de metadatos de un NFT Flunkz
-
 ## Almacenamiento de Activos
 
 Pedazos de información pequeños de metadatos como el nombre y la descripción (las cuales son solo texto) son económicos de almacenar dentro del mismo NFT. No obstante, información como imágenes y videos se vuelven rápidamente más costosos de almacenar en el Blockchain. Para manejar esto, usamos servicios como [IPFS](https://ipfs.io/), la cual es una red de almacenaje descentralizada. Podemos subir nuestras imágenes al IPFS, lo que nos regresará un "CID" o "hash" (una serie de números y letras arbitrarias, _ej: 89d89wy8989dwq89d9qwydqw89_) que hacen referencia a estos datos. Luego, podemos almacenar este CID en el NFT que se encuentra en el Blockchain, volviéndolo súper barato mientras que accedemos datos más costosos usando el CID cuando queramos.
+
+<Diagram name="Flujo de datos hacia/desde IPFS" number="2.3">
+  <IpfsFlow/>
+</Diagram>

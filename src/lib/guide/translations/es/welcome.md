@@ -1,6 +1,6 @@
 ---
 title: Bienvenidos
-author: Jacob Tucker
+author: CuriosityFlow
 index: 1
 language: es
 ---
