@@ -1,6 +1,4 @@
 <script>
-  import { user } from "$stores/FlowStore";
-  import { getContractDisplays } from "$flow/actions";
   import { dappTitle } from "$lib/config/config";
   import {
     Section,
@@ -37,8 +35,6 @@
       owner: "0xfe10201e647ca718",
     },
   ];
-
-  getContractDisplays($user?.addr);
 
   let address;
 </script>
