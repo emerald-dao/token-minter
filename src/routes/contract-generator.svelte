@@ -1,4 +1,4 @@
-<!-- Page that dynamically renders each step of the Collection Generation process -->
+<!-- Page that dynamically renders each step of the Contract Generation process -->
 <script>
   import { user } from "$stores/FlowStore";
   import { WalletConnectModal, HtmlHead } from "$atoms";
@@ -8,17 +8,20 @@
   import generatorSteps from "$lib/config/generatorSteps.js";
 </script>
 
-<HtmlHead title="Collection Generator"/>
+<HtmlHead title="Contract Generator" />
 
 <!-- Display generator if user has loggedIn with wallet -->
 {#if $user?.loggedIn}
   <SidebarMainLayout>
-    <GeneratorNav slot="sidebar" bind:step={$activeStep.step} steps={generatorSteps} />
+    <GeneratorNav
+      slot="sidebar"
+      bind:step={$activeStep.step}
+      steps={generatorSteps} />
     <svelte:component
-      slot="main"
-      this={generatorSteps[$activeStep.step].component} />
+      this={generatorSteps[$activeStep.step].component}
+      slot="main" />
   </SidebarMainLayout>
-<!-- If not connected, ask to connect wallet -->
+  <!-- If not connected, ask to connect wallet -->
 {:else}
-  <WalletConnectModal/>
+  <WalletConnectModal />
 {/if}

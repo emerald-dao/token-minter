@@ -1,11 +1,11 @@
 ---
-title: Collection Generator Guide
+title: Contract Generator Guide
 author: Jacob Tucker
 index: 5
 language: es
 ---
 
-# Collection Generator Guide
+# Contract Generator Guide
 
 There are 5 steps to creating your own NFT Collection using Touchstone. We will walk you through all of them in detail below.
 
