@@ -1,13 +1,13 @@
 ---
-title: Flow Benefits
-author: Jacob Tucker
+title: Преимущества Блокчейна Flow
+author: SuuriKat
 index: 4
-language: en
+language: ru
 ---
 
-# Benefits of the Flow Blockchain
+# Преимущества Блокчейна Flow
 
-1. On Flow, users (like me and you) actually store NFTs in their _own accounts, and thus own their data_. This is very different from Blockchains like Ethereum where the smart contract actually stores your NFTs.
-2. Flow Blockchain has cheaper transaction fees when minting, selling or transferring NFTs and other digital assets (less than $0.01 on average) compared to Ethereum Blockchain (around $12 on average).
-3. Flow Blockchain uses Proof-Of-Stake (PoS) consensus mechanism which consumes less energy, making it more environmentally friendly. But, the Ethereum Blockchain uses Proof-Of-Work (PoW) consensus mechanism which consumes more energy with huge environmental concerns. Check out [this tool](https://flow-energy.vercel.app/) to see the difference.
-4. Cadence separates the smart contract layer from transactions and scripts, making the contracts much easier to read than other languages like Solidity, and thus a lot safer.
+1. На Flow, пользователи (как ты и я) действительно хранят NFT на своих аккаунтах и информацию о них, в отличии от таких Блокчейнов, как Ethereum, где NFT хранятся в смарт контрактах.
+2. Транзакции на Блокчейне Flow намного дешевле, когда вы минтите, продаёте или отправляете NFT или другой цифровой ассет. Цена транзакции на Flow составляет менее 1 рубля, тогда как на Блокчейне Ethereum она в варьируется от 1 тысячи до 10 тысяч рублей. 
+3. Flow использует Proof-Of-Stake (PoS), что потребляет меньше энергии, делая его более экологичным. Тогда как сеть Ethereum использует Proof-Of-Work (PoW), потребляющий больше энергии и плохо влияющий на экологию. Более подробно можете посмотреть [тут](https://flow-energy.vercel.app/).
+4. Cadence разделяет смарт контракт от транзакций и скриптов, делая контракты более надёжными и более удобными для чтения, в сравнении с другими языками как Solidity

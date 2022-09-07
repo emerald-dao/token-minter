@@ -54,6 +54,6 @@ Metadata is a term used to describe the details of the NFT or any asset. What do
 
 ` `For smaller pieces of metadata like a name and description (which are just text), it is inexpensive to store it within the NFT itself. However, for things like images and videos, it becomes expensive very quickly to store on the Blockchain. To cope with this, we use other services like [IPFS](https://ipfs.io/), which is a decentralised storage network. We can upload our images to IPFS which will return to us a “CID” or “hash” (a bunch of random numbers and letters _ex. 89d89wy8989dwq89d9qwydqw89_) that references that data. Then, we can store that CID on the Blockchain in the NFT, which is super cheap, and retrieve the more expensive data using the CID whenever we want.
 
-<Diagram name="Flow of data to/from IPFS" number="2.4">
+<Diagram name="Flow of data to/from IPFS" number="2.3">
   <IpfsFlow/>
 </Diagram>

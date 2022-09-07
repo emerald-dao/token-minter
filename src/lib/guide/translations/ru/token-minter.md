@@ -1,58 +1,58 @@
 ---
-title: Collection Generator Guide
-author: Jacob Tucker
+title: Гайд по созданию коллекций
+author: SuuriKat
 index: 5
-language: en
+language: ru
 ---
 
-# Collection Generator Guide
+# Гайд по созданию коллекций
 
-There are 5 steps to creating your own NFT Collection using Touchstone. We will walk you through all of them in detail below.
+Всего существует 5 шагов для создания вашей собственной коллекции NFT, с помощью Touchstone. Ниже мы пройдемся по ним детально.
 
-## Collection Information
+## Информация по коллекциям
 
-There are a few things you have to enter:
-1. Collection Name - this is the general name of your collection (ex. FLOAT)
-2. Price - the price of your NFTs in $FLOW
-3. Description - a description of your collection
-4. Image - an image for your collection
+Немного вещей, которые вам нужно ввести:
+1. Название коллекции - основное название вашей коллекции (к примеру FLOAT)
+2. Цена - цена вашей NFT во $Flow
+3. Описание - описание коллекции
+4. Изображение - изображение вашей коллекции
 
-## Upload Assets
+## Загрузка ваших ассетов
 
-1. CSV File - this is a file that contains all of your attributes and associated metadata for each NFT. You must have a `name`, `description`, and `image` attribute.
+1. CSV файл - файл, в котором хранятся все метаданные по вашим атрибутам и тем, что с этим связано для каждого NFT. Из атрибутов у вас должны быть `name`, `description` и `image`
 
-Additionally, you can (not required) include:
-- a `thumbnail` attribute if you want your NFT to display a less-intensive picture for easier loading.
-- a `price` attribute if you want each NFT to have a different price. All prices should be in $FLOW.
+Также, у вас может быть (не обязательно):
+- `thumbnail`, если вы хотите, чтобы ваше NFT отображали менее нагруженную картинку для быстрой загрузки.
+- `price`, если хотите, чтобы у каждого NFT была разная цена. Они все должны быть во $FLOW
 
-You can also include whatever other attributes you'd like, however you cannot use one of the 5 attribute names above (name, description, image, thumbnail, or price) for different purposes than what is described of them above.
+Также, вы можете добавлять любые другие атрибуты, которые захотите, но вы не можете использовать 5 вышеперечисленных атрибутов (имя, описание, картинка, миниатюра или цена) для других целей, чем те, что были описаны выше.
 
-2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`.
+2. Папка с файлами - папка, в которой хранятся все ваши изображения. Названия ваших изображений должны совпадать с теми, которые описаны в csv, например: `image1.png`.
 
-*Click <a href="/assets/metadata.csv" download="">here</a> for an example CSV file, and <a href="/assets/images.zip" download="">here</a> for an example images folder. They show you how to match the metadata.*
+*Нажмите <a href="/assets/metadata.csv" download="">сюда</a>, для примера CSV файла и <a href="/assets/images.zip" download="">сюда</a> для примера папки с изображениями. Они также показывают как совместить метаданные.*
 
-3. IPFS Key - this is a key you can provide for us to upload your assets to IPFS. You can get this by going to https://nft.storage/login, clicking "API Keys" at the top, and creating your own key. 
+3. IPFS ключ - ключ, который позволяет нам загрузить ваши ассеты в IPFS. Вы можете получить их по этой ссылке https://nft.storage/login, нажав на “API Keys” в сам верху и создав свой собственный ключ.
 
-## Contract Information
+## Информация по контрактам
 
-Select different options about your contract.
+Для начала, выберите различные опции вашего контракта.
 
-### Contract Options
-- Minting starts active: If you check this box, then as soon as you deploy your contract, people can purchase your NFTs.
-- Royalty (primary sales): If you check this box, you can input an address and a number between `0` and `0.95`. This will automatically give a portion of your primary sales on Touchstone to the inputted address. For example, you could put the artist of your collection here to give them some royalty.
+### Варианты контракта
+- Активное начало минтинга: Если вы выбрали это поле, то как только вы загрузите ваш контракт, люди смогут покупать ваши NFT.
+- Royalty (первичные продажи): Если выбрано это поле, вы сможете вставлять адреса и числа между `0` и `0.95`. Это позволит автоматически отдать часть от первичных продаж на Touchstone адресам, которые вы ввели. Например, вы можете добавить художника вашей коллекции сюда, чтобы отдавать им роялти. 
 
-### Minting Verifiers
-These are things that will gate purchases of your NFTs to people who meet certain requirements.
+### Подтверждения для минта
+А вот несколько вещей, которые позволят покупать ваши NFT только тем, кто подходит под определенные условия.
 
-- Require a FLOAT: If you paste in a link to a FLOAT event, then only people with that FLOAT will be able to mint your NFTs.
-- Require Emerald Pass subscription: If you check this box, then only people with Emerald Pass will be able to mint your NFTs.
+- Необходимость в FLOAT: Если вы вставите ссылку на FLOAT, то только те, у кого есть этот FLOAT смогут купить ваши NFT.
+- Необходимость в подписке Emerald Pass: если вы выберете эту настройку, то только те, у кого есть Emerald Pass смогут заминтить ваше NFT.
 
-## Collection Preview & Deploy
+## Предпросмотр и загрузка коллекции
 
-Preview your collection and makes sure it looks correct.
+С помощью предпросмотра вы можете увидеть как будет выглядеть ваша коллекция и убедиться, что всё выглядит правильно.
 
-Then, officially deploy your new contract to your account. You have full control over the contract after that point.
+Потом, официально загружаете новый контракт на ваш аккаунт. И теперь у вас есть полный контроль над контрактом.
 
-## Upload Metadata
+## Загрузка Метаданных
 
-This step will help guide you through uploading all your metadata to the contract. You must do this step in batches due to gas limits.
+Этот шаг поможет вам загрузить все ваши метаданные в контракт. Вы должны выполнять этот шаг поочередно, из-за ограничений по газу.
