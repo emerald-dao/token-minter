@@ -106,7 +106,7 @@
     border: none;
     outline: none;
     cursor: pointer;
-    transition: 0.4s;
+    transition: 0.4s box-shadow, 0.4s transform;
 
     @include mq(small) {
       width: fit-content;
@@ -134,6 +134,7 @@
     border: none;
     color: var(--clr-font-text-t4);
     padding: 0;
+    width: auto;
   }
   .transparent:hover {
     box-shadow: none;
