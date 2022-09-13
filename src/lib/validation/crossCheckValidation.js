@@ -23,8 +23,8 @@ export const crossCheckValidation = (parsedCsv, csvMetadata, imagesFiles) => {
       if (file_xcheck[nft[required_ipfs_file]]) {
         file_xcheck[nft[required_ipfs_file]] = OK; // mark the file as referenced
       } else {
-        let msg = nft[required_ipfs_file] ? 'FILE NOT FOUND' : 'NO FILE REFERENCED';
-        errs.push(`WARNING: ${msg} for item: ${nft.name}.${required_ipfs_file}`);
+        let msg = nft[required_ipfs_file] ? `${required_ipfs_file} NOT FOUND` : 'NO FILE REFERENCED';
+        errs.push(`WARNING: ${msg} for item: ${nft.name}`);
       }
     }
   }
@@ -41,7 +41,7 @@ export const crossCheckValidation = (parsedCsv, csvMetadata, imagesFiles) => {
   } else {
     console.log(errs);
     return {
-      error: 'The images and the CSV do not match',
+      error: errs[0],
       errs: errs,
     };
   }

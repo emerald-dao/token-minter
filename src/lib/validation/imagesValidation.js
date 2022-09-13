@@ -8,7 +8,7 @@ export const collectionImagesValidation = async (data) => {
   const validationResult = await validateImages(data);
 
   if (validationResult.validation === true) {
-    const getFiles = validationResult.files;
+    const getFiles = validationResult.files.filter(file => file.name !== ".DS_Store");
 
     // If the validation successful and the CSV is already uploaded: we run the cross check validation
     if (get(csvStore).files.length > 0) {
