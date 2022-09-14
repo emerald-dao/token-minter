@@ -8,7 +8,7 @@
       a.push({
         name: asset.name,
         description: asset.description,
-        thumbnail: `${ipfsCID}/${asset.thumbnail}`,
+        thumbnail: `${ipfsCID}/${asset.thumbnail ?? asset.image}`,
       });
       return a;
     }, []);
