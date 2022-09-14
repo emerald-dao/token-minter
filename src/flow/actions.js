@@ -264,6 +264,8 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress) =>
 
 // Function to upload metadata to the contract in batches of 500
 export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
+  initTransactionState();
+
   const userAddr = get(user).addr;
   // Get The MetadataId we should start at
   let names = [];
@@ -290,8 +292,6 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   console.log(extras);
 
   const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr).replaceAll('500', batchSize);
-
-  initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
