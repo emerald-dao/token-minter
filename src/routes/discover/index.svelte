@@ -59,7 +59,7 @@
       {#each collections as collection}
         <CollectionCard
           name={collection.name}
-          url={`/${collection.owner}/${collection.slug}`}
+          url={`/discover/${collection.owner}/${collection.slug}`}
           thumbnailURL={collection.thumbnailURL}
           description={collection.description}
           owner={collection.owner} />

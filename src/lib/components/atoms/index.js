@@ -49,3 +49,4 @@ export { default as TransactionModal } from './TransactionModal.svelte';
 export { default as TransactionModalMessage } from './TransactionModalMessage.svelte';
 export { default as CollectionStat } from './CollectionStat.svelte';
 export { default as CollectionFilters } from './CollectionFilters.svelte';
+export { default as ImagePlaceholder } from './ImagePlaceholder.svelte';

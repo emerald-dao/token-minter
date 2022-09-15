@@ -1,20 +1,40 @@
 <script>
-  import { Divider, BallButton, Button } from "$atoms";
+  import { getContext } from 'svelte';
+  import { user } from "$stores/FlowStore";
+  import { page } from "$app/stores";
+  import { Divider, BallButton, Button, Stack, NftImage, ImagePlaceholder } from "$atoms";
 
-  export let collectionName;
+  const collectionInfo = getContext('collectionInfo');
 </script>
 
-<img src="/images/guide/ballerz.png" alt="Collection main" />
-<h4>{collectionName}</h4>
+<Stack direction="column" gap="0.2rem" align="flex-start" justify="center">
+  {#await collectionInfo}
+    <ImagePlaceholder/>
+    <h3>Loading...</h3>
+  {:then info} 
+    <NftImage
+      thumbnailURL={`https://nftstorage.link/ipfs/${info.image.cid}/${info.image.path}`}
+      name={`${info.name} main image`} />
+    <h3>{info.name}</h3>
+  {/await}
+</Stack>
 <Divider
   line={true}
   lineWidth="2px"
-  space="2rem"
+  space="3rem"
   lineColor="var(--clr-accent-main-t9)" />
-<BallButton icon="ion:settings">General</BallButton>
-<a href="/contract-generator">
-  <BallButton icon="ion:gift">Airdrop</BallButton>
-</a>
+<BallButton
+  active={$page.url.pathname === `/my-collections/${$page.params.collection}`}
+  icon="ion:settings"
+  href={`/my-collections/${$page.params.collection}`}>
+  General
+</BallButton>
+<BallButton
+  active={$page.url.pathname === `/my-collections/${$page.params.collection}/airdrop`}
+  icon="ion:gift"
+  href={`/my-collections/${$page.params.collection}/airdrop`}>
+  Airdrop
+</BallButton>
 <Divider space="3rem" />
 <BallButton icon="ion:trash" danger={true}>Remove</BallButton>
 <Divider
@@ -27,19 +47,12 @@
   leftIcon="arrow-back-circle"
   href="/my-collections">Back to My Collections</Button>
 
-<style>
-  img {
-    width: 100%;
-    background-color: red;
-    margin-bottom: 1.3rem;
-    border-radius: 0.8rem;
-  }
 
-  h4 {
+
+<style type="scss">
+  h3 {
     font-size: var(--fs-400);
-  }
-
-  a {
-    text-decoration: none;
+    margin-bottom: 0.3rem;
+    margin-top: 1.2rem;
   }
 </style>

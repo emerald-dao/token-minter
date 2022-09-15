@@ -11,7 +11,7 @@
   {#each collections as collection}
     <CollectionCard
       name={collection.name}
-      url={`/${$user.addr}/${collection.contractName}`}
+      url={`/my-collections/${collection.contractName}`}
       thumbnailURL={`https://nftstorage.link/ipfs/${collection.image.cid}/${collection.image.path}`}
       description={collection.description}
       owner={$user.addr} />

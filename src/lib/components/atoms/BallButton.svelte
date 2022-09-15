@@ -18,7 +18,7 @@
     class:li-passed={passed}
     class:li-danger={danger}
   >
-    <Ball active={active} passed={passed} icon={icon}>
+    <Ball active={active} passed={passed} icon={icon} {danger}>
       {#if number}
         {number}
       {/if}
@@ -34,7 +34,7 @@
     class:li-danger={danger}
     on:click
   >
-    <Ball active={active} passed={passed} icon={icon}>
+    <Ball active={active} passed={passed} icon={icon} {danger}>
       {#if number}
         {number}
       {/if}

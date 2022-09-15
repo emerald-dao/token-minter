@@ -16,7 +16,7 @@
     </div>
     <CollectionCard
       name={$contractInfo.name}
-      url={`/${$user.addr}/${$contractInfo.contractName}`}
+      url={`/discover/${$user.addr}/${$contractInfo.contractName}`}
       thumbnailURL={`https://nftstorage.link/ipfs/${$resultCID}/${$contractInfo.imageName}`}
       description={$contractInfo.description}
       owner={$user.addr} />

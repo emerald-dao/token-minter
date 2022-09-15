@@ -3,6 +3,7 @@
   import { page } from "$app/stores";
   import { Divider, BallButton, Button, Stack } from "$atoms";
   import { getFindProfile } from "$flow/utils";
+  import { theme } from '$stores/ThemeStore'
 
   let findProfile = getFindProfile($user?.addr);
 </script>
@@ -14,9 +15,15 @@
       <h3>{profile.name}</h3>
       <h4>{profile.address}</h4>
     {:else}
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/168/168734.png"
-        alt="default avatar" />
+      {#if $theme === "dark"}
+        <img
+          src="/images/avatar/avatar-sidebar.jpg"
+          alt="default avatar" />
+      {:else}
+        <img
+          src="/images/avatar/avatar-sidebar-light.jpg"
+          alt="default avatar" />
+      {/if}
       <h3 class="address">{$user.addr}</h3>
       <Button
         href="https://find.xyz/me/profile"

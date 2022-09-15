@@ -13,7 +13,7 @@
   export let owner;
 </script>
 
-<a href={`/discover${url}`}>
+<a href={`${url}`}>
   <TransparentCard border={true} hoverShadow={true}>
     <div class="main-wrapper" direction="row" align="flex-start">
       <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>

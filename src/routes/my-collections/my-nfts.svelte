@@ -4,7 +4,7 @@
   import { user } from "$lib/stores/FlowStore.js";
 </script>
 
-<AdaptableGrid minWidth="14rem">
+<AdaptableGrid minWidth="10rem">
   {#await getTouchstonePurchases($user.addr) then purchases}
     {#each Object.values(purchases) as purchase}
       <NFTCard
