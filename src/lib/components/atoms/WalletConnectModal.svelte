@@ -1,7 +1,7 @@
 <script>
   import { fly } from "svelte/transition";
   import { Stack, TouchstoneIcon, Divider, FlowConnect } from "$atoms";
-  import {backInOut } from 'svelte/easing';
+  import { backInOut } from 'svelte/easing';
 
   let duration = 2000;
   let easing = backInOut;
@@ -24,7 +24,7 @@
   export let logoUrl = "/flow-logo.png"
 </script>
 
-<article transition:fly="{{ x: 100, duration: 800 }}">
+<article transition:fly="{{ y: 100, duration: 800 }}">
   <Stack direction="column" gap="2.7rem">
     <Stack direction="column" gap="0rem">
       <h6>Connect</h6>
@@ -46,8 +46,9 @@
 <style type="scss">
   article {
     position: fixed;
-    top: 90px;
-    right: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
     background-color: var(--clr-primary-main);
     box-shadow: 0 0 6px 0px var(--clr-primary-strong);
     color: var(--clr-font-text-inverse);
