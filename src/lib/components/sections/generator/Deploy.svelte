@@ -1,18 +1,17 @@
 <script>
-  import { Button, CollectionPreview, Stack } from "$atoms";
-  import DeploymentTransaction from '$components/sections/generator/DeploymentTransaction.svelte';
+  import { Button, CollectionPreview, Stack, TransactionModal } from "$atoms";
   import { deployToMainnet, deployToTestnet } from "$flow/actions.js";
-	import { transactionInProgress } from "$stores/FlowStore";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
 </script>
 
+<TransactionModal />
 <GeneratorStepLayout>
   <div slot="main-content">    
-    {#if $transactionInProgress}
+    <!-- {#if $transactionInProgress}
       <DeploymentTransaction/>
-    {:else}
+    {:else} -->
       <CollectionPreview/>
-    {/if}
+    <!-- {/if} -->
   </div>
   <Stack slot="buttons" direction="row ">
     <Button on:click={deployToTestnet} leftIcon="flask" class="ghost">
