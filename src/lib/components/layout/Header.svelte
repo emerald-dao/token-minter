@@ -16,6 +16,7 @@
   import { goto } from "$app/navigation";
   import { getFindProfile } from "$flow/utils";
   import { user } from "$stores/FlowStore";
+  import { theme } from "$stores/ThemeStore"
 
   let findProfile = getFindProfile($user?.addr);
 
@@ -67,10 +68,17 @@
                     src={profile.avatar}
                     alt={`${profile.name} avatar`} />
                 {:else}
-                  <img
-                    class="avatar"
-                    src="https://cdn-icons-png.flaticon.com/512/168/168734.png"
-                    alt="default avatar" />
+                  {#if $theme === "dark"}
+                    <img
+                      class="avatar"
+                      src="/images/avatar/avatar-header.jpg"
+                      alt="default avatar" />
+                  {:else}
+                    <img
+                      class="avatar"
+                      src="/images/avatar/avatar-header-light.jpg"
+                      alt="default avatar" />
+                  {/if}
                 {/if}
               </a>
             {/await}
@@ -92,10 +100,17 @@
                     src={profile.avatar}
                     alt={`${profile.name} avatar`} />
                 {:else}
-                  <img
-                    class="avatar"
-                    src="https://find.xyz/assets/img/avatars/avatar16.png"
-                    alt="default avatar" />
+                  {#if $theme === "dark"}
+                    <img
+                      class="avatar"
+                      src="/images/avatar/avatar-header.jpg"
+                      alt="default avatar" />
+                  {:else}
+                    <img
+                      class="avatar"
+                      src="/images/avatar/avatar-header-light.jpg"
+                      alt="default avatar" />
+                  {/if}
                 {/if}
               </a>
             {/await}
