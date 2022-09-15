@@ -21,11 +21,11 @@
     MyNFTs,
     CollectionStat,
     CollectionFilters,
+    TransactionModal,
+    WalletConnectModal
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
-  import { authenticate } from "@onflow/fcl";
-  import TransactionModal from "$lib/components/atoms/TransactionModal.svelte";
 
   export let contractAddress = $page.params.address;
 
@@ -135,7 +135,7 @@
               {/await}
             </Stack>
             {#if !$user.loggedIn}
-              <Button on:click={() => authenticate()}>Connect</Button>
+              <WalletConnectModal/>
             {/if}
             {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
               {#if !verifiers.some((verifier) => verifier.passing == false)}
