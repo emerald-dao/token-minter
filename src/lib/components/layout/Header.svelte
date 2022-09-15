@@ -44,9 +44,11 @@
     <nav>
       <!-- Desktop menu -->
       <div class="desktop-menu">
-        <Logo />
-        <Navigation />
-        <Stack direction="row" gap="0.5em">
+        <Stack direction="row" gap="4rem">
+          <Logo />
+          <Navigation gap="3rem"/>
+        </Stack>
+        <Stack direction="row" gap="0.4rem">
           <DiscordInvite />
           <ThemeToggle />
           {#if $page.url.pathname.includes("guide")}
@@ -58,10 +60,12 @@
               {/each}
             </Select>
           {/if}
-          <FlowConnect />
+          <FlowConnect size="small"/>
+          
+          
           {#if $user?.loggedIn}
             {#await findProfile then profile}
-              <a href="/my-collections" sveltekit:prefetch>
+              <a href="/my-collections" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}> 
                 {#if profile}
                   <img
                     class="avatar"
@@ -93,7 +97,7 @@
           <AnimatedHamburger {open} {onClick} />
           {#if $user?.loggedIn}
             {#await findProfile then profile}
-              <a href="/my-collections" sveltekit:prefetch>
+              <a href="/my-collections" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}>
                 {#if profile}
                   <img
                     class="avatar"

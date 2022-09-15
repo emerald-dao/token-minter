@@ -34,13 +34,20 @@
     text-align: inherit;
     justify-content: inherit;
     align-items: inherit;
+
+    @include mq(medium) {
+      text-align: left;
+      justify-content: flex-start;
+      align-items: flex-start;
+      width: auto;
+    }
   }
   
   li {
     font-size: var(--fs-400);
     
     @include mq(medium) {
-      font-size: var(--fs-300);
+      font-size: var(--fs-200);
     }
   }
   
