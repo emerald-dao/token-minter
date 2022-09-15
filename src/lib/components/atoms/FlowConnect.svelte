@@ -4,6 +4,9 @@
   import { getFindProfile } from "$flow/utils";
   import { user } from "$stores/FlowStore";
 
+  export let size = "medium";
+  export let type = "";
+
   let findProfile = getFindProfile($user?.addr);
 </script>
 
@@ -27,7 +30,7 @@
       </div>
     </Button>
   {:else}
-    <Button class="medium" on:click={logIn}>Connect</Button>
+    <Button class={`${size} ${type}`} on:click={logIn}>Connect</Button>
   {/if}
 </div>
 
