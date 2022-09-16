@@ -8,6 +8,7 @@
     Button,
     HtmlHead,
   } from "$atoms";
+  import { goto } from "$app/navigation";
 
   let collections = [
     {
@@ -43,17 +44,19 @@
 
 <Section class="padding-top-small padding-bottom-small">
   <Container>
+    <Stack direction="column" align="center" gap="0">
     <h1>Discover Collections</h1>
     <p>
       Browse collections created with {dappTitle} and mint your favourite NFTs
     </p>
-    <div class="flex">
+    <form on:submit|preventDefault={() => goto(`discover/${address}`)}>
       <input
         type="text"
         bind:value={address}
-        placeholder="0x5643fd47a29770e7" />
-      <Button href={`discover/${address}`}>Search</Button>
-    </div>
+        placeholder="0x5643fd47a29770e7" 
+      />
+      <Button>Search</Button>
+    </form>
 
     <Stack direction="column">
       {#each collections as collection}
@@ -65,21 +68,33 @@
           owner={collection.owner} />
       {/each}
     </Stack>
+    </Stack>
   </Container>
 </Section>
 
 <style type="scss">
-  .flex {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
+  @use "../../lib/styles/abstracts" as *;
+
+  form {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 100px;
+    gap: 0.6rem;
+
+    @include mq(small) {
+      flex-direction: row;
+    }
 
     input {
-      margin-right: 5px;
       margin-top: 0px;
+      width: 100%;
+      height: 100%;
+
+      @include mq(small) {
+        max-width: 25rem;
+      }
     }
   }
   h1 {
