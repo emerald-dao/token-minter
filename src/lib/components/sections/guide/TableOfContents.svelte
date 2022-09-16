@@ -95,20 +95,17 @@
     letter-spacing: 0.1em;
     font-weight: 200;
     text-transform: uppercase;
-    margin-bottom: 2em;
+    margin-bottom: 1rem;
   }
 
   ul {
     list-style: none;
     padding: 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 0.3rem;
     padding-block: 0.4em;
-    
-    @include mq(medium) {
-      border-left: 0.2px solid var(--clr-accent-strong);
-    }
   }
 
   .link-wrapper {
@@ -129,13 +126,12 @@
     .link-wrapper::before {
       content: '•';
       position: relative;
-      left: -0.35ch;
-      padding-right: 0.5em;
-      font-size: var(--fs-400);
+      padding-right: 0.3em;
+      font-size: var(--fs-500);
       vertical-align: middle;
       font-family: var(--ff-main);
-      font-size: 35px;
-      color: var(--clr-accent-strong);
+      color: var(--clr-accent-soft);
+      transition: 0.6s;
     }
    }
 
