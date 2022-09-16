@@ -121,7 +121,6 @@
     line-height: 1.4em;
   }
 
-
   @include mq(medium) {
     .link-wrapper::before {
       content: '•';
@@ -136,7 +135,7 @@
    }
 
   .link-wrapper:hover::before {
-    color: var(--clr-primary-main);
+    color: var(--clr-accent-main);
   }
 
 	.active .link-wrapper::before{
