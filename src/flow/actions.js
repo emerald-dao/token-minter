@@ -359,12 +359,12 @@ export const removeContractFromBook = async (contractName) => {
   }
 };
 
-export const airdrop = async (recipients, metadataIds) => {
+export const airdrop = async (recipients, metadataIds, contractName, contractAddress) => {
   initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
-      cadence: replaceWithProperValues(airdropTx),
+      cadence: replaceWithProperValues(airdropTx, contractName, contractAddress),
       args: (arg, t) => [arg(recipients, t.Array(t.Address)), arg(metadataIds, t.Array(t.UInt64))],
       payer: fcl.authz,
       proposer: fcl.authz,
@@ -387,12 +387,12 @@ export const airdrop = async (recipients, metadataIds) => {
   }
 };
 
-export const toggleMinting = async () => {
+export const toggleMinting = async (contractName, contractAddress) => {
   initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
-      cadence: replaceWithProperValues(toggleMintingTx),
+      cadence: replaceWithProperValues(toggleMintingTx, contractName, contractAddress),
       args: (arg, t) => [],
       payer: fcl.authz,
       proposer: fcl.authz,
