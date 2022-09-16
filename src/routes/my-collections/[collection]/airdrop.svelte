@@ -1,5 +1,9 @@
 <script>
-  import { DropZone, Button, Divider } from '$atoms'
+  import { DropZone, Button, Divider } from "$atoms";
+  import { airdrop } from "$flow/actions";
+  import { user } from "$stores/FlowStore";
+  import { page } from "$app/stores";
+  import { airdropCSVStore } from "$stores/CollectionFilesStore";
 </script>
 
 <div class="input-wrapper">
@@ -14,9 +18,20 @@
     id="csv"
     type="csv"
     placeholder="Drop CSV file"
-  />
-  <Divider space="1.7rem"/>
-  <Button>Airdrop</Button>
+    errors={$airdropCSVStore.errors}
+    fileStore={$airdropCSVStore.files}
+    saveFunction={airdropCSVStore.saveFiles}
+    deleteFileFromStore={airdropCSVStore.deleteAllFiles}
+    deleteAllFilesFromStore={airdropCSVStore.deleteAllFiles} />
+  <Divider space="1.7rem" />
+  <Button
+    on:click={() =>
+      airdrop(
+        $airdropCSVStore.parsedFiles[0],
+        $airdropCSVStore.parsedFiles[1],
+        $page.params.collection,
+        $user.addr
+      )}>Airdrop</Button>
 </div>
 
 <style type="scss">

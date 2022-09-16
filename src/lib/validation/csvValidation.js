@@ -163,3 +163,37 @@ const validateCsvAfterParse = (parsedCsv) => {
     };
   }
 };
+
+export const airdropCSVValidation = async (data) => {
+  const files = getFilesFromData(data);
+
+  // Run a first validation to see if the file is a CSV file
+  const beforeParseValidationResult = validateCsvBeforeParse(files);
+
+  if (beforeParseValidationResult === true) {
+    // If the file is a CSV file: we parse the file and run a second validation
+    const file = files.source === 'input' ? files.list[0] : files.list[0].getAsFile();
+    let parsedCSV;
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+      reader.onload = function () {
+        const pt = Papa.parse(reader.result);
+        parsedCSV = pt.data;
+        resolve();
+      };
+      reader.readAsBinaryString(file);
+    }).then(() => {
+      return {
+        validation: true,
+        files: [file],
+        parsedFiles: parsedCSV
+      };
+    })
+  } else {
+    // If the validation failed: we set the error message and set state to 'invalid'
+    return {
+      validation: false,
+      errors: beforeParseValidationResult.error,
+    };
+  }
+};
