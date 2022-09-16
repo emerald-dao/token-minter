@@ -18,20 +18,27 @@
 <Section class="padding-top-small padding-bottom-small">
   <Container>
     <h1>Browse Collections</h1>
-    <p>
-      Check out {owner}'s collections created with {dappTitle}!
-    </p>
     {#await getContractDisplays(owner) then collections}
-      <Stack direction="column">
+      {#if collections}
+        <p>
+          Check out <strong>{owner}</strong>'s collections created with {dappTitle}!
+        </p>
+        <Stack direction="column">
         {#each collections as collection}
           <CollectionCard
             name={collection.name}
             url={`/discover/${owner}/${collection.contractName}`}
             thumbnailURL={`https://nftstorage.link/ipfs/${collection.image.cid}/${collection.image.path}`}
             description={collection.description}
-            {owner} />
+            {owner}
+          />
         {/each}
       </Stack>
+      {:else}
+        <p>
+          Seems like <strong>{owner}</strong> doesn't own any collection created with {dappTitle}!
+        </p>
+      {/if}
     {/await}
   </Container>
 </Section>
@@ -46,5 +53,9 @@
     font-size: var(--fs-400);
     text-align: center;
     margin-bottom: 1.8em;
+
+    strong {
+      color: var(--clr-accent-main)
+    }
   }
 </style>
