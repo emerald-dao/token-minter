@@ -6,12 +6,14 @@
   export let backgroundColor;
 
   const fileType = getFileTypeFromURL(thumbnailURL);
+  // console.log(fileType)
 </script>
 
 {#if thumbnailURL}
   {#if fileType === "video"}
     <video width="100%" height="100%" autoplay loop muted class="thumbnail">
       <source src={thumbnailURL} type="video/webm" />
+      <source src={thumbnailURL} type="video/mp4" />
       <track kind="captions" />
       Your browser does not support the video tag.
     </video>

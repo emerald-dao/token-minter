@@ -9,7 +9,7 @@ const types = new Map([
 const getFileTypeFromURL = (urlPath) => {
   try {
     const url = new URL(urlPath);
-    const extension = url.pathname.split('.')[1];
+    const extension = url.pathname.split('.').pop();
 
     const fileType = types.get(extension);
     return fileType;
