@@ -387,12 +387,12 @@ export const airdrop = async (recipients, metadataIds, contractName, contractAdd
   }
 };
 
-export const toggleMinting = async () => {
+export const toggleMinting = async (contractName, contractAddress) => {
   initTransactionState();
 
   try {
     const transactionId = await fcl.mutate({
-      cadence: replaceWithProperValues(toggleMintingTx),
+      cadence: replaceWithProperValues(toggleMintingTx, contractName, contractAddress),
       args: (arg, t) => [],
       payer: fcl.authz,
       proposer: fcl.authz,
