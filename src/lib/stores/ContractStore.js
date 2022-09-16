@@ -5,6 +5,7 @@ import contract from '$flow/cadence/ExampleNFT.cdc?raw';
 import { user, addresses } from '$stores/FlowStore';
 import createObjectStore from '$stores/custom/ObjectStore';
 import { validateImages } from '$lib/validation/imagesValidation';
+import { imagesFileTypesAllowed } from '$lib/config/config';
 
 export const collectionInfo = createObjectStore('collectionInfo', {
   name: '',
@@ -12,11 +13,17 @@ export const collectionInfo = createObjectStore('collectionInfo', {
   description: '',
   payment: null,
 });
-export const collectionImage = createFilesStore(validateImages);
+export const collectionImage = createFilesStore(validateImages, imagesFileTypesAllowed);
 export const collectionImageName = derived([collectionImage], ([$collectionImage]) => {
   if ($collectionImage.files[0]) return $collectionImage.files[0].name;
 });
-export const collectionBannerImage = createFilesStore(validateImages);
+export const collectionBannerImage = createFilesStore(validateImages, [
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+]);
 export const collectionBannerImageName = derived([collectionBannerImage], ([$collectionBannerImage]) => {
   if ($collectionBannerImage.files[0]) return $collectionBannerImage.files[0].name;
 });
@@ -30,7 +37,7 @@ export const contractOptionsStore = createObjectStore('contractOptionsStore', {
   royalty: false,
   royaltyText: '',
   royaltyNumber: '',
-  lotteryBuying: false
+  lotteryBuying: false,
 });
 export const verifiersOptionsStore = createObjectStore('verifiersOptionsStore', {
   floatLink: false,

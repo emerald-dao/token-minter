@@ -3,9 +3,10 @@ import { csvStore } from '$stores/CollectionFilesStore';
 import { getFilesAsync } from '$lib/utilities/fileDropHandling';
 import { get } from 'svelte/store';
 import getFilesFromData from '$lib/utilities/getFilesFromData';
+import { imagesFileTypesAllowed } from '$lib/config/config';
 
 export const collectionImagesValidation = async (data) => {
-  const validationResult = await validateImages(data);
+  const validationResult = await validateImages(data, imagesFileTypesAllowed);
 
   if (validationResult.validation === true) {
     const getFiles = validationResult.files.filter((file) => file.name !== '.DS_Store');
@@ -46,16 +47,16 @@ export const collectionImagesValidation = async (data) => {
 //
 // If validation is succesful => return true
 // If validation is not succesful => return an object with the error
-export async function validateImages(data) {
-  const acceptedFileTypes = [
-    'video/mp4',
-    'video/webm',
-    'image/png',
-    'image/jpg',
-    'image/jpeg',
-    'image/webp',
-    'image/gif',
-  ];
+export async function validateImages(data, acceptedFileTypes) {
+  // const acceptedFileTypes = [
+  //   'video/mp4',
+  //   'video/webm',
+  //   'image/png',
+  //   'image/jpg',
+  //   'image/jpeg',
+  //   'image/webp',
+  //   'image/gif',
+  // ];
   const maxFileSize = 100000000; // 100 MB
 
   // File handling

@@ -61,3 +61,14 @@ export const socialMedia = [
 
 // Minutes before Flow price will be updated from CoinMarketCap API. This is to prevent various API calls.
 export const timeToUpdateFlowPrice = 15;
+
+// File types allowed for NFTs
+export const imagesFileTypesAllowed = [
+  'video/mp4',
+  'video/webm',
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/webp',
+  'image/gif',
+];

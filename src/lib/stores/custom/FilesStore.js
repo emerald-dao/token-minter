@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-function createFilesStore(validationFunction) {
+function createFilesStore(validationFunction, fileTypesAllowed) {
   const { subscribe, update, set } = writable({
     files: [],
     metadata: [],
@@ -9,7 +9,7 @@ function createFilesStore(validationFunction) {
   });
 
   async function saveFiles(files) {
-    const validationResult = await validationFunction(files);
+    const validationResult = await validationFunction(files, fileTypesAllowed);
     if (validationResult.validation === true) {
       update((store) => {
         store.files = [...store.files, ...validationResult.files];
