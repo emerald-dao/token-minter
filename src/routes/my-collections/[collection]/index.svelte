@@ -4,8 +4,24 @@
 	import { user } from "$stores/FlowStore";
 	import { page } from "$app/stores";
 	import { toggleMinting } from "$flow/actions";
+	import Button from "$lib/components/atoms/Button.svelte";
 
 	const collectionInfo = getContext("collectionInfo");
+
+	const saveContent = (fileContents, fileName) => {
+		const link = document.createElement("a");
+		link.download = fileName;
+		link.href = fileContents;
+		link.click();
+	};
+
+	const downloadBuyers = async (primaryBuyers, collectionName) => {
+		let csvContent = `data:text/csv;charset=utf-8,`;
+		for (const buyer in primaryBuyers) {
+			csvContent += buyer + "," + primaryBuyers[buyer] + "\n";
+		}
+		saveContent(csvContent, `${collectionName}-buyers.csv`);
+	};
 </script>
 
 <div class="stats-wrapper">
@@ -20,10 +36,10 @@
 	</TransparentCard>
 	<TransparentCard accent={true}>
 		{#await collectionInfo}
-			<CollectionStat title="NFTs Sold" stat="0" />
+			<CollectionStat title="NFTs Minted" stat="0" />
 		{:then info}
 			<CollectionStat
-				title="NFTs Sold"
+				title="NFTs Minted"
 				stat={Object.keys(info.primaryBuyers).length} />
 		{/await}
 	</TransparentCard>
@@ -42,7 +58,7 @@
 	<Stack direction="column" gap="1.4rem">
 		{#await collectionInfo then info}
 			<TransparentCard border={true}>
-				<Stack direction="row">
+				<Stack direction="column">
 					<label for="sale-active" class="checkbox-label">
 						<input
 							id="sale-active"
@@ -55,6 +71,10 @@
 					</label>
 				</Stack>
 			</TransparentCard>
+			<Button
+				on:click={() =>
+					downloadBuyers(info.primaryBuyers, $page.params.collection)}
+				>Download Buyers</Button>
 		{/await}
 	</Stack>
 </div>
