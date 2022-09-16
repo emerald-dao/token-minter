@@ -46,9 +46,9 @@
     // min-width: 15ch;
     // max-width: 30ch;
 
-    border: 1px solid var(--clr-accent-main);
-    border-radius: 0.2em;
-    padding: 0.25em 0.5em;
+    border: 2px solid var(--clr-accent-main);
+    border-radius: 0.5rem;
+    padding: 0.27em 0.5em;
 
     font-size: 1.25rem;
     cursor: pointer;
