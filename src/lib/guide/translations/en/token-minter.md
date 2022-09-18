@@ -14,7 +14,7 @@ There are 5 steps to creating your own NFT Collection using Touchstone. We will 
 There are a few things you have to enter:
 1. Collection Name - this is the general name of your collection (ex. FLOAT)
 2. Description - a description of your collection
-3. Payment Type - select if you want to sell in $FUSD or $FLOW
+3. Payment Type - select if you want to sell in $FLOW or $FUSD
 4. Price - the price of your NFTs in $FLOW or $FUSD
 5. Image - an image for your collection
 
