@@ -1,4 +1,5 @@
 <script>
+  import { getValue } from "felte";
   import DropZone from "./DropZone.svelte";
 
   export let header;
@@ -72,16 +73,21 @@
       deleteFileFromStore={store.deleteFile}
       deleteAllFilesFromStore={store.deleteAllFiles} />
   {:else if type === "radio"}
-    {#each radioOptions as value, idx}
-      <label>
+    {#each radioOptions as { value, image }, idx}
+      <div class="option">
+        <div>
+          <img width="50px" src={image} alt={value} />
+          <span>
+            {value}
+          </span>
+        </div>
         <input
           type="radio"
           id="{name}_{idx}"
           {name}
           {value}
           bind:group={$store[name]} />
-        <span>{value}</span>
-      </label>
+      </div>
     {/each}
   {/if}
 
@@ -97,5 +103,18 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+  }
+
+  .option {
+    display: flex;
+    margin-bottom: 5px;
+    padding: 10px;
+  }
+
+  .option > div {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
   }
 </style>

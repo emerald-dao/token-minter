@@ -30,7 +30,7 @@ let collectionOptions = [
       'Select if you want to sell in $FLOW or $FUSD',
     placeholder: '$FLOW',
     required: true,
-    radioOptions: ["$FLOW", "$FUSD"],
+    radioOptions: [{ value: "$FLOW", image: "/flow-logo.png" }, { value: "$FUSD", image: "/fusd-logo.png" }],
     store: collectionInfo,
   },
   {
