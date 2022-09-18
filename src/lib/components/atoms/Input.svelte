@@ -10,6 +10,9 @@
   export let helperText;
   export let store;
   export let bindValue;
+  export let radioOptions = [];
+
+  console.log(radioOptions);
 </script>
 
 <div class="input">
@@ -20,58 +23,66 @@
   {#if type === "text"}
     {#if store}
       <input
-        name={name}
+        {name}
         id={name}
-        placeholder={placeholder}
+        {placeholder}
         type="text"
         class:input-error={errors[name]}
-        class:input-ok={!errors[name]} 
-        bind:value={$store[name]}  
-      />
+        class:input-ok={!errors[name]}
+        bind:value={$store[name]} />
     {:else}
       <input
-        name={name}
+        {name}
         id={name}
-        placeholder={placeholder}
+        {placeholder}
         type="text"
         class:input-error={errors[name]}
-        class:input-ok={!errors[name]} 
-        bind:value={bindValue}  
-      />
+        class:input-ok={!errors[name]}
+        bind:value={bindValue} />
     {/if}
   {:else if type === "number"}
     {#if store}
       <input
-        name={name}
+        {name}
         id={name}
-        placeholder={placeholder}
+        {placeholder}
         type="number"
         class:input-error={errors[name]}
-        class:input-ok={!errors[name]} 
-        bind:value={$store[name]}  
-      />
+        class:input-ok={!errors[name]}
+        bind:value={$store[name]} />
     {:else}
       <input
-        name={name}
+        {name}
         id={name}
-        placeholder={placeholder}
+        {placeholder}
         type="number"
         class:input-error={errors[name]}
-        class:input-ok={!errors[name]} 
-        bind:value={bindValue}  
-      />
+        class:input-ok={!errors[name]}
+        bind:value={bindValue} />
     {/if}
   {:else if type === "image"}
     <DropZone
-      name={name}
+      {name}
       id={name}
-      placeholder={placeholder}
+      {placeholder}
       type="image"
       fileStore={$store.files}
       errors={$store.errors}
       saveFunction={store.saveFiles}
       deleteFileFromStore={store.deleteFile}
       deleteAllFilesFromStore={store.deleteAllFiles} />
+  {:else if type === "radio"}
+    {#each radioOptions as value, idx}
+      <label>
+        <input
+          type="radio"
+          id="{name}_{idx}"
+          {name}
+          {value}
+          bind:group={$store[name]} />
+        <span>{value}</span>
+      </label>
+    {/each}
   {/if}
 
   <div class="error-div">

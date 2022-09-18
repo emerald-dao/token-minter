@@ -6,6 +6,9 @@
   export let fontSize = "var(--fs-300)";
   export let currentPrice = false;
   export let flowPrice;
+  export let paymentType = "$FLOW";
+
+  console.log(paymentType);
 </script>
 
 <div style={`font-size: ${fontSize}`}>
@@ -16,16 +19,20 @@
     <Stack direction="row" gap="0.5em">
       <Stack direction="row" gap="0.4em">
         <img
-          src="/flow-logo.png"
+          src={paymentType === "$FUSD" ? "/fusd-logo.png" : "/flow-logo.png"}
           alt="flow coin logo"
           style={`width: ${width}`} />
         <p class="price" style={`font-size: ${fontSize}`}>
           {Number(price).toFixed(3)}
         </p>
       </Stack>
-      {#if flowPrice}
+      {#if flowPrice && paymentType === "$FLOW"}
         <p class="price-dollars">
-          {`(USD ${(Number(price).toFixed(3) * flowPrice).toFixed(1)})`} 
+          {`(USD ${(Number(price).toFixed(3) * flowPrice).toFixed(1)})`}
+        </p>
+      {:else if paymentType === "$FUSD"}
+        <p class="price-dollars">
+          {`(USD ${Number(price).toFixed(3)})`}
         </p>
       {/if}
     </Stack>

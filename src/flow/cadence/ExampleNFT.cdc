@@ -6,6 +6,7 @@ import MetadataViews from "./utility/MetadataViews.cdc"
 import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
 import MintVerifiers from "./MintVerifiers.cdc" 
+import FUSD from "./utility/FUSD.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
@@ -232,7 +233,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	// A function to mint NFTs. 
 	// You can only call this function if minting
 	// is currently active.
-	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FlowToken.Vault): UInt64 {
+	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FungibleToken.Vault): UInt64 {
 		pre {
 			self.canMint(): "Minting is currently closed by the Administrator!"
 			payment.balance == self.getPriceOfNFT(metadataId): 
@@ -248,9 +249,10 @@ pub contract ExampleNFT: NonFungibleToken {
 			}
 		}
 
+		let receiverPath: PublicPath = /public/RECEIVER_PATH
 		// Handle Emerald City DAO royalty (5%)
-		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/flowTokenReceiver)
-								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(receiverPath)
+								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		let emeraldCityCut: UFix64 = 0.05 * price
 
 		// Handle royalty to user that was configured upon creation
@@ -261,8 +263,8 @@ pub contract ExampleNFT: NonFungibleToken {
 		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: emeraldCityCut))
 
 		// Give the rest to the collection owner
-		let paymentRecipient = self.account.getCapability(/public/flowTokenReceiver)
-								.borrow<&FlowToken.Vault{FungibleToken.Receiver}>()!
+		let paymentRecipient = self.account.getCapability(receiverPath)
+								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 
 		// Mint the nft 
@@ -385,6 +387,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		_minting: Bool, 
 		_royalty: MetadataViews.Royalty?,
 		_defaultPrice: UFix64,
+		_paymentType: String,
 		_ipfsCID: String,
 		_lotteryBuying: Bool,
 		_socials: {String: MetadataViews.ExternalURL},
@@ -413,6 +416,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.collectionInfo["royalty"] = royalty
 		}
 		self.collectionInfo["price"] = _defaultPrice
+		self.collectionInfo["paymentType"] = _paymentType
 		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
 		self.collectionInfo["mintVerifiers"] = _mintVerifiers
 		self.collectionInfo["profit"] = 0.0

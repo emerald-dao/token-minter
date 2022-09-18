@@ -8,6 +8,7 @@
   export let address;
   export let contractName;
   export let number;
+  export let paymentType;
 
   let lotteryNumber = 0;
   let clear;
@@ -30,6 +31,7 @@
   name={metadatas[lotteryNumber].name}
   description={metadatas[lotteryNumber].description}
   {price}
+  {paymentType}
   buy={true}
   url={`/discover/${address}/${contractName}/${metadatas[lotteryNumber].metadataId}`}
   purchase={() => purchaseRandomNFT(price, contractName, address)}

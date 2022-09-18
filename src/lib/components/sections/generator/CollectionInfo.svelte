@@ -1,6 +1,10 @@
 <script>
 	import { createForm } from "felte";
-	import { canMakeReservation, getAllContractNames, hasEmeraldPass } from "$flow/actions.js";
+	import {
+		canMakeReservation,
+		getAllContractNames,
+		hasEmeraldPass,
+	} from "$flow/actions.js";
 	import { collectionInfo, collectionImage } from "$stores/ContractStore.js";
 	import { user } from "$stores/FlowStore";
 	import collectionOptions from "$lib/config/collectionOptions.js";
@@ -26,9 +30,9 @@
 	const { form, errors } = createForm({
 		extend: [validator({ schema })],
 
-		onSubmit(){
-			activeStep.onNext(checkContracts)
-		}
+		onSubmit() {
+			activeStep.onNext(checkContracts);
+		},
 	});
 
 	async function checkContracts() {
@@ -37,28 +41,38 @@
 		// CHECK TO SEE IF THEY HAVE EMERALD PASS HERE
 		const activeEmeraldPass = await hasEmeraldPass($user.addr);
 
-		$collectionInfo.contractName = activeEmeraldPass ? $collectionInfo.name.replace(/\s+/g, "") : "Touchstone" + $collectionInfo.name.replace(/\s+/g, "");
-		
+		$collectionInfo.contractName = activeEmeraldPass
+			? $collectionInfo.name.replace(/\s+/g, "")
+			: "Touchstone" + $collectionInfo.name.replace(/\s+/g, "");
+
 		if (contracts.includes($collectionInfo.contractName)) {
 			return {
-				error: "This collection name is already deployed to your account. You cannot use it again."
+				error:
+					"This collection name is already deployed to your account. You cannot use it again.",
 			};
 		}
 
 		if (activeEmeraldPass) {
-			const userCanMakeReservation = await canMakeReservation($collectionInfo.contractName);
+			const userCanMakeReservation = await canMakeReservation(
+				$collectionInfo.contractName
+			);
 			if (!userCanMakeReservation) {
 				return {
-					error:	"Someone has already used this Collection Name. Please choose another."
-				}
+					error:
+						"Someone has already used this Collection Name. Please choose another.",
+				};
 			}
 		}
-		
+
 		return true;
 	}
 
 	// Activate next button when all required fields are filled
-	$: buttonActive = $collectionInfo.name.length > 0 && $collectionInfo.payment && $collectionInfo.description.length > 0 && $collectionImage.files.length > 0;
+	$: buttonActive =
+		$collectionInfo.name.length > 0 &&
+		$collectionInfo.payment &&
+		$collectionInfo.description.length > 0 &&
+		$collectionImage.files.length > 0;
 </script>
 
 <GeneratorStepLayout>
@@ -72,8 +86,8 @@
 				errors={$errors}
 				required={option.required}
 				placeholder={option.placeholder}
-				helperText={option.helperText} 
-				/>
+				helperText={option.helperText}
+				radioOptions={option.radioOptions} />
 		{/each}
 	</form>
 	<Button
@@ -82,11 +96,10 @@
 		form="collection-info"
 		rightIcon="arrow-forward-circle"
 		loading={$activeStep.loading}
-		disabled={!buttonActive}
-		>
+		disabled={!buttonActive}>
 		{#if $activeStep.loading}
-      Checking Collection Availability
-    {:else}
+			Checking Collection Availability
+		{:else}
 			Next
 		{/if}
 	</Button>

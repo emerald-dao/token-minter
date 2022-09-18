@@ -18,6 +18,10 @@ const contractData = {
     testnet: '0x7e60df042a9c0868',
     mainnet: '0x1654653399040a61',
   },
+  FUSD: {
+    testnet: '0xe223d8a629e49c68',
+    mainnet: '0x3c5959b568896393',
+  },
   ECTreasury: {
     testnet: '0x6c0d53c676256e8c',
     mainnet: '0x5643fd47a29770e7',
@@ -63,6 +67,7 @@ export const addresses = derived([network], ([$network]) => {
     MetadataViews: contractData.MetadataViews[$network],
     FungibleToken: contractData.FungibleToken[$network],
     FlowToken: contractData.FlowToken[$network],
+    FUSD: contractData.FUSD[$network],
     ECTreasury: contractData.ECTreasury[$network],
     MintVerifiers: contractData.MintVerifiers[$network],
     FLOAT: contractData.FLOAT[$network],

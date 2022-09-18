@@ -4,6 +4,7 @@ import MetadataViews from "../utility/MetadataViews.cdc"
 import TouchstoneContracts from "../TouchstoneContracts.cdc"
 import FlowToken from "../utility/FlowToken.cdc"
 import FungibleToken from "../utility/FungibleToken.cdc"
+import FUSD from "../utility/FUSD.cdc"
 
 transaction(
   contractName: String, // TouchstoneExampleNFT
@@ -12,6 +13,7 @@ transaction(
   imagePath: String,
   bannerImagePath: String?,
   price: UFix64,
+  paymentType: String,
   ipfsCID: String,
   // Socials
   socials: {String: String},
@@ -33,6 +35,16 @@ transaction(
 ) {
 
   prepare(deployer: AuthAccount) {
+    /**************************************************************************************/
+    /********************************** Setup FUSD if not *********************************/
+    /**************************************************************************************/
+    if deployer.borrow<&FUSD.Vault>(from: /storage/fusdVault) == nil {
+      deployer.save(<- FUSD.createEmptyVault(), to: /storage/fusdVault)
+      deployer.link<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver, target: /storage/fusdVault)
+      deployer.link<&FUSD.Vault{FungibleToken.Balance}>(/public/fusdBalance, target: /storage/fusdVault)
+    }
+
+
     /**************************************************************************************/
     /************************************* DEPLOYMENT *************************************/
     /**************************************************************************************/
@@ -81,6 +93,7 @@ transaction(
       _minting: minting,
       _royalty: royaltyInfo,
       _price: price,
+      _paymentType: paymentType,
       _ipfsCID: ipfsCID,
       _lotteryBuying: lotteryBuying,
       _socials: socialsStruct,

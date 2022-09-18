@@ -49,8 +49,9 @@
 		{:then info}
 			<CollectionStat
 				title="Profit"
-				stat={Number(info.profit).toFixed(2)}
-				flowLogo={true} />
+				stat={Number(info.profit).toFixed(3)}
+				flowLogo={info.paymentType === "$FLOW"}
+				fusdLogo={info.paymentType === "$FUSD"} />
 		{/await}
 	</TransparentCard>
 </div>

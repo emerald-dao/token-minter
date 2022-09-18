@@ -11,6 +11,7 @@
   export let url;
   export let purchase;
   export let flowPrice;
+  export let paymentType;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
@@ -22,7 +23,8 @@
         {name}
         {description}
         {backgroundColor}
-        {price} />
+        {price}
+        {paymentType} />
       {#if buy}
         <Button class="small full-width no-shadow ghost">Buy Now</Button>
       {/if}
@@ -35,6 +37,7 @@
       {description}
       {backgroundColor}
       {price} />
+    {paymentType}
     {#if buy}
       {#if purchase}
         <Button class="small full-width no-shadow ghost" on:click={purchase}

@@ -14,21 +14,32 @@ let collectionOptions = [
     store: collectionInfo,
   },
   {
-    header: 'Price',
-    name: 'payment',
-    type: 'number',
-    helperText:
-      'Define the default price of your NFTs in $FLOW tokens (this will get overwritten if you supply a `price` attribute in your CSV file in the next step)',
-    placeholder: '10.0',
-    required: true,
-    store: collectionInfo,
-  },
-  {
     header: 'Description',
     name: 'description',
     type: 'text',
     helperText: 'Provide a description for your project',
     placeholder: 'This is a super awesome example NFT Collection.',
+    required: true,
+    store: collectionInfo,
+  },
+  {
+    header: 'Payment Type',
+    name: 'paymentType',
+    type: 'radio',
+    helperText:
+      'Select if you want to sell in $FLOW or $FUSD',
+    placeholder: '$FLOW',
+    required: true,
+    radioOptions: ["$FLOW", "$FUSD"],
+    store: collectionInfo,
+  },
+  {
+    header: 'Price',
+    name: 'payment',
+    type: 'number',
+    helperText:
+      'Define the default price of your NFTs in $FLOW or $FUSD tokens (this will get overwritten for an individual NFT if you supply a `price` attribute in your CSV file in the next step)',
+    placeholder: '10.0',
     required: true,
     store: collectionInfo,
   },

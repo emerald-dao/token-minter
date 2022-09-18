@@ -88,11 +88,13 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"../utility/FUSD.cdc"', addressList.FUSD)
     .replace('"../utility/FungibleToken.cdc"', addressList.FungibleToken)
     .replace('"./utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
     .replace('"./utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"./utility/FUSD.cdc"', addressList.FUSD)
     .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
@@ -138,6 +140,7 @@ async function deployContract() {
         arg(info.imageName, t.String),
         arg(info.bannerImageName ? info.bannerImageName : null, t.Optional(t.String)),
         arg(Number(info.payment).toFixed(3), t.UFix64),
+        arg(info.paymentType, t.String),
         arg(get(resultCID), t.String),
         // Socials
         arg(socials, t.Dictionary({ key: t.String, value: t.String })),
@@ -185,8 +188,19 @@ async function deployContract() {
   }
 }
 
-export const purchaseNFT = async (serial, price, contractName, contractAddress) => {
-  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress);
+export const purchaseNFT = async (serial, price, contractName, contractAddress, paymentType) => {
+  let vaultType = '';
+  let storagePath = '';
+  if (paymentType == "$FLOW") {
+    vaultType = "FlowToken.Vault";
+    storagePath = "flowTokenVault";
+  } else if (paymentType == "$FUSD") {
+    vaultType = "FUSD.Vault";
+    storagePath = "fusdVault";
+  }
+  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
+    .replaceAll('FungibleToken.Vault', vaultType)
+    .replace('PAYMENT_PATH', storagePath);
 
   initTransactionState();
 
@@ -620,6 +634,7 @@ export async function hasEmeraldPass(user) {
       args: (arg, t) => [arg(user, t.Address)],
     });
 
+    console.log('[EMERALD PASS]: ', response);
     return response;
   } catch (e) {
     console.log(e);

@@ -1,6 +1,7 @@
 <script>
   export let title;
   export let flowLogo = false;
+  export let fusdLogo = false;
   export let stat;
 </script>
 
@@ -8,6 +9,8 @@
   <strong>
     {#if flowLogo}
       <img src="/flow-logo.png" alt="flow logo" />
+    {:else if fusdLogo}
+      <img src="/fusd-logo.png" alt="fusd logo" />
     {/if}
     {stat}
   </strong>
@@ -21,9 +24,9 @@
     p {
       font-size: var(--fs-300);
       text-align: left;
-      color: var(--clr-font-text-t7)
+      color: var(--clr-font-text-t7);
     }
-    
+
     strong {
       display: flex;
       align-items: center;

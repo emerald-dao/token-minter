@@ -12,6 +12,7 @@ export const collectionInfo = createObjectStore('collectionInfo', {
   contractName: '',
   description: '',
   payment: null,
+  paymentType: '$FLOW'
 });
 export const collectionImage = createFilesStore(validateImages, imagesFileTypesAllowed);
 export const collectionImageName = derived([collectionImage], ([$collectionImage]) => {
@@ -37,7 +38,7 @@ export const contractOptionsStore = createObjectStore('contractOptionsStore', {
   royalty: false,
   royaltyText: '',
   royaltyNumber: '',
-  lotteryBuying: false,
+  lotteryBuying: false
 });
 export const verifiersOptionsStore = createObjectStore('verifiersOptionsStore', {
   floatLink: false,
@@ -71,6 +72,7 @@ export const contractInfo = derived(
       contractName: $collectionInfo.contractName,
       description: $collectionInfo.description,
       payment: $collectionInfo.payment,
+      paymentType: $collectionInfo.paymentType,
       image: $collectionImage.files[0],
       imageName: $collectionImageName,
       bannerImage: $collectionBannerImage.files[0],
@@ -94,7 +96,19 @@ export const contractInfo = derived(
 );
 
 export const contractCode = derived([contractInfo, user, addresses], ([$contractInfo, $user]) => {
-  return replaceWithProperValues(contract, $contractInfo.contractName, undefined).replaceAll('USER_ADDR', $user.addr);
+  let vaultType = '';
+  let receiverPath = '';
+  if ($contractInfo.paymentType == "$FLOW") {
+    vaultType = "FlowToken.Vault";
+    receiverPath = "flowTokenReceiver";
+  } else if ($contractInfo.paymentType == "$FUSD") {
+    vaultType = "FUSD.Vault";
+    receiverPath = "fusdReceiver";
+  }
+  return replaceWithProperValues(contract, $contractInfo.contractName, undefined)
+    .replaceAll('USER_ADDR', $user.addr)
+    .replaceAll('FungibleToken.Vault', vaultType)
+    .replaceAll('RECEIVER_PATH', receiverPath);
 });
 
 export const restartContractInfo = () => {

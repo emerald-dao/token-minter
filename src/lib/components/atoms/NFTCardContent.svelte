@@ -1,24 +1,25 @@
 <script>
   import { NFTPrice, NftImage, Divider } from "$atoms";
-  
+
   export let thumbnailURL;
   export let name;
   export let description;
   export let backgroundColor;
   export let price;
   export let flowPrice;
+  export let paymentType;
 </script>
 
 <div class="main-wrapper">
-  <NftImage thumbnailURL={thumbnailURL} name={name} backgroundColor={backgroundColor} />
-  <Divider space="2rem"/>
+  <NftImage {thumbnailURL} {name} {backgroundColor} />
+  <Divider space="2rem" />
   <div class="content">
     <h4>{name}</h4>
     {#if description}
-    <p class="description">{description}</p>
+      <p class="description">{description}</p>
     {/if}
     {#if price}
-      <NFTPrice price={price} flowPrice={flowPrice}/>
+      <NFTPrice {price} {flowPrice} {paymentType} />
     {/if}
   </div>
 </div>
