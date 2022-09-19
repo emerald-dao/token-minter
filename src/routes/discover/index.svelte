@@ -12,27 +12,11 @@
 
   let collections = [
     {
-      name: "Test Collection 1",
-      slug: "jacob3",
-      thumbnailURL: "/images/guide/ballerz.png",
+      name: "Official Testnet Test",
+      slug: "OfficialTestnetTest",
+      thumbnailURL: "/nft_cap1.png",
       description:
-        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
-      owner: "0xfe10201e647ca718",
-    },
-    {
-      name: "Test Collection 1",
-      slug: "jacob3",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
-      owner: "0xfe10201e647ca718",
-    },
-    {
-      name: "Test Collection 1",
-      slug: "jacob3",
-      thumbnailURL: "/images/guide/ballerz.png",
-      description:
-        "This is a test... random text... Founded in 2016, they have been OGs in the crypto space...!",
+        "This is our first official test of Touchstone on Testnet. NOTE: Because this is on testnet, this is not a real collection.",
       owner: "0xfe10201e647ca718",
     },
   ];
@@ -45,29 +29,28 @@
 <Section class="padding-top-small padding-bottom-small">
   <Container>
     <Stack direction="column" align="center" gap="0">
-    <h1>Discover Collections</h1>
-    <p>
-      Browse collections created with {dappTitle} and mint your favourite NFTs
-    </p>
-    <form on:submit|preventDefault={() => goto(`discover/${address}`)}>
-      <input
-        type="text"
-        bind:value={address}
-        placeholder="0x5643fd47a29770e7" 
-      />
-      <Button>Search</Button>
-    </form>
+      <h1>Discover Collections</h1>
+      <p>
+        Browse collections created with {dappTitle} and mint your favourite NFTs
+      </p>
+      <form on:submit|preventDefault={() => goto(`discover/${address}`)}>
+        <input
+          type="text"
+          bind:value={address}
+          placeholder="0x5643fd47a29770e7" />
+        <Button>Search</Button>
+      </form>
 
-    <Stack direction="column">
-      {#each collections as collection}
-        <CollectionCard
-          name={collection.name}
-          url={`/discover/${collection.owner}/${collection.slug}`}
-          thumbnailURL={collection.thumbnailURL}
-          description={collection.description}
-          owner={collection.owner} />
-      {/each}
-    </Stack>
+      <Stack direction="column">
+        {#each collections as collection}
+          <CollectionCard
+            name={collection.name}
+            url={`/discover/${collection.owner}/${collection.slug}`}
+            thumbnailURL={collection.thumbnailURL}
+            description={collection.description}
+            owner={collection.owner} />
+        {/each}
+      </Stack>
     </Stack>
   </Container>
 </Section>
