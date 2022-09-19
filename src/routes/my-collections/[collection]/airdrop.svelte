@@ -9,9 +9,9 @@
 <div class="input-wrapper">
   <label for="dropZoneCsv">Airdrop Data</label>
   <span class="helper-text"
-    >Drop a CSV file containing airdrop adresses.
+    >Drop a CSV file containing airdrop adresses and associated NFT ids.
     <br />Download this <a href="/assets/metadata.csv" download>template</a>
-    to have a basic CSV structure.
+    to see an example.
   </span>
   <DropZone
     name="csv"

@@ -1,17 +1,24 @@
 <script>
-  import { getContext } from 'svelte';
+  import { getContext } from "svelte";
   import { user } from "$stores/FlowStore";
   import { page } from "$app/stores";
-  import { Divider, BallButton, Button, Stack, NftImage, ImagePlaceholder } from "$atoms";
+  import {
+    Divider,
+    BallButton,
+    Button,
+    Stack,
+    NftImage,
+    ImagePlaceholder,
+  } from "$atoms";
 
-  const collectionInfo = getContext('collectionInfo');
+  const collectionInfo = getContext("collectionInfo");
 </script>
 
 <Stack direction="column" gap="0.2rem" align="flex-start" justify="center">
   {#await collectionInfo}
-    <ImagePlaceholder/>
+    <ImagePlaceholder />
     <h3>Loading...</h3>
-  {:then info} 
+  {:then info}
     <NftImage
       thumbnailURL={`https://nftstorage.link/ipfs/${info.image.cid}/${info.image.path}`}
       name={`${info.name} main image`} />
@@ -30,7 +37,14 @@
   General
 </BallButton>
 <BallButton
-  active={$page.url.pathname === `/my-collections/${$page.params.collection}/airdrop`}
+  active={false}
+  icon="ion:eye"
+  href={`/discover/${$user.addr}/${$page.params.collection}`}>
+  View Collection
+</BallButton>
+<BallButton
+  active={$page.url.pathname ===
+    `/my-collections/${$page.params.collection}/airdrop`}
   icon="ion:gift"
   href={`/my-collections/${$page.params.collection}/airdrop`}>
   Airdrop
@@ -46,8 +60,6 @@
   class="small transparent"
   leftIcon="arrow-back-circle"
   href="/my-collections">Back to My Collections</Button>
-
-
 
 <style type="scss">
   h3 {
