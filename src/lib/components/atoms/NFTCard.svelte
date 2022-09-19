@@ -36,8 +36,8 @@
       {name}
       {description}
       {backgroundColor}
-      {price} />
-    {paymentType}
+      {price}
+      {paymentType} />
     {#if buy}
       {#if purchase}
         <Button class="small full-width no-shadow ghost" on:click={purchase}
