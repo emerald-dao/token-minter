@@ -20,19 +20,43 @@ There are a few things you have to enter:
 
 ## Upload Assets
 
-1. CSV File - this is a file that contains all of your attributes and associated metadata for each NFT. You must have a `name`, `description`, and `image` attribute.
+There are 2 folders you need to upload in this step:
 
-Additionally, you can (not required) include:
+1. CSV File - this is a CSV file that contains all of your attributes and associated metadata for each NFT.
+2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`.
+
+> If you're someone who likes examples instead of reading text, you can click <a href="/assets/metadata.csv" download="">here</a> for an example CSV file, and <a href="/assets/images.zip" download="">here</a> for an example images folder. They show you how to match the metadata.*
+
+### How to Make CSV File
+
+Each of your NFTs is going to have metadata associated with it. For example:
+- Name
+- Description
+- Image
+- Rarity
+- ... and more
+
+Each of these items are called "attributes." The first line of your metadata CSV File should be the attributes that the NFTs will have.
+
+On Touchstone, **you must** have a `name`, `description`, and `image` attribute. Additionally, you can optionally include:
 - a `thumbnail` attribute if you want your NFT to display a less-intensive picture for easier loading.
 - a `price` attribute if you want each NFT to have a different price. All prices should be in $FLOW.
 
 You can also include whatever other attributes you'd like, however you cannot use one of the 5 attribute names above (name, description, image, thumbnail, or price) for different purposes than what is described of them above.
 
-2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`.
+Each row of the CSV File is an NFT.
 
-*Click <a href="/assets/metadata.csv" download="">here</a> for an example CSV file, and <a href="/assets/images.zip" download="">here</a> for an example images folder. They show you how to match the metadata.*
+For the `image` attribute, you must put the name of the file that is inside your Images folder. More on that in the next section...
 
-3. IPFS Key - this is a key you can provide for us to upload your assets to IPFS. You can get this by going to https://nft.storage/login, clicking "API Keys" at the top, and creating your own key. 
+### How to Make the Images Folder
+
+The images folder is actually quite simple. Just make a folder that contains all of the images of your different NFTs. It's totally fine if an image gets used more than once, so don't have duplicate images in that folder. 
+
+You map an NFT to an image by putting its name in the CSV File described above. So if an image is named `nft_image1.png`, that is what you put under the NFT's image attribute.
+
+### IPFS Key
+
+The last thing you need is a key you can provide for us to upload your assets to IPFS. You can get this by going to https://nft.storage/login, clicking "API Keys" at the top, and creating your own key. 
 
 ## Contract Information
 
