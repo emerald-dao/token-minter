@@ -46,7 +46,7 @@
       }
       resolve({
         floorPrice:
-          min == Number.POSITIVE_INFINITY ? "Sold Out" : Number(min).toFixed(3),
+          min == Number.POSITIVE_INFINITY ? "N/A" : Number(min).toFixed(3),
         highestBuy: Number(highestBuy).toFixed(3),
         totalItems: metadatas.length,
         numPurchased: purchasedIndexes.length,
