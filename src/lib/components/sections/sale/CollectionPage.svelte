@@ -81,7 +81,7 @@
             <div
               class="collection-info-wrapper"
               class:no-banner={!collectionInfo.bannerImage}>
-              <Stack direction="row" align="flex-end" justify="space-between">
+              <div class="collection-info">
                 <div class="presentation-wrapper">
                   <div class="image-wrapper">
                     <NftImage
@@ -105,7 +105,7 @@
                     <Divider space="1px" />
                   </Stack>
                 {/if}
-              </Stack>
+              </div>
               <Divider space="30px" />
               <Stack direction="column" align="flex-start" gap="1.7em">
                 <h1>{collectionInfo.name}</h1>
@@ -220,15 +220,24 @@
     position: relative;
     top: -120px;
 
-    .presentation-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-      align-items: flex-start;
-
-      @include mq(small) {
+    .collection-info {
+      @include mq(medium) {
+        display: flex;
         flex-direction: row;
+        justify-content: space-between;
         align-items: flex-end;
+      }
+
+      .presentation-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+        align-items: flex-start;
+
+        @include mq(medium) {
+          flex-direction: row;
+          align-items: flex-end;
+        }
       }
     }
   }
