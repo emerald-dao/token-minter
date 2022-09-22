@@ -41,6 +41,7 @@
 				<div class="video sticky">
 					<video width="100%" height="100%" autoplay loop muted>
 						<source src="emerald2.webm" type="video/webm" />
+						<source src="emerald2.mp4" type="video/mp4" />
 						<track kind="captions" />
 						Your browser does not support the video tag.
 					</video>
@@ -101,5 +102,9 @@
 			transparent
 		);
 		backdrop-filter: blur(10px);
+	}
+
+	video {
+		border-radius: 3rem;
 	}
 </style>
