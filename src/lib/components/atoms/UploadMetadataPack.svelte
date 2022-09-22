@@ -1,19 +1,12 @@
 <script>
-  import {
-    TransparentCard,
-    Stack,
-    LoadingSpinner,
-    Button,
-  } from "$atoms";
+  import { TransparentCard, Stack, LoadingSpinner, Button } from "$atoms";
   import Icon from "@iconify/svelte";
-  import {
-    uploadMetadataToContract,
-    getNextMetadataId,
-  } from "$flow/actions";
+  import { uploadMetadataToContract, getNextMetadataId } from "$flow/actions";
   import { user } from "$stores/FlowStore";
   import { contractInfo } from "$stores/ContractStore";
   import { csvStore } from "$stores/CollectionFilesStore";
   import { createEventDispatcher } from "svelte";
+  import { resultCID } from "$stores/IPFSstore";
 
   const dispatch = createEventDispatcher();
 
@@ -42,7 +35,8 @@
     const uploadResult = await uploadMetadataToContract(
       $contractInfo.contractName,
       metadatas,
-      batchSize
+      batchSize,
+      $resultCID
     );
     if (uploadResult.success) {
       uploadState = "uploaded";

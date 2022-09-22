@@ -23,7 +23,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub event Deposit(id: UInt64, to: Address?)
 	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile, price: UFix64)
 	pub event Minted(id: UInt64, recipient: Address, metadataId: UInt64)
-	pub event MintBatch(metadataIds: [UInt64], intendedRecipients: [Address], notSetup: [Address])
+	pub event MintBatch(metadataIds: [UInt64], recipients: [Address])
 
 	// Paths
 	pub let CollectionStoragePath: StoragePath
@@ -39,6 +39,8 @@ pub contract ExampleNFT: NonFungibleToken {
 	// You can also get a list of purchased NFTs
 	// by doing `primaryBuyers.keys`
 	access(account) let primaryBuyers: {UInt64: Address}
+
+	access(account) let nftStorage: @{Address: {UInt64: NFT}}
 
 	pub struct NFTMetadata {
 		pub let metadataId: UInt64
@@ -221,6 +223,14 @@ pub contract ExampleNFT: NonFungibleToken {
 			return nft as &AnyResource{MetadataViews.Resolver}
 		}
 
+		pub fun claim() {
+			if let storage = &ExampleNFT.nftStorage[self.owner!.address] as &{UInt64: NFT}? {
+				for id in storage.keys {
+					self.deposit(token: <- storage.remove(key: id)!)
+				}
+			}
+		}
+
 		init () {
 			self.ownedNFTs <- {}
 		}
@@ -298,8 +308,17 @@ pub contract ExampleNFT: NonFungibleToken {
 
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
-		pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.CollectionPublic}) {
-			recipient.deposit(token: <- create NFT(_metadataId: metadataId, _recipient: recipient.owner!.address))
+		pub fun mintNFT(metadataId: UInt64, recipient: Address) {
+			let nft <- create NFT(_metadataId: metadataId, _recipient: recipient)
+			if let recipientCollection = getAccount(recipient).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
+				recipientCollection.deposit(token: <- nft)
+			} else {
+				if let storage = &ExampleNFT.nftStorage[recipient] as &{UInt64: NFT}? {
+					storage[nft.id] <-! nft
+				} else {
+					ExampleNFT.nftStorage[recipient] <-! {nft.id: <- nft}
+				}
+			}
 		}
 
 		pub fun mintBatch(metadataIds: [UInt64], recipients: [Address]) {
@@ -307,17 +326,12 @@ pub contract ExampleNFT: NonFungibleToken {
 				metadataIds.length == recipients.length: "You need to pass in an equal number of metadataIds and recipients."
 			}
 			var i = 0
-			var notSetup: [Address] = []
 			while i < metadataIds.length {
-				if let recipientCollection = getAccount(recipients[i]).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
-					self.mintNFT(metadataId: metadataIds[i], recipient: recipientCollection)
-				} else {
-					notSetup.append(recipients[i])
-				}
+				self.mintNFT(metadataId: metadataIds[i], recipient: recipients[i])
 				i = i + 1
 			}
 
-			emit MintBatch(metadataIds: metadataIds, intendedRecipients: recipients, notSetup: notSetup)
+			emit MintBatch(metadataIds: metadataIds, recipients: recipients)
 		}
 
 		// create a new Administrator resource
@@ -425,6 +439,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.totalSupply = 0
 		self.metadatas = {}
 		self.primaryBuyers = {}
+		self.nftStorage <- {}
 
 		// Set the named paths
 		// We include the user's address in the paths.

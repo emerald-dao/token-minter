@@ -5,23 +5,60 @@
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
   import { activeStep } from "$stores/ActiveStepStore";
+  import { uploadMetadataToContract } from "$flow/actions.js";
+  import { page } from "$app/stores";
+  import { resultCID } from "$stores/IPFSstore";
+
+  export let afterCreation = false;
 
   const onStepSubmit = async () => {
     if ($csvStore.files && $imagesStore.files && $userIPFSToken) {
-      // TODO: Any simpler way to do it?
-      async function uploadAssetsToIpfs() {
-        return await uploadToIPFS($csvStore.files, $imagesStore.files, $userIPFSToken);
+      if (afterCreation) {
+        // TODO: Any simpler way to do it?
+        async function uploadAssetsToIpfs() {
+          const uploadResult = await uploadToIPFS(
+            $csvStore.files,
+            $imagesStore.files,
+            $userIPFSToken,
+            afterCreation
+          );
+          if (uploadResult !== true) return;
+          console.log($activeStep.loading);
+          uploadMetadataToContract(
+            $page.params.collection,
+            $csvStore.metadata,
+            500,
+            $resultCID
+          );
+        }
+        activeStep.onNext(uploadAssetsToIpfs);
+      } else {
+        // TODO: Any simpler way to do it?
+        async function uploadAssetsToIpfs() {
+          return await uploadToIPFS(
+            $csvStore.files,
+            $imagesStore.files,
+            $userIPFSToken,
+            afterCreation
+          );
+        }
+        activeStep.onNext(uploadAssetsToIpfs);
       }
-      activeStep.onNext(uploadAssetsToIpfs);
     } else {
       alert("Missing assets");
     }
   };
 
-  $: buttonActive = $imagesStore.files && $csvStore.files && $userIPFSToken ? true : false;
+  $: buttonActive =
+    $imagesStore.files && $csvStore.files && $userIPFSToken ? true : false;
 </script>
 
-<TransactionModal logoUrl="/ipfs-logo.png" transactionName="IPFS" loading={$activeStep.loading}/>
+{#if $activeStep.loading}
+  <TransactionModal
+    logoUrl="/ipfs-logo.png"
+    transactionName="IPFS"
+    loading={true} />
+{/if}
 <GeneratorStepLayout>
   <Stack direction="column" slot="main-content" gap="3.6rem">
     <!-- CSV DropZone -->
@@ -40,8 +77,8 @@
         type="csv"
         placeholder="Drop CSV file"
         errors={$csvStore.errors}
-        fileStore={$csvStore.files} 
-        saveFunction={csvStore.saveFiles} 
+        fileStore={$csvStore.files}
+        saveFunction={csvStore.saveFiles}
         deleteFileFromStore={csvStore.deleteAllFiles}
         deleteAllFilesFromStore={csvStore.deleteAllFiles} />
     </div>
@@ -58,7 +95,7 @@
         id="images"
         type="images-folder"
         placeholder="Drop Images folder"
-        fileStore={$imagesStore.files} 
+        fileStore={$imagesStore.files}
         errors={$imagesStore.errors}
         saveFunction={imagesStore.saveFiles}
         deleteFileFromStore={imagesStore.deleteFile}

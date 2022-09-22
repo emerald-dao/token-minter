@@ -7,7 +7,7 @@ import { resultCID } from '$stores/IPFSstore';
 import { contractInfo } from '$stores/ContractStore';
 import { get } from 'svelte/store';
 
-export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
+export async function uploadToIPFS(assets, imageFiles, IPFSToken, afterCreation) {
   //---- add metadata to .car file
   //  NOTE: this may not be needed if all metadata is stored in the contract
   const car_files = assets.reduce((a, item, index) => {
@@ -19,11 +19,14 @@ export async function uploadToIPFS(assets, imageFiles, IPFSToken) {
   imageFiles.forEach((imageFile) => {
     car_files.push({ path: imageFile.name, content: imageFile });
   });
-  // Also upload the main image file for the collection
-  const { image, bannerImage } = get(contractInfo);
-  car_files.push({ path: image.name, content: image });
-  if (bannerImage) {
-    car_files.push({ path: bannerImage.name, content: bannerImage });
+
+  if (!afterCreation) {
+    // Also upload the main image file for the collection
+    const { image, bannerImage } = get(contractInfo);
+    car_files.push({ path: image.name, content: image });
+    if (bannerImage) {
+      car_files.push({ path: bannerImage.name, content: bannerImage });
+    }
   }
 
   const { root, car } = await packToBlob({

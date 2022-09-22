@@ -277,7 +277,7 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress) =>
 };
 
 // Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(contractName, metadatas, batchSize) {
+export async function uploadMetadataToContract(contractName, metadatas, batchSize, ipfsCID) {
   initTransactionState();
 
   const userAddr = get(user).addr;
@@ -316,6 +316,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
         arg(thumbnails, t.Array(t.String)),
         arg(prices, t.Array(t.Optional(t.UFix64))),
         arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
+        arg(ipfsCID, t.String)
       ],
       payer: fcl.authz,
       proposer: fcl.authz,

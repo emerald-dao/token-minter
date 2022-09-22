@@ -10,6 +10,7 @@
     NftImage,
     ImagePlaceholder,
   } from "$atoms";
+  import { removeContractFromBook } from "$flow/actions";
 
   const collectionInfo = getContext("collectionInfo");
 </script>
@@ -44,13 +45,25 @@
 </BallButton>
 <BallButton
   active={$page.url.pathname ===
+    `/my-collections/${$page.params.collection}/upload`}
+  icon="ion:upload"
+  href={`/my-collections/${$page.params.collection}/upload`}>
+  Upload
+</BallButton>
+<BallButton
+  active={$page.url.pathname ===
     `/my-collections/${$page.params.collection}/airdrop`}
   icon="ion:gift"
   href={`/my-collections/${$page.params.collection}/airdrop`}>
   Airdrop
 </BallButton>
 <Divider space="3rem" />
-<BallButton icon="ion:trash" danger={true}>Remove</BallButton>
+<BallButton
+  icon="ion:trash"
+  danger={true}
+  clickable={true}
+  on:click={() => removeContractFromBook($page.params.collection)}
+  >Remove</BallButton>
 <Divider
   line={true}
   lineWidth="2px"
