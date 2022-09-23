@@ -85,7 +85,7 @@ pub contract TouchstoneContracts {
       if reservedBy == nil {
         return ReservationStatus.notFound
       } else if !EmeraldPass.isActive(user: reservedBy!) {
-        let userEmeraldPass = getAccount(reservedBy!).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>() ?? panic("This account no longer has an Emerald Pass Vault for some reason.")
+        let userEmeraldPass: &EmeraldPass.Vault{EmeraldPass.VaultPublic} = getAccount(reservedBy!).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>() ?? panic("This account no longer has an Emerald Pass Vault for some reason.")
         
         // If the user's Emerald Pass has been expired for more than a month, allow replacement
         if userEmeraldPass.endDate + 2629743.0 < getCurrentBlock().timestamp {
