@@ -15,6 +15,8 @@ $light: (
   background: (
     primary: map-deep-get($colors, neutral, 100),
     secondary: map-deep-get($colors, neutral, 200),
+    gradient-main: map-deep-get($colors, blue, gradient-light),
+    gradient-secondary: map-deep-get($colors, green, gradient-light),
   ),
   neutral: (
     100: map-deep-get($colors, neutral, 100),

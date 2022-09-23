@@ -19,7 +19,7 @@
       font-size: 20px;
       color: var(--clr-accent-main);
       text-transform: uppercase;
-      font-weight: 900;
+      --font-weight: 700;
       letter-spacing: 0.2ch;
       font-style: italic;
       background: linear-gradient(

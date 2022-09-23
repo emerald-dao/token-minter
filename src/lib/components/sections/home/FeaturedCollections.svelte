@@ -10,6 +10,14 @@
         "This is our first official test of Touchstone on Testnet. NOTE: Because this is on testnet, this is not a real collection.",
       owner: "0xfe10201e647ca718",
     },
+    {
+      name: "Official Testnet Test",
+      slug: "OfficialTestnetTest",
+      thumbnailURL: "/nft_cap1.png",
+      description:
+        "This is our first official test of Touchstone on Testnet. NOTE: Because this is on testnet, this is not a real collection.",
+      owner: "0xfe10201e647ca718",
+    },
   ];
 </script>
 
@@ -25,7 +33,8 @@
               url={`/discover/${collection.owner}/${collection.slug}`}
               thumbnailURL={collection.thumbnailURL}
               description={collection.description}
-              owner={collection.owner} />
+              owner={collection.owner}
+               />
           {/each}
         </Stack>
       </Stack>
@@ -38,19 +47,19 @@
     padding-bottom: 2rem;
   }
   .background {
-    border-top: 4px var(--clr-accent-main-t8) solid;
-    background: radial-gradient(
-        ellipse at right,
-        var(--clr-primary-main-t9),
-        transparent
-      ),
-      radial-gradient(ellipse at left, var(--clr-primary-main-t9), transparent),
-      radial-gradient(
-        ellipse at bottom,
-        var(--clr-primary-soft-t4),
-        transparent
-      ),
-      radial-gradient(ellipse at top, var(--clr-accent-soft-t4), transparent);
-    backdrop-filter: blur(50px);
+    position: relative;
+    // background: radial-gradient(
+    //     ellipse at right,
+    //     var(--clr-primary-main),
+    //     transparent
+    //   ),
+    //   radial-gradient(ellipse at left, var(--clr-primary-main), transparent),
+    //   radial-gradient(
+    //     ellipse at bottom,
+    //     var(--clr-primary-soft),
+    //     transparent
+    //   ),
+    //   radial-gradient(ellipse at top, var(--clr-accent-soft), transparent);
+    // backdrop-filter: blur(50px);
   }
 </style>

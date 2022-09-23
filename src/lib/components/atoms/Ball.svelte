@@ -31,7 +31,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 600;
+    --font-weight: 700;
     transition: 0.8s;
     background-color: var(--clr-accent-main-t7);
     color: var(--clr-accent-main);

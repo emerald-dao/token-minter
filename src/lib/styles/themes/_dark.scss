@@ -8,13 +8,15 @@ $dark: (
     strong: map-deep-get($colors, green, 100),
   ),
   accent: (
-    soft: map-deep-get($colors, blue, 400),
+    soft: map-deep-get($colors, blue, 300),
     main: map-deep-get($colors, blue, 200),
     strong: map-deep-get($colors, blue, 100),
   ),
   background: (
     primary: map-deep-get($colors, neutral, 900),
     secondary: map-deep-get($colors, neutral, 800),
+    gradient-main: map-deep-get($colors, blue, gradient-dark),
+    gradient-secondary: map-deep-get($colors, green, gradient-dark),
   ),
   neutral: (
     100: map-deep-get($colors, neutral, 900),

@@ -1,5 +1,4 @@
 <script>
-  import { BackgroundGradient } from "$atoms";
   import Header from "$components/layout/Header.svelte";
   import Footer from "$components/layout/Footer.svelte";
   import "$lib/styles/app.scss";
@@ -10,7 +9,6 @@
 </script>
 
 <Header />
-<BackgroundGradient />
 <main>
   <slot />
 </main>

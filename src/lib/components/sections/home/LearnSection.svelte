@@ -8,6 +8,7 @@
 		Ball,
 		Feature
 	} from "$atoms";
+	import { GradientWrapper, Gradient } from '$components/gradients';
 
 	let tools = [
 		{
@@ -36,12 +37,16 @@
 				<AdaptableGrid minWidth="18rem">
 					{#each tools as tool}
 						<Feature title={tool.title} description={tool.description} background={true} center={true}>
-							<Ball accent={true} icon={tool.icon} size="2.4rem"/>
+							<Ball accent={true} icon={tool.icon} size="3rem"/>
 						</Feature>
 					{/each}
 				</AdaptableGrid>
 			</Stack>
 		</Container>
+		<GradientWrapper>
+			<Gradient left="25%" top="10%" blur="60px" width="390px" height="430px" color="var(--clr-background-gradient-secondary)"/>
+			<Gradient left="48%" top="40%" blur="60px" width="430px" height="410px" />
+		</GradientWrapper>
 	</Section>
 </div>
 
@@ -50,6 +55,7 @@
 		padding-bottom: 2rem;
 	}
 	.background {
-		border-top: 4px var(--clr-accent-main-t8) solid;
+		border-block: 1px var(--clr-accent-main-t6) solid;
+		position: relative;
 	}
 </style>

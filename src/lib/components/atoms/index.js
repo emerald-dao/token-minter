@@ -1,6 +1,5 @@
 export { default as AdaptableGrid } from './AdaptableGrid.svelte';
 export { default as AnimatedHamburger } from './AnimatedHamburger.svelte';
-export { default as BackgroundGradient } from './BackgroundGradient.svelte';
 export { default as Ball } from './Ball.svelte';
 export { default as BallButton } from './BallButton.svelte';
 export { default as Button } from './Button.svelte';

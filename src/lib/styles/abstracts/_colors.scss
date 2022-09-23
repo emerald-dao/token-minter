@@ -1,6 +1,6 @@
 $green: (
-  hue: 171,
-  saturation: 100%,
+  hue: 168,
+  saturation: 79%,
 );
 
 $blue: (
@@ -10,7 +10,7 @@ $blue: (
 
 $neutral: (
   hue: 260,
-  saturation: 14%,
+  saturation: 6%,
 );
 
 $colors: (
@@ -20,13 +20,17 @@ $colors: (
     300: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 60%, 1),
     400: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 36%, 1),
     500: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 20%, 1),
+    gradient-light: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 60%, 1),
+    gradient-dark: hsla(map-get($green, 'hue'), map-get($green, 'saturation'), 60%, 1),
   ),
   blue: (
     100: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 80%, 1),
-    200: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 71%, 1),
+    200: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 70%, 1),
     300: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 60%, 1),
     400: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 43%, 1),
     500: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 20%, 1),
+    gradient-light: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 92%, 0.6),
+    gradient-dark: hsla(map-get($blue, 'hue'), map-get($blue, 'saturation'), 55%, 1),
   ),
   neutral: (
     100: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 100%, 1),
@@ -36,7 +40,7 @@ $colors: (
     500: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 54%, 1),
     600: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 39%, 1),
     700: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 27%, 1),
-    800: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 14%, 1),
+    800: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 5%, 1),
     900: hsla(map-get($neutral, 'hue'), map-get($neutral, 'saturation'), 0%, 1),
   ),
 );
