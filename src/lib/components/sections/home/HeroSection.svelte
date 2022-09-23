@@ -9,6 +9,7 @@
 		TouchstoneIcon,
 	} from "$atoms";
 	import { newCollection } from "$stores/ActiveStepStore";
+	import { theme } from '$stores/ThemeStore'
 </script>
 
 <div class="background">
@@ -31,12 +32,21 @@
 						on:click={newCollection}>Start</Button>
 				</Stack>
 				<Stack align="center" justify="center">
-					<video width="100%" height="100%" autoplay loop muted>
-						<source src="emerald1.webm" type="video/webm" />
-						<source src="emerald1.mp4" type="video/mp4" />
-						<track kind="captions" />
-						Your browser does not support the video tag.
-					</video>
+					{#if $theme === "dark"}
+						<video width="100%" height="100%" autoplay loop muted>
+							<source src="emerald1.webm" type="video/webm" />
+							<source src="emerald1.mp4" type="video/mp4" />
+							<track kind="captions" />
+							Your browser does not support the video tag.
+						</video>
+					{:else}
+						<video width="100%" height="100%" autoplay loop muted>
+							<source src="emerald1.webm" type="video/webm" />
+							<source src="emerald1-white.mp4" type="video/mp4" />
+							<track kind="captions" />
+							Your browser does not support the video tag.
+						</video>
+					{/if}
 				</Stack>
 			</AdaptableGrid>
 		</Container>
