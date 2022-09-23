@@ -9,8 +9,9 @@
 <div class="input-wrapper">
   <label for="dropZoneCsv">Airdrop Data</label>
   <span class="helper-text"
-    >Drop a CSV file containing airdrop adresses and associated NFT ids.
-    <br />Download this <a href="/assets/metadata.csv" download>template</a>
+    >Drop a CSV file containing airdrop adresses and associated NFT metadataIds.
+    You can find an NFT's metadataId under the "metadata" box on its sale page.
+    <br />Download this <a href="/assets/airdrop.csv" download>template</a>
     to see an example.
   </span>
   <DropZone

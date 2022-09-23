@@ -393,6 +393,19 @@ pub contract ExampleNFT: NonFungibleToken {
 		return self.getCollectionAttribute(key: "lotteryBuying") as! Bool == false ? self.getNFTMetadata(metadataId)?.price : self.getCollectionAttribute(key: "price") as! UFix64
 	}
 
+	// Returns an mapping of `id` to NFTMetadata
+	// for the NFTs a user can claim
+	pub fun getClaimableNFTs(user: Address): {UInt64: NFTMetadata} {
+		let answer: {UInt64: NFTMetadata} = {}
+		if let storage = &ExampleNFT.nftStorage[user] as &{UInt64: NFT}? {
+			for id in storage.keys {
+				let nftRef = (&storage[id] as &NFT?)!
+				answer[id] = self.getNFTMetadata(nftRef.metadataId)
+			}
+		}
+		return answer
+	}
+
 	init(
 		_name: String, 
 		_description: String, 

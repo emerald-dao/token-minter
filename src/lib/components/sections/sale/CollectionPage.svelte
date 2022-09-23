@@ -151,7 +151,9 @@
                       <CollectionFilters
                         bind:seeMine
                         bind:maxPrice
-                        bind:minPrice />
+                        bind:minPrice
+                        {contractAddress}
+                        contractName={$page.params.collection} />
                     {/if}
                     <AdaptableGrid minWidth="12em" gap="1.2em">
                       {#if seeMine}

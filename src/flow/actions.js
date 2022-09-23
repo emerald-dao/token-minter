@@ -23,6 +23,7 @@ import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
 import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
 import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc?raw';
 import getTouchstonePurchasesScript from './cadence/scripts/get_touchstone_purchases.cdc?raw';
+import getClaimableNFTsScript from './cadence/scripts/get_claimable_nfts.cdc?raw';
 // Transactions
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
@@ -33,6 +34,7 @@ import airdropTx from './cadence/transactions/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
 import proposeNFTToCatalogTx from './cadence/transactions/propose_nft_to_catalog.cdc?raw';
 import setupCollectionTx from './cadence/transactions/setup_collection.cdc?raw';
+import claimNFTsTx from './cadence/transactions/claim_nfts.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -402,6 +404,34 @@ export const airdrop = async (recipients, metadataIds, contractName, contractAdd
   }
 };
 
+export const claimNFTs = async (contractName, contractAddress) => {
+  initTransactionState();
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: replaceWithProperValues(claimNFTsTx, contractName, contractAddress),
+      args: (arg, t) => [arg(contractName, t.String), arg(contractAddress, t.Address)],
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+    console.log({ transactionId });
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set({}), 5000);
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    transactionInProgress.set(false);
+    transactionStatus.set({});
+  }
+};
+
 export const toggleMinting = async (contractName, contractAddress) => {
   initTransactionState();
 
@@ -621,6 +651,21 @@ export async function getNFTInfo(contractName, contractAddress, metadataId) {
       cadence: replaceWithProperValues(getNFTInfoScript, contractName, contractAddress),
       args: (arg, t) => [arg(metadataId, t.UInt64)],
     });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getClaimableNFTs(contractName, contractAddress, user) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getClaimableNFTsScript, contractName, contractAddress),
+      args: (arg, t) => [arg(user, t.Address)],
+    });
+
+    console.log(response)
 
     return response;
   } catch (e) {

@@ -18,7 +18,7 @@
   import { user } from "$stores/FlowStore";
 
   async function getInfo() {
-    const nftInfo = await getNFTInfo(
+    let nftInfo = await getNFTInfo(
       $page.params.collection,
       $page.params.address,
       $page.params.nft
@@ -27,8 +27,8 @@
       $page.params.collection,
       $page.params.address
     );
+    nftInfo.extra["metadataId"] = nftInfo.metadataId;
     const owner = collectionInfo.primaryBuyers[nftInfo.metadataId];
-    console.log({ collectionInfo, nftInfo, owner });
     return { collectionInfo, nftInfo, owner };
   }
 

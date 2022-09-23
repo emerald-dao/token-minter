@@ -1,29 +1,35 @@
 <script>
-  import {
-    TransparentCard,
-    Divider,
-    Stack
-  } from "$atoms";
+  import { TransparentCard, Divider, Stack } from "$atoms";
+  import { claimNFTs, getClaimableNFTs } from "$flow/actions";
+  import { user } from "$stores/FlowStore";
   import Icon from "@iconify/svelte";
+  import Button from "./Button.svelte";
 
   export let seeMine;
   export let maxPrice;
   export let minPrice;
+  export let contractName;
+  export let contractAddress;
 </script>
 
 <div class="filters-wrapper">
   <TransparentCard height="fit-content">
     <Stack direction="row" gap="0.3rem">
-      <Icon icon="ion:filter-circle" color="var(--clr-accent-main-t3)" width="2rem"/>
-      <h4>
-        Filters
-      </h4>
+      <Icon
+        icon="ion:filter-circle"
+        color="var(--clr-accent-main-t3)"
+        width="2rem" />
+      <h4>Filters</h4>
     </Stack>
-    <Divider line={true} space="3.4rem" lineColor="var(--clr-accent-main-t9)" lineWidth="1px"/>
+    <Divider
+      line={true}
+      space="3.4rem"
+      lineColor="var(--clr-accent-main-t9)"
+      lineWidth="1px" />
     <label for="price">
       Price
       <Stack direction="row" gap="0.5rem" justify="center">
-        <input 
+        <input
           name="min-price"
           id="min-price"
           type="number"
@@ -32,7 +38,7 @@
           max={`${maxPrice}`}
           bind:value={minPrice} />
         to
-        <input 
+        <input
           name="max-price"
           id="max-price"
           type="number"
@@ -41,7 +47,11 @@
           bind:value={maxPrice} />
       </Stack>
     </label>
-    <Divider line={true} space="3.4rem" lineColor="var(--clr-accent-main-t9)" lineWidth="1px"/>
+    <Divider
+      line={true}
+      space="3.4rem"
+      lineColor="var(--clr-accent-main-t9)"
+      lineWidth="1px" />
     <label for="my-purchases" class="checkbox-label">
       <input
         name="my-purchases"
@@ -50,6 +60,12 @@
         bind:checked={seeMine} />
       My Purchases
     </label>
+    {#await getClaimableNFTs(contractName, contractAddress, $user.addr) then claimableNFTs}
+      {#if Object.keys(claimableNFTs).length > 0}
+        <Button on:click={() => claimNFTs(contractName, contractAddress)}
+          >Claim NFTs</Button>
+      {/if}
+    {/await}
   </TransparentCard>
 </div>
 
@@ -64,7 +80,7 @@
       top: 6rem;
       left: 0;
     }
-    
+
     h4 {
       font-size: var(--fs-400);
       color: var(--clr-accent-main-t3);
@@ -72,6 +88,7 @@
 
     label {
       font-size: var(--fs-300);
+      margin-bottom: 10px;
 
       input {
         font-size: var(--fs-200);
