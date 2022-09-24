@@ -8,49 +8,55 @@
 		Stack,
 		TouchstoneIcon,
 	} from "$atoms";
-	import { newCollection } from "$stores/ActiveStepStore";
-	import { theme } from '$stores/ThemeStore'
+	import { newCollection } from '$stores/ActiveStepStore';
+	import { theme } from '$stores/ThemeStore';
+	import { GradientWrapper, Gradient } from '$components/gradients';
 </script>
 
-<div class="background">
-	<Section>
-		<Container class="width-large">
-			<AdaptableGrid>
-				<Stack align="start">
-					<h1>
-						Tools for creating
-						<span class="accent">NFT Collections and Contracts</span>
-						on the Flow Blockchain
-					</h1>
-					<p>
-						Create your own NFT Collections without knowing any code. Learn all
-						about NFTs on the Flow Blockchain.
-					</p>
-					<Button
-						href="/contract-generator"
-						rightIcon="arrow-forward-circle"
-						on:click={newCollection}>Start</Button>
-				</Stack>
-				<Stack align="center" justify="center">
-					{#if $theme === "dark"}
-						<video width="100%" height="100%" autoplay loop muted>
-							<source src="emerald1.webm" type="video/webm" />
-							<source src="emerald1.mp4" type="video/mp4" />
-							<track kind="captions" />
-							Your browser does not support the video tag.
-						</video>
-					{:else}
-						<video width="100%" height="100%" autoplay loop muted>
-							<source src="emerald1.webm" type="video/webm" />
-							<source src="emerald1-white.mp4" type="video/mp4" />
-							<track kind="captions" />
-							Your browser does not support the video tag.
-						</video>
-					{/if}
-				</Stack>
-			</AdaptableGrid>
-		</Container>
-	</Section>
+<div style="position: relative;">
+<Section>
+	<Container class="width-large">
+		<AdaptableGrid>
+			<Stack align="start">
+				<h1>
+					Tools for creating
+					<span class="accent">NFT Collections and Contracts</span>
+					on the Flow Blockchain
+				</h1>
+				<p>
+					Create your own NFT Collections without knowing any code. Learn all
+					about NFTs on the Flow Blockchain.
+				</p>
+				<Button
+					href="/contract-generator"
+					rightIcon="arrow-forward-circle"
+					on:click={newCollection}>Start</Button>
+			</Stack>
+			<Stack align="center" justify="center">
+				{#if $theme === "dark"}
+					<video width="100%" height="100%" autoplay loop muted>
+						<source src="emerald1.webm" type="video/webm" />
+						<source src="emerald1.mp4" type="video/mp4" />
+						<track kind="captions" />
+						Your browser does not support the video tag.
+					</video>
+				{:else}
+					<video width="100%" height="100%" autoplay loop muted>
+						<source src="emerald1.webm" type="video/webm" />
+						<source src="emerald1-white.mp4" type="video/mp4" />
+						<track kind="captions" />
+						Your browser does not support the video tag.
+					</video>
+				{/if}
+			</Stack>
+		</AdaptableGrid>
+	</Container>
+</Section>
+<!-- <GradientWrapper>
+	<Gradient left="58%" top="23%" blur="70px" width="350px" height="350px" color="var(--clr-background-gradient-secondary)"/>
+	<Gradient left="48%" top="5%" blur="70px" width="300px" height="300px"/>
+	<Gradient left="65%" top="35%" blur="70px" width="450px" height="450px"/>
+</GradientWrapper> -->
 </div>
 <Marquee repeat={10}>
 	<div class="marquee-element">
@@ -61,10 +67,11 @@
 	</div>
 </Marquee>
 
+
 <style type="scss">
 	h1 {
 		font-size: var(--fs-700);
-		font-weight: 900;
+		--font-weight: 600;
 
 		span {
 			color: var(--clr-accent-main);
@@ -84,15 +91,6 @@
 		span {
 			font-style: italic;
 		}
-	}
-
-	.background {
-		background: radial-gradient(
-			ellipse at right,
-			var(--clr-primary-main-t8),
-			transparent
-		);
-		backdrop-filter: blur(50px);
 	}
 
 	video {

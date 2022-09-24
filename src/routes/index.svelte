@@ -13,6 +13,6 @@
 
 <HeroSection/>
 <CreateCollectionSection/>
-<FeaturedCollections/>
 <LearnSection/>
+<FeaturedCollections/>
 <InvitationSection/>

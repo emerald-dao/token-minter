@@ -11,10 +11,11 @@
   export let thumbnailURL;
   export let description;
   export let owner;
+  export let accent = false;
 </script>
 
 <a href={`${url}`}>
-  <TransparentCard border={true} hoverShadow={true}>
+  <TransparentCard border={true} hoverShadow={true} {accent}>
     <div class="main-wrapper" direction="row" align="flex-start">
       <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
       <div class="content-wrapper">
