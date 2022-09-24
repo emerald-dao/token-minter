@@ -1,18 +1,18 @@
 <script>
-	import { HtmlHead } from '$atoms'
-	import { 
-		HeroSection, 
-		CreateCollectionSection, 
-		LearnSection, 
+	import { HtmlHead } from "$atoms";
+	import {
+		HeroSection,
+		CreateCollectionSection,
+		LearnSection,
 		InvitationSection,
-		FeaturedCollections
+		FeaturedCollections,
 	} from "$components/sections/home/index";
 </script>
 
-<HtmlHead title="Home"/>
+<HtmlHead title="Home" />
 
-<HeroSection/>
-<CreateCollectionSection/>
-<LearnSection/>
-<FeaturedCollections/>
-<InvitationSection/>
+<HeroSection />
+<CreateCollectionSection />
+<FeaturedCollections />
+<LearnSection />
+<InvitationSection />
