@@ -14,10 +14,10 @@
 </script>
 
 <div style="position: relative;">
-	<Section>
+	<Section class="padding-bottom-medium padding-top-medium">
 		<Container class="width-large">
 			<AdaptableGrid>
-				<Stack align="start">
+				<Stack align="left" justify="center">
 					<h1>
 						No-code
 						<span class="accent">NFT Launchpad</span>
