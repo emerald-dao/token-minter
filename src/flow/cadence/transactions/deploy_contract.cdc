@@ -72,11 +72,23 @@ transaction(
       mintVerifiers.append(MintVerifiers.HasEmeraldPass())
     }
 
-    let royaltyInfo: MetadataViews.Royalty? = royalty ? MetadataViews.Royalty(
-      recepient: getAccount(royaltyAddress!).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
-      cut: royaltyAmount!,
-      description: "This is a royalty cut on primary sales."
-    ) : nil
+
+    var royaltyInfo: MetadataViews.Royalty? =  nil
+    if (royalty) {
+      if (paymentType == "$FLOW") {
+        royaltyInfo = MetadataViews.Royalty(
+          recepient: getAccount(royaltyAddress!).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+          cut: royaltyAmount!,
+          description: "This is a royalty cut on primary sales."
+        )
+      } else if (paymentType == "$FUSD") {
+        royaltyInfo = MetadataViews.Royalty(
+          recepient: getAccount(royaltyAddress!).getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver),
+          cut: royaltyAmount!,
+          description: "This is a royalty cut on primary sales."
+        )
+      }
+    }
 
     let socialsStruct: {String: MetadataViews.ExternalURL} = {}
     for key in socials.keys {

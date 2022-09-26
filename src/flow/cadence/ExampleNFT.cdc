@@ -7,7 +7,7 @@ import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
 import MintVerifiers from "./MintVerifiers.cdc" 
 import FUSD from "./utility/FUSD.cdc"
-
+import EmeraldPass from "./utility/EmeraldPass.cdc"
 pub contract ExampleNFT: NonFungibleToken {
 
 	// Collection Information
@@ -309,6 +309,9 @@ pub contract ExampleNFT: NonFungibleToken {
 		// mintNFT mints a new NFT and deposits 
 		// it in the recipients collection
 		pub fun mintNFT(metadataId: UInt64, recipient: Address) {
+			pre {
+				EmeraldPass.isActive(user: ExampleNFT.account.address): "You must have an active Emerald Pass subscription to airdrop NFTs. You can purchase Emerald Pass at https://pass.ecdao.org/"
+			}
 			let nft <- create NFT(_metadataId: metadataId, _recipient: recipient)
 			if let recipientCollection = getAccount(recipient).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
 				recipientCollection.deposit(token: <- nft)
@@ -439,6 +442,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["minting"] = _minting
 		self.collectionInfo["lotteryBuying"] = _lotteryBuying
 		if let royalty = _royalty {
+			assert(royalty.receiver.check(), message: "The passed in royalty receiver is not valid. The royalty account must set up the intended payment token.")
 			assert(royalty.cut <= 0.95, message: "The royalty cut cannot be bigger than 95% because 5% goes to Emerald City treasury for primary sales.")
 			self.collectionInfo["royalty"] = royalty
 		}
