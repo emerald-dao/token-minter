@@ -60,7 +60,7 @@ body {
   -moz-border-radius: 3px;
   border-radius: 3px;
   background-color: var(--clr-accent-main);
-  color: var(--clr-font-text);
+  color: var(--clr-font-text-inverse);
   content: attr(data-tooltip);
   text-align: center;
   font-size: var(--fs-200);

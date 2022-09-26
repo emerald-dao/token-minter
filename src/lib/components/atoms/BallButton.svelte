@@ -5,6 +5,7 @@
   export let clickable = false;
   export let passed = false;
   export let danger = false;
+  export let target;
   export let number;
   export let icon;
   export let href;
@@ -17,6 +18,7 @@
     class:li-clickable={clickable}
     class:li-passed={passed}
     class:li-danger={danger}
+    target={target}
   >
     <Ball active={active} passed={passed} icon={icon} {danger}>
       {#if number}
@@ -60,7 +62,7 @@
     transition: 0.4s;
     width: 100%;
     color: var(--clr-accent-main-t1);
-    padding-block: 0.6em;
+    padding-block: 0.43em;
     transition: 1s;
     font-size: var(--fs-200);
     
@@ -85,6 +87,6 @@
     color: var(--clr-primary-main-t5);
   }
   .li-danger {
-    color: red;
+    color: hsla(0,100%,50%, 0.7);
   }
 </style>

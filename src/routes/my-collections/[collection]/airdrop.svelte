@@ -4,6 +4,9 @@
   import { user } from "$stores/FlowStore";
   import { page } from "$app/stores";
   import { airdropCSVStore } from "$stores/CollectionFilesStore";
+  import { getContext } from "svelte";
+
+  const hasEmeraldPass = getContext("emeraldPass");
 </script>
 
 <div class="input-wrapper">
@@ -25,14 +28,18 @@
     deleteFileFromStore={airdropCSVStore.deleteAllFiles}
     deleteAllFilesFromStore={airdropCSVStore.deleteAllFiles} />
   <Divider space="1.7rem" />
-  <Button
-    on:click={() =>
-      airdrop(
-        $airdropCSVStore.parsedFiles[0],
-        $airdropCSVStore.parsedFiles[1],
-        $page.params.collection,
-        $user.addr
-      )}>Airdrop</Button>
+  {#await hasEmeraldPass then pass}
+    <Button
+      locked={!pass}
+      on:click={() =>
+        airdrop(
+          $airdropCSVStore.parsedFiles[0],
+          $airdropCSVStore.parsedFiles[1],
+          $page.params.collection,
+          $user.addr
+        )}>Airdrop
+    </Button>
+  {/await}
 </div>
 
 <style type="scss">

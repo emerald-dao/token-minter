@@ -1,6 +1,7 @@
 <script>
   import Icon from "@iconify/svelte";
   import { LoadingSpinner } from "$atoms";
+  import { goto } from "$app/navigation";
 
   let buttonProps = {
     class: [$$restProps.class],
@@ -14,6 +15,7 @@
   export let done = false;
   export let form;
   export let target;
+  export let locked;
 </script>
 
 {#if href}
@@ -58,6 +60,7 @@
   {/if}
 {:else}
   <button
+    data-tooltip={locked ? "You must own Emerald Pass" : false}
     on:click
     on:mouseover
     on:focus
@@ -66,7 +69,8 @@
     class:loading={loading}
     class:done={done}
     class:disabled={disabled}
-    disabled={disabled || loading || done}
+    class:locked={locked}
+    disabled={disabled || loading || done || locked}
     {form}
     {...buttonProps}>
     {#if loading}
@@ -74,6 +78,9 @@
     {/if}
     {#if leftIcon && !loading}
       <Icon icon={`ion:${leftIcon}`} width="1.5em" />
+    {/if}
+    {#if locked}
+      <Icon icon="ion:lock-closed" width="1.2em" />
     {/if}
     <slot />
     {#if rightIcon && !loading}
@@ -214,6 +221,16 @@
   
   button:disabled:hover,
   .disabled:hover {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .locked {
+    background: var(--clr-accent-main-t5);
+    cursor: not-allowed;
+  }
+
+  .locked:hover {
     box-shadow: none;
     transform: none;
   }

@@ -13,9 +13,10 @@
   import { removeContractFromBook } from "$flow/actions";
 
   const collectionInfo = getContext("collectionInfo");
+  const hasEmeraldPass = getContext("emeraldPass");
 </script>
 
-<Stack direction="column" gap="0.2rem" align="flex-start" justify="center">
+<Stack direction="column" gap="0.1rem" align="flex-start" justify="center">
   {#await collectionInfo}
     <ImagePlaceholder />
     <h3>Loading...</h3>
@@ -29,50 +30,64 @@
 <Divider
   line={true}
   lineWidth="2px"
-  space="3rem"
+  space="1.8rem"
   lineColor="var(--clr-accent-main-t9)" />
-<BallButton
-  active={$page.url.pathname === `/my-collections/${$page.params.collection}`}
-  icon="ion:settings"
-  href={`/my-collections/${$page.params.collection}`}>
-  General
-</BallButton>
-<BallButton
-  active={false}
-  icon="ion:eye"
-  href={`/discover/${$user.addr}/${$page.params.collection}`}>
-  View Collection
-</BallButton>
-<BallButton
-  active={$page.url.pathname ===
-    `/my-collections/${$page.params.collection}/upload`}
-  icon="ion:upload"
-  href={`/my-collections/${$page.params.collection}/upload`}>
-  Upload
-</BallButton>
-<BallButton
-  active={$page.url.pathname ===
-    `/my-collections/${$page.params.collection}/airdrop`}
-  icon="ion:gift"
-  href={`/my-collections/${$page.params.collection}/airdrop`}>
-  Airdrop
-</BallButton>
-<Divider space="3rem" />
-<BallButton
-  icon="ion:trash"
-  danger={true}
-  clickable={true}
-  on:click={() => removeContractFromBook($page.params.collection)}
-  >Remove</BallButton>
-<Divider
-  line={true}
-  lineWidth="2px"
-  space="2rem"
-  lineColor="var(--clr-accent-main-t9)" />
-<Button
-  class="small transparent"
-  leftIcon="arrow-back-circle"
-  href="/my-collections">Back to My Collections</Button>
+<Stack direction="column" gap="0rem">
+  <BallButton
+    active={$page.url.pathname === `/my-collections/${$page.params.collection}`}
+    icon="ion:settings"
+    href={`/my-collections/${$page.params.collection}`}>
+    General
+  </BallButton>
+  <BallButton
+    active={false}
+    icon="ion:eye"
+    target="_blank"
+    href={`/discover/${$user.addr}/${$page.params.collection}`}>
+    View Collection
+  </BallButton>
+  <BallButton
+    active={$page.url.pathname ===
+      `/my-collections/${$page.params.collection}/upload`}
+    icon="ion:upload"
+    href={`/my-collections/${$page.params.collection}/upload`}>
+    Upload
+  </BallButton>
+  <BallButton
+    active={$page.url.pathname ===
+      `/my-collections/${$page.params.collection}/airdrop`}
+    icon="ion:gift"
+    href={`/my-collections/${$page.params.collection}/airdrop`}>
+    Airdrop
+  </BallButton>
+  <BallButton
+    icon="ion:trash"
+    danger={true}
+    clickable={true}
+    on:click={() => removeContractFromBook($page.params.collection)}
+    >Remove</BallButton>
+  <Divider
+    line={true}
+    lineWidth="2px"
+    space="2rem"
+    lineColor="var(--clr-accent-main-t9)" />
+  <Button
+    class="small transparent"
+    leftIcon="arrow-back-circle"
+    href="/my-collections">Back to My Collections</Button>
+  <Divider
+    space="1rem"
+    lineColor="var(--clr-accent-main-t9)" />
+  {#await hasEmeraldPass then pass}
+    {#if !pass}
+      <Button
+        class="small full-width ghost"
+        leftIcon="lock-open"
+        target="_blank"
+        href="https://pass.ecdao.org/">Get Emerald Pass</Button>
+    {/if}
+  {/await}
+</Stack>
 
 <style type="scss">
   h3 {

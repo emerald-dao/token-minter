@@ -50,7 +50,7 @@
   }
   .danger {
     background-color: rgba(255, 0, 0, 0.153);
-    color: red;
+    color: hsla(0,100%,50%, 0.6);
   }
   .icon-wrapper {
     width: 100%;

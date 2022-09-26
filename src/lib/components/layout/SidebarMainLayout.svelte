@@ -1,5 +1,5 @@
 <script>
-  import { Section, Container, TransparentCard } from "$atoms";
+  import { Section, Container, TransparentCard, Stack } from "$atoms";
 </script>
 
 <Section class="padding-top-none padding-bottom-none"height="100%">

@@ -8,17 +8,15 @@
   import { GeneratorStepLayout } from '$components/sections/generator/index'
   import SidebarMainLayout from "$components/layout/SidebarMainLayout.svelte";
   import { user } from '$stores/FlowStore'
-  import { checkRequiredVerifiers, getCollectionInfo } from "$flow/actions";
+  import { getCollectionInfo, hasEmeraldPass } from "$flow/actions";
   import TransactionModal from "$lib/components/atoms/TransactionModal.svelte";
-  import { getContext, setContext } from 'svelte';
-  import { get, writable } from 'svelte/store';
+  import { setContext } from 'svelte';
   import { page } from "$app/stores";
-  import { browser } from "$app/env";
-  import { resolveAddressObject } from "$flow/utils";
 
   let userAddress = $user?.addr;
-  
+
   setContext('collectionInfo', getCollectionInfo($page.params.collection, userAddress))
+  setContext('emeraldPass', hasEmeraldPass(userAddress))
 </script>
 
 <HtmlHead title="My Collections"/>

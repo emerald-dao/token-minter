@@ -6,7 +6,6 @@
   export let backgroundColor;
 
   const fileType = getFileTypeFromURL(thumbnailURL);
-  // console.log(fileType)
 </script>
 
 {#if thumbnailURL}
@@ -30,7 +29,7 @@
 
 <style type="scss">
   .thumbnail {
-    border-radius: 0.4rem;
+    border-radius: 0.6rem;
     height: 100%;
     width: 100%;
   }

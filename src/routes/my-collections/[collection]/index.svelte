@@ -7,6 +7,7 @@
 	import Button from "$lib/components/atoms/Button.svelte";
 
 	const collectionInfo = getContext("collectionInfo");
+	const hasEmeraldPass = getContext("emeraldPass");
 
 	const saveContent = (fileContents, fileName) => {
 		const link = document.createElement("a");
@@ -56,7 +57,7 @@
 	</TransparentCard>
 </div>
 <div style="width: 100%;">
-	<Stack direction="column" gap="1.4rem">
+	<Stack direction="column" align="flex-start" gap="1.4rem">
 		{#await collectionInfo then info}
 			<TransparentCard border={true}>
 				<Stack direction="column">
@@ -72,10 +73,13 @@
 					</label>
 				</Stack>
 			</TransparentCard>
-			<Button
-				on:click={() =>
-					downloadBuyers(info.primaryBuyers, $page.params.collection)}
-				>Download Buyers</Button>
+			{#await hasEmeraldPass then pass}
+				<Button
+					locked={!pass}
+					on:click={() =>
+						downloadBuyers(info.primaryBuyers, $page.params.collection)}
+					>Download Buyers</Button>
+			{/await}
 		{/await}
 	</Stack>
 </div>

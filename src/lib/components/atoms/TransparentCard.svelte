@@ -20,7 +20,7 @@
 <style type="scss">
   div {
     background-color: var(--clr-accent-soft-t9);
-    border-radius: 1rem;
+    border-radius: 1.4rem;
     padding: 1.4rem;
     width: 100%;
     transition: 0.5s;
