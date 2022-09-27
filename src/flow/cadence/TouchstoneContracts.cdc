@@ -21,6 +21,9 @@ pub contract TouchstoneContracts {
     pub let contractNames: {String: Bool}
 
     pub fun addContract(contractName: String) {
+      pre {
+        self.contractNames[contractName] == nil: "You already have a contract with this name."
+      }
       let me: Address = self.owner!.address
       self.contractNames[contractName] = true
       
@@ -81,18 +84,18 @@ pub contract TouchstoneContracts {
     }
 
     pub fun getReservationStatus(contractName: String): ReservationStatus {
-      let reservedBy = self.reservedContractNames[contractName]
-      if reservedBy == nil {
-        return ReservationStatus.notFound
-      } else if !EmeraldPass.isActive(user: reservedBy!) {
-        let userEmeraldPass: &EmeraldPass.Vault{EmeraldPass.VaultPublic} = getAccount(reservedBy!).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>() ?? panic("This account no longer has an Emerald Pass Vault for some reason.")
+      if let reservedBy = self.reservedContractNames[contractName] {
+        if !EmeraldPass.isActive(user: reservedBy) {
+          let userEmeraldPass: &EmeraldPass.Vault{EmeraldPass.VaultPublic}? = getAccount(reservedBy).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>()
         
-        // If the user's Emerald Pass has been expired for more than a month, allow replacement
-        if userEmeraldPass.endDate + 2629743.0 < getCurrentBlock().timestamp {
-          return ReservationStatus.expired
+          // If the user's Emerald Pass has been expired for more than a month, allow replacement
+          if userEmeraldPass == nil || userEmeraldPass!.endDate + 2629743.0 < getCurrentBlock().timestamp {
+            return ReservationStatus.expired
+          }
         }
+        return ReservationStatus.active
       }
-      return ReservationStatus.active
+      return ReservationStatus.notFound
     }
 
     pub fun getAddressFromContractName(contractName: String): Address? {
@@ -126,10 +129,10 @@ pub contract TouchstoneContracts {
   }
 
   init() {
-    self.ContractsBookStoragePath = /storage/TouchstoneContractsBookv2
-    self.ContractsBookPublicPath = /public/TouchstoneContractsBookv2
-    self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBookv2
-    self.GlobalContractsBookPublicPath = /public/TouchstoneGlobalContractsBookv2
+    self.ContractsBookStoragePath = /storage/TouchstoneContractsBook
+    self.ContractsBookPublicPath = /public/TouchstoneContractsBook
+    self.GlobalContractsBookStoragePath = /storage/TouchstoneGlobalContractsBook
+    self.GlobalContractsBookPublicPath = /public/TouchstoneGlobalContractsBook
 
     self.account.save(<- create GlobalContractsBook(), to: TouchstoneContracts.GlobalContractsBookStoragePath)
     self.account.link<&GlobalContractsBook{GlobalContractsBookPublic}>(TouchstoneContracts.GlobalContractsBookPublicPath, target: TouchstoneContracts.GlobalContractsBookStoragePath)

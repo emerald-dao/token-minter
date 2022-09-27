@@ -24,7 +24,7 @@ pub contract EmeraldPass {
 
     init() {
       // TODO CHANGE THIS ADDRESS HERE
-      let ecAccount: PublicAccount = getAccount(0x8f9e8e0dc951c5b9)
+      let ecAccount: PublicAccount = getAccount(0x6c0d53c676256e8c)
       self.tokenTypeToVault = {
         Type<@FUSD.Vault>(): ecAccount.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver),
         Type<@FlowToken.Vault>(): ecAccount.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
@@ -160,15 +160,11 @@ pub contract EmeraldPass {
       Type<@FUSD.Vault>(): Pricing({
         2629743.0: 100.0, // 1 month
         31556926.0: 1000.0 // 1 year
-      }),
-      Type<@FlowToken.Vault>(): Pricing({
-        2629743.0: 100.0, // 1 month
-        31556926.0: 1000.0 // 1 year
       })
     }
 
-    self.VaultPublicPath = /public/EmeraldPassv2
-    self.VaultStoragePath = /storage/EmeraldPassv2
+    self.VaultPublicPath = /public/EmeraldPass
+    self.VaultStoragePath = /storage/EmeraldPass
 
     self.account.save(<- create Admin(), to: /storage/EmeraldPassAdmin)
   }

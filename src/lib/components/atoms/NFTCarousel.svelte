@@ -34,5 +34,5 @@
   {paymentType}
   buy={true}
   url={`/discover/${address}/${contractName}/${metadatas[lotteryNumber].metadataId}`}
-  purchase={() => purchaseRandomNFT(price, contractName, address)}
+  purchase={() => purchaseRandomNFT(price, contractName, address, paymentType)}
   withLink={false} />
