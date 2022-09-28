@@ -34,7 +34,7 @@
       let min = Number.POSITIVE_INFINITY;
       let highestBuy = 0.0;
       for (const index in metadatas) {
-        const nftPrice = metadatas[index].price ?? collectionPrice;
+        const nftPrice = Number(metadatas[index].price ?? collectionPrice);
         if (!purchasedIndexes.includes(index) && nftPrice < min) {
           min = nftPrice;
         }

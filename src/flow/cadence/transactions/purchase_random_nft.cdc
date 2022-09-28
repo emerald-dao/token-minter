@@ -4,6 +4,8 @@ import NonFungibleToken from "../utility/NonFungibleToken.cdc"
 import MetadataViews from "../utility/MetadataViews.cdc"
 import TouchstonePurchases from "../TouchstonePurchases.cdc"
 import EmeraldPass from "../utility/EmeraldPass.cdc"
+import FlowToken from "../utility/FlowToken.cdc"
+import FUSD from "../utility/FUSD.cdc"
 
 transaction(price: UFix64, contractName: String, contractAddress: Address) {
   let PaymentVault: &FungibleToken.Vault
