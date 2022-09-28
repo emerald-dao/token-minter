@@ -41,6 +41,7 @@ pub contract MintVerifiers {
       self.eventURL = _eventURL
       self.eventCap = getAccount(_eventOwner).getCapability<&FLOAT.FLOATEvents{FLOAT.FLOATEventsPublic}>(FLOAT.FLOATEventsPublicPath)
       assert(self.eventCap.check(), message: "This is not a valid FLOAT Event.")
+      assert(self.eventCap.borrow()!.getIDs().contains(_eventId), message: "This is not a valid eventId.")
     }
   }
 
