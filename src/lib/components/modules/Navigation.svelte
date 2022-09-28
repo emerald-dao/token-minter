@@ -1,24 +1,23 @@
 <script>
-  import { navItems } from '$lib/config/config'
+  import { navItems } from "$lib/config/config";
 
-  export let gap = "3em"
-  export let color = "var(--clr-accent-main)"
+  export let gap = "3em";
+  export let color = "var(--clr-accent-main)";
 </script>
 
 <ul style={`gap: ${gap}`}>
-  {#each navItems as navItem }
+  {#each navItems as navItem}
     <li>
-      <a 
-        href={navItem.route} 
+      <a
+        href={navItem.route}
         sveltekit:prefetch={navItem.prefetch}
         target={navItem.target}
-        style={`color: ${color}`}
-      >
+        style={`color: ${color}`}>
         {navItem.title}
       </a>
     </li>
   {/each}
-  <slot/>
+  <slot />
 </ul>
 
 <style type="scss">
@@ -37,20 +36,20 @@
 
     @include mq(medium) {
       text-align: left;
-      justify-content: flex-start;
-      align-items: flex-start;
+      justify-content: center;
+      align-items: center;
       width: auto;
     }
   }
-  
+
   li {
     font-size: var(--fs-400);
-    
+
     @include mq(medium) {
       font-size: var(--fs-200);
     }
   }
-  
+
   a {
     text-decoration: none;
     transition: 0.3s;
