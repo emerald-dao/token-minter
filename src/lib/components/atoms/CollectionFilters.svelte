@@ -1,7 +1,6 @@
 <script>
   import { TransparentCard, Divider, Stack } from "$atoms";
-  import { claimNFTs, getClaimableNFTs } from "$flow/actions";
-  import { user } from "$stores/FlowStore";
+  import { claimNFTs } from "$flow/actions";
   import Icon from "@iconify/svelte";
   import Button from "./Button.svelte";
 
@@ -10,6 +9,7 @@
   export let minPrice;
   export let contractName;
   export let contractAddress;
+  export let claimableNFTs;
 </script>
 
 <div class="filters-wrapper">
@@ -60,12 +60,10 @@
         bind:checked={seeMine} />
       My Purchases
     </label>
-    {#await getClaimableNFTs(contractName, contractAddress, $user.addr) then claimableNFTs}
-      {#if Object.keys(claimableNFTs).length > 0}
-        <Button on:click={() => claimNFTs(contractName, contractAddress)}
-          >Claim NFTs</Button>
-      {/if}
-    {/await}
+    {#if Object.keys(claimableNFTs).length > 0}
+      <Button on:click={() => claimNFTs(contractName, contractAddress)}
+        >Claim NFTs</Button>
+    {/if}
   </TransparentCard>
 </div>
 
