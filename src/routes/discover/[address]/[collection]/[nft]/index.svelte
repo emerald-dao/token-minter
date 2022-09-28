@@ -29,7 +29,8 @@
     );
     nftInfo.extra["metadataId"] = nftInfo.metadataId;
     const owner = collectionInfo.primaryBuyers[nftInfo.metadataId];
-    return { collectionInfo, nftInfo, owner };
+    const price = nftInfo.price ?? collectionInfo.price;
+    return { collectionInfo, nftInfo, owner, price };
   }
 
   let checkNftInfo = getInfo();
@@ -97,7 +98,7 @@
             <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
             {#if !info.owner && !purchased}
               <NFTPrice
-                price={info.nftInfo.price}
+                price={info.price}
                 width="34px"
                 fontSize="var(--fs-500)"
                 currentPrice={true}
@@ -106,10 +107,7 @@
                 leftIcon="wallet"
                 loading={$transactionInProgress}
                 on:click={() =>
-                  buyNft(
-                    Number(info.nftInfo.price).toFixed(3),
-                    info.collectionInfo.paymentType
-                  )}>
+                  buyNft(info.price, info.collectionInfo.paymentType)}>
                 {#if $transactionInProgress}
                   Loading Transaction
                 {:else}

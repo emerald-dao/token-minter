@@ -5,10 +5,17 @@
   export let metadatas;
   export let primaryBuyers;
   export let addr;
+  export let collectionPrice;
 
   let myNFTs = () => {
-    return Object.values(Object.fromEntries(Object.entries(metadatas).filter(([key, value]) => primaryBuyers[key] == addr)));
-  }
+    return Object.values(
+      Object.fromEntries(
+        Object.entries(metadatas).filter(
+          ([key, value]) => primaryBuyers[key] == addr
+        )
+      )
+    );
+  };
 </script>
 
 {#each myNFTs() as NFT}
@@ -16,8 +23,7 @@
     thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
     name={NFT.name}
     description={NFT.description}
-    price={Number(NFT.price).toFixed(3)}
+    price={Number(NFT.price ?? collectionPrice).toFixed(3)}
     url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-    withLink={true}
-     />
+    withLink={true} />
 {/each}

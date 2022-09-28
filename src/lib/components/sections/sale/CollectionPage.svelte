@@ -29,19 +29,17 @@
 
   export let contractAddress = $page.params.address;
 
-  async function getStats(metadatas, purchasedIndexes) {
+  async function getStats(metadatas, purchasedIndexes, collectionPrice) {
     return new Promise(async (resolve, reject) => {
       let min = Number.POSITIVE_INFINITY;
       let highestBuy = 0.0;
       for (const index in metadatas) {
-        if (!purchasedIndexes.includes(index) && metadatas[index].price < min) {
-          min = metadatas[index].price;
+        const nftPrice = metadatas[index].price ?? collectionPrice;
+        if (!purchasedIndexes.includes(index) && nftPrice < min) {
+          min = nftPrice;
         }
-        if (
-          purchasedIndexes.includes(index) &&
-          metadatas[index].price > highestBuy
-        ) {
-          highestBuy = metadatas[index].price;
+        if (purchasedIndexes.includes(index) && nftPrice > highestBuy) {
+          highestBuy = nftPrice;
         }
       }
       resolve({
@@ -112,7 +110,7 @@
                 <p class="collection-description">
                   {collectionInfo.description}
                 </p>
-                {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers)) then stats}
+                {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers), collectionInfo.price) then stats}
                   <AdaptableGrid minWidth="5em" gap="1.2em">
                     <CollectionStat
                       title="total items"
@@ -160,10 +158,11 @@
                         <MyNFTs
                           metadatas={collectionInfo.metadatas}
                           primaryBuyers={collectionInfo.primaryBuyers}
-                          addr={$user?.addr} />
+                          addr={$user?.addr}
+                          collectionPrice={collectionInfo.price} />
                       {:else if !collectionInfo.lotteryBuying}
                         {#each Object.values(collectionInfo.metadatas) as NFT}
-                          {#if (maxPrice === undefined || maxPrice >= Number(NFT.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price).toFixed(3))}
+                          {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price).toFixed(3))}
                             {#if $loading}
                               Loading: {$loading}
                             {:else if $error}
@@ -173,7 +172,9 @@
                                 thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
                                 name={NFT.name}
                                 description={NFT.description}
-                                price={Number(NFT.price).toFixed(3)}
+                                price={Number(
+                                  NFT.price ?? collectionInfo.price
+                                ).toFixed(3)}
                                 buy={!Object.keys(
                                   collectionInfo.primaryBuyers
                                 ).includes(NFT.metadataId)}
