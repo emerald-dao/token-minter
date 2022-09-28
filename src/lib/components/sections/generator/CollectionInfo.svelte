@@ -16,9 +16,9 @@
 
 	const schema = object({
 		name: string().required("Of course your collection needs a name! 🤷‍♂️"),
-		payment: number().required(
-			"If your NFTs don't have a price, you can't sell them 🤑"
-		),
+		payment: number()
+			.required("If your NFTs don't have a price, you can't sell them 🤑")
+			.min(0),
 		description: string().required("Don't be shy, write a description 🤗"),
 		image: mixed().required("We also need an image! 📸"),
 		bannerImage: mixed(),
