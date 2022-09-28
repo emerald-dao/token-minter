@@ -3,7 +3,7 @@
 	import { Stack, CollectionStat, TransparentCard } from "$atoms";
 	import { user } from "$stores/FlowStore";
 	import { page } from "$app/stores";
-	import { toggleMinting } from "$flow/actions";
+	import { proposeNFTToCatalog, toggleMinting } from "$flow/actions";
 	import Button from "$lib/components/atoms/Button.svelte";
 
 	const collectionInfo = getContext("collectionInfo");
@@ -79,6 +79,11 @@
 					on:click={() =>
 						downloadBuyers(info.primaryBuyers, $page.params.collection)}
 					>Download Buyers</Button>
+				<Button
+					locked={!pass}
+					on:click={() =>
+						proposeNFTToCatalog($page.params.collection, $user.addr)}
+					>Add to NFT Catalog</Button>
 			{/await}
 		{/await}
 	</Stack>
