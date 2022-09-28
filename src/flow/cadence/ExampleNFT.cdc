@@ -48,7 +48,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let description: String 
 		pub let thumbnail: MetadataViews.IPFSFile
 		// If price is nil, defaults to the collection price
-		pub let price: UFix64
+		pub let price: UFix64?
 		pub var extra: {String: AnyStruct}
 
 		init(_name: String, _description: String, _thumbnail: MetadataViews.IPFSFile, _price: UFix64?, _extra: {String: AnyStruct}) {
@@ -56,7 +56,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.name = _name
 			self.description = _description
 			self.thumbnail = _thumbnail
-			self.price = _price ?? ExampleNFT.getCollectionAttribute(key: "price") as! UFix64
+			self.price = _price
 			self.extra = _extra
 
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
@@ -393,7 +393,15 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	// Returns nil if an NFT with this metadataId doesn't exist
 	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64? {
-		return self.getCollectionAttribute(key: "lotteryBuying") as! Bool == false ? self.getNFTMetadata(metadataId)?.price : self.getCollectionAttribute(key: "price") as! UFix64
+		if let metadata: ExampleNFT.NFTMetadata = self.getNFTMetadata(metadataId) {
+			let defaultPrice: UFix64 = self.getCollectionAttribute(key: "price") as! UFix64
+			if self.getCollectionAttribute(key: "lotteryBuying") as! Bool {
+				return defaultPrice
+			}
+			return metadata.price ?? defaultPrice
+		}
+		// If the metadataId doesn't exist
+		return nil
 	}
 
 	// Returns an mapping of `id` to NFTMetadata
