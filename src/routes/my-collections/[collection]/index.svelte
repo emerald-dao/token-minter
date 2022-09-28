@@ -3,7 +3,11 @@
 	import { Stack, CollectionStat, TransparentCard } from "$atoms";
 	import { user } from "$stores/FlowStore";
 	import { page } from "$app/stores";
-	import { proposeNFTToCatalog, toggleMinting } from "$flow/actions";
+	import {
+		getEmeraldIDBatch,
+		proposeNFTToCatalog,
+		toggleMinting,
+	} from "$flow/actions";
 	import Button from "$lib/components/atoms/Button.svelte";
 
 	const collectionInfo = getContext("collectionInfo");
@@ -17,9 +21,17 @@
 	};
 
 	const downloadBuyers = async (primaryBuyers, collectionName) => {
-		let csvContent = `data:text/csv;charset=utf-8,`;
-		for (const buyer in primaryBuyers) {
-			csvContent += buyer + "," + primaryBuyers[buyer] + "\n";
+		let csvContent = `data:text/csv;charset=utf-8,nft metadataId,buyer address,discord name\n`;
+		const emeraldIds = getEmeraldIDBatch(Object.values(primaryBuyers));
+		for (const metadataId in primaryBuyers) {
+			const buyer = primaryBuyers[metadataId];
+			csvContent +=
+				metadataId +
+				"," +
+				buyer +
+				"," +
+				(emeraldIds[buyer] ?? "NOT FOUND") +
+				"\n";
 		}
 		saveContent(csvContent, `${collectionName}-buyers.csv`);
 	};

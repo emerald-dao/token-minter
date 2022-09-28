@@ -24,6 +24,7 @@ import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
 import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc?raw';
 import getTouchstonePurchasesScript from './cadence/scripts/get_touchstone_purchases.cdc?raw';
 import getClaimableNFTsScript from './cadence/scripts/get_claimable_nfts.cdc?raw';
+import getEmeraldIDBatchScript from './cadence/scripts/get_emeraldid_batch.cdc?raw';
 // Transactions
 import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
@@ -105,6 +106,9 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
     .replace('"../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
     .replace('"../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
+    .replace('"../utility/EmeraldIdentity.cdc"', addressList.EmeraldID)
+    .replace('"../utility/EmeraldIdentityDapper.cdc"', addressList.EmeraldID)
+    .replace('"../utility/EmeraldIdentityLilico.cdc"', addressList.EmeraldID)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
@@ -719,6 +723,22 @@ export const getTouchstonePurchases = async (user) => {
       cadence: replaceWithProperValues(getTouchstonePurchasesScript),
       args: (arg, t) => [
         arg(user, t.Address)
+      ],
+    });
+
+    console.log(response);
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+export const getEmeraldIDBatch = async (users) => {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getEmeraldIDBatchScript),
+      args: (arg, t) => [
+        arg(users, t.Array(t.Address))
       ],
     });
 
