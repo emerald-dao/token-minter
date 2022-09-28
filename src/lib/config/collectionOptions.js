@@ -38,7 +38,7 @@ let collectionOptions = [
     name: 'payment',
     type: 'number',
     helperText:
-      'Define the default price of your NFTs in $FLOW or $FUSD tokens (this will get overwritten for an individual NFT if you supply a `price` attribute in your CSV file in the next step)',
+      'Define the default price of your NFTs in $FLOW or $FUSD tokens (this will get overwritten for an individual NFT if you supply a `price` attribute in your CSV file in the next step). Input 0 if you want them to be free.',
     placeholder: '10.0',
     required: true,
     store: collectionInfo,
