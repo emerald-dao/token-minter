@@ -24,8 +24,8 @@
 						on the Flow Blockchain
 					</h1>
 					<p>
-						Create your own NFT Collections and set up a sales page without
-						knowing any code.
+						Create and deploy your own NFT Collections. Craft your own primary
+						sales page. Sell your NFTs with any Flow-based token.
 					</p>
 					<Button
 						href="/contract-generator"
