@@ -16,7 +16,11 @@
   <div class="content">
     <h4>{name}</h4>
     {#if description}
-      <p class="description">{description}</p>
+      <p class="description">
+        {description.length > 200
+          ? description.substring(0, 200) + "..."
+          : description}
+      </p>
     {/if}
     {#if price}
       <NFTPrice {price} {flowPrice} {paymentType} />

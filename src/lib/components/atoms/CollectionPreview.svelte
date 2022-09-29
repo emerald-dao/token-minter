@@ -2,6 +2,7 @@
   import { NFTCard } from "$atoms";
   import { resultCID } from "$stores/IPFSstore";
   import { csvStore } from "$stores/CollectionFilesStore";
+  import { collectionInfo } from "$stores/ContractStore.js";
 
   function getTemplates(assets, ipfsCID) {
     const response = assets.reduce((a, asset) => {
@@ -9,6 +10,7 @@
         name: asset.name,
         description: asset.description,
         thumbnail: `${ipfsCID}/${asset.thumbnail ?? asset.image}`,
+        price: Number(asset.price ?? $collectionInfo.payment).toFixed(3),
       });
       return a;
     }, []);
@@ -28,7 +30,9 @@
         <NFTCard
           name={NFT.name}
           description={NFT.description}
-          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`} />
+          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`}
+          price={NFT.price}
+          paymentType={$collectionInfo.paymentType} />
       {/each}
     </div>
   {:catch error}
