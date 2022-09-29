@@ -8,6 +8,7 @@ import FlowToken from "./utility/FlowToken.cdc"
 import MintVerifiers from "./MintVerifiers.cdc" 
 import FUSD from "./utility/FUSD.cdc"
 import EmeraldPass from "./utility/EmeraldPass.cdc"
+
 pub contract ExampleNFT: NonFungibleToken {
 
 	// Collection Information
