@@ -1,6 +1,8 @@
 import FLOAT from "./utility/FLOAT.cdc"
 import EmeraldPass from "./utility/EmeraldPass.cdc"
 
+// Created by Emerald City DAO for Touchstone (https://touchstone.city/)
+
 pub contract MintVerifiers {
 
   pub struct interface IVerifier {

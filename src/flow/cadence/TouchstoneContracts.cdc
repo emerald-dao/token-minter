@@ -1,5 +1,7 @@
 import EmeraldPass from "./utility/EmeraldPass.cdc"
 
+// Created by Emerald City DAO for Touchstone (https://touchstone.city/)
+
 pub contract TouchstoneContracts {
 
   pub let ContractsBookStoragePath: StoragePath
