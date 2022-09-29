@@ -6,6 +6,7 @@
 
   export let seeMine;
   export let available;
+  export let nameFilter;
   export let maxPrice;
   export let minPrice;
   export let contractName;
@@ -47,6 +48,19 @@
           min={`${minPrice === undefined ? 0 : minPrice}`}
           bind:value={maxPrice} />
       </Stack>
+    </label>
+    <Divider
+      line={true}
+      space="3.4rem"
+      lineColor="var(--clr-accent-main-t9)"
+      lineWidth="1px" />
+    <label for="name-filter">
+      Name
+      <input
+        name="name-filter"
+        id="name-filter"
+        type="text"
+        bind:value={nameFilter} />
     </label>
     <Divider
       line={true}

@@ -61,6 +61,7 @@
 
   let seeMine = false;
   let available = false;
+  let nameFilter;
   let maxPrice;
   let minPrice;
 </script>
@@ -158,6 +159,7 @@
                         <CollectionFilters
                           bind:seeMine
                           bind:available
+                          bind:nameFilter
                           bind:maxPrice
                           bind:minPrice
                           {contractAddress}
@@ -178,7 +180,9 @@
                                 Loading: {$loading}
                               {:else if $error}
                                 Error: {$error}
-                              {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId])}
+                              {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId]) && (!nameFilter || NFT.name
+                                    .toUpperCase()
+                                    .includes(nameFilter.toUpperCase()))}
                                 <NFTCard
                                   thumbnailURL={NFT.thumbnail
                                     ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
