@@ -28,15 +28,15 @@ const contractData = {
   },
   MintVerifiers: {
     testnet: '0x692e8e2f2f8db5b6',
-    mainnet: '',
+    mainnet: '0x7a696d6136e1dce2',
   },
   TouchstoneContracts: {
     testnet: '0x692e8e2f2f8db5b6',
-    mainnet: '',
+    mainnet: '0x7a696d6136e1dce2',
   },
   TouchstonePurchases: {
     testnet: '0x692e8e2f2f8db5b6',
-    mainnet: ''
+    mainnet: '0x7a696d6136e1dce2'
   },
   FLOAT: {
     testnet: '0x0afe396ebc8eee65',
@@ -52,7 +52,7 @@ const contractData = {
   },
   EmeraldPass: {
     testnet: '0x692e8e2f2f8db5b6',
-    mainnet: '',
+    mainnet: '0x6a07dbeb03167a13',
   },
   EmeraldID: {
     testnet: '0x692e8e2f2f8db5b6',
