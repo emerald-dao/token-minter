@@ -19,7 +19,7 @@
     <div class="main-wrapper" direction="row" align="flex-start">
       <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
       <div class="content-wrapper">
-        <Stack direction="column" align="left" gap="0.6em">
+        <Stack direction="column" align="left" gap="0.9em">
           <h2>{name}</h2>
           <WalletAddress address={owner}>Made by</WalletAddress>
           <p class="description">
@@ -37,7 +37,7 @@
   a {
     text-decoration: none;
     color: var(--clr-font-text);
-    max-width: 900px;
+    max-width: 74rem;
     width: 100%;
 
     .main-wrapper {
@@ -46,15 +46,20 @@
       gap: 1.8rem;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
 
       @include mq(small) {
         display: grid;
-        grid-template-columns: 14rem 1fr;
-        gap: 1.8rem;
+        grid-template-columns: 18rem 1fr;
+        gap: 2.4rem;
       }
 
       .content-wrapper {
         padding-block: 2em;
+
+        @include mq(small) {
+          padding-block: 0;
+        }
 
         h2 {
           // color: var(--clr-accent-main);

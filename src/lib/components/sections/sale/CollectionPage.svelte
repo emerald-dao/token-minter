@@ -269,6 +269,7 @@
 
   .image-wrapper {
     height: 200px;
+    width: auto;
     border-radius: 0.8rem;
     border: 3px var(--clr-accent-soft-t4) solid;
     background-color: var(--clr-background-primary);
