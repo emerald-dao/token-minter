@@ -9,7 +9,7 @@ export const collectionImagesValidation = async (data) => {
   const validationResult = await validateImages(data, imagesFileTypesAllowed);
 
   if (validationResult.validation === true) {
-    const getFiles = validationResult.files.filter((file) => file.name !== '.DS_Store');
+    const getFiles = validationResult.files;
 
     // If the validation successful and the CSV is already uploaded: we run the cross check validation
     if (get(csvStore).files.length > 0) {
@@ -62,7 +62,8 @@ export async function validateImages(data, acceptedFileTypes) {
   // File handling
   // TODO: Move file handling to indpenendent functions
   const files = getFilesFromData(data);
-  const getFiles = files.source === 'input' ? [...files.list] : await getFilesAsync(files.list);
+  let getFiles = files.source === 'input' ? [...files.list] : await getFilesAsync(files.list);
+  getFiles = getFiles.filter((file) => file.name !== '.DS_Store')
 
   // Validations arrays
   const acceptedFilesValidation = [];
