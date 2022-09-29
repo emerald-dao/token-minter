@@ -5,7 +5,8 @@ import ExampleNFT from "../ExampleNFT.cdc"
 transaction(
   names: [String], 
   descriptions: [String], 
-  thumbnails: [String], 
+  images: [String],
+  thumbnails: [String?], 
   prices: [UFix64?], 
   extras: [{String: String}], 
   ipfsCID: String
@@ -29,6 +30,7 @@ transaction(
       self.Administrator.createNFTMetadata(
         name: names[i], 
         description: descriptions[i], 
+        imagePath: images[i],
         thumbnailPath: thumbnails[i],
         ipfsCID: ipfsCID,
         price: prices[i],

@@ -21,7 +21,7 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub event ContractInitialized()
 	pub event Withdraw(id: UInt64, from: Address?)
 	pub event Deposit(id: UInt64, to: Address?)
-	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, thumbnail: MetadataViews.IPFSFile, price: UFix64)
+	pub event TouchstonePurchase(id: UInt64, recipient: Address, metadataId: UInt64, name: String, description: String, image: MetadataViews.IPFSFile, price: UFix64)
 	pub event Minted(id: UInt64, recipient: Address, metadataId: UInt64)
 	pub event MintBatch(metadataIds: [UInt64], recipients: [Address])
 
@@ -46,15 +46,20 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String 
-		pub let thumbnail: MetadataViews.IPFSFile
+		// The main image of the NFT
+		pub let image: MetadataViews.IPFSFile
+		// An optional thumbnail that can go along with it
+		// for easier loading
+		pub let thumbnail: MetadataViews.IPFSFile?
 		// If price is nil, defaults to the collection price
 		pub let price: UFix64?
 		pub var extra: {String: AnyStruct}
 
-		init(_name: String, _description: String, _thumbnail: MetadataViews.IPFSFile, _price: UFix64?, _extra: {String: AnyStruct}) {
+		init(_name: String, _description: String, _image: MetadataViews.IPFSFile, _thumbnail: MetadataViews.IPFSFile?, _price: UFix64?, _extra: {String: AnyStruct}) {
 			self.metadataId = ExampleNFT.nextMetadataId
 			self.name = _name
 			self.description = _description
+			self.image = _image
 			self.thumbnail = _thumbnail
 			self.price = _price
 			self.extra = _extra
@@ -93,7 +98,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.Display(
 						name: metadata.name,
 						description: metadata.description,
-						thumbnail: metadata.thumbnail
+						thumbnail: metadata.thumbnail ?? metadata.image
 					)
 				case Type<MetadataViews.NFTCollectionData>():
 					return MetadataViews.NFTCollectionData(
@@ -283,7 +288,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + price
 
 		// Emit event
-		emit TouchstonePurchase(id: nftId, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, thumbnail: metadata.thumbnail, price: price)
+		emit TouchstonePurchase(id: nftId, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, image: metadata.image, price: price)
 		
 		// Deposit nft
 		recipient.deposit(token: <- nft)
@@ -292,14 +297,15 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, thumbnailPath: String, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}) {
+		pub fun createNFTMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}) {
 			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
 				_name: name,
 				_description: description,
-				_thumbnail: MetadataViews.IPFSFile(
+				_image: MetadataViews.IPFSFile(
 					cid: ipfsCID,
-					path: thumbnailPath
+					path: imagePath
 				),
+				_thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
 				_price: price,
 				_extra: extra
 			)

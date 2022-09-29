@@ -20,7 +20,9 @@
 
 {#each myNFTs() as NFT}
   <NFTCard
-    thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`}
+    thumbnailURL={NFT.thumbnail
+      ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+      : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
     name={NFT.name}
     description={NFT.description}
     price={Number(NFT.price ?? collectionPrice).toFixed(3)}

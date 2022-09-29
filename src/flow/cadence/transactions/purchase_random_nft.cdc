@@ -56,7 +56,7 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
     let display = MetadataViews.Display(
       name: nftMetadata.name,
       description: nftMetadata.description,
-      thumbnail: nftMetadata.thumbnail
+      thumbnail: nftMetadata.thumbnail ?? nftMetadata.image
     )
     self.Purchases.addPurchase(uuid: nftId, metadataId: chosenMetadataId!, display: display, contractAddress: contractAddress, contractName: contractName)
   }

@@ -27,7 +27,9 @@
 </script>
 
 <NFTCard
-  thumbnailURL={`https://nftstorage.link/ipfs/${metadatas[lotteryNumber].thumbnail.cid}/${metadatas[lotteryNumber].thumbnail.path}`}
+  thumbnailURL={metadatas[lotteryNumber].thumbnail
+    ? `https://nftstorage.link/ipfs/${metadatas[lotteryNumber].thumbnail.cid}/${metadatas[lotteryNumber].thumbnail.path}`
+    : `https://nftstorage.link/ipfs/${metadatas[lotteryNumber].image.cid}/${metadatas[lotteryNumber].image.path}`}
   name={metadatas[lotteryNumber].name}
   description={metadatas[lotteryNumber].description}
   {price}

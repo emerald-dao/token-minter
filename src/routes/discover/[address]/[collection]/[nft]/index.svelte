@@ -64,7 +64,7 @@
         <Stack direction="column" align="flex-start">
           <div class="image-wrapper">
             <NftImage
-              thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.thumbnail.cid}/${info.nftInfo.thumbnail.path}`}
+              thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
               name={`${info.nftInfo.name} NFT`} />
           </div>
           <Stack direction="column" align="flex-start" gap="0.4em">

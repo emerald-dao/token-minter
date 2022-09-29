@@ -69,7 +69,7 @@ function switchNetwork(newNetwork) {
 }
 
 export const deployToTestnet = async () => {
-  // unauthenticate();
+  unauthenticate();
   switchNetwork('testnet');
   deployContract();
 };
@@ -303,14 +303,16 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   // Get The MetadataId we should start at
   let names = [];
   let descriptions = [];
+  let images = [];
   let thumbnails = [];
   let prices = [];
   let extras = [];
   for (var i = 0; i < metadatas.length; i++) {
-    const { name, description, image, price, ...rest } = metadatas[i];
+    const { name, description, image, thumbnail, price, ...rest } = metadatas[i];
     names.push(name);
     descriptions.push(description);
-    thumbnails.push(image);
+    images.push(image);
+    thumbnails.push(thumbnail);
     prices.push(price ? Number(price).toFixed(3) : null);
     let extra = [];
     for (const attribute in rest) {
@@ -332,7 +334,8 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       args: (arg, t) => [
         arg(names, t.Array(t.String)),
         arg(descriptions, t.Array(t.String)),
-        arg(thumbnails, t.Array(t.String)),
+        arg(images, t.Array(t.String)),
+        arg(thumbnails, t.Array(t.Optional(t.String))),
         arg(prices, t.Array(t.Optional(t.UFix64))),
         arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
         arg(ipfsCID, t.String)
