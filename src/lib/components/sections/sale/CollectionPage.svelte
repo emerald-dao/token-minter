@@ -60,6 +60,7 @@
   const [flowPrice, loading, error] = flowPriceStore();
 
   let seeMine = false;
+  let available = false;
   let maxPrice;
   let minPrice;
 </script>
@@ -156,6 +157,7 @@
                       {#if !collectionInfo.lotteryBuying}
                         <CollectionFilters
                           bind:seeMine
+                          bind:available
                           bind:maxPrice
                           bind:minPrice
                           {contractAddress}
@@ -176,7 +178,7 @@
                                 Loading: {$loading}
                               {:else if $error}
                                 Error: {$error}
-                              {:else if browser}
+                              {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId])}
                                 <NFTCard
                                   thumbnailURL={NFT.thumbnail
                                     ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`

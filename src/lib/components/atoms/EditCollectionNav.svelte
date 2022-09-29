@@ -42,7 +42,6 @@
   <BallButton
     active={false}
     icon="ion:eye"
-    target="_blank"
     href={`/discover/${$user.addr}/${$page.params.collection}`}>
     View Collection
   </BallButton>
@@ -75,9 +74,7 @@
     class="small transparent"
     leftIcon="arrow-back-circle"
     href="/my-collections">Back to My Collections</Button>
-  <Divider
-    space="1rem"
-    lineColor="var(--clr-accent-main-t9)" />
+  <Divider space="1rem" lineColor="var(--clr-accent-main-t9)" />
   {#await hasEmeraldPass then pass}
     {#if !pass}
       <Button

@@ -5,6 +5,7 @@
   import Button from "./Button.svelte";
 
   export let seeMine;
+  export let available;
   export let maxPrice;
   export let minPrice;
   export let contractName;
@@ -52,6 +53,14 @@
       space="3.4rem"
       lineColor="var(--clr-accent-main-t9)"
       lineWidth="1px" />
+    <label for="available" class="checkbox-label">
+      <input
+        name="available"
+        id="available"
+        type="checkbox"
+        bind:checked={available} />
+      Available
+    </label>
     <label for="my-purchases" class="checkbox-label">
       <input
         name="my-purchases"
