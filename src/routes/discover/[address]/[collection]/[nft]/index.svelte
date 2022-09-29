@@ -94,6 +94,7 @@
               <MadeWithTouchstone />
               <WalletAddress address={$page.params.address}>By</WalletAddress>
             </Stack>
+            <p>{info.collectionInfo.name}</p>
             <h1>{info.nftInfo.name}</h1>
             <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
             {#if !info.owner && !purchased}
@@ -127,6 +128,11 @@
                 Bought by: {info.owner}
               </Button>
             {/if}
+            <Button
+              class="medium ghost"
+              leftIcon="arrow-back-circle"
+              href="/discover/{$page.params.address}/{$page.params.collection}"
+              >Back to Collection</Button>
           </Stack>
         </div>
       {/await}
