@@ -7,6 +7,27 @@
 	},
 	"contracts": {
 		"ExampleNFT": "./src/flow/cadence/ExampleNFT.cdc",
+		"EmeraldIdentity": {
+			"source": "./src/flow/cadence/utility/EmeraldIdentity.cdc",
+			"aliases": {
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x39e42c67cc851cfb"
+			}
+		},
+		"EmeraldIdentityDapper": {
+			"source": "./src/flow/cadence/utility/EmeraldIdentityDapper.cdc",
+			"aliases": {
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x39e42c67cc851cfb"
+			}
+		},
+		"EmeraldIdentityLilico": {
+			"source": "./src/flow/cadence/utility/EmeraldIdentityLilico.cdc",
+			"aliases": {
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x39e42c67cc851cfb"
+			}
+		},
 		"MetadataViews": {
 			"source": "./src/flow/cadence/utility/MetadataViews.cdc",
 			"aliases": {
@@ -60,25 +81,29 @@
 		"MintVerifiers": {
 			"source": "./src/flow/cadence/MintVerifiers.cdc",
 			"aliases": {
-				"testnet": "0xaf717f34dcb01af1"
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x7a696d6136e1dce2"
 			}
 		},
 		"TouchstoneContracts": {
 			"source": "./src/flow/cadence/TouchstoneContracts.cdc",
 			"aliases": {
-				"testnet": "0xaf717f34dcb01af1"
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x7a696d6136e1dce2"
 			}
 		},
 		"TouchstonePurchases": {
 			"source": "./src/flow/cadence/TouchstonePurchases.cdc",
 			"aliases": {
-				"testnet": "0xaf717f34dcb01af1"
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x7a696d6136e1dce2"
 			}
 		},
 		"EmeraldPass": {
 			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
 			"aliases": {
-				"testnet": "0x88b6d0be84df0918"
+				"testnet": "0x692e8e2f2f8db5b6",
+				"mainnet": "0x6a07dbeb03167a13"
 			}
 		},
 		"NFTCatalog": {
@@ -98,36 +123,6 @@
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
-		},
-		"testnet-account": {
-			"address": "0xd24f69d0e1865520",
-			"key": {
-				"type": "hex",
-				"index": 0,
-				"signatureAlgorithm": "ECDSA_P256",
-				"hashAlgorithm": "SHA3_256",
-				"privateKey": "88b15950949c0007f931f168b2d0a350c16e64aa5ec6e3bf57d4a895d02f36c1"
-			}
-		},
-		"emeraldpass-account": {
-			"address": "0x5a2114f5b8c53b0d",
-			"key": {
-				"type": "hex",
-				"index": 0,
-				"signatureAlgorithm": "ECDSA_P256",
-				"hashAlgorithm": "SHA3_256",
-				"privateKey": "337e6c09d647faf961372c48a3cece203a9bbb03b0649490354a11f9b8e274c9"
-			}
-		},
-		"touchstonecontracts-account": {
-			"address": "0xaf717f34dcb01af1",
-			"key": {
-				"type": "hex",
-				"index": 0,
-				"signatureAlgorithm": "ECDSA_P256",
-				"hashAlgorithm": "SHA3_256",
-				"privateKey": "5ec5f085ed54f64b0ad9c5cf35da29f9ffd8f107f0b9d3818c2e10d6b8830f4d"
-			}
 		}
 	},
 	"deployments": {
@@ -141,7 +136,16 @@
 			]
 		},
 		"testnet": {
-			"touchstonecontracts-account": [
+			"testnet-account": [
+				"EmeraldIdentity",
+				"EmeraldIdentityDapper",
+				"EmeraldIdentityLilico"
+			]
+		},
+		"mainnet": {
+			"mainnet-account": [
+				"MintVerifiers",
+				"TouchstoneContracts",
 				"TouchstonePurchases"
 			]
 		}
