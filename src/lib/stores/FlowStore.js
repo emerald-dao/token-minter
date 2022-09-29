@@ -61,7 +61,7 @@ const contractData = {
 };
 
 export const user = writable(null);
-export const network = writable('testnet');
+export const network = writable('mainnet');
 export const profile = writable(null);
 export const transactionStatus = writable({});
 export const transactionInProgress = writable(false);
