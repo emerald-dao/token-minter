@@ -30,7 +30,7 @@
 <style type="scss">
   .thumbnail {
     border-radius: 0.6rem;
-    height: 100%;
+    // height: 100%;
     width: 100%;
   }
   .placeholder {
