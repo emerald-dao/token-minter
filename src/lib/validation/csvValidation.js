@@ -132,6 +132,11 @@ const validateCsvAfterParse = (parsedCsv) => {
 
         metadata.push(nft_attribs);
 
+        // Make sure same length
+        if (vals.length !== attributes.length) {
+          trackedErrors.push(`ERROR: Not enough or too many attributes for ${key}`);
+        }
+
         // check for all required attributes
         required.forEach((k) => {
           if (!nft_attribs[k]) {
@@ -152,7 +157,7 @@ const validateCsvAfterParse = (parsedCsv) => {
       console.log('errs', errs);
       return {
         validation: false,
-        error: 'Errors encountered in CSV records',
+        error: errs[0],
         errs,
       };
     }
