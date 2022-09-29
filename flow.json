@@ -134,20 +134,6 @@
 				"FLOAT",
 				"MintVerifiers"
 			]
-		},
-		"testnet": {
-			"testnet-account": [
-				"EmeraldIdentity",
-				"EmeraldIdentityDapper",
-				"EmeraldIdentityLilico"
-			]
-		},
-		"mainnet": {
-			"mainnet-account": [
-				"MintVerifiers",
-				"TouchstoneContracts",
-				"TouchstonePurchases"
-			]
 		}
 	}
 }
