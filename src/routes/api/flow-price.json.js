@@ -10,6 +10,8 @@ export const get = async () => {
 
     let json = await response.json();
     let flowPrice = json.data[4558].quote.USD.price;
+    console.log(flowPrice);
+    console.log(json);
 
     return {
       status: 200,
