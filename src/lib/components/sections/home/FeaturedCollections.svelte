@@ -9,6 +9,7 @@
       description:
         "This is the first official Emerald City NFT collection, and the first ever collection on Touchstone. Featured in this collection are different types of Emeralds, all with different origins, planets, energetic properties, and elements. Purchasing these Emeralds will help pay developers inside of Emerald City to build more free tools like Touchstone, educate more users inside of Emerald Academy, and will grant you free months of Emerald Pass subscription.",
       owner: "0x5643fd47a29770e7",
+      url: "/Emeralds",
     },
   ];
 </script>
@@ -22,7 +23,7 @@
           {#each collections as collection}
             <CollectionCard
               name={collection.name}
-              url={`/discover/${collection.owner}/${collection.slug}`}
+              url={collection.url}
               thumbnailURL={collection.thumbnailURL}
               description={collection.description}
               owner={collection.owner} />
