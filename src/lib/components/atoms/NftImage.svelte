@@ -31,6 +31,7 @@
   .thumbnail {
     border-radius: 0.6rem;
     height: 100%;
+    width: 100%;
   }
   .placeholder {
     height: 180px;
