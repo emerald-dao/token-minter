@@ -2,18 +2,23 @@ import FungibleToken from "./FungibleToken.cdc"
 import FUSD from "./FUSD.cdc"
 import FlowToken from "./FlowToken.cdc"
 
+// The official Emerald Pass contract. Access premium features across Emerald City tools and education by having an active subscription.
+// Purchase or learn more about Emerald Pass: https://pass.ecdao.org/
+// Created by Emerald City
+
 pub contract EmeraldPass {
 
   access(self) var treasury: ECTreasury
   // Maps the type of a token to its pricing
   access(self) var pricing: {Type: Pricing}
+  pub var purchased: UInt64
 
   pub let VaultPublicPath: PublicPath
   pub let VaultStoragePath: StoragePath
 
   pub event ChangedPricing(newPricing: {UFix64: UFix64})
   pub event Purchased(subscriber: Address, time: UFix64, vaultType: Type)
-  pub event Donation(by: Address, to: Address, time: UFix64, vaultType: Type)
+  pub event Donation(by: Address, to: Address, vaultType: Type)
 
   pub struct ECTreasury {
     pub let tokenTypeToVault: {Type: Capability<&{FungibleToken.Receiver}>}
@@ -23,8 +28,7 @@ pub contract EmeraldPass {
     }
 
     init() {
-      // TODO CHANGE THIS ADDRESS HERE
-      let ecAccount: PublicAccount = getAccount(0x6c0d53c676256e8c)
+      let ecAccount: PublicAccount = getAccount(0x5643fd47a29770e7)
       self.tokenTypeToVault = {
         Type<@FUSD.Vault>(): ecAccount.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver),
         Type<@FlowToken.Vault>(): ecAccount.getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver)
@@ -34,22 +38,22 @@ pub contract EmeraldPass {
 
   pub struct Pricing {
     // examples in $FUSD
-    // 2629743.0 (1 month) -> 100
-    // 31556926.0 (1 year) -> 1000
-    pub let timeToCost: {UFix64: UFix64}
+    // 100.0 -> 2629743.0 (1 month)
+    // 1000.0 -> 31556926.0 (1 year)
+    pub let costToTime: {UFix64: UFix64}
 
-    pub fun getPrice(time: UFix64): UFix64? {
-      return self.timeToCost[time]
+    pub fun getTime(cost: UFix64): UFix64? {
+      return self.costToTime[cost]
     }
 
-    init(_ timeToCost: {UFix64: UFix64}) {
-      self.timeToCost = timeToCost
+    init(_ costToTime: {UFix64: UFix64}) {
+      self.costToTime = costToTime
     }
   }
 
   pub resource interface VaultPublic {
     pub var endDate: UFix64
-    pub fun purchase(payment: @FungibleToken.Vault, time: UFix64)
+    pub fun purchase(payment: @FungibleToken.Vault)
     access(account) fun addTime(time: UFix64)
     pub fun isActive(): Bool
   }
@@ -58,15 +62,15 @@ pub contract EmeraldPass {
 
     pub var endDate: UFix64
 
-    pub fun purchase(payment: @FungibleToken.Vault, time: UFix64) {
-      pre {
-        EmeraldPass.getPrice(vaultType: payment.getType(), time: time) != nil: "This is not a supported amount of time."
-        EmeraldPass.getPrice(vaultType: payment.getType(), time: time)! == payment.balance:
-          "The cost is ".concat(EmeraldPass.getPrice(vaultType: payment.getType(), time: time)!.toString()).concat(" but you passed in ").concat(payment.balance.toString()).concat(".")
-      }
-      let paymentType = payment.getType()
+    pub fun purchase(payment: @FungibleToken.Vault) {
+      let paymentType: Type = payment.getType()
+      let pricing: Pricing = EmeraldPass.getPricing(vaultType: paymentType) ?? panic("This is not a supported form of payment.")
+      let time: UFix64 = pricing.getTime(cost: payment.balance) ?? panic("The balance of the Vault you sent in does not correlate to any supported amounts of time.")
+      
       EmeraldPass.depositToECTreasury(vault: <- payment)
       self.addTime(time: time)
+
+      EmeraldPass.purchased = EmeraldPass.purchased + 1
       emit Purchased(subscriber: self.owner!.address, time: time, vaultType: paymentType)
     }
 
@@ -118,13 +122,12 @@ pub contract EmeraldPass {
   }
 
   // A function you can call to donate subscription time to someone else
-  pub fun donate(nicePerson: Address, to: Address, time: UFix64, payment: @FungibleToken.Vault) {
+  pub fun donate(nicePerson: Address, to: Address, payment: @FungibleToken.Vault) {
     let userVault = getAccount(to).getCapability(EmeraldPass.VaultPublicPath)
                       .borrow<&Vault{VaultPublic}>() ?? panic("This receiver has not set up a Vault for Emerald Pass yet.")
-    let paymentType = payment.getType()
-    userVault.purchase(payment: <- payment, time: time)
-
-    emit Donation(by: nicePerson, to: to, time: time, vaultType: paymentType)
+    let paymentType: Type = payment.getType()
+    userVault.purchase(payment: <- payment)
+    emit Donation(by: nicePerson, to: to, vaultType: paymentType)
   }
 
   // Checks to see if a user is currently subscribed to Emerald Pass
@@ -140,11 +143,6 @@ pub contract EmeraldPass {
     return self.getAllPricing()[vaultType]
   }
 
-  pub fun getPrice(vaultType: Type, time: UFix64): UFix64? {
-    let pricing = self.getPricing(vaultType: vaultType) ?? panic("Emerald Pass does not support this form of payment.")
-    return pricing.getPrice(time: time)
-  }
-
   pub fun getTreasury(): {Type: Capability<&{FungibleToken.Receiver}>} {
     return ECTreasury().tokenTypeToVault
   }
@@ -158,10 +156,11 @@ pub contract EmeraldPass {
     self.treasury = ECTreasury()
     self.pricing = {
       Type<@FUSD.Vault>(): Pricing({
-        2629743.0: 100.0, // 1 month
-        31556926.0: 1000.0 // 1 year
+        100.0: 2629743.0, // 1 month
+        1000.0: 31556926.0 // 1 year
       })
     }
+    self.purchased = 0
 
     self.VaultPublicPath = /public/EmeraldPass
     self.VaultStoragePath = /storage/EmeraldPass
