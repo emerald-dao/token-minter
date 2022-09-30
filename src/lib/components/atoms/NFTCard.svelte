@@ -26,7 +26,9 @@
         {price}
         {paymentType} />
       {#if buy}
-        <Button class="small full-width no-shadow ghost">Buy Now</Button>
+        <Button class="small full-width no-shadow accent-color">Buy Now</Button>
+      {:else}
+        <Button class="small full-width no-shadow ghost done">Sold</Button>
       {/if}
     </a>
   {:else}
@@ -40,11 +42,13 @@
       {paymentType} />
     {#if buy}
       {#if purchase}
-        <Button class="small full-width no-shadow ghost" on:click={purchase}
+        <Button class="small full-width no-shadow accent-color" on:click={purchase}
           >Buy Now</Button>
       {:else}
-        <Button class="small full-width no-shadow ghost">Buy Now</Button>
+        <Button class="small full-width no-shadow accent-color">Buy Now</Button>
       {/if}
+    {:else}
+      <Button class="small full-width no-shadow ghost done">Sold</Button>
     {/if}
   {/if}
 </TransparentCard>
