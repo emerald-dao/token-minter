@@ -10,7 +10,7 @@
         name: asset.name,
         description: asset.description,
         thumbnail: `${ipfsCID}/${asset.thumbnail ?? asset.image}`,
-        price: Number(asset.price ?? $collectionInfo.payment).toFixed(3),
+        price: Number(asset.price ?? $collectionInfo.payment),
       });
       return a;
     }, []);

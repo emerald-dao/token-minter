@@ -62,7 +62,7 @@
 		{:then info}
 			<CollectionStat
 				title="Profit"
-				stat={Number(info.profit).toFixed(3)}
+				stat={Number(info.profit)}
 				flowLogo={info.paymentType === "$FLOW"}
 				fusdLogo={info.paymentType === "$FUSD"} />
 		{/await}

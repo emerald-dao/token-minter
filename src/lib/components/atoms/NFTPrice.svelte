@@ -23,16 +23,16 @@
           alt="flow coin logo"
           style={`width: ${width}`} />
         <p class="price" style={`font-size: ${fontSize}`}>
-          {Number(price).toFixed(3)}
+          {Number(price)}
         </p>
       </Stack>
       {#if flowPrice && paymentType === "$FLOW"}
         <p class="price-dollars">
-          {`(USD ${(Number(price).toFixed(3) * flowPrice).toFixed(1)})`}
+          {`(USD ${(Number(price) * flowPrice).toFixed(1)})`}
         </p>
       {:else if paymentType === "$FUSD"}
         <p class="price-dollars">
-          {`(USD ${Number(price).toFixed(3)})`}
+          {`(USD ${Number(price)})`}
         </p>
       {/if}
     </Stack>
