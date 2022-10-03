@@ -144,9 +144,16 @@
   @use "../../../../../lib/styles/abstracts" as *;
 
   .image-wrapper {
-    border-radius: 0.4rem;
-    border: 3px var(--clr-accent-soft-t8) solid;
+    border-radius: 1rem;
+    border: 3px var(--clr-accent-soft-t4) solid;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    overflow: hidden;
   }
+  
   .sticky {
     @include mq(medium) {
       position: sticky;

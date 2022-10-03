@@ -17,7 +17,9 @@
 <a href={`${url}`}>
   <TransparentCard border={true} hoverShadow={true} {accent}>
     <div class="main-wrapper" direction="row" align="flex-start">
-      <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
+      <Stack>
+        <NftImage thumbnailURL={thumbnailURL} name={`${name} main image`}/>
+      </Stack>
       <div class="content-wrapper">
         <Stack direction="column" align="left" gap="0.9em">
           <h2>{name}</h2>
@@ -50,7 +52,7 @@
 
       @include mq(small) {
         display: grid;
-        grid-template-columns: 18rem 1fr;
+        grid-template-columns: 28% 1fr;
         gap: 2.4rem;
       }
 

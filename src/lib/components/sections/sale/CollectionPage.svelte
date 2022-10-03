@@ -76,7 +76,7 @@
     <Section class="padding-top-none padding-bottom-small">
       <Container class="width-full">
         <TransparentCard padding="0">
-          {#if collectionInfo.bannerImage}
+          {#if collectionInfo?.bannerImage}
             <div
               class="banner"
               style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
@@ -269,10 +269,15 @@
 
   .image-wrapper {
     height: 200px;
+    min-width: 200px;
     width: auto;
     border-radius: 0.8rem;
     border: 3px var(--clr-accent-soft-t4) solid;
     background-color: var(--clr-background-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   h1 {
