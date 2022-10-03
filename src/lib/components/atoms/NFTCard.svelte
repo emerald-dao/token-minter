@@ -12,6 +12,7 @@
   export let purchase;
   export let flowPrice;
   export let paymentType;
+  export let ownedByUser = false;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
@@ -28,7 +29,9 @@
       {#if buy}
         <Button class="small full-width no-shadow accent-color">Buy Now</Button>
       {:else}
-        <Button class="small full-width no-shadow ghost done">Sold</Button>
+        {#if !ownedByUser}
+          <Button class="small full-width no-shadow ghost done">Sold</Button>
+        {/if}
       {/if}
     </a>
   {:else}
@@ -40,15 +43,8 @@
       {backgroundColor}
       {price}
       {paymentType} />
-    {#if buy}
-      {#if purchase}
-        <Button class="small full-width no-shadow accent-color" on:click={purchase}
-          >Buy Now</Button>
-      {:else}
-        <Button class="small full-width no-shadow accent-color">Buy Now</Button>
-      {/if}
-    {:else}
-      <Button class="small full-width no-shadow ghost done">Sold</Button>
+    {#if purchase}
+        <Button class="small full-width no-shadow accent-color" on:click={purchase}>Buy Now</Button>
     {/if}
   {/if}
 </TransparentCard>
