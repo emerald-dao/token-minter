@@ -48,9 +48,8 @@
         }
       }
       resolve({
-        floorPrice:
-          min == Number.POSITIVE_INFINITY ? "N/A" : Number(min).toFixed(3),
-        highestBuy: Number(highestBuy).toFixed(3),
+        floorPrice: min == Number.POSITIVE_INFINITY ? "N/A" : Number(min),
+        highestBuy: Number(highestBuy),
         totalItems: metadatas.length,
         numPurchased: purchasedIndexes.length,
         available: metadatas.length - purchasedIndexes.length,
@@ -146,7 +145,7 @@
                         title="price"
                         flowLogo={collectionInfo.paymentType === "$FLOW"}
                         fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                        stat={Number(collectionInfo.price).toFixed(3)} />
+                        stat={Number(collectionInfo.price)} />
                     {/if}
                   </AdaptableGrid>
                 {/await}
@@ -181,7 +180,7 @@
                         {:else if !collectionInfo.lotteryBuying}
                           {#each Object.values(collectionInfo.metadatas) as NFT, i}
                             <!-- Apply filters -->
-                            {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price).toFixed(3)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price).toFixed(3)) && i < nftsToDisplay}
+                            {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
                               {#if $loading}
                                 Loading: {$loading}
                               {:else if $error}
@@ -197,7 +196,7 @@
                                   description={NFT.description}
                                   price={Number(
                                     NFT.price ?? collectionInfo.price
-                                  ).toFixed(3)}
+                                  )}
                                   buy={!Object.keys(
                                     collectionInfo.primaryBuyers
                                   ).includes(NFT.metadataId)}
