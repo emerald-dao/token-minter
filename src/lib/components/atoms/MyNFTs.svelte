@@ -27,5 +27,7 @@
     description={NFT.description}
     price={Number(NFT.price ?? collectionPrice)}
     url={`/discover/${$page.params.address}/${$page.params.collection}/${NFT.metadataId}`}
-    withLink={true} />
+    withLink={true}
+    buy={false}
+    ownedByUser={true} />
 {/each}

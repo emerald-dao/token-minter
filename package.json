@@ -43,6 +43,7 @@
     "ipfs-car": "^0.7.0",
     "nft.storage": "^6.2.0",
     "papaparse": "^5.3.2",
+    "svelte-intersection-observer": "^0.10.0",
     "yup": "^0.32.11"
   }
 }

@@ -30,6 +30,7 @@
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
+  import IntersectionObserver from "svelte-intersection-observer";
 
   export let contractAddress = $page.params.address;
 
@@ -58,6 +59,10 @@
 
   const [flowPrice, loading, error] = flowPriceStore();
 
+  let nftsToDisplay = 50;
+  let element;
+  let intersecting;
+
   let seeMine = false;
   let available = false;
   let nameFilter;
@@ -75,7 +80,7 @@
     <Section class="padding-top-none padding-bottom-small">
       <Container class="width-full">
         <TransparentCard padding="0">
-          {#if collectionInfo.bannerImage}
+          {#if collectionInfo?.bannerImage}
             <div
               class="banner"
               style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
@@ -173,8 +178,9 @@
                             addr={$user?.addr}
                             collectionPrice={collectionInfo.price} />
                         {:else if !collectionInfo.lotteryBuying}
-                          {#each Object.values(collectionInfo.metadatas) as NFT}
-                            {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price))}
+                          {#each Object.values(collectionInfo.metadatas) as NFT, i}
+                            <!-- Apply filters -->
+                            {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
                               {#if $loading}
                                 Loading: {$loading}
                               {:else if $error}
@@ -201,6 +207,11 @@
                               {/if}
                             {/if}
                           {/each}
+                          <IntersectionObserver {element} bind:intersecting on:observe={() => {
+                            nftsToDisplay = nftsToDisplay + 20;
+                          }}>
+                            <div bind:this={element}/>
+                          </IntersectionObserver>
                         {:else}
                           <NFTCarousel
                             metadatas={collectionInfo.metadatas}
@@ -268,10 +279,15 @@
 
   .image-wrapper {
     height: 200px;
+    min-width: 200px;
     width: auto;
     border-radius: 0.8rem;
     border: 3px var(--clr-accent-soft-t4) solid;
     background-color: var(--clr-background-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   h1 {

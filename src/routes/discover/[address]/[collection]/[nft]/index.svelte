@@ -3,7 +3,6 @@
     Section,
     Container,
     Stack,
-    AdaptableGrid,
     WalletAddress,
     NFTPrice,
     Button,
@@ -59,36 +58,14 @@
 <TransactionModal />
 <Section class="padding-top-small">
   <Container>
-    <AdaptableGrid>
+    <div class="main-grid">
       {#await checkNftInfo then info}
-        <Stack direction="column" align="flex-start">
-          <div class="image-wrapper">
-            <NftImage
-              thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
-              name={`${info.nftInfo.name} NFT`} />
-          </div>
-          <Stack direction="column" align="flex-start" gap="0.4em">
-            <h4>Description</h4>
-            <p>{info.nftInfo.description}</p>
-          </Stack>
-          <Stack direction="column" align="flex-start" gap="0.4em">
-            <h4>Metadata</h4>
-            <table>
-              {#each Object.entries(info.nftInfo.extra) as metadataArray}
-                <tr>
-                  {#each metadataArray as metadata, i}
-                    {#if i === 0}
-                      <th class="title">{`${metadata}:`}</th>
-                    {:else}
-                      <th>{metadata}</th>
-                    {/if}
-                  {/each}
-                </tr>
-              {/each}
-            </table>
-          </Stack>
-        </Stack>
-        <div class="sticky">
+        <div class="image-wrapper left-top">
+          <NftImage
+            thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
+            name={`${info.nftInfo.name} NFT`} />
+        </div>
+        <div class="collection-info-wrapper">
           <Stack direction="column" align="flex-start">
             <Stack direction="column" gap="0.6em" align="flex-start">
               <MadeWithTouchstone />
@@ -129,29 +106,87 @@
               </Button>
             {/if}
             <Button
-              class="medium ghost"
+              class="medium transparent"
               leftIcon="arrow-back-circle"
               href="/discover/{$page.params.address}/{$page.params.collection}"
               >Back to Collection</Button>
           </Stack>
         </div>
+        <div class="left-bottom">
+          <Stack  direction="column" align="flex-start" gap="2rem">
+            <Stack direction="column" align="flex-start" gap="0.4em">
+              <h4>Description</h4>
+              <p>{info.nftInfo.description}</p>
+            </Stack>
+            <table>
+              <tr>
+                <th colspan="2">Metadata</th>
+              </tr>
+              {#each Object.entries(info.nftInfo.extra) as metadataArray}
+                <tr>
+                  {#each metadataArray as metadata, i}
+                    {#if i === 0}
+                      <th class="title">{`${metadata}:`}</th>
+                    {:else}
+                      <th>{metadata}</th>
+                    {/if}
+                  {/each}
+                </tr>
+              {/each}
+            </table>
+          </Stack>
+        </div>
       {/await}
-    </AdaptableGrid>
+    </div>
   </Container>
 </Section>
 
 <style type="scss">
   @use "../../../../../lib/styles/abstracts" as *;
 
-  .image-wrapper {
-    border-radius: 0.4rem;
-    border: 3px var(--clr-accent-soft-t8) solid;
-  }
-  .sticky {
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     @include mq(medium) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 2rem;
+      column-gap: 5rem;
+      grid-template-areas: 
+        "left-top right"
+        "left-bottom right"
+    }
+  }
+
+  .image-wrapper {
+    border-radius: 1rem;
+    border: 3px var(--clr-accent-soft-t4) solid;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    overflow: hidden;
+  }
+  
+  .collection-info-wrapper {
+    @include mq(medium) {
+      grid-area: right;
       position: sticky;
-      top: 5rem;
+      top: 8rem;
       height: fit-content;
+    }
+  }
+
+  .left-top {
+    @include mq(medium) {
+      grid-area: left-top;
+    }
+  }
+  .left-bottom {
+    @include mq(medium) {
+      grid-area: left-bottom;
     }
   }
 
@@ -177,6 +212,12 @@
     width: 100%;
     margin: 0 auto;
     position: relative;
+
+    tr:first-child {
+      background-color: var(--clr-accent-main-t8);
+      color: var(--clr-accent-main);
+      --font-weight: 500;
+    }
 
     th {
       border: 1px var(--clr-accent-soft-t8) solid;

@@ -3,6 +3,7 @@
   import { resultCID } from "$stores/IPFSstore";
   import { csvStore } from "$stores/CollectionFilesStore";
   import { collectionInfo } from "$stores/ContractStore.js";
+  import IntersectionObserver from "svelte-intersection-observer";
 
   function getTemplates(assets, ipfsCID) {
     const response = assets.reduce((a, asset) => {
@@ -18,6 +19,10 @@
     return response;
   }
 
+  let nftsToDisplay = 50;
+  let element;
+  let intersecting;
+
   let NFTs = getTemplates($csvStore.metadata, $resultCID);
 </script>
 
@@ -26,14 +31,21 @@
     <p>...Getting NFTs</p>
   {:then NFTs}
     <div class="nfts">
-      {#each NFTs as NFT}
-        <NFTCard
-          name={NFT.name}
-          description={NFT.description}
-          thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`}
-          price={NFT.price}
-          paymentType={$collectionInfo.paymentType} />
+      {#each NFTs as NFT, i}
+        {#if i < nftsToDisplay}
+          <NFTCard
+            name={NFT.name}
+            description={NFT.description}
+            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`}
+            price={NFT.price}
+            paymentType={$collectionInfo.paymentType} />
+        {/if}
       {/each}
+      <IntersectionObserver {element} bind:intersecting on:observe={() => {
+        nftsToDisplay = nftsToDisplay + 20;
+      }}>
+        <div bind:this={element}/>
+      </IntersectionObserver>
     </div>
   {:catch error}
     <p style="color: red">{error}</p>
