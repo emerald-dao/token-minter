@@ -17,8 +17,8 @@
 	const schema = object({
 		name: string().required("Of course your collection needs a name! 🤷‍♂️"),
 		payment: number()
-			.required("If your NFTs don't have a price, you can't sell them 🤑")
-			.min(0),
+			.min(0.0)
+			.required("If your NFTs don't have a price, you can't sell them 🤑"),
 		description: string().required("Don't be shy, write a description 🤗"),
 		image: mixed().required("We also need an image! 📸"),
 		bannerImage: mixed(),
@@ -70,7 +70,7 @@
 	// Activate next button when all required fields are filled
 	$: buttonActive =
 		$collectionInfo.name.length > 0 &&
-		$collectionInfo.payment &&
+		$collectionInfo.payment >= 0 &&
 		$collectionInfo.description.length > 0 &&
 		$collectionImage.files.length > 0;
 </script>
