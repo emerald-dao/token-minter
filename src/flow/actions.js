@@ -662,6 +662,7 @@ export async function checkRequiredVerifiers(contractName, contractAddress, user
     return response;
   } catch (e) {
     console.log(e);
+    return [];
   }
 }
 
@@ -690,6 +691,7 @@ export async function getClaimableNFTs(contractName, contractAddress, user) {
     return response;
   } catch (e) {
     console.log(e);
+    return {};
   }
 }
 

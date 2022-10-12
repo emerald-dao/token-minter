@@ -8,6 +8,7 @@
   export let collectionPrice;
 
   let myNFTs = () => {
+    if (!addr) return [];
     return Object.values(
       Object.fromEntries(
         Object.entries(metadatas).filter(

@@ -73,167 +73,161 @@
 <HtmlHead title="Discover" />
 <TransactionModal />
 
-{#if !$user?.loggedIn}
-  <WalletConnectModal />
-{:else}
-  {#await getCollectionInfo($page.params.collection, contractAddress) then collectionInfo}
-    <Section class="padding-top-none padding-bottom-small">
-      <Container class="width-full">
-        <TransparentCard padding="0">
-          {#if collectionInfo?.bannerImage}
-            <div
-              class="banner"
-              style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
-          {/if}
-          <Container class="width-full">
-            <div
-              class="collection-info-wrapper"
-              class:no-banner={!collectionInfo.bannerImage}>
-              <div class="collection-info">
-                <div class="presentation-wrapper">
-                  <div class="image-wrapper">
-                    <NftImage
-                      thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
-                      name={`${collectionInfo.name} main image`} />
-                  </div>
-                  <Stack
-                    direction="column"
-                    gap="0.8em"
-                    align="center"
-                    justify="flex-start">
-                    <MadeWithTouchstone />
-                    <WalletAddress address={contractAddress}>By</WalletAddress>
-                    <Divider space="1px" />
-                  </Stack>
+
+{#await getCollectionInfo($page.params.collection, contractAddress) then collectionInfo}
+  <Section class="padding-top-none padding-bottom-small">
+    <Container class="width-full">
+      <TransparentCard padding="0">
+        {#if collectionInfo?.bannerImage}
+          <div
+            class="banner"
+            style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
+        {/if}
+        <Container class="width-full">
+          <div
+            class="collection-info-wrapper"
+            class:no-banner={!collectionInfo.bannerImage}>
+            <div class="collection-info">
+              <div class="presentation-wrapper">
+                <div class="image-wrapper">
+                  <NftImage
+                    thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
+                    name={`${collectionInfo.name} main image`} />
                 </div>
-                {#if collectionInfo.socials}
-                  <Stack direction="row" gap="1.5rem">
-                    <CollectionSocials
-                      collectionSocials={collectionInfo.socials} />
-                    <Divider space="1px" />
-                  </Stack>
-                {/if}
+                <Stack
+                  direction="column"
+                  gap="0.8em"
+                  align="center"
+                  justify="flex-start">
+                  <MadeWithTouchstone />
+                  <WalletAddress address={contractAddress}>By</WalletAddress>
+                  <Divider space="1px" />
+                </Stack>
               </div>
-              <Divider space="30px" />
-              <Stack direction="column" align="flex-start" gap="1.7em">
-                <h1>{collectionInfo.name}</h1>
-                <p class="collection-description">
-                  {collectionInfo.description}
-                </p>
-                {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers), collectionInfo.price) then stats}
-                  <AdaptableGrid minWidth="5em" gap="1.2em">
-                    <CollectionStat
-                      title="total items"
-                      stat={stats.totalItems} />
-                    <CollectionStat
-                      title="purchased"
-                      stat={stats.numPurchased} />
-                    <CollectionStat title="available" stat={stats.available} />
-                    {#if !collectionInfo.lotteryBuying}
-                      <CollectionStat
-                        title="floor price"
-                        flowLogo={collectionInfo.paymentType === "$FLOW"}
-                        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                        stat={stats.floorPrice} />
-                      <CollectionStat
-                        title="highest buy"
-                        flowLogo={collectionInfo.paymentType === "$FLOW"}
-                        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                        stat={stats.highestBuy} />
-                    {:else}
-                      <CollectionStat
-                        title="price"
-                        flowLogo={collectionInfo.paymentType === "$FLOW"}
-                        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                        stat={Number(collectionInfo.price)} />
-                    {/if}
-                  </AdaptableGrid>
-                {/await}
-                {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
-                  {#if verifiers.length > 0}
-                    <Verifiers {verifiers} />
-                  {/if}
-                {/await}
-              </Stack>
-              {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
-                {#await getClaimableNFTs($page.params.collection, contractAddress, $user.addr) then claimableNFTs}
-                  {#if Object.keys(claimableNFTs).length > 0 || !verifiers.some((verifier) => verifier.passing == false)}
-                    <div class="nft-list-wrapper">
-                      {#if !collectionInfo.lotteryBuying}
-                        <CollectionFilters
-                          bind:seeMine
-                          bind:available
-                          bind:nameFilter
-                          bind:maxPrice
-                          bind:minPrice
-                          {contractAddress}
-                          contractName={$page.params.collection}
-                          {claimableNFTs} />
-                      {/if}
-                      <AdaptableGrid minWidth="12em" gap="1.2em">
-                        {#if seeMine}
-                          <MyNFTs
-                            metadatas={collectionInfo.metadatas}
-                            primaryBuyers={collectionInfo.primaryBuyers}
-                            addr={$user?.addr}
-                            collectionPrice={collectionInfo.price} />
-                        {:else if !collectionInfo.lotteryBuying}
-                          {#each Object.values(collectionInfo.metadatas) as NFT, i}
-                            <!-- Apply filters -->
-                            {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
-                              {#if $loading}
-                                Loading: {$loading}
-                              {:else if $error}
-                                Error: {$error}
-                              {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId]) && (!nameFilter || NFT.name
-                                    .toUpperCase()
-                                    .includes(nameFilter.toUpperCase()))}
-                                <NFTCard
-                                  thumbnailURL={NFT.thumbnail
-                                    ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
-                                    : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
-                                  name={NFT.name}
-                                  description={NFT.description}
-                                  price={Number(
-                                    NFT.price ?? collectionInfo.price
-                                  )}
-                                  buy={!Object.keys(
-                                    collectionInfo.primaryBuyers
-                                  ).includes(NFT.metadataId)}
-                                  url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
-                                  withLink={true}
-                                  flowPrice={$flowPrice.price}
-                                  paymentType={collectionInfo.paymentType} />
-                              {/if}
-                            {/if}
-                          {/each}
-                          <IntersectionObserver {element} bind:intersecting on:observe={() => {
-                            nftsToDisplay = nftsToDisplay + 20;
-                          }}>
-                            <div bind:this={element}/>
-                          </IntersectionObserver>
-                        {:else}
-                          <NFTCarousel
-                            metadatas={collectionInfo.metadatas}
-                            price={collectionInfo.price}
-                            paymentType={collectionInfo.paymentType}
-                            address={contractAddress}
-                            contractName={$page.params.collection}
-                            number={Object.keys(collectionInfo.metadatas)
-                              .length} />
-                        {/if}
-                      </AdaptableGrid>
-                    </div>
-                  {/if}
-                {/await}
-              {/await}
+              {#if collectionInfo.socials}
+                <Stack direction="row" gap="1.5rem">
+                  <CollectionSocials
+                    collectionSocials={collectionInfo.socials} />
+                  <Divider space="1px" />
+                </Stack>
+              {/if}
             </div>
-          </Container>
-        </TransparentCard>
-      </Container>
-    </Section>
-  {/await}
-{/if}
+            <Divider space="30px" />
+            <Stack direction="column" align="flex-start" gap="1.7em">
+              <h1>{collectionInfo.name}</h1>
+              <p class="collection-description">
+                {collectionInfo.description}
+              </p>
+              {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers), collectionInfo.price) then stats}
+                <AdaptableGrid minWidth="5em" gap="1.2em">
+                  <CollectionStat
+                    title="total items"
+                    stat={stats.totalItems} />
+                  <CollectionStat
+                    title="purchased"
+                    stat={stats.numPurchased} />
+                  <CollectionStat title="available" stat={stats.available} />
+                  {#if !collectionInfo.lotteryBuying}
+                    <CollectionStat
+                      title="floor price"
+                      flowLogo={collectionInfo.paymentType === "$FLOW"}
+                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
+                      stat={stats.floorPrice} />
+                    <CollectionStat
+                      title="highest buy"
+                      flowLogo={collectionInfo.paymentType === "$FLOW"}
+                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
+                      stat={stats.highestBuy} />
+                  {:else}
+                    <CollectionStat
+                      title="price"
+                      flowLogo={collectionInfo.paymentType === "$FLOW"}
+                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
+                      stat={Number(collectionInfo.price)} />
+                  {/if}
+                </AdaptableGrid>
+              {/await}
+              {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
+                {#if verifiers.length > 0}
+                  <Verifiers {verifiers} />
+                {/if}
+              {/await}
+            </Stack>
+            <div class="nft-list-wrapper">
+              {#if !collectionInfo.lotteryBuying}
+                {#await getClaimableNFTs($page.params.collection, contractAddress, $user?.addr) then claimableNFTs}
+                  <CollectionFilters
+                    bind:seeMine
+                    bind:available
+                    bind:nameFilter
+                    bind:maxPrice
+                    bind:minPrice
+                    {contractAddress}
+                    contractName={$page.params.collection}
+                    {claimableNFTs} />
+                {/await}
+              {/if}
+              <AdaptableGrid minWidth="12em" gap="1.2em">
+                {#if seeMine}
+                  <MyNFTs
+                    metadatas={collectionInfo.metadatas}
+                    primaryBuyers={collectionInfo.primaryBuyers}
+                    addr={$user?.addr}
+                    collectionPrice={collectionInfo.price} />
+                {:else if !collectionInfo.lotteryBuying}
+                  {#each Object.values(collectionInfo.metadatas) as NFT, i}
+                    <!-- Apply filters -->
+                    {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
+                      {#if $loading}
+                        Loading: {$loading}
+                      {:else if $error}
+                        Error: {$error}
+                      {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId]) && (!nameFilter || NFT.name
+                            .toUpperCase()
+                            .includes(nameFilter.toUpperCase()))}
+                        <NFTCard
+                          thumbnailURL={NFT.thumbnail
+                            ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+                            : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
+                          name={NFT.name}
+                          description={NFT.description}
+                          price={Number(
+                            NFT.price ?? collectionInfo.price
+                          )}
+                          buy={!Object.keys(
+                            collectionInfo.primaryBuyers
+                          ).includes(NFT.metadataId)}
+                          url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
+                          withLink={true}
+                          flowPrice={$flowPrice.price}
+                          paymentType={collectionInfo.paymentType} />
+                      {/if}
+                    {/if}
+                  {/each}
+                  <IntersectionObserver {element} bind:intersecting on:observe={() => {
+                    nftsToDisplay = nftsToDisplay + 20;
+                  }}>
+                    <div bind:this={element}/>
+                  </IntersectionObserver>
+                {:else}
+                  <NFTCarousel
+                    metadatas={collectionInfo.metadatas}
+                    price={collectionInfo.price}
+                    paymentType={collectionInfo.paymentType}
+                    address={contractAddress}
+                    contractName={$page.params.collection}
+                    number={Object.keys(collectionInfo.metadatas)
+                      .length} />
+                {/if}
+              </AdaptableGrid>
+            </div>
+          </div>
+        </Container>
+      </TransparentCard>
+    </Container>
+  </Section>
+{/await}
+
 
 <style type="scss">
   @use "../../../../lib/styles/abstracts" as *;
