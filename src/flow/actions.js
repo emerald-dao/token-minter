@@ -498,7 +498,7 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
       cadence: replaceWithProperValues(proposeNFTToCatalogTx, contractName, contractAddress),
       args: (arg, t) => [
         arg(contractName, t.String),
-        arg(contractAddress, t.String),
+        arg(contractAddress, t.Address),
         arg(publicLinkedTypeRestrictions, t.Array(t.String)),
         arg(privateLinkedTypeRestrictions, t.Array(t.String)),
       ],
