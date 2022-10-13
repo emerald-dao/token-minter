@@ -495,7 +495,7 @@ export const proposeNFTToCatalog = async (contractName, contractAddress) => {
 
   try {
     const transactionId = await fcl.mutate({
-      cadence: replaceWithProperValues(proposeNFTToCatalogTx),
+      cadence: replaceWithProperValues(proposeNFTToCatalogTx, contractName, contractAddress),
       args: (arg, t) => [
         arg(contractName, t.String),
         arg(contractAddress, t.String),
