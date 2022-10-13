@@ -42,8 +42,9 @@ transaction(
           privateLinkedType: privateLinkedType!
       )
 
+      let squareImage = ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile
       let squareMedia = MetadataViews.Media(
-        file: ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile,
+        file: MetadataViews.HTTPFile(url: "https://nftstorage.link/ipfs/".concat(squareImage.cid).concat("/").concat(squareImage.path!)),
         mediaType: "image"
       )
       
@@ -52,7 +53,7 @@ transaction(
       var bannerMedia: MetadataViews.Media? = nil
       if let bannerImage = ExampleNFT.getOptionalCollectionAttribute(key: "bannerImage") as! MetadataViews.IPFSFile? {
         bannerMedia = MetadataViews.Media(
-            file: bannerImage,
+            file: MetadataViews.HTTPFile(url: "https://nftstorage.link/ipfs/".concat(bannerImage.cid).concat("/").concat(bannerImage.path!)),
             mediaType: "image"
         )
       }
