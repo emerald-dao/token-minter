@@ -58,6 +58,10 @@ const contractData = {
     testnet: '0x692e8e2f2f8db5b6',
     mainnet: '0x39e42c67cc851cfb',
   },
+  NFTCatalog: {
+    testnet: '0x324c34e1c517e4db',
+    mainnet: '0x49a7cda3a1eecc29',
+  }
 };
 
 export const user = writable(null);
@@ -80,6 +84,7 @@ export const addresses = derived([network], ([$network]) => {
     TouchstoneContracts: contractData.TouchstoneContracts[$network],
     TouchstonePurchases: contractData.TouchstonePurchases[$network],
     EmeraldPass: contractData.EmeraldPass[$network],
-    EmeraldID: contractData.EmeraldID[$network]
+    EmeraldID: contractData.EmeraldID[$network],
+    NFTCatalog: contractData.NFTCatalog[$network]
   };
 });
