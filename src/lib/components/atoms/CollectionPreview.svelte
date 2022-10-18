@@ -11,7 +11,7 @@
         name: asset.name,
         description: asset.description,
         thumbnail: `${ipfsCID}/${asset.thumbnail ?? asset.image}`,
-        price: Number(asset.price ?? $collectionInfo.payment),
+        price: Number(asset.price || $collectionInfo.payment),
       });
       return a;
     }, []);
@@ -41,10 +41,13 @@
             paymentType={$collectionInfo.paymentType} />
         {/if}
       {/each}
-      <IntersectionObserver {element} bind:intersecting on:observe={() => {
-        nftsToDisplay = nftsToDisplay + 20;
-      }}>
-        <div bind:this={element}/>
+      <IntersectionObserver
+        {element}
+        bind:intersecting
+        on:observe={() => {
+          nftsToDisplay = nftsToDisplay + 20;
+        }}>
+        <div bind:this={element} />
       </IntersectionObserver>
     </div>
   {:catch error}
