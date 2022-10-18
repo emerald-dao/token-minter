@@ -23,7 +23,7 @@ There are a few things you have to enter:
 
 Additionally, you can (not required) include:
 - a `thumbnail` attribute if you want your NFT to display a less-intensive picture for easier loading.
-- a `price` attribute if you want each NFT to have a different price. All prices should be in $FLOW.
+- a `price` attribute if you want each NFT to have a different price.
 
 You can also include whatever other attributes you'd like, however you cannot use one of the 5 attribute names above (name, description, image, thumbnail, or price) for different purposes than what is described of them above.
 

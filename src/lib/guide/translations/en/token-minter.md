@@ -25,7 +25,7 @@ There are 2 folders you need to upload in this step:
 1. CSV File - this is a CSV file that contains all of your attributes and associated metadata for each NFT.
 2. Images Folder - a folder containing all of your images. The names of the images must match what is in the csv, for example `image1.png`.
 
-> If you're someone who likes examples instead of reading text, you can click <a href="/assets/metadata.csv" download="">here</a> for an example CSV file, and <a href="/assets/images.zip" download="">here</a> for an example images folder. They show you how to match the metadata.*
+> If you're someone who likes examples instead of reading text, you can click <a href="/assets/metadata.csv" download="">here</a> for an example CSV file, and <a href="/assets/images.zip" download="">here</a> for an example images folder. They show you how to match the metadata.
 
 ### How to Make CSV File
 
@@ -40,7 +40,7 @@ Each of these items are called "attributes." The first line of your metadata CSV
 
 On Touchstone, **you must** have a `name`, `description`, and `image` attribute. Additionally, you can optionally include:
 - a `thumbnail` attribute if you want your NFT to display a less-intensive picture for easier loading.
-- a `price` attribute if you want each NFT to have a different price. All prices should be in $FLOW.
+- a `price` attribute if you want each NFT to have a different price.
 
 You can also include whatever other attributes you'd like, however you cannot use one of the 5 attribute names above (name, description, image, thumbnail, or price) for different purposes than what is described of them above.
 
@@ -48,11 +48,15 @@ Each row of the CSV File is an NFT.
 
 For the `image` attribute, you must put the name of the file that is inside your Images folder. More on that in the next section...
 
+Please see <a href="/assets/metadata.csv" download="">this file</a> for an example CSV file.
+
 ### How to Make the Images Folder
 
 The images folder is actually quite simple. Just make a folder that contains all of the images of your different NFTs. It's totally fine if an image gets used more than once, so don't have duplicate images in that folder. 
 
 You map an NFT to an image by putting its name in the CSV File described above. So if an image is named `nft_image1.png`, that is what you put under the NFT's image attribute.
+
+Please see <a href="/assets/images.zip" download="">this file</a> for an example images folder.
 
 ### IPFS Key
 

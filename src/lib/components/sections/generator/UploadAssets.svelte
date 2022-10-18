@@ -61,15 +61,16 @@
 {/if}
 <GeneratorStepLayout>
   <Stack direction="column" slot="main-content" gap="3.6rem">
+    <span class="helper-text"
+      >To understand what to put here, please see our <a
+        href="/guide/en/token-minter#upload-assets"
+        target="_blank">guide</a
+      >.</span>
     <!-- CSV DropZone -->
     <div class="input-wrapper">
       <label for="dropZoneCsv"> Collection Data </label>
       <span class="helper-text"
         >Drop a CSV file containing all your collection metadata.
-        <br />Each NFT must have a 'name', 'description', and 'image' (file
-        name) in it's metadata.
-        <br />Download this <a href="/assets/metadata.csv" download>template</a>
-        to have a basic CSV structure.
       </span>
       <DropZone
         name="csv"
@@ -88,7 +89,6 @@
       <label for="dropZoneImages"> Collection Images </label>
       <span class="helper-text"
         >Drop a folder containing all your collection images.
-        <br />Images file names must match the ones in the metadata CSV.
       </span>
       <DropZone
         name="images"
