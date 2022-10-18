@@ -1,6 +1,6 @@
-import EmeraldIdentity from "../utility/EmeraldIdentity.cdc"
-import EmeraldIdentityDapper from "../utility/EmeraldIdentityDapper.cdc"
-import EmeraldIdentityLilico from "../utility/EmeraldIdentityLilico.cdc"
+import EmeraldIdentity from "../../utility/EmeraldIdentity.cdc"
+import EmeraldIdentityDapper from "../../utility/EmeraldIdentityDapper.cdc"
+import EmeraldIdentityLilico from "../../utility/EmeraldIdentityLilico.cdc"
 
 pub fun main(addresses: [Address]): {Address: String} {
   let answer: {Address: String} = {}

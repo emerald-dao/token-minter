@@ -1,5 +1,5 @@
-import ExampleNFT from "../ExampleNFT.cdc"
-import MintVerifiers from "../MintVerifiers.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
+import MintVerifiers from "../../MintVerifiers.cdc"
 
 pub fun main(potentialMinter: Address): [VerifierInfo] {
   let answer: [VerifierInfo] = []

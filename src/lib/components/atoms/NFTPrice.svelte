@@ -14,7 +14,7 @@
 <div style={`font-size: ${fontSize}`}>
   <Stack direction="column" align="flex-start" gap="0">
     {#if currentPrice}
-      <span>Current price</span>
+      <span>Price</span>
     {/if}
     <Stack direction="row" gap="0.5em">
       <Stack direction="row" gap="0.4em">

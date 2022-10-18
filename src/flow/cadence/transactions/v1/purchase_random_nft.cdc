@@ -1,13 +1,13 @@
-import ExampleNFT from "../ExampleNFT.cdc"
-import FungibleToken from "../utility/FungibleToken.cdc"
-import NonFungibleToken from "../utility/NonFungibleToken.cdc"
-import MetadataViews from "../utility/MetadataViews.cdc"
-import TouchstonePurchases from "../TouchstonePurchases.cdc"
-import FlowToken from "../utility/FlowToken.cdc"
-import FUSD from "../utility/FUSD.cdc"
-import EmeraldPass from "../utility/EmeraldPass.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
+import FungibleToken from "../../utility/FungibleToken.cdc"
+import NonFungibleToken from "../../utility/NonFungibleToken.cdc"
+import MetadataViews from "../../utility/MetadataViews.cdc"
+import TouchstonePurchases from "../../TouchstonePurchases.cdc"
+import EmeraldPass from "../../utility/EmeraldPass.cdc"
+import FlowToken from "../../utility/FlowToken.cdc"
+import FUSD from "../../utility/FUSD.cdc"
 
-transaction(metadataId: UInt64, price: UFix64, contractName: String, contractAddress: Address) {
+transaction(price: UFix64, contractName: String, contractAddress: Address) {
   let PaymentVault: &FungibleToken.Vault
   let CollectionPublic: &ExampleNFT.Collection{NonFungibleToken.Receiver}
   let Purchases: &TouchstonePurchases.Purchases
@@ -42,13 +42,22 @@ transaction(metadataId: UInt64, price: UFix64, contractName: String, contractAdd
 
   execute { 
     let payment: @FungibleToken.Vault <- self.PaymentVault.withdraw(amount: price) as! @FungibleToken.Vault
-    let nftId = ExampleNFT.mintNFT(metadataId: metadataId, recipient: self.CollectionPublic, payment: <- payment)
-    let nftMetadata: ExampleNFT.NFTMetadata = ExampleNFT.getNFTMetadata(metadataId)!
+    let allMetadataIds = ExampleNFT.getNFTMetadatas().keys
+    let boughtMetadataIds = ExampleNFT.getPrimaryBuyers().keys
+    var chosenMetadataId: UInt64? = nil
+    for metadataId in allMetadataIds {
+      if !boughtMetadataIds.contains(metadataId) {
+        chosenMetadataId = metadataId
+        break
+      }
+    }
+    let nftId = ExampleNFT.mintNFT(metadataId: chosenMetadataId!, recipient: self.CollectionPublic, payment: <- payment, serial: nil)
+    let nftMetadata: ExampleNFT.NFTMetadata = ExampleNFT.getNFTMetadata(chosenMetadataId!)!
     let display = MetadataViews.Display(
       name: nftMetadata.name,
       description: nftMetadata.description,
       thumbnail: nftMetadata.thumbnail ?? nftMetadata.image
     )
-    self.Purchases.addPurchase(uuid: nftId, metadataId: metadataId, display: display, contractAddress: contractAddress, contractName: contractName)
+    self.Purchases.addPurchase(uuid: nftId, metadataId: chosenMetadataId!, display: display, contractAddress: contractAddress, contractName: contractName)
   }
 }

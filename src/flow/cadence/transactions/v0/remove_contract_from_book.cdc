@@ -1,4 +1,4 @@
-import TouchstoneContracts from "../TouchstoneContracts.cdc"
+import TouchstoneContracts from "../../TouchstoneContracts.cdc"
 
 transaction(contractName: String) {
   let ContractsBook: &TouchstoneContracts.ContractsBook

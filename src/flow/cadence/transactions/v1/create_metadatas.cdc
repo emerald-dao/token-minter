@@ -1,4 +1,4 @@
-import ExampleNFT from "../ExampleNFT.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
 
 // Put a batch of up to 500 NFT Metadatas inside the contract
 
@@ -8,6 +8,7 @@ transaction(
   images: [String],
   thumbnails: [String?], 
   prices: [UFix64?], 
+  serials: [{UInt64: Bool}?],
   extras: [{String: String}], 
   ipfsCID: String
 ) {
@@ -34,6 +35,7 @@ transaction(
         thumbnailPath: thumbnails[i],
         ipfsCID: ipfsCID,
         price: prices[i],
+        serials: serials[i],
         extra: extras[i]
       )
       i = i + 1

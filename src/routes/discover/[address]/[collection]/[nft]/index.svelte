@@ -17,7 +17,7 @@
   import { user } from "$stores/FlowStore";
 
   async function getInfo() {
-    let nftInfo = await getNFTInfo(
+    let { nftInfo, serials } = await getNFTInfo(
       $page.params.collection,
       $page.params.address,
       $page.params.nft
@@ -29,19 +29,22 @@
     nftInfo.extra["metadataId"] = nftInfo.metadataId;
     const owner = collectionInfo.primaryBuyers[nftInfo.metadataId];
     const price = nftInfo.price ?? collectionInfo.price;
-    return { collectionInfo, nftInfo, owner, price };
+    return { collectionInfo, nftInfo, owner, price, serials };
   }
 
   let checkNftInfo = getInfo();
   let purchased = false; // flag to check if user has bought the NFT
+  let serial = null;
 
-  async function buyNft(price, paymentType) {
+  async function buyNft(price, paymentType, version) {
     const transactionResult = await purchaseNFT(
       $page.params.nft,
       price,
+      serial,
       $page.params.collection,
       $page.params.address,
-      paymentType
+      paymentType,
+      version
     );
     if (
       transactionResult &&
@@ -73,19 +76,30 @@
             </Stack>
             <p>{info.collectionInfo.name}</p>
             <h1>{info.nftInfo.name}</h1>
+            <NFTPrice
+              price={info.price}
+              width="34px"
+              fontSize="var(--fs-500)"
+              currentPrice={true}
+              paymentType={info.collectionInfo.paymentType} />
             <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
+            {#if info.serials}
+              <select bind:value={serial}>
+                {#each Object.keys(info.serials) as serialOption}
+                  <option>{serialOption}</option>
+                {/each}
+              </select>
+            {/if}
             {#if !info.owner && !purchased}
-              <NFTPrice
-                price={info.price}
-                width="34px"
-                fontSize="var(--fs-500)"
-                currentPrice={true}
-                paymentType={info.collectionInfo.paymentType} />
               <Button
                 leftIcon="wallet"
                 loading={$transactionInProgress}
                 on:click={() =>
-                  buyNft(info.price, info.collectionInfo.paymentType)}>
+                  buyNft(
+                    info.price,
+                    info.collectionInfo.paymentType,
+                    info.collectionInfo.version
+                  )}>
                 {#if $transactionInProgress}
                   Loading Transaction
                 {:else}
@@ -113,7 +127,7 @@
           </Stack>
         </div>
         <div class="left-bottom">
-          <Stack  direction="column" align="flex-start" gap="2rem">
+          <Stack direction="column" align="flex-start" gap="2rem">
             <Stack direction="column" align="flex-start" gap="0.4em">
               <h4>Description</h4>
               <p>{info.nftInfo.description}</p>
@@ -153,9 +167,9 @@
       grid-template-columns: 1fr 1fr;
       row-gap: 2rem;
       column-gap: 5rem;
-      grid-template-areas: 
+      grid-template-areas:
         "left-top right"
-        "left-bottom right"
+        "left-bottom right";
     }
   }
 
@@ -169,7 +183,7 @@
     min-height: 200px;
     overflow: hidden;
   }
-  
+
   .collection-info-wrapper {
     @include mq(medium) {
       grid-area: right;

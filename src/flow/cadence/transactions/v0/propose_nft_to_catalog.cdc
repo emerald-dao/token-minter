@@ -1,6 +1,6 @@
-import MetadataViews from "../utility/MetadataViews.cdc"
-import NFTCatalog from "../utility/NFTCatalog.cdc"
-import ExampleNFT from "../ExampleNFT.cdc"
+import MetadataViews from "../../utility/MetadataViews.cdc"
+import NFTCatalog from "../../utility/NFTCatalog.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
 
 transaction(
     contractName: String,

@@ -1,5 +1,5 @@
 // IMPORTS
-import MetadataViews from "../utility/MetadataViews.cdc"
+import MetadataViews from "../../utility/MetadataViews.cdc"
 pub fun main(): [CollectionDisplay] {
   let answer: [CollectionDisplay] = []
 

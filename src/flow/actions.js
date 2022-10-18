@@ -13,29 +13,30 @@ import { resolveAddressObject } from './utils';
 // Cadence code
 ///////////////
 // Scripts
-import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
-import getContractsInBookScript from './cadence/scripts/get_contracts_in_book.cdc?raw';
-import getContractFromNameScript from './cadence/scripts/get_contract_from_name.cdc?raw';
-import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
-import getContractNamesScript from './cadence/scripts/get_contracts.cdc?raw';
-import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
-import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
-import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
-import canMakeReservationScript from './cadence/scripts/can_make_reservation.cdc?raw';
-import getTouchstonePurchasesScript from './cadence/scripts/get_touchstone_purchases.cdc?raw';
-import getClaimableNFTsScript from './cadence/scripts/get_claimable_nfts.cdc?raw';
-import getEmeraldIDBatchScript from './cadence/scripts/get_emeraldid_batch.cdc?raw';
+import getCollectionInfoScript from './cadence/scripts/v0/get_collection_info.cdc?raw';
+import getContractsInBookScript from './cadence/scripts/v0/get_contracts_in_book.cdc?raw';
+import getContractFromNameScript from './cadence/scripts/v0/get_contract_from_name.cdc?raw';
+import getContractDisplaysScript from './cadence/scripts/v0/get_contract_displays.cdc?raw';
+import getContractNamesScript from './cadence/scripts/v0/get_contracts.cdc?raw';
+import checkRequiredVerifiersScript from './cadence/scripts/v0/check_required_verifiers.cdc?raw';
+import getNFTInfoScript from './cadence/scripts/v0/get_nft_info.cdc?raw';
+import hasEmeraldPassScript from './cadence/scripts/v0/has_emerald_pass.cdc?raw';
+import canMakeReservationScript from './cadence/scripts/v0/can_make_reservation.cdc?raw';
+import getTouchstonePurchasesScript from './cadence/scripts/v0/get_touchstone_purchases.cdc?raw';
+import getClaimableNFTsScript from './cadence/scripts/v0/get_claimable_nfts.cdc?raw';
+import getEmeraldIDBatchScript from './cadence/scripts/v0/get_emeraldid_batch.cdc?raw';
 // Transactions
-import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
-import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
-import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
-import purchaseRandomNFTTx from './cadence/transactions/purchase_random_nft.cdc?raw';
-import removeContractFromBookTx from './cadence/transactions/remove_contract_from_book.cdc?raw';
-import airdropTx from './cadence/transactions/airdrop.cdc?raw';
-import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
-import proposeNFTToCatalogTx from './cadence/transactions/propose_nft_to_catalog.cdc?raw';
-import setupCollectionTx from './cadence/transactions/setup_collection.cdc?raw';
-import claimNFTsTx from './cadence/transactions/claim_nfts.cdc?raw';
+import createMetadatasTx from './cadence/transactions/v1/create_metadatas.cdc?raw';
+import deployContractTx from './cadence/transactions/v0/deploy_contract.cdc?raw';
+import purchaseNFTTxv0 from './cadence/transactions/v0/purchase_nft.cdc?raw';
+import purchaseNFTTxv1 from './cadence/transactions/v1/purchase_nft.cdc?raw';
+import purchaseRandomNFTTx from './cadence/transactions/v0/purchase_random_nft.cdc?raw';
+import removeContractFromBookTx from './cadence/transactions/v0/remove_contract_from_book.cdc?raw';
+import airdropTx from './cadence/transactions/v0/airdrop.cdc?raw';
+import toggleMintingTx from './cadence/transactions/v0/toggle_minting.cdc?raw';
+import proposeNFTToCatalogTx from './cadence/transactions/v0/propose_nft_to_catalog.cdc?raw';
+import setupCollectionTx from './cadence/transactions/v0/setup_collection.cdc?raw';
+import claimNFTsTx from './cadence/transactions/v0/claim_nfts.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -87,12 +88,12 @@ function initTransactionState() {
 export function replaceWithProperValues(script, contractName = '', contractAddress = '') {
   const addressList = get(addresses);
   return script
-    .replace('"../ExampleNFT.cdc"', contractAddress)
-    .replace('"../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
-    .replace('"../utility/MetadataViews.cdc"', addressList.MetadataViews)
-    .replace('"../utility/FlowToken.cdc"', addressList.FlowToken)
-    .replace('"../utility/FUSD.cdc"', addressList.FUSD)
-    .replace('"../utility/FungibleToken.cdc"', addressList.FungibleToken)
+    .replace('"../../ExampleNFT.cdc"', contractAddress)
+    .replace('"../../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
+    .replace('"../../utility/MetadataViews.cdc"', addressList.MetadataViews)
+    .replace('"../../utility/FlowToken.cdc"', addressList.FlowToken)
+    .replace('"../../utility/FUSD.cdc"', addressList.FUSD)
+    .replace('"../../utility/FungibleToken.cdc"', addressList.FungibleToken)
     .replace('"./utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
     .replace('"./utility/MetadataViews.cdc"', addressList.MetadataViews)
     .replace('"./utility/FungibleToken.cdc"', addressList.FungibleToken)
@@ -100,15 +101,15 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"./utility/FUSD.cdc"', addressList.FUSD)
     .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"./utility/EmeraldPass.cdc"', addressList.EmeraldPass)
-    .replace('"../MintVerifiers.cdc"', addressList.MintVerifiers)
-    .replace('"../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
-    .replace('"../TouchstonePurchases.cdc"', addressList.TouchstonePurchases)
-    .replace('"../utility/FLOAT.cdc"', addressList.FLOAT)
-    .replace('"../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
-    .replace('"../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
-    .replace('"../utility/EmeraldIdentity.cdc"', addressList.EmeraldID)
-    .replace('"../utility/EmeraldIdentityDapper.cdc"', addressList.EmeraldID)
-    .replace('"../utility/EmeraldIdentityLilico.cdc"', addressList.EmeraldID)
+    .replace('"../../MintVerifiers.cdc"', addressList.MintVerifiers)
+    .replace('"../../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
+    .replace('"../../TouchstonePurchases.cdc"', addressList.TouchstonePurchases)
+    .replace('"../../utility/FLOAT.cdc"', addressList.FLOAT)
+    .replace('"../../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
+    .replace('"../../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
+    .replace('"../../utility/EmeraldIdentity.cdc"', addressList.EmeraldID)
+    .replace('"../../utility/EmeraldIdentityDapper.cdc"', addressList.EmeraldID)
+    .replace('"../../utility/EmeraldIdentityLilico.cdc"', addressList.EmeraldID)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
@@ -195,7 +196,7 @@ async function deployContract() {
   }
 }
 
-export const purchaseNFT = async (serial, price, contractName, contractAddress, paymentType) => {
+export const purchaseNFT = async (metadataId, price, serial, contractName, contractAddress, paymentType, version) => {
   let vaultType = '';
   let storagePath = '';
   if (paymentType == "$FLOW") {
@@ -205,44 +206,87 @@ export const purchaseNFT = async (serial, price, contractName, contractAddress, 
     vaultType = "FUSD.Vault";
     storagePath = "fusdVault";
   }
-  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
-    .replaceAll('FungibleToken.Vault', vaultType)
-    .replace('PAYMENT_PATH', storagePath);
+  // v0
+  if (!version) {
+    const transaction = replaceWithProperValues(purchaseNFTTxv0, contractName, contractAddress)
+      .replaceAll('FungibleToken.Vault', vaultType)
+      .replace('PAYMENT_PATH', storagePath);
 
-  initTransactionState();
+    initTransactionState();
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      const transactionId = await fcl.mutate({
-        cadence: transaction,
-        args: (arg, t) => [
-          arg(serial, t.UInt64),
-          arg(price, t.UFix64),
-          arg(contractName, t.String),
-          arg(contractAddress, t.Address)
-        ],
-        payer: fcl.authz,
-        proposer: fcl.authz,
-        authorizations: [fcl.authz],
-        limit: 9999,
-      });
-      console.log({ transactionId });
-      fcl.tx(transactionId).subscribe((res) => {
-        transactionStatus.set(res);
-        console.log(res);
-        if (res.status === 4) {
-          setTimeout(() => transactionInProgress.set(false), 2000);
-          setTimeout(() => transactionStatus.set({}), 5000);
-          resolve(true);
-        }
-      });
-    } catch (e) {
-      console.log(e);
-      transactionInProgress.set(false);
-      transactionStatus.set({});
-      reject(false);
-    }
-  });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const transactionId = await fcl.mutate({
+          cadence: transaction,
+          args: (arg, t) => [
+            arg(metadataId, t.UInt64),
+            arg(price, t.UFix64),
+            arg(contractName, t.String),
+            arg(contractAddress, t.Address)
+          ],
+          payer: fcl.authz,
+          proposer: fcl.authz,
+          authorizations: [fcl.authz],
+          limit: 9999,
+        });
+        console.log({ transactionId });
+        fcl.tx(transactionId).subscribe((res) => {
+          transactionStatus.set(res);
+          console.log(res);
+          if (res.status === 4) {
+            setTimeout(() => transactionInProgress.set(false), 2000);
+            setTimeout(() => transactionStatus.set({}), 5000);
+            resolve(true);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+        transactionInProgress.set(false);
+        transactionStatus.set({});
+        reject(false);
+      }
+    });
+  } else if (version == 1) {
+    const transaction = replaceWithProperValues(purchaseNFTTxv1, contractName, contractAddress)
+      .replaceAll('FungibleToken.Vault', vaultType)
+      .replace('PAYMENT_PATH', storagePath);
+
+    initTransactionState();
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        const transactionId = await fcl.mutate({
+          cadence: transaction,
+          args: (arg, t) => [
+            arg(metadataId, t.UInt64),
+            arg(price, t.UFix64),
+            arg(serial, t.Optional(t.UInt64)),
+            arg(contractName, t.String),
+            arg(contractAddress, t.Address)
+          ],
+          payer: fcl.authz,
+          proposer: fcl.authz,
+          authorizations: [fcl.authz],
+          limit: 9999,
+        });
+        console.log({ transactionId });
+        fcl.tx(transactionId).subscribe((res) => {
+          transactionStatus.set(res);
+          console.log(res);
+          if (res.status === 4) {
+            setTimeout(() => transactionInProgress.set(false), 2000);
+            setTimeout(() => transactionStatus.set({}), 5000);
+            resolve(true);
+          }
+        });
+      } catch (e) {
+        console.log(e);
+        transactionInProgress.set(false);
+        transactionStatus.set({});
+        reject(false);
+      }
+    });
+  }
 };
 
 export const purchaseRandomNFT = async (price, contractName, contractAddress, paymentType) => {
@@ -306,14 +350,27 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   let images = [];
   let thumbnails = [];
   let prices = [];
+  let serials = [];
   let extras = [];
   for (var i = 0; i < metadatas.length; i++) {
-    const { name, description, image, thumbnail, price, ...rest } = metadatas[i];
+    const { name, description, image, thumbnail, price, supply, ...rest } = metadatas[i];
     names.push(name);
     descriptions.push(description);
     images.push(image);
     thumbnails.push(thumbnail);
     prices.push(price ? Number(price).toFixed(3) : null);
+
+    // Supply / Serials
+    let tempSerials = null;
+    if (supply) {
+      tempSerials = [];
+      for (let i = 0; i < supply; i++) {
+        tempSerials.push({ key: i, value: true })
+      }
+    }
+    serials.push(tempSerials);
+
+    // Extra
     let extra = [];
     for (const attribute in rest) {
       if (rest[attribute]) {
@@ -324,6 +381,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   }
 
   console.log('Uploading ' + batchSize + ' NFTs to the contract.');
+  console.log(serials);
   console.log(extras);
 
   const transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr).replaceAll('500', batchSize);
@@ -337,6 +395,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
         arg(images, t.Array(t.String)),
         arg(thumbnails, t.Array(t.Optional(t.String))),
         arg(prices, t.Array(t.Optional(t.UFix64))),
+        arg(serials, t.Array(t.Optional(t.Dictionary({ key: t.UInt64, value: t.Bool })))),
         arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
         arg(ipfsCID, t.String)
       ],
@@ -672,7 +731,6 @@ export async function getNFTInfo(contractName, contractAddress, metadataId) {
       cadence: replaceWithProperValues(getNFTInfoScript, contractName, contractAddress),
       args: (arg, t) => [arg(metadataId, t.UInt64)],
     });
-
     return response;
   } catch (e) {
     console.log(e);
