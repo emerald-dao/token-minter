@@ -1,4 +1,4 @@
-export const dappTitle = 'Touchstone';
+export const dappTitle = 'Testnet Touchstone';
 export const dappDescription = 'Pending';
 export const dappURL = 'pending.com';
 export const dappLink = 'pending';
