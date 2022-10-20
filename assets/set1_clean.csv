@@ -1,6 +1,5 @@
-name,description,image,serial,price
-Cap1,Gray cap with petroman,nft_cap1.png,1,10.003001
-Cap1,Gray cap with petroman,nft_cap2.png,1
-Cap2,Green cap with deer,nft_cap2.png,2,5.0
-Cap3,Purple cap with petroman,nft_cap3.png,3,1.0
-Cap4,White cap with petroman,nft_cap4.png,4
+name,description,image,price,supply
+Cap1,Gray cap with petroman,nft_cap1.png,10.003001,10
+Cap2,Green cap with deer,nft_cap2.png,5.0,2
+Cap3,Purple cap with petroman,nft_cap3.png,1.0,
+Cap4,White cap with petroman,nft_cap4.png,,

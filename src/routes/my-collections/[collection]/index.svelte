@@ -5,6 +5,7 @@
 	import { page } from "$app/stores";
 	import {
 		getEmeraldIDBatch,
+		getVersion,
 		proposeNFTToCatalog,
 		toggleMinting,
 	} from "$flow/actions";
@@ -21,19 +22,41 @@
 	};
 
 	const downloadBuyers = async (primaryBuyers, collectionName) => {
-		let csvContent = `data:text/csv;charset=utf-8,nft metadataId,buyer address,discord name\n`;
-		const emeraldIds = getEmeraldIDBatch(Object.values(primaryBuyers));
-		for (const metadataId in primaryBuyers) {
-			const buyer = primaryBuyers[metadataId];
-			csvContent +=
-				metadataId +
-				"," +
-				buyer +
-				"," +
-				(emeraldIds[buyer] ?? "NOT FOUND") +
-				"\n";
+		const version = await getVersion(collectionName, $user.addr);
+		if (version == 0) {
+			let csvContent = `data:text/csv;charset=utf-8,nft metadataId,buyer address,discord name\n`;
+			const emeraldIds = await getEmeraldIDBatch(Object.values(primaryBuyers));
+			for (const metadataId in primaryBuyers) {
+				const buyer = primaryBuyers[metadataId];
+				csvContent +=
+					metadataId +
+					"," +
+					buyer +
+					"," +
+					(emeraldIds[buyer] ?? "NOT FOUND") +
+					"\n";
+			}
+			saveContent(csvContent, `${collectionName}-buyers.csv`);
+		} else if (version == 1) {
+			let csvContent = `data:text/csv;charset=utf-8,buyer address,discord name,metadata id,amount purchased\n`;
+			const emeraldIds = await getEmeraldIDBatch(Object.keys(primaryBuyers));
+			console.log(primaryBuyers);
+			for (const buyer in primaryBuyers) {
+				const metadataIdPurchases = primaryBuyers[buyer];
+				for (const metadataId in metadataIdPurchases) {
+					csvContent +=
+						buyer +
+						"," +
+						(emeraldIds[buyer] ?? "NOT FOUND") +
+						"," +
+						metadataId +
+						"," +
+						metadataIdPurchases[metadataId].length +
+						"\n";
+				}
+			}
+			saveContent(csvContent, `${collectionName}-buyers.csv`);
 		}
-		saveContent(csvContent, `${collectionName}-buyers.csv`);
 	};
 </script>
 

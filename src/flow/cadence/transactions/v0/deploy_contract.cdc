@@ -1,10 +1,10 @@
-import MintVerifiers from "../MintVerifiers.cdc"
-import FLOAT from "../utility/FLOAT.cdc"
-import MetadataViews from "../utility/MetadataViews.cdc"
-import TouchstoneContracts from "../TouchstoneContracts.cdc"
-import FlowToken from "../utility/FlowToken.cdc"
-import FungibleToken from "../utility/FungibleToken.cdc"
-import FUSD from "../utility/FUSD.cdc"
+import MintVerifiers from "../../MintVerifiers.cdc"
+import FLOAT from "../../utility/FLOAT.cdc"
+import MetadataViews from "../../utility/MetadataViews.cdc"
+import TouchstoneContracts from "../../TouchstoneContracts.cdc"
+import FlowToken from "../../utility/FlowToken.cdc"
+import FungibleToken from "../../utility/FungibleToken.cdc"
+import FUSD from "../../utility/FUSD.cdc"
 
 transaction(
   contractName: String, // TouchstoneExampleNFT

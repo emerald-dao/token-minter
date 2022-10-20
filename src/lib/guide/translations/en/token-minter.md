@@ -41,12 +41,13 @@ Each of these items are called "attributes." The first line of your metadata CSV
 On Touchstone, **you must** have a `name`, `description`, and `image` attribute. Additionally, you can optionally include:
 - a `thumbnail` attribute if you want your NFT to display a less-intensive picture for easier loading.
 - a `price` attribute if you want each NFT to have a different price.
+- a `supply` attribute to automatically create X number of that NFT. If you give an NFT a supply, it will automatically duplicate that NFT X number of times, and serial all of them from 0 to (X-1), and group them under the same sale page. Just like NBATopShot does for a moment.
 
-You can also include whatever other attributes you'd like, however you cannot use one of the 5 attribute names above (name, description, image, thumbnail, or price) for different purposes than what is described of them above.
+You can also include whatever other attributes you'd like, however you cannot use one of the 7 attribute names above (name, description, image, thumbnail, price, supply, or serial) for different purposes than what is described of them above.
 
 Each row of the CSV File is an NFT.
 
-For the `image` attribute, you must put the name of the file that is inside your Images folder. More on that in the next section...
+For the `image` and `thumbnail` attribute, you must put the name of the file that is inside your Images folder. More on that in the next section...
 
 Please see <a href="/assets/metadata.csv" download="">this file</a> for an example CSV file.
 

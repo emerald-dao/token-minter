@@ -13,6 +13,8 @@
   export let flowPrice;
   export let paymentType;
   export let ownedByUser = false;
+  export let supply = 1;
+  export let serial;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
@@ -25,13 +27,13 @@
         {description}
         {backgroundColor}
         {price}
-        {paymentType} />
+        {paymentType}
+        {supply}
+        {serial} />
       {#if buy}
         <Button class="small full-width no-shadow accent-color">Buy Now</Button>
-      {:else}
-        {#if !ownedByUser}
-          <Button class="small full-width no-shadow ghost done">Sold</Button>
-        {/if}
+      {:else if !ownedByUser}
+        <Button class="small full-width no-shadow ghost done">Sold</Button>
       {/if}
     </a>
   {:else}
@@ -43,9 +45,13 @@
         {description}
         {backgroundColor}
         {price}
-        {paymentType} />
+        {paymentType}
+        {supply}
+        {serial} />
       {#if purchase}
-          <Button class="small full-width no-shadow accent-color" on:click={purchase}>Buy Now</Button>
+        <Button
+          class="small full-width no-shadow accent-color"
+          on:click={purchase}>Buy Now</Button>
       {/if}
     </div>
   {/if}

@@ -1,6 +1,10 @@
+<script>
+  export let value;
+</script>
+
 <div class="select">
-  <select on:change>
-    <slot/>
+  <select on:change bind:value>
+    <slot />
   </select>
 </div>
 

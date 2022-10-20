@@ -10,8 +10,9 @@
       a.push({
         name: asset.name,
         description: asset.description,
-        thumbnail: `${ipfsCID}/${asset.thumbnail ?? asset.image}`,
+        thumbnail: `${ipfsCID}/${asset.thumbnail || asset.image}`,
         price: Number(asset.price || $collectionInfo.payment),
+        supply: asset.supply || 1,
       });
       return a;
     }, []);
@@ -38,7 +39,8 @@
             description={NFT.description}
             thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`}
             price={NFT.price}
-            paymentType={$collectionInfo.paymentType} />
+            paymentType={$collectionInfo.paymentType}
+            supply={NFT.supply} />
         {/if}
       {/each}
       <IntersectionObserver

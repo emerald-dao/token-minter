@@ -8,6 +8,8 @@
   export let price;
   export let flowPrice;
   export let paymentType;
+  export let supply;
+  export let serial;
 </script>
 
 <div class="main-wrapper">
@@ -26,6 +28,11 @@
     </div>
     {#if price}
       <NFTPrice {price} {flowPrice} {paymentType} />
+    {/if}
+    {#if serial}
+      <small class="description">#{serial}/{supply}</small>
+    {:else}
+      <small class="description">/{supply}</small>
     {/if}
   </div>
 </div>

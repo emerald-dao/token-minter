@@ -1,7 +1,7 @@
-import ExampleNFT from "../ExampleNFT.cdc"
-import NonFungibleToken from "../utility/NonFungibleToken.cdc"
-import MetadataViews from "../utility/MetadataViews.cdc"
-import TouchstonePurchases from "../TouchstonePurchases.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
+import NonFungibleToken from "../../utility/NonFungibleToken.cdc"
+import MetadataViews from "../../utility/MetadataViews.cdc"
+import TouchstonePurchases from "../../TouchstonePurchases.cdc"
 
 transaction(contractName: String, contractAddress: Address) {
   let Collection: &ExampleNFT.Collection

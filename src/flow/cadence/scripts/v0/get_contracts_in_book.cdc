@@ -1,4 +1,4 @@
-import TouchstoneContracts from "../TouchstoneContracts.cdc"
+import TouchstoneContracts from "../../TouchstoneContracts.cdc"
 
 pub fun main(user: Address): [Contract] {
   let answer: [Contract] = []

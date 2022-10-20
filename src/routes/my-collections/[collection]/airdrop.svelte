@@ -35,9 +35,11 @@
         airdrop(
           $airdropCSVStore.parsedFiles[0],
           $airdropCSVStore.parsedFiles[1],
+          $airdropCSVStore.parsedFiles[2],
           $page.params.collection,
           $user.addr
-        )}>Airdrop
+        )}
+      >Airdrop
     </Button>
   {/await}
 </div>

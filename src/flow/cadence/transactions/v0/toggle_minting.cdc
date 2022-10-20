@@ -1,4 +1,4 @@
-import ExampleNFT from "../ExampleNFT.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
 
 transaction() {
   let Administrator: &ExampleNFT.Administrator

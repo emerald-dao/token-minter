@@ -19,43 +19,18 @@
     NftImage,
     CollectionSocials,
     HtmlHead,
-    Button,
     NFTCarousel,
     Verifiers,
     MyNFTs,
-    CollectionStat,
     CollectionFilters,
     TransactionModal,
-    WalletConnectModal,
   } from "$atoms";
   import { page } from "$app/stores";
   import { user } from "$stores/FlowStore";
   import IntersectionObserver from "svelte-intersection-observer";
+  import CollectionStats from "./CollectionStats.svelte";
 
   export let contractAddress = $page.params.address;
-
-  async function getStats(metadatas, purchasedIndexes, collectionPrice) {
-    return new Promise(async (resolve, reject) => {
-      let min = Number.POSITIVE_INFINITY;
-      let highestBuy = 0.0;
-      for (const index in metadatas) {
-        const nftPrice = Number(metadatas[index].price ?? collectionPrice);
-        if (!purchasedIndexes.includes(index) && nftPrice < min) {
-          min = nftPrice;
-        }
-        if (purchasedIndexes.includes(index) && nftPrice > highestBuy) {
-          highestBuy = nftPrice;
-        }
-      }
-      resolve({
-        floorPrice: min == Number.POSITIVE_INFINITY ? "N/A" : Number(min),
-        highestBuy: Number(highestBuy),
-        totalItems: metadatas.length,
-        numPurchased: purchasedIndexes.length,
-        available: metadatas.length - purchasedIndexes.length,
-      });
-    });
-  }
 
   const [flowPrice, loading, error] = flowPriceStore();
 
@@ -72,7 +47,6 @@
 
 <HtmlHead title="Discover" />
 <TransactionModal />
-
 
 {#await getCollectionInfo($page.params.collection, contractAddress) then collectionInfo}
   <Section class="padding-top-none padding-bottom-small">
@@ -118,35 +92,10 @@
               <p class="collection-description">
                 {collectionInfo.description}
               </p>
-              {#await getStats(Object.values(collectionInfo.metadatas), Object.keys(collectionInfo.primaryBuyers), collectionInfo.price) then stats}
-                <AdaptableGrid minWidth="5em" gap="1.2em">
-                  <CollectionStat
-                    title="total items"
-                    stat={stats.totalItems} />
-                  <CollectionStat
-                    title="purchased"
-                    stat={stats.numPurchased} />
-                  <CollectionStat title="available" stat={stats.available} />
-                  {#if !collectionInfo.lotteryBuying}
-                    <CollectionStat
-                      title="floor price"
-                      flowLogo={collectionInfo.paymentType === "$FLOW"}
-                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                      stat={stats.floorPrice} />
-                    <CollectionStat
-                      title="highest buy"
-                      flowLogo={collectionInfo.paymentType === "$FLOW"}
-                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                      stat={stats.highestBuy} />
-                  {:else}
-                    <CollectionStat
-                      title="price"
-                      flowLogo={collectionInfo.paymentType === "$FLOW"}
-                      fusdLogo={collectionInfo.paymentType === "$FUSD"}
-                      stat={Number(collectionInfo.price)} />
-                  {/if}
-                </AdaptableGrid>
-              {/await}
+              <CollectionStats
+                {collectionInfo}
+                version={collectionInfo.version} />
+
               {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
                 {#if verifiers.length > 0}
                   <Verifiers {verifiers} />
@@ -170,6 +119,7 @@
               <AdaptableGrid minWidth="12em" gap="1.2em">
                 {#if seeMine}
                   <MyNFTs
+                    version={collectionInfo.version}
                     metadatas={collectionInfo.metadatas}
                     primaryBuyers={collectionInfo.primaryBuyers}
                     addr={$user?.addr}
@@ -191,23 +141,29 @@
                             : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
                           name={NFT.name}
                           description={NFT.description}
-                          price={Number(
-                            NFT.price ?? collectionInfo.price
-                          )}
-                          buy={!Object.keys(
-                            collectionInfo.primaryBuyers
-                          ).includes(NFT.metadataId)}
+                          price={Number(NFT.price ?? collectionInfo.price)}
+                          buy={collectionInfo.version == 1
+                            ? !(
+                                Object.keys(NFT.purchasers).length == NFT.supply
+                              )
+                            : !Object.keys(
+                                collectionInfo.primaryBuyers
+                              ).includes(NFT.metadataId)}
                           url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
                           withLink={true}
                           flowPrice={$flowPrice.price}
-                          paymentType={collectionInfo.paymentType} />
+                          paymentType={collectionInfo.paymentType}
+                          supply={NFT.supply} />
                       {/if}
                     {/if}
                   {/each}
-                  <IntersectionObserver {element} bind:intersecting on:observe={() => {
-                    nftsToDisplay = nftsToDisplay + 20;
-                  }}>
-                    <div bind:this={element}/>
+                  <IntersectionObserver
+                    {element}
+                    bind:intersecting
+                    on:observe={() => {
+                      nftsToDisplay = nftsToDisplay + 20;
+                    }}>
+                    <div bind:this={element} />
                   </IntersectionObserver>
                 {:else}
                   <NFTCarousel
@@ -216,8 +172,7 @@
                     paymentType={collectionInfo.paymentType}
                     address={contractAddress}
                     contractName={$page.params.collection}
-                    number={Object.keys(collectionInfo.metadatas)
-                      .length} />
+                    number={Object.keys(collectionInfo.metadatas).length} />
                 {/if}
               </AdaptableGrid>
             </div>
@@ -227,7 +182,6 @@
     </Container>
   </Section>
 {/await}
-
 
 <style type="scss">
   @use "../../../../lib/styles/abstracts" as *;

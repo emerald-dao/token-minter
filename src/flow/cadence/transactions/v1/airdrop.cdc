@@ -1,7 +1,7 @@
-import ExampleNFT from "../ExampleNFT.cdc"
-import NonFungibleToken from "../utility/NonFungibleToken.cdc"
+import ExampleNFT from "../../ExampleNFT.cdc"
+import NonFungibleToken from "../../utility/NonFungibleToken.cdc"
 
-transaction(recipients: [Address], metadataIds: [UInt64]) {
+transaction(recipients: [Address], metadataIds: [UInt64], serials: [UInt64]) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
     self.Administrator = deployer.borrow<&ExampleNFT.Administrator>(from: ExampleNFT.AdministratorStoragePath)
@@ -13,7 +13,7 @@ transaction(recipients: [Address], metadataIds: [UInt64]) {
   }
 
   execute {
-    self.Administrator.mintBatch(metadataIds: metadataIds, recipients: recipients)
+    self.Administrator.mintBatch(metadataIds: metadataIds, serials: serials, recipients: recipients)
   }
 }
  
