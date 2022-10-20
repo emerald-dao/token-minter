@@ -58,37 +58,6 @@ export const unauthenticate = () => fcl.unauthenticate();
 export const logIn = async () => await fcl.logIn();
 export const signUp = () => fcl.signUp();
 
-function switchNetwork(newNetwork) {
-  if (newNetwork === 'emulator') {
-    fcl
-      .config()
-      .put('accessNode.api', 'http://localhost:8080')
-      .put('discovery.wallet', 'http://localhost:8701/fcl/authn');
-  } else if (newNetwork === 'testnet') {
-    fcl
-      .config()
-      .put('accessNode.api', 'https://rest-testnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/testnet/authn');
-  } else if (newNetwork === 'mainnet') {
-    fcl
-      .config()
-      .put('accessNode.api', 'https://rest-mainnet.onflow.org')
-      .put('discovery.wallet', 'https://fcl-discovery.onflow.org/authn');
-  }
-  network.set(newNetwork);
-}
-
-export const deployToTestnet = async () => {
-  unauthenticate();
-  switchNetwork('testnet');
-  deployContract();
-};
-
-export const deployToMainnet = async () => {
-  switchNetwork('mainnet');
-  deployContract();
-};
-
 function initTransactionState() {
   transactionInProgress.set(true);
   transactionStatus.set({ status: -1 });
@@ -125,7 +94,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
 
 // ****** Transactions ****** //
 
-async function deployContract() {
+export async function deployContract() {
   const hexCode = Buffer.from(get(contractCode)).toString('hex');
   let info = get(contractInfo);
   console.log(info);
