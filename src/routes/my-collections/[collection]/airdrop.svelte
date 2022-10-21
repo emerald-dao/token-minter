@@ -12,8 +12,10 @@
 <div class="input-wrapper">
   <label for="dropZoneCsv">Airdrop Data</label>
   <span class="helper-text"
-    >Drop a CSV file containing airdrop adresses and associated NFT metadataIds.
-    You can find an NFT's metadataId under the "metadata" box on its sale page.
+    >Drop a CSV file below. Your first row should be the addresses you are
+    dropping to. The second row should be the "metadataId" of the NFT. You can
+    find an NFT's metadataId under the "metadata" box on its sale page. The
+    third row should be the serial of the NFT.
     <br />Download this <a href="/assets/airdrop.csv" download>template</a>
     to see an example.
   </span>
