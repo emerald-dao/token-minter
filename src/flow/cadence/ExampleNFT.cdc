@@ -73,8 +73,6 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.extra = _extra
 			self.supply = _supply
 			self.purchasers = {}
-
-			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 	}
 
@@ -337,6 +335,7 @@ pub contract ExampleNFT: NonFungibleToken {
 				_extra: extra,
 				_supply: supply
 			)
+			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 
 		// mintNFT mints a new NFT and deposits 
