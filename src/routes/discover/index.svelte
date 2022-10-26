@@ -20,14 +20,6 @@
       url: "/Emeralds",
     },
     {
-      name: "Maneki Planets",
-      thumbnailURL: "/geniace-planets.png",
-      description:
-        "Our iconic MANEKI planets, with just 224 lucky cats in this collection. With an inviting raised paw and pointy ears, these iconic lucky charms have been bringing good fortune for centuries. The MANEKI is the adopted icon of the GENIACE community and brings good fortune & benefits to those who hold a special MANEKI NFT",
-      owner: "Geniace",
-      url: "/discover/0xcf3c77ef638573e8/TouchstoneManekiPlanets",
-    },
-    {
       name: "Halloween by AI",
       thumbnailURL: "/halloween-by-ai.png",
       description:
