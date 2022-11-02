@@ -21,7 +21,7 @@ const config = {
     {
       locale: 'ru',
       key: 'toc',
-      loader: async () => (await import('./es/toc.json')).default,
+      loader: async () => (await import('./ru/toc.json')).default,
     },
   ],
 };
