@@ -63,7 +63,7 @@
   <Stack direction="column" slot="main-content" gap="3.6rem">
     <span class="helper-text"
       >To understand what to put here, please see our <a
-        href="/guide/en/token-minter#upload-assets"
+        href="/guide/en/contract-generator#upload-assets"
         target="_blank">guide</a
       >.</span>
     <!-- CSV DropZone -->
