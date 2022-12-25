@@ -11,12 +11,12 @@
       url: "/Emeralds",
     },
     {
-      name: "Halloween by AI",
-      thumbnailURL: "/halloween-by-ai.png",
+      name: "Christmas Cats",
+      thumbnailURL: "/christmas-cats-logo.jpeg",
       description:
-        "This collection was all made by MidJorney's artificial intelligence, no person has ever touched it",
-      owner: "SuuriKat",
-      url: "/discover/0x1c09c3b8d6bf323b/TouchstoneHalloweencreatedbyAi",
+        "Unique collection of Christmas themed cats. Created by CryptoKittyMagic.",
+      owner: "0x8e52cbe5a8f1c592",
+      url: "/discover/0x8e52cbe5a8f1c592/TouchstoneChristmasCats",
     },
   ];
 </script>
