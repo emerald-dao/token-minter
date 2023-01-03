@@ -18,6 +18,14 @@
       owner: "0x8e52cbe5a8f1c592",
       url: "/discover/0x8e52cbe5a8f1c592/TouchstoneChristmasCats",
     },
+    {
+      name: "Best Teas",
+      thumbnailURL: "/best-teas.png",
+      description:
+        "A collection of bubble teas designed by a 14 year old on Flow. The artist has already begun learning about smart contracts on Flow, and is looking to continue on her journey of learning Cadence.",
+      owner: "0x213c401adf5c8854",
+      url: "/discover/0x213c401adf5c8854/TouchstoneBestTeas",
+    },
   ];
 </script>
 
