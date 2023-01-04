@@ -132,7 +132,7 @@
                         Loading: {$loading}
                       {:else if $error}
                         Error: {$error}
-                      {:else if browser && (!available || !collectionInfo.primaryBuyers[NFT.metadataId]) && (!nameFilter || NFT.name
+                      {:else if browser && (!available || Object.keys(collectionInfo.metadatas[NFT.metadataId].purchasers).length != collectionInfo.metadatas[NFT.metadataId].supply) && (!nameFilter || NFT.name
                             .toUpperCase()
                             .includes(nameFilter.toUpperCase()))}
                         <NFTCard

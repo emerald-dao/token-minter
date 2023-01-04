@@ -37,9 +37,6 @@ pub contract ExampleNFT: NonFungibleToken {
 	access(account) let metadatas: {UInt64: NFTMetadata}
 
 	// Maps the metadataId of an NFT to the primary buyer
-	//
-	// You can also get a list of purchased NFTs
-	// by doing `primaryBuyers.keys`
 	access(account) let primaryBuyers: {Address: {UInt64: [UInt64]}}
 
 	access(account) let nftStorage: @{Address: {UInt64: NFT}}
