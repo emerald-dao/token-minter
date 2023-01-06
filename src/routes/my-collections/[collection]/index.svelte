@@ -115,7 +115,7 @@
 						downloadBuyers(info.primaryBuyers, $page.params.collection)}
 					>Download Buyers</Button>
 				<Button
-					locked={!pass}
+					locked={false}
 					on:click={() =>
 						proposeNFTToCatalog($page.params.collection, $user.addr)}
 					>Add to NFT Catalog</Button>
