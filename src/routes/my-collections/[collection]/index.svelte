@@ -119,6 +119,12 @@
 					on:click={() =>
 						proposeNFTToCatalog($page.params.collection, $user.addr)}
 					>Add to NFT Catalog</Button>
+				<Button
+					locked={false}
+					on:click={() =>
+						navigator.clipboard.writeText(
+							`/verify touchstone contractaddress:${$user.addr} contractname:${$page.params.collection} amount: role:`
+						)}>Copy Discord Verification</Button>
 			{/await}
 		{/await}
 	</Stack>
