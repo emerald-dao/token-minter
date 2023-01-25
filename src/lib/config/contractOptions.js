@@ -4,10 +4,6 @@ let contractOptions = [
     bindValue: 'startMinting'
   },
   {
-    name: 'Lottery buying (user purchases unknown NFT)',
-    bindValue: 'lotteryBuying'
-  },
-  {
     name: 'Royalty (primary sales)',
     bindValue: 'royalty',
     withDouble: true,

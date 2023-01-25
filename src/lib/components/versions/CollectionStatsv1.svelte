@@ -37,23 +37,15 @@
     <CollectionStat title="total items" stat={stats.totalItems} />
     <CollectionStat title="purchased" stat={stats.numPurchased} />
     <CollectionStat title="available" stat={stats.available} />
-    {#if !collectionInfo.lotteryBuying}
-      <CollectionStat
-        title="floor price"
-        flowLogo={collectionInfo.paymentType === "$FLOW"}
-        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-        stat={stats.floorPrice} />
-      <CollectionStat
-        title="highest buy"
-        flowLogo={collectionInfo.paymentType === "$FLOW"}
-        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-        stat={stats.highestBuy} />
-    {:else}
-      <CollectionStat
-        title="price"
-        flowLogo={collectionInfo.paymentType === "$FLOW"}
-        fusdLogo={collectionInfo.paymentType === "$FUSD"}
-        stat={Number(collectionInfo.price)} />
-    {/if}
+    <CollectionStat
+      title="floor price"
+      flowLogo={collectionInfo.paymentType === "$FLOW"}
+      fusdLogo={collectionInfo.paymentType === "$FUSD"}
+      stat={stats.floorPrice} />
+    <CollectionStat
+      title="highest buy"
+      flowLogo={collectionInfo.paymentType === "$FLOW"}
+      fusdLogo={collectionInfo.paymentType === "$FUSD"}
+      stat={stats.highestBuy} />
   </AdaptableGrid>
 {/await}

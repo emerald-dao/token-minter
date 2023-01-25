@@ -135,7 +135,6 @@ export async function deployContract() {
         arg(info.royalty, t.Bool),
         arg(info.royalty ? info.royaltyText : null, t.Optional(t.Address)),
         arg(info.royalty ? info.royaltyNumber : null, t.Optional(t.UFix64)),
-        arg(info.lotteryBuying, t.Bool),
         // Singular FLOAT Verifier
         arg(info.floatLink, t.Bool),
         arg(eventOwner, t.Optional(t.Address)),

@@ -33,15 +33,14 @@ pub contract ExampleNFT: NonFungibleToken {
 	pub let CollectionPrivatePath: PrivatePath
 	pub let AdministratorStoragePath: StoragePath
 
-	// Maps metadataId of NFT to NFTMetadata
-	access(account) let metadatas: {UInt64: NFTMetadata}
-
+	// Maps metadataId of NFT to Metadata
+	access(account) let nftMetadatas: {UInt64: NFTMetadata}
+	access(account) let packMetadatas: {UInt64: PackMetadata}
 	// Maps the metadataId of an NFT to the primary buyer
 	access(account) let primaryBuyers: {Address: {UInt64: [UInt64]}}
-
 	access(account) let nftStorage: @{Address: {UInt64: NFT}}
 
-	pub struct NFTMetadata {
+	pub struct Metadata {
 		pub let metadataId: UInt64
 		pub let name: String
 		pub let description: String 
@@ -55,33 +54,63 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub var extra: {String: AnyStruct}
 		pub let supply: UInt64
 		pub let purchasers: {UInt64: Address}
+		pub let lockSale: Bool
 
 		access(account) fun purchased(serial: UInt64, buyer: Address) {
 			self.purchasers[serial] = buyer
 		}
 
-		init(_name: String, _description: String, _image: MetadataViews.IPFSFile, _thumbnail: MetadataViews.IPFSFile?, _price: UFix64?, _extra: {String: AnyStruct}, _supply: UInt64) {
+		init(name: String, description: String, image: MetadataViews.IPFSFile, thumbnail: MetadataViews.IPFSFile?, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, lockSale: Bool) {
 			self.metadataId = ExampleNFT.nextMetadataId
-			self.name = _name
-			self.description = _description
-			self.image = _image
-			self.thumbnail = _thumbnail
-			self.price = _price
-			self.extra = _extra
-			self.supply = _supply
+			self.name = name
+			self.description = description
+			self.image = image
+			self.thumbnail = thumbnail
+			self.price = price
+			self.extra = extra
+			self.supply = supply
 			self.purchasers = {}
+			self.lockSale = lockSale
+		}
+	}
+
+	pub struct interface IMetadata {
+		pub let metadata: Metadata
+		pub let isPack: Bool
+	}
+
+	pub struct NFTMetadata: IMetadata {
+		pub let metadata: Metadata
+		pub let isPack: Bool
+
+		init(metadata: Metadata) {
+			self.metadata = metadata
+			self.isPack = false
+		}
+	}
+
+	pub struct PackMetadata: IMetadata {
+		pub let metadata: Metadata
+		pub let isPack: Bool
+		// NFT metadataId -> serials
+		pub let containedNFTs: {UInt64: [UInt64]}
+
+		init(metadata: Metadata, containedNFTs: {UInt64: [UInt64]}) {
+			self.metadata = metadata
+			self.isPack = true
+			self.containedNFTs = containedNFTs
 		}
 	}
 
 	pub resource NFT: NonFungibleToken.INFT, MetadataViews.Resolver {
 		// The 'id' is the same as the 'uuid'
 		pub let id: UInt64
-		// The 'metadataId' is what maps this NFT to its 'NFTMetadata'
+		// The 'metadataId' is what maps this NFT to its 'Metadata'
 		pub let metadataId: UInt64
 		pub let serial: UInt64
 
-		pub fun getMetadata(): NFTMetadata {
-			return ExampleNFT.getNFTMetadata(self.metadataId)!
+		pub fun getMetadata(): {IMetadata} {
+			return ExampleNFT.getMetadata(self.metadataId)!
 		}
 
 		pub fun getViews(): [Type] {
@@ -102,9 +131,9 @@ pub contract ExampleNFT: NonFungibleToken {
 				case Type<MetadataViews.Display>():
 					let metadata = self.getMetadata()
 					return MetadataViews.Display(
-						name: metadata.name,
-						description: metadata.description,
-						thumbnail: metadata.thumbnail ?? metadata.image
+						name: metadata.metadata.name,
+						description: metadata.metadata.description,
+						thumbnail: metadata.metadata.thumbnail ?? metadata.metadata.image
 					)
 				case Type<MetadataViews.NFTCollectionData>():
 					return MetadataViews.NFTCollectionData(
@@ -157,7 +186,7 @@ pub contract ExampleNFT: NonFungibleToken {
 						self.serial
 					)
 				case Type<MetadataViews.Traits>():
-					return MetadataViews.dictToTraits(dict: self.getMetadata().extra, excludedNames: nil)
+					return MetadataViews.dictToTraits(dict: self.getMetadata().metadata.extra, excludedNames: nil)
 				case Type<MetadataViews.NFTView>():
 					return MetadataViews.NFTView(
 						id: self.id,
@@ -173,36 +202,21 @@ pub contract ExampleNFT: NonFungibleToken {
 			return nil
 		}
 
-		init(_metadataId: UInt64, _serial: UInt64, _recipient: Address) {
-			pre {
-				ExampleNFT.metadatas[_metadataId] != nil:
-					"This NFT does not exist yet."
-				_serial < ExampleNFT.getNFTMetadata(_metadataId)!.supply:
-					"This serial does not exist for this metadataId."
-				!ExampleNFT.getNFTMetadata(_metadataId)!.purchasers.containsKey(_serial):
-					"This serial has already been purchased."
-			}
+		init(metadataId: UInt64, serial: UInt64, recipient: Address) {
 			self.id = self.uuid
-			self.metadataId = _metadataId
-			self.serial = _serial
+			self.metadataId = metadataId
+			self.serial = serial
 
 			// Update the buyers list so we keep track of who is purchasing
-			if let buyersRef = &ExampleNFT.primaryBuyers[_recipient] as &{UInt64: [UInt64]}? {
-				if let metadataIdMap = &buyersRef[_metadataId] as &[UInt64]? {
-					metadataIdMap.append(_serial)
+			if let buyersRef = &ExampleNFT.primaryBuyers[recipient] as &{UInt64: [UInt64]}? {
+				if let metadataIdMap = &buyersRef[metadataId] as &[UInt64]? {
+					metadataIdMap.append(serial)
 				} else {
-					buyersRef[_metadataId] = [_serial]
+					buyersRef[metadataId] = [serial]
 				}
 			} else {
-				ExampleNFT.primaryBuyers[_recipient] = {_metadataId: [_serial]}
+				ExampleNFT.primaryBuyers[recipient] = {metadataId: [serial]}
 			}
-
-			// Update who bought this serial inside NFTMetadata so it cannot be purchased again.
-			let metadataRef = (&ExampleNFT.metadatas[_metadataId] as &NFTMetadata?)!
-			metadataRef.purchased(serial: _serial, buyer: _recipient)
-
-			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
-			emit Minted(id: self.id, recipient: _recipient, metadataId: _metadataId)
 		}
 	}
 
@@ -231,6 +245,19 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.ownedNFTs[id] <-! token
 
 			emit Deposit(id: id, to: self.owner?.address)
+		}
+
+		pub fun openPack(id: UInt64) {
+			let pack <- self.withdraw(withdrawID: id) as! @NFT
+			assert(pack.getMetadata().isPack, message: "This is not a pack!")
+			let packMetadata = pack.getMetadata() as! PackMetadata
+			let containedNFTs: {UInt64: [UInt64]} = packMetadata.containedNFTs
+			for metadataId in containedNFTs.keys {
+				for serial in containedNFTs[metadataId]! {
+					self.deposit(token: <- ExampleNFT.createNFT(metadataId: metadataId, serial: serial, recipient: self.owner!.address))
+				}
+			}
+			destroy pack
 		}
 
 		// getIDs returns an array of the IDs that are in the collection
@@ -267,17 +294,12 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
-	// A function to mint NFTs. 
-	// You can only call this function if minting
-	// is currently active.
-	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FungibleToken.Vault, serial: UInt64): UInt64 {
+	access(self) fun mint(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FungibleToken.Vault, nft: @NFT) {
 		pre {
 			self.canMint(): "Minting is currently closed by the Administrator!"
-			payment.balance == self.getPriceOfNFT(metadataId): 
-				"Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfNFT(metadataId)!.toString())
 		}
-		let price: UFix64 = self.getPriceOfNFT(metadataId)!
-
+		let price: UFix64 = self.getPriceOfItem(metadataId)!
+		assert(payment.balance == price, message: "Payment does not match the price. You passed in ".concat(payment.balance.toString()).concat(" but this NFT costs ").concat(self.getPriceOfItem(metadataId)!.toString()))
 		// Confirm recipient passes all verifiers
 		for verifier in self.getMintVerifiers() {
 			let params = {"minter": recipient.owner!.address}
@@ -287,7 +309,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 
 		// Handle Emerald City DAO royalty (5%)
-		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/RECEIVER_PATH)
+		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/RECEIVERPATH)
 								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		let emeraldCityCut: UFix64 = 0.05 * price
 
@@ -299,38 +321,81 @@ pub contract ExampleNFT: NonFungibleToken {
 		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: emeraldCityCut))
 
 		// Give the rest to the collection owner
-		let paymentRecipient = self.account.getCapability(/public/RECEIVER_PATH)
+		let paymentRecipient = self.account.getCapability(/public/RECEIVERPATH)
 								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 
-		// Mint the nft 
-		let nft <- create NFT(_metadataId: metadataId, _serial: serial, _recipient: recipient.owner!.address)
-		let nftId: UInt64 = nft.id
-		let metadata = self.getNFTMetadata(metadataId)!
 		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + price
+		let metadataWrap = self.getMetadata(metadataId)!
+		let metadata = metadataWrap.metadata
 
 		// Emit event
-		emit TouchstonePurchase(id: nftId, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, image: metadata.image, price: price)
-		
+		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, image: metadata.image, price: price)
 		// Deposit nft
 		recipient.deposit(token: <- nft)
+	}
 
-		return nftId
+	// A function to mint NFTs. 
+	// You can only call this function if minting
+	// is currently active.
+	pub fun mintNFT(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FungibleToken.Vault, serial: UInt64): UInt64 {
+		pre {
+			!self.getNFTMetadata(metadataId)!.metadata.lockSale: "This NFT can only be discovered in Packs."
+		}
+		// Mint the nft 
+		let nft <- self.createNFT(metadataId: metadataId, serial: serial, recipient: recipient.owner!.address)
+		let id = nft.id
+		self.mint(metadataId: metadataId, recipient: recipient, payment: <- payment, nft: <- nft)
+		return id
+	}
+
+	// A function to mint Packs. 
+	// You can only call this function if minting
+	// is currently active.
+	pub fun mintPack(metadataId: UInt64, recipient: &{NonFungibleToken.Receiver}, payment: @FungibleToken.Vault): UInt64 {
+		// Mint the nft 
+		let pack <- self.createPack(metadataId: metadataId, recipient: recipient.owner!.address)
+		let id = pack.id
+		self.mint(metadataId: metadataId, recipient: recipient, payment: <- payment, nft: <- pack)
+		return id
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64) {
-			ExampleNFT.metadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
-				_name: name,
-				_description: description,
-				_image: MetadataViews.IPFSFile(
-					cid: ipfsCID,
-					path: imagePath
+		pub fun createNFTMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, lockSale: Bool) {
+			ExampleNFT.nftMetadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
+				metadata: Metadata(
+					name: name,
+					description: description,
+					image: MetadataViews.IPFSFile(
+						cid: ipfsCID,
+						path: imagePath
+					),
+					thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
+					price: price,
+					extra: extra,
+					supply: supply,
+					lockSale: lockSale
+				)
+			)
+			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
+		}
+
+		pub fun createPackMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, containedNFTs: {UInt64: [UInt64]}) {
+			ExampleNFT.packMetadatas[ExampleNFT.nextMetadataId] = PackMetadata(
+				metadata: Metadata(
+					name: name,
+					description: description,
+					image: MetadataViews.IPFSFile(
+						cid: ipfsCID,
+						path: imagePath
+					),
+					thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
+					price: price,
+					extra: extra,
+					supply: supply,
+					lockSale: false
 				),
-				_thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
-				_price: price,
-				_extra: extra,
-				_supply: supply
+				containedNFTs: containedNFTs
 			)
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
@@ -341,7 +406,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			pre {
 				EmeraldPass.isActive(user: ExampleNFT.account.address): "You must have an active Emerald Pass subscription to airdrop NFTs. You can purchase Emerald Pass at https://pass.ecdao.org/"
 			}
-			let nft <- create NFT(_metadataId: metadataId, _serial: serial, _recipient: recipient)
+			let nft <- ExampleNFT.createNFT(metadataId: metadataId, serial: serial, recipient: recipient)
 			if let recipientCollection = getAccount(recipient).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
 				recipientCollection.deposit(token: <- nft)
 			} else {
@@ -382,13 +447,38 @@ pub contract ExampleNFT: NonFungibleToken {
 		return <- create Collection()
 	}
 
-	// Get information about a NFTMetadata
+	pub fun isPack(_ metadataId: UInt64): Bool {
+		return self.packMetadatas[metadataId] != nil
+	}
+
+	pub fun isNFT(_ metadataId: UInt64): Bool {
+		return self.nftMetadatas[metadataId] != nil
+	}
+
+	// Get information about a Metadata
+	pub fun getMetadata(_ metadataId: UInt64): {IMetadata}? {
+		if self.isPack(metadataId) {
+			return self.getPackMetadata(metadataId)
+		} else if self.isNFT(metadataId) {
+			return self.getNFTMetadata(metadataId)
+		}
+		return nil
+	}
+
 	pub fun getNFTMetadata(_ metadataId: UInt64): NFTMetadata? {
-		return self.metadatas[metadataId]
+		return self.nftMetadatas[metadataId]
+	}
+
+	pub fun getPackMetadata(_ metadataId: UInt64): PackMetadata? {
+		return self.packMetadatas[metadataId]
 	}
 
 	pub fun getNFTMetadatas(): {UInt64: NFTMetadata} {
-		return self.metadatas
+		return self.nftMetadatas
+	}
+
+	pub fun getPackMetadatas(): {UInt64: PackMetadata} {
+		return self.packMetadatas
 	}
 
 	pub fun getPrimaryBuyers(): {Address: {UInt64: [UInt64]}} {
@@ -397,7 +487,8 @@ pub contract ExampleNFT: NonFungibleToken {
 
 	pub fun getCollectionInfo(): {String: AnyStruct} {
 		let collectionInfo = self.collectionInfo
-		collectionInfo["metadatas"] = self.metadatas
+		collectionInfo["nftMetadatas"] = self.nftMetadatas
+		collectionInfo["packMetadatas"] = self.packMetadatas
 		collectionInfo["primaryBuyers"] = self.primaryBuyers
 		collectionInfo["totalSupply"] = self.totalSupply
 		collectionInfo["nextMetadataId"] = self.nextMetadataId
@@ -422,78 +513,112 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	// Returns nil if an NFT with this metadataId doesn't exist
-	pub fun getPriceOfNFT(_ metadataId: UInt64): UFix64? {
-		if let metadata: ExampleNFT.NFTMetadata = self.getNFTMetadata(metadataId) {
+	pub fun getPriceOfItem(_ metadataId: UInt64): UFix64? {
+		if let metadata: {IMetadata} = self.getMetadata(metadataId) {
 			let defaultPrice: UFix64 = self.getCollectionAttribute(key: "price") as! UFix64
-			if self.getCollectionAttribute(key: "lotteryBuying") as! Bool {
-				return defaultPrice
-			}
-			return metadata.price ?? defaultPrice
+			return metadata.metadata.price ?? defaultPrice
 		}
 		// If the metadataId doesn't exist
 		return nil
 	}
 
-	// Returns an mapping of `id` to NFTMetadata
+	// Returns an mapping of `id` to Metadata
 	// for the NFTs a user can claim
-	pub fun getClaimableNFTs(user: Address): {UInt64: NFTMetadata} {
-		let answer: {UInt64: NFTMetadata} = {}
+	pub fun getClaimableNFTs(user: Address): {UInt64: Metadata} {
+		let answer: {UInt64: Metadata} = {}
 		if let storage = &ExampleNFT.nftStorage[user] as &{UInt64: NFT}? {
 			for id in storage.keys {
 				let nftRef = (&storage[id] as &NFT?)!
-				answer[id] = self.getNFTMetadata(nftRef.metadataId)
+				answer[id] = self.getNFTMetadata(nftRef.metadataId)!.metadata
 			}
 		}
 		return answer
 	}
 
+	// Helpers
+
+	access(self) fun createNFT(metadataId: UInt64, serial: UInt64, recipient: Address): @NFT {
+			pre {
+				ExampleNFT.nftMetadatas[metadataId] != nil:
+					"This NFT does not exist yet."
+				serial < ExampleNFT.getNFTMetadata(metadataId)!.metadata.supply:
+					"This serial does not exist for this metadataId."
+				!ExampleNFT.getNFTMetadata(metadataId)!.metadata.purchasers.containsKey(serial):
+					"This serial has already been purchased."
+			}
+
+			// Update who bought this serial inside Metadata so it cannot be purchased again.
+			let metadataRef: &NFTMetadata = (&ExampleNFT.nftMetadatas[metadataId] as &NFTMetadata?)!
+			metadataRef.metadata.purchased(serial: serial, buyer: recipient)
+
+			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
+			let nft: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
+			emit Minted(id: nft.id, recipient: recipient, metadataId: metadataId)
+			return <- nft
+	}
+
+	access(self) fun createPack(metadataId: UInt64, recipient: Address): @NFT {
+			pre {
+				ExampleNFT.packMetadatas[metadataId] != nil:
+					"This Pack does not exist yet."
+			}
+
+			// Update who bought this serial inside Metadata so it cannot be purchased again.
+			let metadataRef: &PackMetadata = (&ExampleNFT.packMetadatas[metadataId] as &PackMetadata?)!
+			let serial = UInt64(metadataRef.metadata.purchasers.keys.length)
+			metadataRef.metadata.purchased(serial: serial, buyer: recipient)
+
+			let pack: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
+			emit Minted(id: pack.id, recipient: recipient, metadataId: metadataId)
+			return <- pack
+	}
+
 	init(
-		_name: String, 
-		_description: String, 
-		_imagePath: String, 
-		_bannerImagePath: String?,
-		_minting: Bool, 
-		_royalty: MetadataViews.Royalty?,
-		_defaultPrice: UFix64,
-		_paymentType: String,
-		_ipfsCID: String,
-		_lotteryBuying: Bool,
-		_socials: {String: MetadataViews.ExternalURL},
-		_mintVerifiers: [{MintVerifiers.IVerifier}]
+		name: String, 
+		description: String, 
+		imagePath: String, 
+		bannerImagePath: String?,
+		minting: Bool, 
+		royalty: MetadataViews.Royalty?,
+		defaultPrice: UFix64,
+		paymentType: String,
+		ipfsCID: String,
+		socials: {String: MetadataViews.ExternalURL},
+		mintVerifiers: [{MintVerifiers.IVerifier}]
 	) {
 		// Collection Info
 		self.collectionInfo = {}
-		self.collectionInfo["name"] = _name
-		self.collectionInfo["description"] = _description
+		self.collectionInfo["name"] = name
+		self.collectionInfo["description"] = description
 		self.collectionInfo["image"] = MetadataViews.IPFSFile(
-			cid: _ipfsCID,
-			path: _imagePath
+			cid: ipfsCID,
+			path: imagePath
 		)
-		if let bannerImagePath = _bannerImagePath {
+		if let bannerImagePath = bannerImagePath {
 			self.collectionInfo["bannerImage"] = MetadataViews.IPFSFile(
-				cid: _ipfsCID,
-				path: _bannerImagePath
+				cid: ipfsCID,
+				path: bannerImagePath
 			)
 		}
-		self.collectionInfo["ipfsCID"] = _ipfsCID
-		self.collectionInfo["socials"] = _socials
-		self.collectionInfo["minting"] = _minting
-		self.collectionInfo["lotteryBuying"] = _lotteryBuying
-		if let royalty = _royalty {
+		self.collectionInfo["ipfsCID"] = ipfsCID
+		self.collectionInfo["socials"] = socials
+		self.collectionInfo["minting"] = minting
+		if let royalty = royalty {
 			assert(royalty.receiver.check(), message: "The passed in royalty receiver is not valid. The royalty account must set up the intended payment token.")
 			assert(royalty.cut <= 0.95, message: "The royalty cut cannot be bigger than 95% because 5% goes to Emerald City treasury for primary sales.")
 			self.collectionInfo["royalty"] = royalty
 		}
-		self.collectionInfo["price"] = _defaultPrice
-		self.collectionInfo["paymentType"] = _paymentType
+		self.collectionInfo["price"] = defaultPrice
+		self.collectionInfo["paymentType"] = paymentType
 		self.collectionInfo["dateCreated"] = getCurrentBlock().timestamp
-		self.collectionInfo["mintVerifiers"] = _mintVerifiers
+		self.collectionInfo["mintVerifiers"] = mintVerifiers
 		self.collectionInfo["profit"] = 0.0
 
 		self.nextEditionId = 0
 		self.nextMetadataId = 0
 		self.totalSupply = 0
-		self.metadatas = {}
+		self.nftMetadatas = {}
+		self.packMetadatas = {}
 		self.primaryBuyers = {}
 		self.nftStorage <- {}
 
@@ -501,10 +626,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// We include the user's address in the paths.
 		// This is to prevent clashing with existing 
 		// Collection paths in the ecosystem.
-		self.CollectionStoragePath = /storage/ExampleNFTCollection_USER_ADDR
-		self.CollectionPublicPath = /public/ExampleNFTCollection_USER_ADDR
-		self.CollectionPrivatePath = /private/ExampleNFTCollection_USER_ADDR
-		self.AdministratorStoragePath = /storage/ExampleNFTAdministrator_USER_ADDR
+		self.CollectionStoragePath = /storage/ExampleNFTCollectionUSERADDR
+		self.CollectionPublicPath = /public/ExampleNFTCollectionUSERADDR
+		self.CollectionPrivatePath = /private/ExampleNFTCollectionUSERADDR
+		self.AdministratorStoragePath = /storage/ExampleNFTAdministratorUSERADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()

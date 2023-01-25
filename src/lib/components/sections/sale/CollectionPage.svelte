@@ -19,7 +19,6 @@
     NftImage,
     CollectionSocials,
     HtmlHead,
-    NFTCarousel,
     Verifiers,
     MyNFTs,
     CollectionFilters,
@@ -103,19 +102,17 @@
               {/await}
             </Stack>
             <div class="nft-list-wrapper">
-              {#if !collectionInfo.lotteryBuying}
-                {#await getClaimableNFTs($page.params.collection, contractAddress, $user?.addr) then claimableNFTs}
-                  <CollectionFilters
-                    bind:seeMine
-                    bind:available
-                    bind:nameFilter
-                    bind:maxPrice
-                    bind:minPrice
-                    {contractAddress}
-                    contractName={$page.params.collection}
-                    {claimableNFTs} />
-                {/await}
-              {/if}
+              {#await getClaimableNFTs($page.params.collection, contractAddress, $user?.addr) then claimableNFTs}
+                <CollectionFilters
+                  bind:seeMine
+                  bind:available
+                  bind:nameFilter
+                  bind:maxPrice
+                  bind:minPrice
+                  {contractAddress}
+                  contractName={$page.params.collection}
+                  {claimableNFTs} />
+              {/await}
               <AdaptableGrid minWidth="12em" gap="1.2em">
                 {#if seeMine}
                   <MyNFTs
@@ -124,7 +121,7 @@
                     primaryBuyers={collectionInfo.primaryBuyers}
                     addr={$user?.addr}
                     collectionPrice={collectionInfo.price} />
-                {:else if !collectionInfo.lotteryBuying}
+                {:else}
                   {#each Object.values(collectionInfo.metadatas) as NFT, i}
                     <!-- Apply filters -->
                     {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
@@ -165,14 +162,6 @@
                     }}>
                     <div bind:this={element} />
                   </IntersectionObserver>
-                {:else}
-                  <NFTCarousel
-                    metadatas={collectionInfo.metadatas}
-                    price={collectionInfo.price}
-                    paymentType={collectionInfo.paymentType}
-                    address={contractAddress}
-                    contractName={$page.params.collection}
-                    number={Object.keys(collectionInfo.metadatas).length} />
                 {/if}
               </AdaptableGrid>
             </div>

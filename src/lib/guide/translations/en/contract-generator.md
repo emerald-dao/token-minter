@@ -69,7 +69,6 @@ Select different options about your contract.
 
 ### Contract Options
 - Minting starts active: If you check this box, then as soon as you deploy your contract, people can purchase your NFTs.
-- Lottery buying (user purchases unknown NFT): If you select this box, then on the primary sales page we generate for you, users will not be able to select which NFT they want to buy. Instead, it will have 1 purchase button that shows a rotation of NFTs being displayed, and when the user purchases, it gives them a random NFT. 
 - Royalty (primary sales): If you check this box, you can input an address and a number between `0` and `0.95`. This will automatically give a portion of your primary sales on Touchstone to the inputted address. For example, you could put the artist of your collection here to give them some royalty.
 
 ### Minting Verifiers
