@@ -326,8 +326,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		paymentRecipient.deposit(from: <- payment)
 
 		self.collectionInfo["profit"] = (self.getCollectionAttribute(key: "profit") as! UFix64) + price
-		let metadataWrap = self.getMetadata(metadataId)!
-		let metadata = metadataWrap.metadata
+		let metadata = self.getMetadata(metadataId)!.metadata
 
 		// Emit event
 		emit TouchstonePurchase(id: nft.id, recipient: recipient.owner!.address, metadataId: metadataId, name: metadata.name, description: metadata.description, image: metadata.image, price: price)
@@ -361,59 +360,38 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, lockSale: Bool) {
-			ExampleNFT.nftMetadatas[ExampleNFT.nextMetadataId] = NFTMetadata(
-				metadata: Metadata(
-					name: name,
-					description: description,
-					image: MetadataViews.IPFSFile(
-						cid: ipfsCID,
-						path: imagePath
-					),
-					thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
-					price: price,
-					extra: extra,
-					supply: supply,
-					lockSale: lockSale
-				)
-			)
+		pub fun createNFTMetadata(metadata: Metadata, lockSale: Bool) {
+			ExampleNFT.nftMetadatas[ExampleNFT.nextMetadataId] = NFTMetadata(metadata: metadata)
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 
-		pub fun createPackMetadata(name: String, description: String, imagePath: String, thumbnailPath: String?, ipfsCID: String, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, containedNFTs: {UInt64: [UInt64]}) {
-			ExampleNFT.packMetadatas[ExampleNFT.nextMetadataId] = PackMetadata(
-				metadata: Metadata(
-					name: name,
-					description: description,
-					image: MetadataViews.IPFSFile(
-						cid: ipfsCID,
-						path: imagePath
-					),
-					thumbnail: thumbnailPath == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnailPath),
-					price: price,
-					extra: extra,
-					supply: supply,
-					lockSale: false
-				),
-				containedNFTs: containedNFTs
-			)
+		pub fun createPackMetadata(metadata: Metadata, containedNFTs: {UInt64: [UInt64]}) {
+			ExampleNFT.packMetadatas[ExampleNFT.nextMetadataId] = PackMetadata(metadata: metadata, containedNFTs: containedNFTs)
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 
-		// mintNFT mints a new NFT and deposits 
+		// mintItem mints a new NFT or Pack and deposits 
 		// it in the recipients collection
-		pub fun mintNFT(metadataId: UInt64, serial: UInt64, recipient: Address) {
+		pub fun mintItem(metadataId: UInt64, serial: UInt64, recipient: Address) {
 			pre {
 				EmeraldPass.isActive(user: ExampleNFT.account.address): "You must have an active Emerald Pass subscription to airdrop NFTs. You can purchase Emerald Pass at https://pass.ecdao.org/"
 			}
-			let nft <- ExampleNFT.createNFT(metadataId: metadataId, serial: serial, recipient: recipient)
+			var nft: @NFT? <- nil
+			if ExampleNFT.isPack(metadataId) {
+				nft <-! ExampleNFT.createPack(metadataId: metadataId, recipient: recipient)
+			} else if ExampleNFT.isNFT(metadataId) {
+				nft <-! ExampleNFT.createNFT(metadataId: metadataId, serial: serial, recipient: recipient)
+			} else {
+				panic("Not a valiid NFT or Pack metadataId")
+			}
+			
 			if let recipientCollection = getAccount(recipient).getCapability(ExampleNFT.CollectionPublicPath).borrow<&ExampleNFT.Collection{NonFungibleToken.CollectionPublic}>() {
-				recipientCollection.deposit(token: <- nft)
+				recipientCollection.deposit(token: <- nft!)
 			} else {
 				if let storage = &ExampleNFT.nftStorage[recipient] as &{UInt64: NFT}? {
-					storage[nft.id] <-! nft
+					storage[nft?.id!] <-! nft
 				} else {
-					ExampleNFT.nftStorage[recipient] <-! {nft.id: <- nft}
+					ExampleNFT.nftStorage[recipient] <-! {nft?.id!: <- nft!}
 				}
 			}
 		}
@@ -424,7 +402,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			}
 			var i = 0
 			while i < metadataIds.length {
-				self.mintNFT(metadataId: metadataIds[i], serial: serials[i], recipient: recipients[i])
+				self.mintItem(metadataId: metadataIds[i], serial: serials[i], recipient: recipients[i])
 				i = i + 1
 			}
 
