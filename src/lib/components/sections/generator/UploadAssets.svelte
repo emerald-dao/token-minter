@@ -5,7 +5,7 @@
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
   import { activeStep } from "$stores/ActiveStepStore";
-  import { uploadMetadataToContract } from "$flow/actions.js";
+  import { uploadToContract } from "$flow/actions.js";
   import { page } from "$app/stores";
   import { resultCID } from "$stores/IPFSstore";
 
@@ -24,11 +24,12 @@
           );
           if (uploadResult !== true) return;
           console.log($activeStep.loading);
-          uploadMetadataToContract(
+          uploadToContract(
             $page.params.collection,
             $csvStore.metadata,
             500,
-            $resultCID
+            $resultCID,
+            $csvStore.uploadType
           );
         }
         activeStep.onNext(uploadAssetsToIpfs);

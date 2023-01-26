@@ -13,6 +13,13 @@ export const csvValidation = async (data) => {
   if (beforeParseValidationResult === true) {
     // If the file is a CSV file: we parse the file and run a second validation
     const file = files.source === 'input' ? files.list[0] : files.list[0].getAsFile();
+    const uploadType = file.name === 'pack.csv' ? 'Pack' : file.name === 'nft.csv' ? 'NFT' : null;
+    if (!uploadType) {
+      return {
+        validation: false,
+        errors: 'File must either be named pack.csv or nft.csv'
+      };
+    }
     let parsedCSV;
     return new Promise((resolve, reject) => {
       let reader = new FileReader();
@@ -40,6 +47,7 @@ export const csvValidation = async (data) => {
               validation: true,
               files: [file],
               parsedFiles: parsedCSV,
+              uploadType,
               metadata: afterParseValidationResult.metadata,
             };
           } else {
@@ -55,6 +63,7 @@ export const csvValidation = async (data) => {
             validation: true,
             files: [file],
             parsedFiles: parsedCSV,
+            uploadType,
             metadata: afterParseValidationResult.metadata,
           };
         }

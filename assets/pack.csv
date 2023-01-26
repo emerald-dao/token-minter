@@ -1,0 +1,6 @@
+name,description,image,price,supply
+Pack,This is a test pack,nft_cap1.png,10.0,20
+Cap1,Gray cap with petroman,nft_cap1.png,10.003001,10
+Cap2,Green cap with deer,nft_cap2.png,5.0,5
+Cap3,Purple cap with petroman,nft_cap3.png,1.0,3
+Cap4,White cap with petroman,nft_cap4.png,,2

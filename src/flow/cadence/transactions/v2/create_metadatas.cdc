@@ -11,8 +11,7 @@ transaction(
   prices: [UFix64?], 
   extras: [{String: String}], 
   supplys: [UInt64],
-  ipfsCID: String,
-  lockSale: Bool
+  ipfsCID: String
 ) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
@@ -41,10 +40,11 @@ transaction(
         price: prices[i],
         extra: extras[i],
         supply: supplys[i],
-        lockSale: lockSale
+        lockSale: false
       )
       self.Administrator.createNFTMetadata(metadata: metadata)
       i = i + 1
     }
   }
 }
+ 

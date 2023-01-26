@@ -1,7 +1,7 @@
 <script>
   import { TransparentCard, Stack, LoadingSpinner, Button } from "$atoms";
   import Icon from "@iconify/svelte";
-  import { uploadMetadataToContract, getNextMetadataId } from "$flow/actions";
+  import { uploadToContract, getNextMetadataId } from "$flow/actions";
   import { user } from "$stores/FlowStore";
   import { contractInfo } from "$stores/ContractStore";
   import { csvStore } from "$stores/CollectionFilesStore";
@@ -32,11 +32,12 @@
     }
     // Gets the batch of metadata we want to upload
     const metadatas = $csvStore.metadata.slice(initialToken, lastToken + 1);
-    const uploadResult = await uploadMetadataToContract(
+    const uploadResult = await uploadToContract(
       $contractInfo.contractName,
       metadatas,
       batchSize,
-      $resultCID
+      $resultCID,
+      $csvStore.uploadType
     );
     if (uploadResult.success) {
       uploadState = "uploaded";

@@ -46,6 +46,11 @@ import claimNFTsTx from './cadence/transactions/v0/claim_nfts.cdc?raw';
 import createMetadatasTxv1 from './cadence/transactions/v1/create_metadatas.cdc?raw';
 import purchaseNFTTxv1 from './cadence/transactions/v1/purchase_nft.cdc?raw';
 import airdropTxv1 from './cadence/transactions/v1/airdrop.cdc?raw';
+// v2
+import createMetadatasTxv2 from './cadence/transactions/v2/create_metadatas.cdc?raw';
+import createPackTxv2 from './cadence/transactions/v2/create_pack.cdc?raw';
+import purchaseNFTTxv2 from './cadence/transactions/v2/purchase_nft.cdc?raw';
+import purchasePackTxv2 from './cadence/transactions/v2/purchase_pack.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -208,6 +213,17 @@ export const purchaseNFT = async (metadataId, price, serial, contractName, contr
       arg(contractName, t.String),
       arg(contractAddress, t.Address)
     ]
+  } else if (version == 2) {
+    transaction = replaceWithProperValues(purchaseNFTTxv2, contractName, contractAddress)
+      .replaceAll('FungibleToken.Vault', vaultType)
+      .replace('PAYMENT_PATH', storagePath);
+    args = (arg, t) => [
+      arg(metadataId, t.UInt64),
+      arg(price, t.UFix64),
+      arg(serial, t.UInt64),
+      arg(contractName, t.String),
+      arg(contractAddress, t.Address)
+    ]
   } else {
     return;
   }
@@ -293,14 +309,21 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress, pa
   });
 };
 
-// Function to upload metadata to the contract in batches of 500
-export async function uploadMetadataToContract(contractName, metadatas, batchSize, ipfsCID) {
+export async function uploadToContract(contractName, metadatas, batchSize, ipfsCID, uploadType) {
   initTransactionState();
 
   const userAddr = get(user).addr;
 
   const version = await getVersion(contractName, userAddr);
+  if (uploadType === 'NFT') {
+    uploadMetadataToContract(contractName, userAddr, metadatas, batchSize, ipfsCID, version);
+  } else if (uploadType === 'Pack') {
+    uploadPackToContract(contractName, userAddr, metadatas, batchSize, ipfsCID, version);
+  }
+}
 
+// Function to upload metadata to the contract in batches of 500
+async function uploadMetadataToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID, version) {
   // Get The MetadataId we should start at
   let names = [];
   let descriptions = [];
@@ -333,7 +356,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
   let transaction;
   let args;
   if (version == 0) {
-    transaction = replaceWithProperValues(createMetadatasTx, contractName, userAddr).replaceAll('500', batchSize)
+    transaction = replaceWithProperValues(createMetadatasTx, contractName, contractAddress).replaceAll('500', batchSize)
     args = (arg, t) => [
       arg(names, t.Array(t.String)),
       arg(descriptions, t.Array(t.String)),
@@ -344,7 +367,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       arg(ipfsCID, t.String)
     ]
   } else if (version == 1) {
-    transaction = replaceWithProperValues(createMetadatasTxv1, contractName, userAddr).replaceAll('500', batchSize)
+    transaction = replaceWithProperValues(createMetadatasTxv1, contractName, contractAddress).replaceAll('500', batchSize)
     args = (arg, t) => [
       arg(names, t.Array(t.String)),
       arg(descriptions, t.Array(t.String)),
@@ -356,7 +379,7 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       arg(ipfsCID, t.String)
     ]
   } else if (version == 2) {
-    transaction = replaceWithProperValues(createMetadatasTxv1, contractName, userAddr).replaceAll('500', batchSize)
+    transaction = replaceWithProperValues(createMetadatasTxv2, contractName, contractAddress).replaceAll('500', batchSize)
     args = (arg, t) => [
       arg(names, t.Array(t.String)),
       arg(descriptions, t.Array(t.String)),
@@ -404,15 +427,8 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
 }
 
 // Only works for v2
-export async function uploadPackToContract(contractName, metadatas, batchSize, ipfsCID, numOfPacks) {
-  initTransactionState();
-
-  const userAddr = get(user).addr;
-
-  const version = await getVersion(contractName, userAddr);
-  if (version != 2) {
-    return;
-  }
+async function uploadPackToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID, version) {
+  if (version != 2) return;
   const { name, description, image, thumbnail, price, supply, serial, ...rest } = metadatas.shift();
   const packPrice = price ? Number(price).toFixed(3) : null;
   const packSupply = supply || 1;
@@ -423,15 +439,14 @@ export async function uploadPackToContract(contractName, metadatas, batchSize, i
     }
   }
 
-  const numOfPacks = metadatas.length;
   // Figure out number of elements per basket
   const numOfElements = metadatas.reduce(
     (accumulator, currentValue) => accumulator + currentValue.supply,
     0
   );
-  const numOfElementsPerPack = numOfElements / numOfPacks;
+  const numOfElementsPerPack = numOfElements / packSupply;
 
-  let baskets = new Array(numOfPacks);
+  let baskets = new Array(packSupply);
   for (var i = 0; i < baskets.length; i++) {
     baskets[i] = [];
   }
@@ -469,7 +484,9 @@ export async function uploadPackToContract(contractName, metadatas, batchSize, i
     }
   }
 
-  let transaction = replaceWithProperValues(createMetadatasTxv1, contractName, userAddr).replaceAll('500', batchSize)
+  console.log(baskets)
+
+  let transaction = replaceWithProperValues(createPackTxv2, contractName, contractAddress).replaceAll('500', batchSize)
   let args = (arg, t) => [
     arg(name, t.String),
     arg(description, t.String),
