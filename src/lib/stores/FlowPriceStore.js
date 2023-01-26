@@ -1,8 +1,7 @@
-import { writable, get } from 'svelte/store';
+import { writable } from 'svelte/store';
 import persistentWritable from '$lib/utilities/persistentWritable';
 import { browser } from '$app/env';
 import { timeToUpdateFlowPrice } from '$lib/config/config';
-import { page } from '$app/stores';
 
 export default function () {
   const loading = writable(false);

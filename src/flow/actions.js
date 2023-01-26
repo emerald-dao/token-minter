@@ -315,6 +315,7 @@ export async function uploadToContract(contractName, metadatas, batchSize, ipfsC
   const userAddr = get(user).addr;
 
   const version = await getVersion(contractName, userAddr);
+  console.log(uploadType)
   if (uploadType === 'NFT') {
     uploadMetadataToContract(contractName, userAddr, metadatas, batchSize, ipfsCID, version);
   } else if (uploadType === 'Pack') {
@@ -429,6 +430,7 @@ async function uploadMetadataToContract(contractName, contractAddress, metadatas
 // Only works for v2
 async function uploadPackToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID, version) {
   if (version != 2) return;
+  const nextMetadataId = await getNextMetadataId(contractName, contractAddress);
   const { name, description, image, thumbnail, price, supply, serial, ...rest } = metadatas.shift();
   const packPrice = price ? Number(price).toFixed(3) : null;
   const packSupply = supply || 1;
@@ -438,17 +440,16 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
       packExtra.push({ key: attribute, value: rest[attribute] });
     }
   }
-
   // Figure out number of elements per basket
   const numOfElements = metadatas.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.supply,
+    (accumulator, currentValue) => accumulator + Number(currentValue.supply || 1),
     0
   );
   const numOfElementsPerPack = numOfElements / packSupply;
 
-  let baskets = new Array(packSupply);
-  for (var i = 0; i < baskets.length; i++) {
-    baskets[i] = [];
+  let baskets = [];
+  for (var n = 0; n < packSupply; n++) {
+    baskets.push([]);
   }
 
   // Get The MetadataId we should start at
@@ -467,7 +468,8 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
     images.push(image);
     thumbnails.push(thumbnail);
     prices.push(price ? Number(price).toFixed(3) : null);
-    supplys.push(supply || 1);
+    const nftSupply = supply || 1;
+    supplys.push(nftSupply);
     let extra = [];
     for (const attribute in rest) {
       if (rest[attribute]) {
@@ -475,12 +477,12 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
       }
     }
     extras.push(extra);
-    for (var j = 0; j < supply; j++) {
+    for (var j = 0; j < nftSupply; j++) {
       const available = baskets.filter(basket => {
         return basket.length != numOfElementsPerPack
       });
       let basket = available[Math.floor(Math.random() * available.length)];
-      basket.push({ fields: [{ name: "metadataId", value: i }, { name: "serial", value: j }] })
+      basket.push({ fields: [{ name: "metadataId", value: i + nextMetadataId }, { name: "serial", value: j }] })
     }
   }
 
@@ -491,7 +493,7 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
     arg(name, t.String),
     arg(description, t.String),
     arg(image, t.String),
-    arg(thumbnail, t.String),
+    arg(thumbnail, t.Optional(t.String)),
     arg(packPrice, t.Optional(t.UFix64)),
     arg(packExtra, t.Dictionary({ key: t.String, value: t.String })),
     arg(packSupply, t.UInt64),
@@ -499,11 +501,10 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
     arg(descriptions, t.Array(t.String)),
     arg(images, t.Array(t.String)),
     arg(thumbnails, t.Array(t.Optional(t.String))),
-    arg(prices, t.Array(t.Optional(t.UFix64))),
     arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
     arg(supplys, t.Array(t.UInt64)),
     arg(ipfsCID, t.String),
-    arg(baskets, t.Array(t.Array(t.Struct(`A.${userAddr.replace(/^0x/, '')}.${contractName}.Identifier`, [
+    arg(baskets, t.Array(t.Array(t.Struct(`A.${contractAddress.replace(/^0x/, '')}.${contractName}.Identifier`, [
       { name: "metadataId", value: t.UInt64 },
       { name: "serial", value: t.UInt64 },
     ],))))

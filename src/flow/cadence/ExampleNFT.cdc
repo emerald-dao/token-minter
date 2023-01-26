@@ -491,7 +491,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		collectionInfo["primaryBuyers"] = self.primaryBuyers
 		collectionInfo["totalSupply"] = self.totalSupply
 		collectionInfo["nextMetadataId"] = self.nextMetadataId
-		collectionInfo["version"] = 1
+		collectionInfo["version"] = 2
 		return collectionInfo
 	}
 

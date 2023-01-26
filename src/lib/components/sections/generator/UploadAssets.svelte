@@ -1,7 +1,11 @@
 <script>
   import { DropZone, Button, Stack, TransactionModal } from "$atoms";
   import { userIPFSToken } from "$stores/IPFSstore";
-  import { imagesStore, csvStore } from "$stores/CollectionFilesStore";
+  import {
+    imagesStore,
+    csvStore,
+    uploadType,
+  } from "$stores/CollectionFilesStore";
   import GeneratorStepLayout from "./GeneratorStepLayout.svelte";
   import { uploadToIPFS } from "$lib/utilities/uploadToIPFS";
   import { activeStep } from "$stores/ActiveStepStore";
@@ -24,12 +28,13 @@
           );
           if (uploadResult !== true) return;
           console.log($activeStep.loading);
+          console.log($csvStore);
           uploadToContract(
             $page.params.collection,
             $csvStore.metadata,
             500,
             $resultCID,
-            $csvStore.uploadType
+            $uploadType
           );
         }
         activeStep.onNext(uploadAssetsToIpfs);

@@ -1,5 +1,5 @@
 import { crossCheckValidation } from '$lib/validation/crossCheckValidation';
-import { imagesStore } from '$stores/CollectionFilesStore';
+import { imagesStore, uploadType } from '$stores/CollectionFilesStore';
 import Papa from 'papaparse';
 import { get } from 'svelte/store';
 import getFilesFromData from '$lib/utilities/getFilesFromData';
@@ -13,8 +13,8 @@ export const csvValidation = async (data) => {
   if (beforeParseValidationResult === true) {
     // If the file is a CSV file: we parse the file and run a second validation
     const file = files.source === 'input' ? files.list[0] : files.list[0].getAsFile();
-    const uploadType = file.name === 'pack.csv' ? 'Pack' : file.name === 'nft.csv' ? 'NFT' : null;
-    if (!uploadType) {
+    const uploadTypeName = file.name === 'pack.csv' ? 'Pack' : file.name === 'nft.csv' ? 'NFT' : null;
+    if (!uploadTypeName) {
       return {
         validation: false,
         errors: 'File must either be named pack.csv or nft.csv'
@@ -43,11 +43,11 @@ export const csvValidation = async (data) => {
           );
           if (crossedValidationResult === true) {
             // If the cross check validation successful: we return the files
+            uploadType.set(uploadTypeName);
             return {
               validation: true,
               files: [file],
               parsedFiles: parsedCSV,
-              uploadType,
               metadata: afterParseValidationResult.metadata,
             };
           } else {
@@ -58,12 +58,12 @@ export const csvValidation = async (data) => {
             };
           }
         } else {
+          uploadType.set(uploadTypeName);
           // If images are not uploaded yet: we save our files and update validation state
           return {
             validation: true,
             files: [file],
             parsedFiles: parsedCSV,
-            uploadType,
             metadata: afterParseValidationResult.metadata,
           };
         }

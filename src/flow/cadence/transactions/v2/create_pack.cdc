@@ -7,7 +7,7 @@ transaction(
   packName: String,
   packDescription: String,
   packImage: String,
-  packThumbnail: String,
+  packThumbnail: String?,
   packPrice: UFix64?,
   packExtra: {String: String},
   packSupply: UInt64,
@@ -68,3 +68,4 @@ transaction(
     self.Administrator.createPackMetadata(metadata: packMetadata, containedNFTs: containedNFTs)
   }
 }
+ 
