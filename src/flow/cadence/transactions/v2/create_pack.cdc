@@ -4,15 +4,21 @@ import MetadataViews from "../../utility/MetadataViews.cdc"
 // Put a batch of up to 500 NFT Metadatas inside the contract
 
 transaction(
+  packName: String,
+  packDescription: String,
+  packImage: String,
+  packThumbnail: String,
+  packPrice: UFix64?,
+  packExtra: {String: String},
+  packSupply: UInt64,
   names: [String], 
   descriptions: [String], 
   images: [String],
   thumbnails: [String?], 
-  prices: [UFix64?], 
   extras: [{String: String}], 
   supplys: [UInt64],
   ipfsCID: String,
-  lockSale: Bool
+  containedNFTs: [[ExampleNFT.Identifier]]
 ) {
   let Administrator: &ExampleNFT.Administrator
   prepare(deployer: AuthAccount) {
@@ -38,12 +44,27 @@ transaction(
           path: images[i]
         ),
         thumbnail: thumbnails[i] == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: thumbnails[i]),
-        price: prices[i],
+        price: nil,
         extra: extras[i],
         supply: supplys[i],
-        lockSale: lockSale
+        lockSale: true
       )
+      self.Administrator.createNFTMetadata(metadata: metadata)
       i = i + 1
     }
+    let packMetadata = ExampleNFT.Metadata(
+        name: packName,
+        description: packDescription,
+        image: MetadataViews.IPFSFile(
+          cid: ipfsCID,
+          path: packImage
+        ),
+        thumbnail: packThumbnail == nil ? nil : MetadataViews.IPFSFile(cid: ipfsCID, path: packThumbnail),
+        price: packPrice,
+        extra: packExtra,
+        supply: packSupply,
+        lockSale: false
+      )
+    self.Administrator.createPackMetadata(metadata: packMetadata, containedNFTs: containedNFTs)
   }
 }

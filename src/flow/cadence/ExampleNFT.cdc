@@ -53,11 +53,13 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let price: UFix64?
 		pub var extra: {String: AnyStruct}
 		pub let supply: UInt64
+		pub var numBought: UInt64
 		pub let purchasers: {UInt64: Address}
 		pub let lockSale: Bool
 
 		access(account) fun purchased(serial: UInt64, buyer: Address) {
 			self.purchasers[serial] = buyer
+			self.numBought = self.numBought + 1
 		}
 
 		init(name: String, description: String, image: MetadataViews.IPFSFile, thumbnail: MetadataViews.IPFSFile?, price: UFix64?, extra: {String: AnyStruct}, supply: UInt64, lockSale: Bool) {
@@ -69,6 +71,7 @@ pub contract ExampleNFT: NonFungibleToken {
 			self.price = price
 			self.extra = extra
 			self.supply = supply
+			self.numBought = 0
 			self.purchasers = {}
 			self.lockSale = lockSale
 		}
@@ -89,16 +92,35 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
+	pub struct Identifier {
+		pub let metadataId: UInt64
+		pub let serial: UInt64
+
+		init(_ metadataId: UInt64, _ serial: UInt64) {
+			self.metadataId = metadataId
+			self.serial = serial
+		}
+	}
+
 	pub struct PackMetadata: IMetadata {
 		pub let metadata: Metadata
 		pub let isPack: Bool
 		// NFT metadataId -> serials
-		pub let containedNFTs: {UInt64: [UInt64]}
+		pub let containedNFTs: [[Identifier]]
+		pub var numOpened: UInt64
 
-		init(metadata: Metadata, containedNFTs: {UInt64: [UInt64]}) {
+		pub fun opened() {
+			self.numOpened = self.numOpened + 1
+		}
+
+		init(metadata: Metadata, containedNFTs: [[Identifier]]) {
+			pre {
+				UInt64(containedNFTs.length) == metadata.supply: "Must be equal number of pack infos."
+			}
 			self.metadata = metadata
 			self.isPack = true
 			self.containedNFTs = containedNFTs
+			self.numOpened = 0
 		}
 	}
 
@@ -250,13 +272,12 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub fun openPack(id: UInt64) {
 			let pack <- self.withdraw(withdrawID: id) as! @NFT
 			assert(pack.getMetadata().isPack, message: "This is not a pack!")
-			let packMetadata = pack.getMetadata() as! PackMetadata
-			let containedNFTs: {UInt64: [UInt64]} = packMetadata.containedNFTs
-			for metadataId in containedNFTs.keys {
-				for serial in containedNFTs[metadataId]! {
-					self.deposit(token: <- ExampleNFT.createNFT(metadataId: metadataId, serial: serial, recipient: self.owner!.address))
-				}
+			let packMetadata: &PackMetadata = (&ExampleNFT.packMetadatas[pack.metadataId] as &PackMetadata?)!
+			let containedNFTs: [Identifier] = packMetadata.containedNFTs[packMetadata.numOpened]
+			for identifier in containedNFTs {
+				self.deposit(token: <- ExampleNFT.createNFT(metadataId: identifier.metadataId, serial: identifier.serial, recipient: self.owner!.address))
 			}
+			packMetadata.opened()
 			destroy pack
 		}
 
@@ -360,12 +381,12 @@ pub contract ExampleNFT: NonFungibleToken {
 	}
 
 	pub resource Administrator {
-		pub fun createNFTMetadata(metadata: Metadata, lockSale: Bool) {
+		pub fun createNFTMetadata(metadata: Metadata) {
 			ExampleNFT.nftMetadatas[ExampleNFT.nextMetadataId] = NFTMetadata(metadata: metadata)
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
 
-		pub fun createPackMetadata(metadata: Metadata, containedNFTs: {UInt64: [UInt64]}) {
+		pub fun createPackMetadata(metadata: Metadata, containedNFTs: [[Identifier]]) {
 			ExampleNFT.packMetadatas[ExampleNFT.nextMetadataId] = PackMetadata(metadata: metadata, containedNFTs: containedNFTs)
 			ExampleNFT.nextMetadataId = ExampleNFT.nextMetadataId + 1
 		}
@@ -543,7 +564,7 @@ pub contract ExampleNFT: NonFungibleToken {
 
 			// Update who bought this serial inside Metadata so it cannot be purchased again.
 			let metadataRef: &PackMetadata = (&ExampleNFT.packMetadatas[metadataId] as &PackMetadata?)!
-			let serial = UInt64(metadataRef.metadata.purchasers.keys.length)
+			let serial = UInt64(metadataRef.metadata.numBought)
 			metadataRef.metadata.purchased(serial: serial, buyer: recipient)
 
 			let pack: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)

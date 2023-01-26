@@ -355,9 +355,142 @@ export async function uploadMetadataToContract(contractName, metadatas, batchSiz
       arg(supplys, t.Array(t.UInt64)),
       arg(ipfsCID, t.String)
     ]
+  } else if (version == 2) {
+    transaction = replaceWithProperValues(createMetadatasTxv1, contractName, userAddr).replaceAll('500', batchSize)
+    args = (arg, t) => [
+      arg(names, t.Array(t.String)),
+      arg(descriptions, t.Array(t.String)),
+      arg(images, t.Array(t.String)),
+      arg(thumbnails, t.Array(t.Optional(t.String))),
+      arg(prices, t.Array(t.Optional(t.UFix64))),
+      arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
+      arg(supplys, t.Array(t.UInt64)),
+      arg(ipfsCID, t.String)
+    ]
   } else {
     return;
   }
+
+  try {
+    const transactionId = await fcl.mutate({
+      cadence: transaction,
+      args,
+      payer: fcl.authz,
+      proposer: fcl.authz,
+      authorizations: [fcl.authz],
+      limit: 9999,
+    });
+
+    fcl.tx(transactionId).subscribe((res) => {
+      transactionStatus.set(res);
+      console.log(res);
+      if (res.status === 4) {
+        setTimeout(() => transactionInProgress.set(false), 2000);
+        setTimeout(() => transactionStatus.set({}), 5000);
+      }
+    });
+
+    const { status, statusCode, errorMessage } = await fcl.tx(transactionId).onceSealed();
+    if (status === 4 && statusCode === 0) {
+      return { success: true };
+    }
+    return { success: false, error: errorMessage };
+  } catch (e) {
+    console.log(e);
+    transactionInProgress.set(false);
+    transactionStatus.set({});
+    return { success: false, error: e };
+  }
+}
+
+// Only works for v2
+export async function uploadPackToContract(contractName, metadatas, batchSize, ipfsCID, numOfPacks) {
+  initTransactionState();
+
+  const userAddr = get(user).addr;
+
+  const version = await getVersion(contractName, userAddr);
+  if (version != 2) {
+    return;
+  }
+  const { name, description, image, thumbnail, price, supply, serial, ...rest } = metadatas.shift();
+  const packPrice = price ? Number(price).toFixed(3) : null;
+  const packSupply = supply || 1;
+  let packExtra = [];
+  for (const attribute in rest) {
+    if (rest[attribute]) {
+      packExtra.push({ key: attribute, value: rest[attribute] });
+    }
+  }
+
+  const numOfPacks = metadatas.length;
+  // Figure out number of elements per basket
+  const numOfElements = metadatas.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.supply,
+    0
+  );
+  const numOfElementsPerPack = numOfElements / numOfPacks;
+
+  let baskets = new Array(numOfPacks);
+  for (var i = 0; i < baskets.length; i++) {
+    baskets[i] = [];
+  }
+
+  // Get The MetadataId we should start at
+  let names = [];
+  let descriptions = [];
+  let images = [];
+  let thumbnails = [];
+  let prices = [];
+  let extras = [];
+  let supplys = [];
+  for (var i = 0; i < metadatas.length; i++) {
+    // We just take serial out here so its not counted
+    const { name, description, image, thumbnail, price, supply, serial, ...rest } = metadatas[i];
+    names.push(name);
+    descriptions.push(description);
+    images.push(image);
+    thumbnails.push(thumbnail);
+    prices.push(price ? Number(price).toFixed(3) : null);
+    supplys.push(supply || 1);
+    let extra = [];
+    for (const attribute in rest) {
+      if (rest[attribute]) {
+        extra.push({ key: attribute, value: rest[attribute] });
+      }
+    }
+    extras.push(extra);
+    for (var j = 0; j < supply; j++) {
+      const available = baskets.filter(basket => {
+        return basket.length != numOfElementsPerPack
+      });
+      let basket = available[Math.floor(Math.random() * available.length)];
+      basket.push({ fields: [{ name: "metadataId", value: i }, { name: "serial", value: j }] })
+    }
+  }
+
+  let transaction = replaceWithProperValues(createMetadatasTxv1, contractName, userAddr).replaceAll('500', batchSize)
+  let args = (arg, t) => [
+    arg(name, t.String),
+    arg(description, t.String),
+    arg(image, t.String),
+    arg(thumbnail, t.String),
+    arg(packPrice, t.Optional(t.UFix64)),
+    arg(packExtra, t.Dictionary({ key: t.String, value: t.String })),
+    arg(packSupply, t.UInt64),
+    arg(names, t.Array(t.String)),
+    arg(descriptions, t.Array(t.String)),
+    arg(images, t.Array(t.String)),
+    arg(thumbnails, t.Array(t.Optional(t.String))),
+    arg(prices, t.Array(t.Optional(t.UFix64))),
+    arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
+    arg(supplys, t.Array(t.UInt64)),
+    arg(ipfsCID, t.String),
+    arg(baskets, t.Array(t.Array(t.Struct(`A.${userAddr.replace(/^0x/, '')}.${contractName}.Identifier`, [
+      { name: "metadataId", value: t.UInt64 },
+      { name: "serial", value: t.UInt64 },
+    ],))))
+  ]
 
   try {
     const transactionId = await fcl.mutate({
