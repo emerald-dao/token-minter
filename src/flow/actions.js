@@ -29,6 +29,8 @@ import getClaimableNFTsScript from './cadence/scripts/v0/get_claimable_nfts.cdc?
 import getEmeraldIDBatchScript from './cadence/scripts/v0/get_emeraldid_batch.cdc?raw';
 // v1
 import getVersionScript from './cadence/scripts/v1/get_version.cdc?raw';
+// v2
+import getMetadataScript from './cadence/scripts/v2/get_metadata.cdc?raw';
 
 // Transactions
 // v0
@@ -857,6 +859,19 @@ export async function getNFTInfo(contractName, contractAddress, metadataId) {
   try {
     const response = await fcl.query({
       cadence: replaceWithProperValues(getNFTInfoScript, contractName, contractAddress),
+      args: (arg, t) => [arg(metadataId, t.UInt64)],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getMetadata(contractName, contractAddress, metadataId) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getMetadataScript, contractName, contractAddress),
       args: (arg, t) => [arg(metadataId, t.UInt64)],
     });
 
