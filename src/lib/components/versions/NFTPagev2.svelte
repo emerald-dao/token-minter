@@ -15,6 +15,7 @@
     getCollectionInfo,
     getMetadata,
     purchaseNFT,
+    purchasePack,
   } from "$flow/actions.js";
   import { transactionInProgress, transactionStatus } from "$stores/FlowStore";
   import { page } from "$app/stores";
@@ -35,8 +36,7 @@
     );
     metadata.extra["metadataId"] = metadata.metadataId;
     const price = metadata.price ?? collectionInfo.price;
-    console.log({ collectionInfo, info, price });
-    return { collectionInfo, metadata, price };
+    return { collectionInfo, metadata, price, isPack: info.isPack };
   }
 
   let checkItemInfo = getInfo();
@@ -49,6 +49,23 @@
       $page.params.nft,
       price,
       serial,
+      $page.params.collection,
+      $page.params.address,
+      paymentType
+    );
+    if (
+      transactionResult &&
+      $transactionStatus.status === 4 &&
+      $transactionStatus.statusCode === 0
+    ) {
+      purchased = true;
+    }
+  }
+
+  async function buyPack(price, paymentType) {
+    const transactionResult = await purchasePack(
+      $page.params.nft,
+      price,
       $page.params.collection,
       $page.params.address,
       paymentType
@@ -90,22 +107,42 @@
               currentPrice={true}
               paymentType={info.collectionInfo.paymentType} />
             <!-- TODO: ADD VERIFIERS AND BLOCK BUY BUTTON IF USER DOESN'T HAVE VERIFIERS -->
-            <Select bind:value={serial}>
-              <option disabled selected>Select a serial</option>
-              {#each Array(Number(info.metadata.supply)) as _, index (index)}
-                {#if !info.metadata.purchasers[index]}
-                  <option>{index}</option>
-                {:else if info.metadata.purchasers[index] === $user.addr}
-                  <option disabled>{index} - Sold to You</option>
-                {:else}
-                  <option disabled
-                    >{index} - Sold to {info.metadata.purchasers[
-                      index
-                    ]}</option>
-                {/if}
-              {/each}
-            </Select>
-            {#if serial === "Select a serial"}
+            {#if !info.isPack}
+              <Select bind:value={serial}>
+                <option disabled selected>Select a serial</option>
+                {#each Array(Number(info.metadata.supply)) as _, index (index)}
+                  {#if !info.metadata.purchasers[index]}
+                    <option>{index}</option>
+                  {:else if info.metadata.purchasers[index] === $user.addr}
+                    <option disabled>{index} - Sold to You</option>
+                  {:else}
+                    <option disabled
+                      >{index} - Sold to {info.metadata.purchasers[
+                        index
+                      ]}</option>
+                  {/if}
+                {/each}
+              </Select>
+            {/if}
+            {#if info.isPack}
+              {#if purchased}
+                <Button leftIcon="checkmark-circle" done={true}>
+                  Bought by you
+                </Button>
+              {:else}
+                <Button
+                  leftIcon="wallet"
+                  loading={$transactionInProgress}
+                  on:click={() =>
+                    buyPack(info.price, info.collectionInfo.paymentType)}>
+                  {#if $transactionInProgress}
+                    Loading Transaction
+                  {:else}
+                    Buy Pack
+                  {/if}
+                </Button>
+              {/if}
+            {:else if serial === "Select a serial"}
               <Button disabled>Buy NFT</Button>
             {:else if purchased}
               <Button leftIcon="checkmark-circle" done={true}>

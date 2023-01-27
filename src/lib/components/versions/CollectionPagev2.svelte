@@ -1,13 +1,11 @@
 <script>
   import flowPriceStore from "$stores/FlowPriceStore";
-  import { browser } from "$app/env";
   import { checkRequiredVerifiers, getClaimableNFTs } from "$flow/actions";
   import {
     Section,
     Container,
     Stack,
     AdaptableGrid,
-    NFTCard,
     MadeWithTouchstone,
     TransparentCard,
     WalletAddress,
@@ -22,12 +20,12 @@
   import { user } from "$stores/FlowStore";
   import IntersectionObserver from "svelte-intersection-observer";
   import CollectionStats from "../sections/sale/CollectionStats.svelte";
+  import Select from "../atoms/Select.svelte";
+  import DisplayItems from "../sections/sale/DisplayItems.svelte";
 
   export let contractAddress = $page.params.address;
 
-  const [flowPrice, loading, error] = flowPriceStore();
-
-  let nftsToDisplay = 50;
+  let itemsToDisplay = 50;
   let element;
   let intersecting;
 
@@ -36,6 +34,7 @@
   let nameFilter;
   let maxPrice;
   let minPrice;
+  let showNFT = true;
   export let collectionInfo;
   console.log(collectionInfo);
 </script>
@@ -85,7 +84,6 @@
             <CollectionStats
               {collectionInfo}
               version={collectionInfo.version} />
-
             {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
               {#if verifiers.length > 0}
                 <Verifiers {verifiers} />
@@ -93,69 +91,47 @@
             {/await}
           </Stack>
           <div class="nft-list-wrapper">
-            {#await getClaimableNFTs($page.params.collection, contractAddress, $user?.addr) then claimableNFTs}
-              <CollectionFilters
-                bind:seeMine
-                bind:available
-                bind:nameFilter
-                bind:maxPrice
-                bind:minPrice
-                {contractAddress}
-                contractName={$page.params.collection}
-                {claimableNFTs} />
-            {/await}
-            <AdaptableGrid minWidth="12em" gap="1.2em">
-              {#if seeMine}
-                <MyNFTs
-                  version={collectionInfo.version}
-                  metadatas={collectionInfo.nftMetadatas}
-                  primaryBuyers={collectionInfo.primaryBuyers}
-                  addr={$user?.addr}
-                  collectionPrice={collectionInfo.price} />
-              {:else}
-                {#each Object.values(collectionInfo.nftMetadatas) as { metadata }, i}
-                  <!-- Apply filters -->
-                  {#if (maxPrice === undefined || maxPrice >= Number(metadata.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(metadata.price ?? collectionInfo.price)) && i < nftsToDisplay}
-                    {#if $loading}
-                      Loading: {$loading}
-                    {:else if $error}
-                      Error: {$error}
-                    {:else if browser && (!available || Object.keys(collectionInfo.nftMetadatas[metadata.metadataId].metadata.purchasers).length != collectionInfo.nftMetadatas[NFT.metadataId].metadata.supply) && (!nameFilter || NFT.name
-                          .toUpperCase()
-                          .includes(nameFilter.toUpperCase()))}
-                      <NFTCard
-                        thumbnailURL={metadata.thumbnail
-                          ? `https://nftstorage.link/ipfs/${metadata.thumbnail.cid}/${metadata.thumbnail.path}`
-                          : `https://nftstorage.link/ipfs/${metadata.image.cid}/${metadata.image.path}`}
-                        name={metadata.name}
-                        description={metadata.description}
-                        price={Number(metadata.price ?? collectionInfo.price)}
-                        buy={collectionInfo.version == 1
-                          ? !(
-                              Object.keys(metadata.purchasers).length ==
-                              metadata.supply
-                            )
-                          : !Object.keys(collectionInfo.primaryBuyers).includes(
-                              metadata.metadataId
-                            )}
-                        url={`/discover/${contractAddress}/${$page.params.collection}/${metadata.metadataId}`}
-                        withLink={true}
-                        flowPrice={$flowPrice.price}
-                        paymentType={collectionInfo.paymentType}
-                        supply={metadata.supply} />
-                    {/if}
-                  {/if}
-                {/each}
-                <IntersectionObserver
-                  {element}
-                  bind:intersecting
-                  on:observe={() => {
-                    nftsToDisplay = nftsToDisplay + 20;
-                  }}>
-                  <div bind:this={element} />
-                </IntersectionObserver>
-              {/if}
-            </AdaptableGrid>
+            <CollectionFilters
+              bind:seeMine
+              bind:available
+              bind:nameFilter
+              bind:maxPrice
+              bind:minPrice />
+            <div class="main-area">
+              <Select bind:value={showNFT}>
+                <option value={true}>NFTs</option>
+                <option value={false}>Packs</option>
+              </Select>
+              <AdaptableGrid minWidth="12em" gap="1.2em">
+                {#if seeMine}
+                  <MyNFTs
+                    version={collectionInfo.version}
+                    metadatas={collectionInfo.nftMetadatas}
+                    primaryBuyers={collectionInfo.primaryBuyers}
+                    addr={$user?.addr}
+                    collectionPrice={collectionInfo.price} />
+                {:else}
+                  <DisplayItems
+                    {collectionInfo}
+                    metadatas={showNFT
+                      ? collectionInfo.nftMetadatas
+                      : collectionInfo.packMetadatas}
+                    bind:maxPrice
+                    bind:minPrice
+                    bind:itemsToDisplay
+                    bind:available
+                    bind:nameFilter />
+                  <IntersectionObserver
+                    {element}
+                    bind:intersecting
+                    on:observe={() => {
+                      itemsToDisplay = itemsToDisplay + 20;
+                    }}>
+                    <div bind:this={element} />
+                  </IntersectionObserver>
+                {/if}
+              </AdaptableGrid>
+            </div>
           </div>
         </div>
       </Container>
@@ -241,5 +217,11 @@
       margin-top: 2.8rem;
       gap: 2rem;
     }
+  }
+
+  .main-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 </style>

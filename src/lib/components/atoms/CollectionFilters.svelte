@@ -1,17 +1,12 @@
 <script>
   import { TransparentCard, Divider, Stack } from "$atoms";
-  import { claimNFTs } from "$flow/actions";
   import Icon from "@iconify/svelte";
-  import Button from "./Button.svelte";
 
   export let seeMine;
   export let available;
   export let nameFilter;
   export let maxPrice;
   export let minPrice;
-  export let contractName;
-  export let contractAddress;
-  export let claimableNFTs;
 </script>
 
 <div class="filters-wrapper">
@@ -83,10 +78,6 @@
         bind:checked={seeMine} />
       My Purchases
     </label>
-    {#if Object.keys(claimableNFTs).length > 0}
-      <Button on:click={() => claimNFTs(contractName, contractAddress)}
-        >Claim NFTs</Button>
-    {/if}
   </TransparentCard>
 </div>
 

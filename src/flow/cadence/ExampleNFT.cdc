@@ -330,7 +330,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 
 		// Handle Emerald City DAO royalty (5%)
-		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/RECEIVERPATH)
+		let EmeraldCityTreasury = getAccount(0x5643fd47a29770e7).getCapability(/public/RECEIVER_PATH)
 								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		let emeraldCityCut: UFix64 = 0.05 * price
 
@@ -342,7 +342,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		EmeraldCityTreasury.deposit(from: <- payment.withdraw(amount: emeraldCityCut))
 
 		// Give the rest to the collection owner
-		let paymentRecipient = self.account.getCapability(/public/RECEIVERPATH)
+		let paymentRecipient = self.account.getCapability(/public/RECEIVER_PATH)
 								.borrow<&FungibleToken.Vault{FungibleToken.Receiver}>()!
 		paymentRecipient.deposit(from: <- payment)
 

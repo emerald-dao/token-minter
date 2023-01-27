@@ -261,7 +261,7 @@ export const purchaseNFT = async (metadataId, price, serial, contractName, contr
   });
 };
 
-export const purchaseRandomNFT = async (price, contractName, contractAddress, paymentType) => {
+export const purchasePack = async (metadataId, price, contractName, contractAddress, paymentType) => {
   let vaultType = '';
   let storagePath = '';
   if (paymentType == "$FLOW") {
@@ -272,21 +272,27 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress, pa
     storagePath = "fusdVault";
   }
 
-  const transaction = replaceWithProperValues(purchaseRandomNFTTx, contractName, contractAddress)
-    .replaceAll('FungibleToken.Vault', vaultType)
-    .replace('PAYMENT_PATH', storagePath);;
+  const version = await getVersion(contractName, contractAddress);
 
+  if (version != 2) {
+    return
+  }
+  const transaction = replaceWithProperValues(purchasePackTxv2, contractName, contractAddress)
+    .replaceAll('FungibleToken.Vault', vaultType)
+    .replace('PAYMENT_PATH', storagePath);
+  const args = (arg, t) => [
+    arg(metadataId, t.UInt64),
+    arg(price, t.UFix64),
+    arg(contractName, t.String),
+    arg(contractAddress, t.Address)
+  ]
   initTransactionState();
 
   return new Promise(async (resolve, reject) => {
     try {
       const transactionId = await fcl.mutate({
         cadence: transaction,
-        args: (arg, t) => [
-          arg(price, t.UFix64),
-          arg(contractName, t.String),
-          arg(contractAddress, t.Address)
-        ],
+        args,
         payer: fcl.authz,
         proposer: fcl.authz,
         authorizations: [fcl.authz],

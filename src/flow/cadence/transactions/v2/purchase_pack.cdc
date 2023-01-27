@@ -42,13 +42,13 @@ transaction(metadataId: UInt64, price: UFix64, contractName: String, contractAdd
 
   execute { 
     let payment: @FungibleToken.Vault <- self.PaymentVault.withdraw(amount: price) as! @FungibleToken.Vault
-    let nftId = ExampleNFT.mintPack(metadataId: metadataId, recipient: self.CollectionPublic, payment: <- payment)
+    let packId = ExampleNFT.mintPack(metadataId: metadataId, recipient: self.CollectionPublic, payment: <- payment)
     let packMetadata: ExampleNFT.PackMetadata = ExampleNFT.getPackMetadata(metadataId)!
     let display = MetadataViews.Display(
       name: packMetadata.metadata.name,
       description: packMetadata.metadata.description,
       thumbnail: packMetadata.metadata.thumbnail ?? packMetadata.metadata.image
     )
-    self.Purchases.addPurchase(uuid: nftId, metadataId: metadataId, display: display, contractAddress: contractAddress, contractName: contractName)
+    self.Purchases.addPurchase(uuid: packId, metadataId: metadataId, display: display, contractAddress: contractAddress, contractName: contractName)
   }
 }

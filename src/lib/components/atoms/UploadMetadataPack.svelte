@@ -7,6 +7,7 @@
   import { csvStore } from "$stores/CollectionFilesStore";
   import { createEventDispatcher } from "svelte";
   import { resultCID } from "$stores/IPFSstore";
+  import { uploadType } from "$lib/stores/CollectionFilesStore";
 
   const dispatch = createEventDispatcher();
 
@@ -37,7 +38,7 @@
       metadatas,
       batchSize,
       $resultCID,
-      $csvStore.uploadType
+      $uploadType
     );
     if (uploadResult.success) {
       uploadState = "uploaded";

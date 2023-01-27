@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import { purchaseRandomNFT } from "$flow/actions";
 
   import { NFTCard } from ".";
@@ -37,4 +37,4 @@
   buy={true}
   url={`/discover/${address}/${contractName}/${metadatas[lotteryNumber].metadataId}`}
   purchase={() => purchaseRandomNFT(price, contractName, address, paymentType)}
-  withLink={false} />
+  withLink={false} /> -->
