@@ -13,7 +13,6 @@
     NftImage,
     CollectionSocials,
     Verifiers,
-    MyNFTs,
     CollectionFilters,
   } from "$atoms";
   import { page } from "$app/stores";
@@ -103,33 +102,24 @@
                 <option value={false}>Packs</option>
               </Select>
               <AdaptableGrid minWidth="12em" gap="1.2em">
-                {#if seeMine}
-                  <MyNFTs
-                    version={collectionInfo.version}
-                    metadatas={collectionInfo.nftMetadatas}
-                    primaryBuyers={collectionInfo.primaryBuyers}
-                    addr={$user?.addr}
-                    collectionPrice={collectionInfo.price} />
-                {:else}
-                  <DisplayItems
-                    {collectionInfo}
-                    metadatas={showNFT
-                      ? collectionInfo.nftMetadatas
-                      : collectionInfo.packMetadatas}
-                    bind:maxPrice
-                    bind:minPrice
-                    bind:itemsToDisplay
-                    bind:available
-                    bind:nameFilter />
-                  <IntersectionObserver
-                    {element}
-                    bind:intersecting
-                    on:observe={() => {
-                      itemsToDisplay = itemsToDisplay + 20;
-                    }}>
-                    <div bind:this={element} />
-                  </IntersectionObserver>
-                {/if}
+                <DisplayItems
+                  {collectionInfo}
+                  metadatas={showNFT
+                    ? collectionInfo.nftMetadatas
+                    : collectionInfo.packMetadatas}
+                  bind:maxPrice
+                  bind:minPrice
+                  bind:itemsToDisplay
+                  bind:available
+                  bind:nameFilter />
+                <IntersectionObserver
+                  {element}
+                  bind:intersecting
+                  on:observe={() => {
+                    itemsToDisplay = itemsToDisplay + 20;
+                  }}>
+                  <div bind:this={element} />
+                </IntersectionObserver>
               </AdaptableGrid>
             </div>
           </div>

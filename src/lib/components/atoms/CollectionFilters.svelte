@@ -70,14 +70,6 @@
         bind:checked={available} />
       Available
     </label>
-    <label for="my-purchases" class="checkbox-label">
-      <input
-        name="my-purchases"
-        id="my-purchases"
-        type="checkbox"
-        bind:checked={seeMine} />
-      My Purchases
-    </label>
   </TransparentCard>
 </div>
 

@@ -15,7 +15,6 @@
     NftImage,
     CollectionSocials,
     Verifiers,
-    MyNFTs,
     CollectionFilters,
   } from "$atoms";
   import { page } from "$app/stores";
@@ -104,53 +103,44 @@
                 {claimableNFTs} />
             {/await}
             <AdaptableGrid minWidth="12em" gap="1.2em">
-              {#if seeMine}
-                <MyNFTs
-                  version={collectionInfo.version}
-                  metadatas={collectionInfo.metadatas}
-                  primaryBuyers={collectionInfo.primaryBuyers}
-                  addr={$user?.addr}
-                  collectionPrice={collectionInfo.price} />
-              {:else}
-                {#each Object.values(collectionInfo.metadatas) as NFT, i}
-                  <!-- Apply filters -->
-                  {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
-                    {#if $loading}
-                      Loading: {$loading}
-                    {:else if $error}
-                      Error: {$error}
-                    {:else if browser && (!available || Object.keys(collectionInfo.metadatas[NFT.metadataId].purchasers).length != collectionInfo.metadatas[NFT.metadataId].supply) && (!nameFilter || NFT.name
-                          .toUpperCase()
-                          .includes(nameFilter.toUpperCase()))}
-                      <NFTCard
-                        thumbnailURL={NFT.thumbnail
-                          ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
-                          : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
-                        name={NFT.name}
-                        description={NFT.description}
-                        price={Number(NFT.price ?? collectionInfo.price)}
-                        buy={collectionInfo.version == 1
-                          ? !(Object.keys(NFT.purchasers).length == NFT.supply)
-                          : !Object.keys(collectionInfo.primaryBuyers).includes(
-                              NFT.metadataId
-                            )}
-                        url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
-                        withLink={true}
-                        flowPrice={$flowPrice.price}
-                        paymentType={collectionInfo.paymentType}
-                        supply={NFT.supply} />
-                    {/if}
+              {#each Object.values(collectionInfo.metadatas) as NFT, i}
+                <!-- Apply filters -->
+                {#if (maxPrice === undefined || maxPrice >= Number(NFT.price ?? collectionInfo.price)) && (minPrice === undefined || minPrice <= Number(NFT.price ?? collectionInfo.price)) && i < nftsToDisplay}
+                  {#if $loading}
+                    Loading: {$loading}
+                  {:else if $error}
+                    Error: {$error}
+                  {:else if browser && (!available || Object.keys(collectionInfo.metadatas[NFT.metadataId].purchasers).length != collectionInfo.metadatas[NFT.metadataId].supply) && (!nameFilter || NFT.name
+                        .toUpperCase()
+                        .includes(nameFilter.toUpperCase()))}
+                    <NFTCard
+                      thumbnailURL={NFT.thumbnail
+                        ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+                        : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
+                      name={NFT.name}
+                      description={NFT.description}
+                      price={Number(NFT.price ?? collectionInfo.price)}
+                      buy={collectionInfo.version == 1
+                        ? !(Object.keys(NFT.purchasers).length == NFT.supply)
+                        : !Object.keys(collectionInfo.primaryBuyers).includes(
+                            NFT.metadataId
+                          )}
+                      url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
+                      withLink={true}
+                      flowPrice={$flowPrice.price}
+                      paymentType={collectionInfo.paymentType}
+                      supply={NFT.supply} />
                   {/if}
-                {/each}
-                <IntersectionObserver
-                  {element}
-                  bind:intersecting
-                  on:observe={() => {
-                    nftsToDisplay = nftsToDisplay + 20;
-                  }}>
-                  <div bind:this={element} />
-                </IntersectionObserver>
-              {/if}
+                {/if}
+              {/each}
+              <IntersectionObserver
+                {element}
+                bind:intersecting
+                on:observe={() => {
+                  nftsToDisplay = nftsToDisplay + 20;
+                }}>
+                <div bind:this={element} />
+              </IntersectionObserver>
             </AdaptableGrid>
           </div>
         </div>

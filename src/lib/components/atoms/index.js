@@ -23,7 +23,6 @@ export { default as Logo } from './Logo.svelte';
 export { default as MadeWithTouchstone } from './MadeWithTouchstone.svelte';
 export { default as Marquee } from './Marquee.svelte';
 export { default as MyCollectionsNav } from './MyCollectionsNav.svelte';
-export { default as MyNFTs } from './MyNFTs.svelte';
 export { default as NFTCard } from './NFTCard.svelte';
 export { default as NFTCardContent } from './NFTCardContent.svelte';
 export { default as NFTCarousel } from './NFTCarousel.svelte';
