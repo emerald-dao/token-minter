@@ -625,10 +625,10 @@ pub contract ExampleNFT: NonFungibleToken {
 		// We include the user's address in the paths.
 		// This is to prevent clashing with existing 
 		// Collection paths in the ecosystem.
-		self.CollectionStoragePath = /storage/ExampleNFTCollectionUSERADDR
-		self.CollectionPublicPath = /public/ExampleNFTCollectionUSERADDR
-		self.CollectionPrivatePath = /private/ExampleNFTCollectionUSERADDR
-		self.AdministratorStoragePath = /storage/ExampleNFTAdministratorUSERADDR
+		self.CollectionStoragePath = /storage/ExampleNFTCollection_USERADDR
+		self.CollectionPublicPath = /public/ExampleNFTCollection_USERADDR
+		self.CollectionPrivatePath = /private/ExampleNFTCollection_USERADDR
+		self.AdministratorStoragePath = /storage/ExampleNFTAdministrator_USERADDR
 
 		// Create a Collection resource and save it to storage
 		let collection <- create Collection()

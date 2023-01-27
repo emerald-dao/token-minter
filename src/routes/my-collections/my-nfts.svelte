@@ -1,7 +1,20 @@
 <script>
-  import { getTouchstonePurchases } from "$flow/actions";
+  import {
+    getTouchstonePurchases,
+    getOwnedContractNames,
+    getAllContractNamesInBook,
+  } from "$flow/actions";
   import { NFTCard, AdaptableGrid } from "$lib/components/atoms";
   import { user } from "$lib/stores/FlowStore.js";
+
+  async function doStuff() {
+    const ownedContractNames = await getOwnedContractNames($user.addr);
+    console.log(ownedContractNames);
+    const contractsInBook = await getAllContractNamesInBook();
+    console.log(contractsInBook);
+  }
+
+  let waiting = doStuff();
 </script>
 
 <AdaptableGrid minWidth="10rem">
@@ -12,7 +25,8 @@
         description={purchase.display.description}
         thumbnailURL={`https://nftstorage.link/ipfs/${purchase.display.thumbnail.cid}/${purchase.display.thumbnail.path}`}
         url={`/discover/${purchase.contractAddress}/${purchase.contractName}/${purchase.metadataId}`}
-        withLink={true} />
+        withLink={true}
+        ownedByUser={true} />
     {/each}
   {/await}
 </AdaptableGrid>

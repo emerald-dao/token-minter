@@ -31,6 +31,8 @@ import getEmeraldIDBatchScript from './cadence/scripts/v0/get_emeraldid_batch.cd
 import getVersionScript from './cadence/scripts/v1/get_version.cdc?raw';
 // v2
 import getMetadataScript from './cadence/scripts/v2/get_metadata.cdc?raw';
+import getOwnedContractNamesScript from './cadence/scripts/v2/get_owned_contract_names.cdc?raw';
+import getAllContractNamesScript from './cadence/scripts/v2/get_all_contract_names.cdc?raw';
 
 // Transactions
 // v0
@@ -848,6 +850,21 @@ export async function getNextMetadataId(contractName, userAddress) {
   }
 }
 
+export async function getOwnedContractNames(user) {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getOwnedContractNamesScript),
+      args: (arg, t) => [
+        arg(user, t.Address)
+      ],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export async function checkRequiredVerifiers(contractName, contractAddress, userAddress) {
   try {
     const response = await fcl.query({
@@ -879,6 +896,19 @@ export async function getMetadata(contractName, contractAddress, metadataId) {
     const response = await fcl.query({
       cadence: replaceWithProperValues(getMetadataScript, contractName, contractAddress),
       args: (arg, t) => [arg(metadataId, t.UInt64)],
+    });
+
+    return response;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getAllContractNamesInBook() {
+  try {
+    const response = await fcl.query({
+      cadence: replaceWithProperValues(getAllContractNamesScript),
+      args: (arg, t) => [],
     });
 
     return response;
