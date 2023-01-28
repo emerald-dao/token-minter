@@ -42,7 +42,7 @@
   <BallButton
     active={false}
     icon="ion:eye"
-    href={`/discover/${$user.addr}/${$page.params.collection}`}>
+    href={`/${$page.params.collection}`}>
     View Collection
   </BallButton>
   <BallButton
