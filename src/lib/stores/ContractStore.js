@@ -2,7 +2,7 @@ import createFilesStore from '$stores/custom/FilesStore';
 import { derived } from 'svelte/store';
 import { replaceWithProperValues } from '$flow/actions';
 import contract from '$flow/cadence/ExampleNFT.cdc?raw';
-import { user, addresses } from '$stores/FlowStore';
+import { user } from '$stores/FlowStore';
 import createObjectStore from '$stores/custom/ObjectStore';
 import { validateImages } from '$lib/validation/imagesValidation';
 import { imagesFileTypesAllowed } from '$lib/config/config';
@@ -93,7 +93,7 @@ export const contractInfo = derived(
   }
 );
 
-export const contractCode = derived([contractInfo, user, addresses], ([$contractInfo, $user]) => {
+export const contractCode = derived([contractInfo, user], ([$contractInfo, $user]) => {
   let vaultType = '';
   let receiverPath = '';
   if ($contractInfo.paymentType == "$FLOW") {

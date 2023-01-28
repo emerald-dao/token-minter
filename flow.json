@@ -85,20 +85,6 @@
 				"mainnet": "0x7a696d6136e1dce2"
 			}
 		},
-		"TouchstoneContracts": {
-			"source": "./src/flow/cadence/TouchstoneContracts.cdc",
-			"aliases": {
-				"testnet": "0x692e8e2f2f8db5b6",
-				"mainnet": "0x7a696d6136e1dce2"
-			}
-		},
-		"TouchstonePurchases": {
-			"source": "./src/flow/cadence/TouchstonePurchases.cdc",
-			"aliases": {
-				"testnet": "0x692e8e2f2f8db5b6",
-				"mainnet": "0x7a696d6136e1dce2"
-			}
-		},
 		"EmeraldPass": {
 			"source": "./src/flow/cadence/utility/EmeraldPass.cdc",
 			"aliases": {
@@ -112,7 +98,8 @@
 				"testnet": "0x324c34e1c517e4db",
 				"mainnet": "0x49a7cda3a1eecc29"
 			}
-		}
+		},
+		"FCLCrypto": "./src/flow/cadence/utility/FCLCrypto.cdc"
 	},
 	"networks": {
 		"emulator": "127.0.0.1:3569",
@@ -130,8 +117,11 @@
 			"emulator-account": [
 				"NonFungibleToken",
 				"MetadataViews",
+				"FCLCrypto",
+				"FUSD",
 				"GrantedAccountAccess",
 				"FLOAT",
+				"EmeraldPass",
 				"MintVerifiers"
 			]
 		}

@@ -13,6 +13,7 @@
 			activeStep.onNext();
 		},
 	});
+	console.log("Hello")
 </script>
 
 <GeneratorStepLayout>

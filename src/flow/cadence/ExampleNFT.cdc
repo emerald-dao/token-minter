@@ -7,7 +7,6 @@ import FungibleToken from "./utility/FungibleToken.cdc"
 import FlowToken from "./utility/FlowToken.cdc"
 import MintVerifiers from "./MintVerifiers.cdc" 
 import FUSD from "./utility/FUSD.cdc"
-import EmeraldPass from "./utility/EmeraldPass.cdc"
 
 pub contract ExampleNFT: NonFungibleToken {
 
@@ -394,9 +393,6 @@ pub contract ExampleNFT: NonFungibleToken {
 		// mintItem mints a new NFT or Pack and deposits 
 		// it in the recipients collection
 		pub fun mintItem(metadataId: UInt64, serial: UInt64, recipient: Address) {
-			pre {
-				EmeraldPass.isActive(user: ExampleNFT.account.address): "You must have an active Emerald Pass subscription to airdrop NFTs. You can purchase Emerald Pass at https://pass.ecdao.org/"
-			}
 			var nft: @NFT? <- nil
 			if ExampleNFT.isPack(metadataId) {
 				nft <-! ExampleNFT.createPack(metadataId: metadataId, recipient: recipient)

@@ -4,7 +4,7 @@ import { Buffer } from 'buffer';
 import { activeStep } from '$stores/ActiveStepStore';
 import * as fcl from '@onflow/fcl';
 import './config';
-import { user, transactionStatus, transactionInProgress, addresses, network } from '$stores/FlowStore';
+import { user, transactionStatus, transactionInProgress, addresses } from '$stores/FlowStore';
 import { contractInfo, contractCode } from '$stores/ContractStore';
 import { resultCID } from '$stores/IPFSstore';
 import { resolveAddressObject } from './utils';
@@ -39,7 +39,6 @@ import getAllContractNamesScript from './cadence/scripts/v2/get_all_contract_nam
 import createMetadatasTx from './cadence/transactions/v0/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/v0/deploy_contract.cdc?raw';
 import purchaseNFTTx from './cadence/transactions/v0/purchase_nft.cdc?raw';
-import purchaseRandomNFTTx from './cadence/transactions/v0/purchase_random_nft.cdc?raw';
 import removeContractFromBookTx from './cadence/transactions/v0/remove_contract_from_book.cdc?raw';
 import airdropTx from './cadence/transactions/v0/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/v0/toggle_minting.cdc?raw';
@@ -55,6 +54,8 @@ import createMetadatasTxv2 from './cadence/transactions/v2/create_metadatas.cdc?
 import createPackTxv2 from './cadence/transactions/v2/create_pack.cdc?raw';
 import purchaseNFTTxv2 from './cadence/transactions/v2/purchase_nft.cdc?raw';
 import purchasePackTxv2 from './cadence/transactions/v2/purchase_pack.cdc?raw';
+
+const latestVersion = '2';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -73,7 +74,7 @@ function initTransactionState() {
 }
 
 export function replaceWithProperValues(script, contractName = '', contractAddress = '') {
-  const addressList = get(addresses);
+  const addressList = addresses;
   return script
     .replace('"../../ExampleNFT.cdc"', contractAddress)
     .replace('"../../utility/NonFungibleToken.cdc"', addressList.NonFungibleToken)
@@ -89,8 +90,6 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"./MintVerifiers.cdc"', addressList.MintVerifiers)
     .replace('"./utility/EmeraldPass.cdc"', addressList.EmeraldPass)
     .replace('"../../MintVerifiers.cdc"', addressList.MintVerifiers)
-    .replace('"../../TouchstoneContracts.cdc"', addressList.TouchstoneContracts)
-    .replace('"../../TouchstonePurchases.cdc"', addressList.TouchstonePurchases)
     .replace('"../../utility/FLOAT.cdc"', addressList.FLOAT)
     .replace('"../../utility/EmeraldPass.cdc"', addressList.EmeraldPass)
     .replace('"../../utility/NFTCatalog.cdc"', addressList.NFTCatalog)
@@ -161,13 +160,21 @@ export async function deployContract() {
     });
     console.log({ transactionId });
 
-    fcl.tx(transactionId).subscribe((res) => {
+    fcl.tx(transactionId).subscribe(async (res) => {
       transactionStatus.set(res);
       console.log(res);
       if (res.status === 4) {
         // If deployment is successful
         if (res.statusCode === 0) {
           console.log('Successfully deployed the contract.');
+          const response = await fetch('/api/add-project.js', {
+            method: 'POST',
+            body: JSON.stringify({ contractName: info.contractName, user: get(user), version: latestVersion }),
+            headers: {
+              'content-type': 'application/json'
+            }
+          });
+          console.log('Response', response);
           // TODO: Take outside the onNext from this function
           activeStep.onNext();
         }
@@ -680,7 +687,7 @@ export const toggleMinting = async (contractName, contractAddress) => {
 export const proposeNFTToCatalog = async (contractName, contractAddress) => {
   initTransactionState();
 
-  const { NonFungibleToken, MetadataViews } = get(addresses);
+  const { NonFungibleToken, MetadataViews } = addresses;
   const publicLinkedTypeRestrictions = [
     `A.${NonFungibleToken.slice(2)}.NonFungibleToken.CollectionPublic`,
     `A.${NonFungibleToken.slice(2)}.NonFungibleToken.Receiver`,

@@ -1,6 +1,7 @@
 import { get } from 'svelte/store';
 import { addresses } from '$stores/FlowStore';
 import * as fcl from '@onflow/fcl';
+import { network } from './config';
 
 export const resolveAddressObject = async (lookup) => {
   let answer = {
@@ -16,7 +17,7 @@ export const resolveAddressObject = async (lookup) => {
       answer.address = lookup;
       answer.resolvedNames.find = await fcl.query({
         cadence: `
-        import FIND from ${get(addresses).FIND}
+        import FIND from ${addresses.FIND}
         pub fun main(address: Address): String? {
             let name = FIND.reverseLookup(address)
             return name?.concat(".find")
@@ -27,7 +28,7 @@ export const resolveAddressObject = async (lookup) => {
 
       answer.resolvedNames.fn = await fcl.query({
         cadence: `
-        import Domains from ${get(addresses).FN}
+        import Domains from ${addresses.FN}
       
         pub fun main(address: Address): String? {
     
@@ -60,7 +61,7 @@ export const resolveAddressObject = async (lookup) => {
       answer.resolvedNames.find = lookup;
       answer.address = await fcl.query({
         cadence: `
-        import FIND from ${get(addresses).FIND}
+        import FIND from ${addresses.FIND}
   
         pub fun main(name: String): Address?  {
           return FIND.lookupAddress(name)
@@ -72,8 +73,8 @@ export const resolveAddressObject = async (lookup) => {
       answer.resolvedNames.fn = lookup;
       answer.address = await fcl.query({
         cadence: `
-        import Flowns from ${get(addresses).FN}
-        import Domains from ${get(addresses).FN}
+        import Flowns from ${addresses.FN}
+        import Domains from ${addresses.FN}
         pub fun main(name: String): Address? {
           
           let prefix = "0x"
@@ -98,7 +99,7 @@ export const getFindProfile = async (address) => {
   try {
     return await fcl.query({
       cadence: `
-        import FIND from ${get(addresses).FIND}
+        import FIND from ${addresses.FIND}
         pub fun main(address: Address): Profile? {
             if let name = FIND.reverseLookup(address) {
               let profile = FIND.lookup(name)!
@@ -123,7 +124,17 @@ export const getFindProfile = async (address) => {
       args: (arg, t) => [arg(address, t.Address)],
     });
   } catch (e) {
-    console.log(e);
     return null;
   }
 };
+
+export const verifyAccountOwnership = async (userObject) => {
+	if (!userObject.loggedIn) {
+		return false;
+	}
+	const accountProofService = userObject.services.find(
+		(services) => services.type === 'account-proof'
+	);
+	const fclCryptoContract = network === 'emulator' ? '0xf8d6e0586b0a20c7' : null;
+	return await fcl.AppUtils.verifyAccountProof('Touchstone', accountProofService.data, { fclCryptoContract });
+}

@@ -1,7 +1,6 @@
 import MintVerifiers from "../../MintVerifiers.cdc"
 import FLOAT from "../../utility/FLOAT.cdc"
 import MetadataViews from "../../utility/MetadataViews.cdc"
-import TouchstoneContracts from "../../TouchstoneContracts.cdc"
 import FlowToken from "../../utility/FlowToken.cdc"
 import FungibleToken from "../../utility/FungibleToken.cdc"
 import FUSD from "../../utility/FUSD.cdc"
@@ -48,13 +47,6 @@ transaction(
     /************************************* DEPLOYMENT *************************************/
     /**************************************************************************************/
 
-    if deployer.borrow<&TouchstoneContracts.ContractsBook>(from: TouchstoneContracts.ContractsBookStoragePath) == nil {
-      deployer.save(<- TouchstoneContracts.createContractsBook(), to: TouchstoneContracts.ContractsBookStoragePath)
-      deployer.link<&TouchstoneContracts.ContractsBook{TouchstoneContracts.ContractsBookPublic}>(TouchstoneContracts.ContractsBookPublicPath, target: TouchstoneContracts.ContractsBookStoragePath)
-    }
-    let contractsBook = deployer.borrow<&TouchstoneContracts.ContractsBook>(from: TouchstoneContracts.ContractsBookStoragePath)!
-    contractsBook.addContract(contractName: contractName)
-
     var mintVerifiers: [{MintVerifiers.IVerifier}] = []
 
     // Singular FLOAT Verifier
@@ -70,7 +62,6 @@ transaction(
     if hasEmeraldPass {
       mintVerifiers.append(MintVerifiers.HasEmeraldPass())
     }
-
 
     var royaltyInfo: MetadataViews.Royalty? =  nil
     if (royalty) {
