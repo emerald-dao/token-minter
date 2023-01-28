@@ -6,7 +6,7 @@ import { verifyAccountOwnership } from '$flow/utils.js';
 
 const supabase = createClient(PublicEnv.PUBLIC_SUPABASE_URL, PrivateEnv.SUPABASE_SERVICE_KEY);
 
-export const post = async ({ request }) => {
+export async function POST({ request }) {
   const data = await request.json();
 
   // Make sure a valid user was passed in

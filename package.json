@@ -36,7 +36,8 @@
     "vite": "^4.0.0",
     "svelte-preprocess": "^4.10.6",
     "sveltekit-i18n": "^2.2.1",
-    "unist-util-visit": "^4.1.0"
+    "unist-util-visit": "^4.1.0",
+    "isomorphic-fetch": "^3.0.0"
   },
   "type": "module",
   "dependencies": {

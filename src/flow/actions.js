@@ -167,7 +167,7 @@ export async function deployContract() {
         // If deployment is successful
         if (res.statusCode === 0) {
           console.log('Successfully deployed the contract.');
-          const response = await fetch('/api/add-project.js', {
+          const response = await fetch('/api/add', {
             method: 'POST',
             body: JSON.stringify({ contractName: info.contractName, user: get(user), version: latestVersion }),
             headers: {
