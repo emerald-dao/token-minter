@@ -2,7 +2,7 @@
   import { NFTCard } from "$lib/components/atoms";
   import { page } from "$app/stores";
   import flowPriceStore from "$stores/FlowPriceStore";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
 
   export let collectionInfo;
   export let metadatas;

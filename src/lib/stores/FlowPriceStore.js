@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import persistentWritable from '$lib/utilities/persistentWritable';
-import { browser } from '$app/env';
+import { browser } from '$app/environment';
 import { timeToUpdateFlowPrice } from '$lib/config/config';
 
 export default function () {

@@ -1,6 +1,6 @@
 <script>
   import flowPriceStore from "$stores/FlowPriceStore";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import { checkRequiredVerifiers, getClaimableNFTs } from "$flow/actions";
   import {
     Section,
