@@ -770,23 +770,20 @@ export const getAllContractNames = async (address) => {
   }
 };
 
-export const getContractDisplays = async (address) => {
+export const getContractDisplays = async (address, contracts) => {
   try {
-    const response1 = await fcl.query({
-      cadence: replaceWithProperValues(getContractsInBookScript),
-      args: (arg, t) => [arg(address, t.Address)],
-    });
 
     let imports = '';
     let displays = '';
-    response1.forEach((contract, i) => {
-      imports += `import ${contract.name} from ${address}\n`;
+    contracts.forEach((contract, i) => {
+      const {contract_name} = contract;
+      imports += `import ${contract_name} from ${address}\n`;
       displays += `
       answer.append(CollectionDisplay(
-        _contractName: "${contract.name}",
-        _name: ${contract.name}.getCollectionAttribute(key: "name") as! String,
-        _description: ${contract.name}.getCollectionAttribute(key: "description") as! String,
-        _image: ${contract.name}.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile
+        _contractName: "${contract_name}",
+        _name: ${contract_name}.getCollectionAttribute(key: "name") as! String,
+        _description: ${contract_name}.getCollectionAttribute(key: "description") as! String,
+        _image: ${contract_name}.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile
       ))\n
       `;
     });
