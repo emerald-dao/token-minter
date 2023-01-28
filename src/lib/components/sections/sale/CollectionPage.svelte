@@ -14,8 +14,8 @@
 
 {#await getCollectionInfo($page.params.collection, contractAddress) then collectionInfo}
   {#if collectionInfo.version == 1 || collectionInfo.version == 0}
-    <CollectionPagev0 {collectionInfo} />
+    <CollectionPagev0 {collectionInfo} {contractAddress} />
   {:else}
-    <CollectionPagev2 {collectionInfo} />
+    <CollectionPagev2 {collectionInfo} {contractAddress} />
   {/if}
 {/await}

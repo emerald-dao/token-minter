@@ -16,7 +16,6 @@ import { resolveAddressObject } from './utils';
 // Scripts
 // v0
 import getCollectionInfoScript from './cadence/scripts/v0/get_collection_info.cdc?raw';
-import getContractsInBookScript from './cadence/scripts/v0/get_contracts_in_book.cdc?raw';
 import getContractFromNameScript from './cadence/scripts/v0/get_contract_from_name.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/v0/get_contract_displays.cdc?raw';
 import getContractNamesScript from './cadence/scripts/v0/get_contracts.cdc?raw';
@@ -997,6 +996,7 @@ export const getEmeraldIDBatch = async (users) => {
 };
 
 export const getVersion = async (contractName, contractAddress) => {
+  console.log(contractName, contractAddress)
   try {
     const response = await fcl.query({
       cadence: replaceWithProperValues(getVersionScript, contractName, contractAddress),

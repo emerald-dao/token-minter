@@ -3,7 +3,7 @@
   import { getVersion } from "$flow/actions";
   import NFTPagev0 from "$lib/components/versions/NFTPagev0.svelte";
   import NFTPagev1 from "$lib/components/versions/NFTPagev1.svelte";
-  import NftPagev2 from "$lib/components/versions/NFTPagev2.svelte";
+  import NFTPagev2 from "$lib/components/versions/NFTPagev2.svelte";
 </script>
 
 {#await getVersion($page.params.collection, $page.params.address) then version}
@@ -12,6 +12,6 @@
   {:else if version == 1}
     <NFTPagev1 />
   {:else}
-    <NftPagev2 />
+    <NFTPagev2 />
   {/if}
 {/await}

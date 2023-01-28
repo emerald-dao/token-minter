@@ -11,7 +11,8 @@
   export let itemsToDisplay;
   export let available;
   export let nameFilter;
-  export let contractAddress = $page.params.address;
+
+  console.log(collectionInfo)
 
   const [flowPrice, loading, error] = flowPriceStore();
 </script>

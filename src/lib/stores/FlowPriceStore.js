@@ -63,7 +63,7 @@ const fetchApi = async (url) => {
 };
 
 const saveFlowPrice = async (errorStore, loadingStore, dataStore) => {
-  let fetchPrice = await fetchApi('/api/flow-price.json');
+  let fetchPrice = await fetchApi('/api/flow-price');
   if (fetchPrice) {
     let price = fetchPrice.flowPrice;
     dataStore.set({
