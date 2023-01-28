@@ -22,17 +22,19 @@
   import { user } from "$stores/FlowStore";
   import Select from "$lib/components/atoms/Select.svelte";
 
+  export let contractAddress;
+
   async function getInfo() {
     let info = await getMetadata(
       $page.params.collection,
-      $page.params.address,
+      contractAddress,
       $page.params.nft
     );
     console.log(info);
     const metadata = info.metadata;
     const collectionInfo = await getCollectionInfo(
       $page.params.collection,
-      $page.params.address
+      contractAddress
     );
     metadata.extra["metadataId"] = metadata.metadataId;
     const price = metadata.price ?? collectionInfo.price;
@@ -50,7 +52,7 @@
       price,
       serial,
       $page.params.collection,
-      $page.params.address,
+      contractAddress,
       paymentType
     );
     if (
@@ -67,7 +69,7 @@
       $page.params.nft,
       price,
       $page.params.collection,
-      $page.params.address,
+      contractAddress,
       paymentType
     );
     if (
@@ -96,7 +98,7 @@
           <Stack direction="column" align="flex-start">
             <Stack direction="column" gap="0.6em" align="flex-start">
               <MadeWithTouchstone />
-              <WalletAddress address={$page.params.address}>By</WalletAddress>
+              <WalletAddress address={contractAddress}>By</WalletAddress>
             </Stack>
             <p>{info.collectionInfo.name}</p>
             <h1>{info.metadata.name}</h1>
