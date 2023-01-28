@@ -39,15 +39,15 @@
   space="3rem"
   lineColor="var(--clr-accent-main-t9)" />
 <BallButton
-  active={$page.url.pathname === "/my-collections"}
+  active={$page.url.pathname === "/p/c"}
   icon="ion:albums"
-  href="/my-collections">
+  href="/p/c">
   My Collections
 </BallButton>
 <BallButton
-  active={$page.url.pathname.includes("my-nfts")}
+  active={$page.url.pathname === "/p/i"}
   icon="ion:diamond"
-  href="/my-collections/my-nfts/">
+  href="/p/i">
   My NFTs
 </BallButton>
 <Divider space="3rem" />

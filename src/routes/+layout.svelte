@@ -4,7 +4,7 @@
   import "$lib/styles/app.scss";
   import { page } from "$app/stores";
 
-  const noFooterUrls = ["contract-generator", "my-collections"];
+  const noFooterUrls = ["contract-generator", "p"];
   $: hasFooter = !noFooterUrls.some((v) => $page.url.pathname.includes(v));
 </script>
 

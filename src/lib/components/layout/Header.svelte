@@ -65,7 +65,7 @@
           
           {#if $user?.loggedIn}
             {#await findProfile then profile}
-              <a href="/my-collections" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}> 
+              <a href="/p/c" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}> 
                 {#if profile}
                   <img
                     class="avatar"
@@ -97,7 +97,7 @@
           <AnimatedHamburger {open} {onClick} />
           {#if $user?.loggedIn}
             {#await findProfile then profile}
-              <a href="/my-collections" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}>
+              <a href="/p/c" sveltekit:prefetch transition:fly={{ x: 10, duration: 600 }}>
                 {#if profile}
                   <img
                     class="avatar"

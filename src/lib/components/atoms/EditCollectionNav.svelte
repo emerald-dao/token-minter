@@ -34,9 +34,9 @@
   lineColor="var(--clr-accent-main-t9)" />
 <Stack direction="column" gap="0rem">
   <BallButton
-    active={$page.url.pathname === `/my-collections/${$page.params.collection}`}
+    active={$page.url.pathname === `/p/c/${$page.params.collection}`}
     icon="ion:settings"
-    href={`/my-collections/${$page.params.collection}`}>
+    href={`/p/c/${$page.params.collection}`}>
     General
   </BallButton>
   <BallButton
@@ -47,16 +47,16 @@
   </BallButton>
   <BallButton
     active={$page.url.pathname ===
-      `/my-collections/${$page.params.collection}/upload`}
+      `/p/c/${$page.params.collection}/upload`}
     icon="ion:upload"
-    href={`/my-collections/${$page.params.collection}/upload`}>
+    href={`/p/c/${$page.params.collection}/upload`}>
     Upload
   </BallButton>
   <BallButton
     active={$page.url.pathname ===
-      `/my-collections/${$page.params.collection}/airdrop`}
+      `/p/c/${$page.params.collection}/airdrop`}
     icon="ion:gift"
-    href={`/my-collections/${$page.params.collection}/airdrop`}>
+    href={`/p/c/${$page.params.collection}/airdrop`}>
     Airdrop
   </BallButton>
   <BallButton
@@ -73,7 +73,7 @@
   <Button
     class="small transparent"
     leftIcon="arrow-back-circle"
-    href="/my-collections">Back to My Collections</Button>
+    href="/p/c">Back to My Collections</Button>
   <Divider space="1rem" lineColor="var(--clr-accent-main-t9)" />
   {#await hasEmeraldPass then pass}
     {#if !pass}

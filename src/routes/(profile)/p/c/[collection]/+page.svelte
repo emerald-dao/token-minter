@@ -131,7 +131,7 @@
 </div>
 
 <style type="scss">
-	@use "../../../lib/styles/abstracts" as *;
+	@use "../../../../../lib/styles/abstracts" as *;
 
 	.stats-wrapper {
 		display: flex;

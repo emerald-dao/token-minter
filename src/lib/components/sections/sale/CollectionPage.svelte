@@ -6,7 +6,7 @@
   import CollectionPagev0 from "$lib/components/versions/CollectionPagev0.svelte";
   import CollectionPagev2 from "$lib/components/versions/CollectionPagev2.svelte";
 
-  export let contractAddress = $page.params.address;
+  export let contractAddress;
 </script>
 
 <HtmlHead title="Discover" />
