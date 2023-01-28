@@ -1,24 +1,26 @@
 <script>
   import {
-    getTouchstonePurchases,
-    getOwnedContractNames,
-    getAllContractNamesInBook,
+    getOwnedNFTs,
+    getTouchstonePurchases
   } from "$flow/actions";
   import { NFTCard, AdaptableGrid } from "$lib/components/atoms";
+  import Select from "$lib/components/atoms/Select.svelte";
   import { user } from "$lib/stores/FlowStore.js";
 
-  async function doStuff() {
-    const ownedContractNames = await getOwnedContractNames($user.addr);
-    console.log(ownedContractNames);
-    const contractsInBook = await getAllContractNamesInBook();
-    console.log(contractsInBook);
-  }
+  export let data;
+  const { infos } = data;
+  console.log(infos);
 
-  let waiting = doStuff();
+  let index = 0;
 </script>
 
+<Select bind:value={index}>
+  {#each infos as { contract_name }, i}
+    <option value={i}>{contract_name}</option>
+  {/each}
+</Select>
 <AdaptableGrid minWidth="10rem">
-  {#await getTouchstonePurchases($user.addr) then purchases}
+  {#await getOwnedNFTs($user.addr, infos[index].contract_name, infos[index].contract_address) then purchases}
     {#each Object.values(purchases) as purchase}
       <NFTCard
         name={purchase.display.name}

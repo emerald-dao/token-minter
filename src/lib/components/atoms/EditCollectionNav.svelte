@@ -10,7 +10,6 @@
     NftImage,
     ImagePlaceholder,
   } from "$atoms";
-  import { removeContractFromBook } from "$flow/actions";
 
   const collectionInfo = getContext("collectionInfo");
   const hasEmeraldPass = getContext("emeraldPass");
@@ -63,7 +62,6 @@
     icon="ion:trash"
     danger={true}
     clickable={true}
-    on:click={() => removeContractFromBook($page.params.collection)}
     >Remove</BallButton>
   <Divider
     line={true}

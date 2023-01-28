@@ -2,7 +2,6 @@
 	import { createForm } from "felte";
 	import {
 		canMakeReservation,
-		getAllContractNames,
 		hasEmeraldPass,
 	} from "$flow/actions.js";
 	import { collectionInfo, collectionImage } from "$stores/ContractStore.js";
@@ -36,7 +35,8 @@
 	});
 
 	async function checkContracts() {
-		const contracts = await getAllContractNames($user.addr);
+		// const contracts = await getAllContractNames($user.addr);
+		const contracts = [];
 
 		// CHECK TO SEE IF THEY HAVE EMERALD PASS HERE
 		const activeEmeraldPass = await hasEmeraldPass($user.addr);

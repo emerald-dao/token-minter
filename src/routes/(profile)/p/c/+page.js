@@ -10,8 +10,6 @@ export async function load({ params }) {
   }
 
   const { data } = await supabase.from('touchstone-projects').select().eq('contract_address', userAddr);
-
   const contractDisplays = await getContractDisplays(userAddr, data);
-
   return { contractDisplays };
 }

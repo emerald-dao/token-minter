@@ -16,14 +16,10 @@ import { resolveAddressObject } from './utils';
 // Scripts
 // v0
 import getCollectionInfoScript from './cadence/scripts/v0/get_collection_info.cdc?raw';
-import getContractFromNameScript from './cadence/scripts/v0/get_contract_from_name.cdc?raw';
 import getContractDisplaysScript from './cadence/scripts/v0/get_contract_displays.cdc?raw';
-import getContractNamesScript from './cadence/scripts/v0/get_contracts.cdc?raw';
 import checkRequiredVerifiersScript from './cadence/scripts/v0/check_required_verifiers.cdc?raw';
 import getNFTInfoScript from './cadence/scripts/v0/get_nft_info.cdc?raw';
 import hasEmeraldPassScript from './cadence/scripts/v0/has_emerald_pass.cdc?raw';
-import canMakeReservationScript from './cadence/scripts/v0/can_make_reservation.cdc?raw';
-import getTouchstonePurchasesScript from './cadence/scripts/v0/get_touchstone_purchases.cdc?raw';
 import getClaimableNFTsScript from './cadence/scripts/v0/get_claimable_nfts.cdc?raw';
 import getEmeraldIDBatchScript from './cadence/scripts/v0/get_emeraldid_batch.cdc?raw';
 // v1
@@ -31,14 +27,13 @@ import getVersionScript from './cadence/scripts/v1/get_version.cdc?raw';
 // v2
 import getMetadataScript from './cadence/scripts/v2/get_metadata.cdc?raw';
 import getOwnedContractNamesScript from './cadence/scripts/v2/get_owned_contract_names.cdc?raw';
-import getAllContractNamesScript from './cadence/scripts/v2/get_all_contract_names.cdc?raw';
+import getOwnedNFTsScript from './cadence/scripts/v2/get_owned_nfts.cdc?raw';
 
 // Transactions
 // v0
 import createMetadatasTx from './cadence/transactions/v0/create_metadatas.cdc?raw';
 import deployContractTx from './cadence/transactions/v0/deploy_contract.cdc?raw';
 import purchaseNFTTx from './cadence/transactions/v0/purchase_nft.cdc?raw';
-import removeContractFromBookTx from './cadence/transactions/v0/remove_contract_from_book.cdc?raw';
 import airdropTx from './cadence/transactions/v0/airdrop.cdc?raw';
 import toggleMintingTx from './cadence/transactions/v0/toggle_minting.cdc?raw';
 import proposeNFTToCatalogTx from './cadence/transactions/v0/propose_nft_to_catalog.cdc?raw';
@@ -558,34 +553,6 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
   }
 }
 
-export const removeContractFromBook = async (contractName) => {
-  initTransactionState();
-
-  try {
-    const transactionId = await fcl.mutate({
-      cadence: replaceWithProperValues(removeContractFromBookTx),
-      args: (arg, t) => [arg(contractName, t.String)],
-      payer: fcl.authz,
-      proposer: fcl.authz,
-      authorizations: [fcl.authz],
-      limit: 999,
-    });
-    console.log({ transactionId });
-    fcl.tx(transactionId).subscribe((res) => {
-      transactionStatus.set(res);
-      console.log(res);
-      if (res.status === 4) {
-        setTimeout(() => transactionInProgress.set(false), 2000);
-        setTimeout(() => transactionStatus.set({}), 5000);
-      }
-    });
-  } catch (e) {
-    console.log(e);
-    transactionInProgress.set(false);
-    transactionStatus.set({});
-  }
-};
-
 export const airdrop = async (recipients, metadataIds, serials, contractName, contractAddress) => {
   initTransactionState();
 
@@ -756,14 +723,14 @@ export const setupCollection = async (contractName, contractAddress) => {
 
 // ****** Scripts ****** //
 
-export const getAllContractNames = async (address) => {
+export const getOwnedNFTs = async (address, contractName, contractAddress) => {
   try {
     const response = await fcl.query({
-      cadence: getContractNamesScript,
+      cadence: replaceWithProperValues(getOwnedNFTsScript, contractName, contractAddress),
       args: (arg, t) => [arg(address, t.Address)],
     });
-
-    return response.map((element) => element.name);
+    console.log(response)
+    return response;
   } catch (e) {
     console.log(e);
   }
@@ -899,19 +866,6 @@ export async function getMetadata(contractName, contractAddress, metadataId) {
     const response = await fcl.query({
       cadence: replaceWithProperValues(getMetadataScript, contractName, contractAddress),
       args: (arg, t) => [arg(metadataId, t.UInt64)],
-    });
-
-    return response;
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-export async function getAllContractNamesInBook() {
-  try {
-    const response = await fcl.query({
-      cadence: replaceWithProperValues(getAllContractNamesScript),
-      args: (arg, t) => [],
     });
 
     return response;
