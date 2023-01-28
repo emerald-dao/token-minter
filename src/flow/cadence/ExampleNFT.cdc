@@ -169,7 +169,7 @@ pub contract ExampleNFT: NonFungibleToken {
 						})
 					)
 				case Type<MetadataViews.ExternalURL>():
-          return MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT"))
+          return MetadataViews.ExternalURL("https://touchstone.city/ExampleNFT")
 				case Type<MetadataViews.NFTCollectionDisplay>():
 					let squareMedia = MetadataViews.Media(
 						file: ExampleNFT.getCollectionAttribute(key: "image") as! MetadataViews.IPFSFile,
@@ -188,7 +188,7 @@ pub contract ExampleNFT: NonFungibleToken {
 					return MetadataViews.NFTCollectionDisplay(
 						name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
 						description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
-						externalURL: MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(self.owner!.address.toString()).concat("/ExampleNFT")),
+						externalURL: MetadataViews.ExternalURL("https://touchstone.city/ExampleNFT"),
 						squareImage: squareMedia,
 						bannerImage: bannerMedia ?? squareMedia,
 						socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}

@@ -109,7 +109,7 @@
             <Button
               class="medium transparent"
               leftIcon="arrow-back-circle"
-              href="/discover/{$page.params.address}/{$page.params.collection}"
+              href="/{$page.params.collection}"
               >Back to Collection</Button>
           </Stack>
         </div>

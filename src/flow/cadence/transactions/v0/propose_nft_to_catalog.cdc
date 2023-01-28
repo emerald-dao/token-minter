@@ -61,7 +61,7 @@ transaction(
       let collectionDisplay = MetadataViews.NFTCollectionDisplay(
           name: ExampleNFT.getCollectionAttribute(key: "name") as! String,
           description: ExampleNFT.getCollectionAttribute(key: "description") as! String,
-          externalURL: MetadataViews.ExternalURL("https://touchstone.city/discover/".concat(contractAddress.toString()).concat("/ExampleNFT")),
+          externalURL: MetadataViews.ExternalURL("https://touchstone.city/ExampleNFT"),
           squareImage: squareMedia,
           bannerImage: bannerMedia ?? squareMedia,
           socials: ExampleNFT.getCollectionAttribute(key: "socials") as! {String: MetadataViews.ExternalURL}

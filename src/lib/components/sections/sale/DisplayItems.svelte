@@ -38,7 +38,7 @@
           : !Object.keys(collectionInfo.primaryBuyers).includes(
               metadata.metadataId
             )}
-        url={`/discover/${contractAddress}/${$page.params.collection}/${metadata.metadataId}`}
+        url={`/${$page.params.collection}/${metadata.metadataId}`}
         withLink={true}
         flowPrice={$flowPrice.price}
         paymentType={collectionInfo.paymentType}

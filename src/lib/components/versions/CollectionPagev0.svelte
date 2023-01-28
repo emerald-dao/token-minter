@@ -125,7 +125,7 @@
                         : !Object.keys(collectionInfo.primaryBuyers).includes(
                             NFT.metadataId
                           )}
-                      url={`/discover/${contractAddress}/${$page.params.collection}/${NFT.metadataId}`}
+                      url={`/${$page.params.collection}/${NFT.metadataId}`}
                       withLink={true}
                       flowPrice={$flowPrice.price}
                       paymentType={collectionInfo.paymentType}
