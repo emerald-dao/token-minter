@@ -14,40 +14,29 @@ import { resolveAddressObject } from './utils';
 ///////////////
 
 // Scripts
-// v0
-import getCollectionInfoScript from './cadence/scripts/v0/get_collection_info.cdc?raw';
-import getContractDisplaysScript from './cadence/scripts/v0/get_contract_displays.cdc?raw';
-import checkRequiredVerifiersScript from './cadence/scripts/v0/check_required_verifiers.cdc?raw';
-import getNFTInfoScript from './cadence/scripts/v0/get_nft_info.cdc?raw';
-import hasEmeraldPassScript from './cadence/scripts/v0/has_emerald_pass.cdc?raw';
-import getClaimableNFTsScript from './cadence/scripts/v0/get_claimable_nfts.cdc?raw';
-import getEmeraldIDBatchScript from './cadence/scripts/v0/get_emeraldid_batch.cdc?raw';
-// v1
-import getVersionScript from './cadence/scripts/v1/get_version.cdc?raw';
-// v2
-import getMetadataScript from './cadence/scripts/v2/get_metadata.cdc?raw';
-import getOwnedContractNamesScript from './cadence/scripts/v2/get_owned_contract_names.cdc?raw';
-import getOwnedNFTsScript from './cadence/scripts/v2/get_owned_nfts.cdc?raw';
+import getCollectionInfoScript from './cadence/scripts/get_collection_info.cdc?raw';
+import getContractDisplaysScript from './cadence/scripts/get_contract_displays.cdc?raw';
+import checkRequiredVerifiersScript from './cadence/scripts/check_required_verifiers.cdc?raw';
+import getNFTInfoScript from './cadence/scripts/get_nft_info.cdc?raw';
+import hasEmeraldPassScript from './cadence/scripts/has_emerald_pass.cdc?raw';
+import getClaimableNFTsScript from './cadence/scripts/get_claimable_nfts.cdc?raw';
+import getEmeraldIDBatchScript from './cadence/scripts/get_emeraldid_batch.cdc?raw';
+import getVersionScript from './cadence/scripts/get_version.cdc?raw';
+import getMetadataScript from './cadence/scripts/get_metadata.cdc?raw';
+import getOwnedContractNamesScript from './cadence/scripts/get_owned_contract_names.cdc?raw';
+import getOwnedNFTsScript from './cadence/scripts/get_owned_nfts.cdc?raw';
 
 // Transactions
-// v0
-import createMetadatasTx from './cadence/transactions/v0/create_metadatas.cdc?raw';
-import deployContractTx from './cadence/transactions/v0/deploy_contract.cdc?raw';
-import purchaseNFTTx from './cadence/transactions/v0/purchase_nft.cdc?raw';
-import airdropTx from './cadence/transactions/v0/airdrop.cdc?raw';
-import toggleMintingTx from './cadence/transactions/v0/toggle_minting.cdc?raw';
-import proposeNFTToCatalogTx from './cadence/transactions/v0/propose_nft_to_catalog.cdc?raw';
-import setupCollectionTx from './cadence/transactions/v0/setup_collection.cdc?raw';
-import claimNFTsTx from './cadence/transactions/v0/claim_nfts.cdc?raw';
-// v1
-import createMetadatasTxv1 from './cadence/transactions/v1/create_metadatas.cdc?raw';
-import purchaseNFTTxv1 from './cadence/transactions/v1/purchase_nft.cdc?raw';
-import airdropTxv1 from './cadence/transactions/v1/airdrop.cdc?raw';
-// v2
-import createMetadatasTxv2 from './cadence/transactions/v2/create_metadatas.cdc?raw';
-import createPackTxv2 from './cadence/transactions/v2/create_pack.cdc?raw';
-import purchaseNFTTxv2 from './cadence/transactions/v2/purchase_nft.cdc?raw';
-import purchasePackTxv2 from './cadence/transactions/v2/purchase_pack.cdc?raw';
+import createMetadatasTx from './cadence/transactions/create_metadatas.cdc?raw';
+import deployContractTx from './cadence/transactions/deploy_contract.cdc?raw';
+import purchaseNFTTx from './cadence/transactions/purchase_nft.cdc?raw';
+import airdropTx from './cadence/transactions/airdrop.cdc?raw';
+import toggleMintingTx from './cadence/transactions/toggle_minting.cdc?raw';
+import proposeNFTToCatalogTx from './cadence/transactions/propose_nft_to_catalog.cdc?raw';
+import setupCollectionTx from './cadence/transactions/setup_collection.cdc?raw';
+import claimNFTsTx from './cadence/transactions/claim_nfts.cdc?raw';
+import createPackTx from './cadence/transactions/create_pack.cdc?raw';
+import purchasePackTx from './cadence/transactions/purchase_pack.cdc?raw';
 
 const latestVersion = '2';
 
@@ -194,44 +183,16 @@ export const purchaseNFT = async (metadataId, price, serial, contractName, contr
     storagePath = "fusdVault";
   }
 
-  const version = await getVersion(contractName, contractAddress);
-  let transaction;
-  let args;
-  if (version == 0) {
-    transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
+  const transaction = replaceWithProperValues(purchaseNFTTx, contractName, contractAddress)
       .replaceAll('FungibleToken.Vault', vaultType)
       .replace('PAYMENT_PATH', storagePath);
-    args = (arg, t) => [
-      arg(metadataId, t.UInt64),
-      arg(price, t.UFix64),
-      arg(contractName, t.String),
-      arg(contractAddress, t.Address)
-    ]
-  } else if (version == 1) {
-    transaction = replaceWithProperValues(purchaseNFTTxv1, contractName, contractAddress)
-      .replaceAll('FungibleToken.Vault', vaultType)
-      .replace('PAYMENT_PATH', storagePath);
-    args = (arg, t) => [
+  const args = (arg, t) => [
       arg(metadataId, t.UInt64),
       arg(price, t.UFix64),
       arg(serial, t.UInt64),
       arg(contractName, t.String),
       arg(contractAddress, t.Address)
-    ]
-  } else if (version == 2) {
-    transaction = replaceWithProperValues(purchaseNFTTxv2, contractName, contractAddress)
-      .replaceAll('FungibleToken.Vault', vaultType)
-      .replace('PAYMENT_PATH', storagePath);
-    args = (arg, t) => [
-      arg(metadataId, t.UInt64),
-      arg(price, t.UFix64),
-      arg(serial, t.UInt64),
-      arg(contractName, t.String),
-      arg(contractAddress, t.Address)
-    ]
-  } else {
-    return;
-  }
+  ]
 
   initTransactionState();
 
@@ -275,12 +236,7 @@ export const purchasePack = async (metadataId, price, contractName, contractAddr
     storagePath = "fusdVault";
   }
 
-  const version = await getVersion(contractName, contractAddress);
-
-  if (version != 2) {
-    return
-  }
-  const transaction = replaceWithProperValues(purchasePackTxv2, contractName, contractAddress)
+  const transaction = replaceWithProperValues(purchasePackTx, contractName, contractAddress)
     .replaceAll('FungibleToken.Vault', vaultType)
     .replace('PAYMENT_PATH', storagePath);
   const args = (arg, t) => [
@@ -325,17 +281,15 @@ export async function uploadToContract(contractName, metadatas, batchSize, ipfsC
 
   const userAddr = get(user).addr;
 
-  const version = await getVersion(contractName, userAddr);
-  console.log(uploadType)
   if (uploadType === 'NFT') {
-    uploadMetadataToContract(contractName, userAddr, metadatas, batchSize, ipfsCID, version);
+    uploadMetadataToContract(contractName, userAddr, metadatas, batchSize, ipfsCID);
   } else if (uploadType === 'Pack') {
-    uploadPackToContract(contractName, userAddr, metadatas, batchSize, ipfsCID, version);
+    uploadPackToContract(contractName, userAddr, metadatas, batchSize, ipfsCID);
   }
 }
 
 // Function to upload metadata to the contract in batches of 500
-async function uploadMetadataToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID, version) {
+async function uploadMetadataToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID) {
   // Get The MetadataId we should start at
   let names = [];
   let descriptions = [];
@@ -365,22 +319,8 @@ async function uploadMetadataToContract(contractName, contractAddress, metadatas
   console.log('Uploading ' + batchSize + ' NFTs to the contract.');
   console.log(extras);
 
-  let transaction;
-  let args;
-  if (version == 0) {
-    transaction = replaceWithProperValues(createMetadatasTx, contractName, contractAddress).replaceAll('500', batchSize)
-    args = (arg, t) => [
-      arg(names, t.Array(t.String)),
-      arg(descriptions, t.Array(t.String)),
-      arg(images, t.Array(t.String)),
-      arg(thumbnails, t.Array(t.Optional(t.String))),
-      arg(prices, t.Array(t.Optional(t.UFix64))),
-      arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
-      arg(ipfsCID, t.String)
-    ]
-  } else if (version == 1) {
-    transaction = replaceWithProperValues(createMetadatasTxv1, contractName, contractAddress).replaceAll('500', batchSize)
-    args = (arg, t) => [
+  const transaction = replaceWithProperValues(createMetadatasTx, contractName, contractAddress).replaceAll('500', batchSize)
+  const args = (arg, t) => [
       arg(names, t.Array(t.String)),
       arg(descriptions, t.Array(t.String)),
       arg(images, t.Array(t.String)),
@@ -389,22 +329,7 @@ async function uploadMetadataToContract(contractName, contractAddress, metadatas
       arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
       arg(supplys, t.Array(t.UInt64)),
       arg(ipfsCID, t.String)
-    ]
-  } else if (version == 2) {
-    transaction = replaceWithProperValues(createMetadatasTxv2, contractName, contractAddress).replaceAll('500', batchSize)
-    args = (arg, t) => [
-      arg(names, t.Array(t.String)),
-      arg(descriptions, t.Array(t.String)),
-      arg(images, t.Array(t.String)),
-      arg(thumbnails, t.Array(t.Optional(t.String))),
-      arg(prices, t.Array(t.Optional(t.UFix64))),
-      arg(extras, t.Array(t.Dictionary({ key: t.String, value: t.String }))),
-      arg(supplys, t.Array(t.UInt64)),
-      arg(ipfsCID, t.String)
-    ]
-  } else {
-    return;
-  }
+  ]
 
   try {
     const transactionId = await fcl.mutate({
@@ -438,9 +363,8 @@ async function uploadMetadataToContract(contractName, contractAddress, metadatas
   }
 }
 
-// Only works for v2
-async function uploadPackToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID, version) {
-  if (version != 2) return;
+// Only works for 
+async function uploadPackToContract(contractName, contractAddress, metadatas, batchSize, ipfsCID) {
   const nextMetadataId = await getNextMetadataId(contractName, contractAddress);
   const { name, description, image, thumbnail, price, supply, serial, ...rest } = metadatas.shift();
   const packPrice = price ? Number(price).toFixed(3) : null;
@@ -499,7 +423,7 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
 
   console.log(baskets)
 
-  let transaction = replaceWithProperValues(createPackTxv2, contractName, contractAddress).replaceAll('500', batchSize)
+  let transaction = replaceWithProperValues(createPackTx, contractName, contractAddress).replaceAll('500', batchSize)
   let args = (arg, t) => [
     arg(name, t.String),
     arg(description, t.String),
@@ -556,18 +480,8 @@ async function uploadPackToContract(contractName, contractAddress, metadatas, ba
 export const airdrop = async (recipients, metadataIds, serials, contractName, contractAddress) => {
   initTransactionState();
 
-  const version = await getVersion(contractName, contractAddress);
-  let transaction;
-  let args;
-  if (version == 0) {
-    transaction = replaceWithProperValues(airdropTx, contractName, contractAddress)
-    args = (arg, t) => [arg(recipients, t.Array(t.Address)), arg(metadataIds, t.Array(t.UInt64))]
-  } else if (version == 1) {
-    transaction = replaceWithProperValues(airdropTxv1, contractName, contractAddress)
-    args = (arg, t) => [arg(recipients, t.Array(t.Address)), arg(metadataIds, t.Array(t.UInt64)), arg(serials, t.Array(t.UInt64))]
-  } else {
-    return;
-  }
+  let transaction = replaceWithProperValues(airdropTx, contractName, contractAddress)
+  let args = (arg, t) => [arg(recipients, t.Array(t.Address)), arg(metadataIds, t.Array(t.UInt64)), arg(serials, t.Array(t.UInt64))]
 
   try {
     const transactionId = await fcl.mutate({

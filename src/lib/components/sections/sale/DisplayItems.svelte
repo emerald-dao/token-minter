@@ -34,11 +34,7 @@
         name={metadata.name}
         description={metadata.description}
         price={Number(metadata.price ?? collectionInfo.price)}
-        buy={collectionInfo.version == 1
-          ? !(Object.keys(metadata.purchasers).length == metadata.supply)
-          : !Object.keys(collectionInfo.primaryBuyers).includes(
-              metadata.metadataId
-            )}
+        buy={!(Object.keys(metadata.purchasers).length == metadata.supply)}
         url={`/${$page.params.collection}/${metadata.metadataId}`}
         withLink={true}
         flowPrice={$flowPrice.price}

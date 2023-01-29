@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 export async function GET({ url }) {
   try {
-    response = await fetch('https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=4558', {
+    response = await fetch('https://pro-api.coinmarketcap.com//cryptocurrency/quotes/latest?id=4558', {
       headers: {
         'X-CMC_PRO_API_KEY': process.env.CMC_PRO_API_KEY,
       },
