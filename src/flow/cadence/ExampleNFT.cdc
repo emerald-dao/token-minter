@@ -108,7 +108,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		pub let containedNFTs: [[Identifier]]
 		pub var numOpened: UInt64
 
-		pub fun opened() {
+		access(account) fun opened() {
 			self.numOpened = self.numOpened + 1
 		}
 
@@ -200,6 +200,12 @@ pub contract ExampleNFT: NonFungibleToken {
 							recepient: getAccount(0x5643fd47a29770e7).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
 							cut: 0.025, // 2.5% royalty on secondary sales
 							description: "Emerald City DAO receives a 2.5% royalty from secondary sales because this collection was created using Touchstone (https://touchstone.city/), a tool for creating your own NFT collections, crafted by Emerald City DAO."
+						),
+						// This is for you, the creator of the collection!
+						MetadataViews.Royalty(
+							recepient: getAccount(ExampleNFT.account.address).getCapability<&FlowToken.Vault{FungibleToken.Receiver}>(/public/flowTokenReceiver),
+							cut: 0.025, // 2.5% royalty on secondary sales
+							description: "The creator of this Touchstone collection receives a 2.5% royalty from secondary sales. To create your own, head to https://toucshtone.city/"
 						)
 					])
 				case Type<MetadataViews.Serial>():
@@ -241,7 +247,15 @@ pub contract ExampleNFT: NonFungibleToken {
 		}
 	}
 
-	pub resource Collection: NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
+	pub resource interface CollectionPublic {
+		pub fun deposit(token: @NonFungibleToken.NFT)
+		pub fun getIDs(): [UInt64]
+		pub fun borrowNFT(id: UInt64): &NonFungibleToken.NFT
+		pub fun borrowViewResolver(id: UInt64): &AnyResource{MetadataViews.Resolver}
+		pub fun borrowWholeNFT(id: UInt64): &NFT?
+	}
+
+	pub resource Collection: CollectionPublic, NonFungibleToken.Provider, NonFungibleToken.Receiver, NonFungibleToken.CollectionPublic, MetadataViews.ResolverCollection {
 		// dictionary of NFT conforming tokens
 		// NFT is a resource type with an 'UInt64' ID field
 		pub var ownedNFTs: @{UInt64: NonFungibleToken.NFT}
@@ -295,6 +309,16 @@ pub contract ExampleNFT: NonFungibleToken {
 			let token = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
 			let nft = token as! &NFT
 			return nft as &AnyResource{MetadataViews.Resolver}
+		}
+
+		pub fun borrowWholeNFT(id: UInt64): &NFT? {
+			if self.ownedNFTs[id] != nil {
+                // Create an authorized reference to allow downcasting
+                let ref = (&self.ownedNFTs[id] as auth &NonFungibleToken.NFT?)!
+                return ref as! &ExampleNFT.NFT
+            }
+
+            return nil
 		}
 
 		pub fun claim() {
@@ -533,39 +557,39 @@ pub contract ExampleNFT: NonFungibleToken {
 	// Helpers
 
 	access(self) fun createNFT(metadataId: UInt64, serial: UInt64, recipient: Address): @NFT {
-			pre {
-				ExampleNFT.nftMetadatas[metadataId] != nil:
-					"This NFT does not exist yet."
-				serial < ExampleNFT.getNFTMetadata(metadataId)!.metadata.supply:
-					"This serial does not exist for this metadataId."
-				!ExampleNFT.getNFTMetadata(metadataId)!.metadata.purchasers.containsKey(serial):
-					"This serial has already been purchased."
-			}
+		pre {
+			ExampleNFT.nftMetadatas[metadataId] != nil:
+				"This NFT does not exist yet."
+			serial < ExampleNFT.getNFTMetadata(metadataId)!.metadata.supply:
+				"This serial does not exist for this metadataId."
+			!ExampleNFT.getNFTMetadata(metadataId)!.metadata.purchasers.containsKey(serial):
+				"This serial has already been purchased."
+		}
 
-			// Update who bought this serial inside Metadata so it cannot be purchased again.
-			let metadataRef: &NFTMetadata = (&ExampleNFT.nftMetadatas[metadataId] as &NFTMetadata?)!
-			metadataRef.metadata.purchased(serial: serial, buyer: recipient)
+		// Update who bought this serial inside Metadata so it cannot be purchased again.
+		let metadataRef: &NFTMetadata = (&ExampleNFT.nftMetadatas[metadataId] as &NFTMetadata?)!
+		metadataRef.metadata.purchased(serial: serial, buyer: recipient)
 
-			ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
-			let nft: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
-			emit Minted(id: nft.id, recipient: recipient, metadataId: metadataId)
-			return <- nft
+		ExampleNFT.totalSupply = ExampleNFT.totalSupply + 1
+		let nft: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
+		emit Minted(id: nft.id, recipient: recipient, metadataId: metadataId)
+		return <- nft
 	}
 
 	access(self) fun createPack(metadataId: UInt64, recipient: Address): @NFT {
-			pre {
-				ExampleNFT.packMetadatas[metadataId] != nil:
-					"This Pack does not exist yet."
-			}
+		pre {
+			ExampleNFT.packMetadatas[metadataId] != nil:
+				"This Pack does not exist yet."
+		}
 
-			// Update who bought this serial inside Metadata so it cannot be purchased again.
-			let metadataRef: &PackMetadata = (&ExampleNFT.packMetadatas[metadataId] as &PackMetadata?)!
-			let serial = UInt64(metadataRef.metadata.numBought)
-			metadataRef.metadata.purchased(serial: serial, buyer: recipient)
+		// Update who bought this serial inside Metadata so it cannot be purchased again.
+		let metadataRef: &PackMetadata = (&ExampleNFT.packMetadatas[metadataId] as &PackMetadata?)!
+		let serial = UInt64(metadataRef.metadata.numBought)
+		metadataRef.metadata.purchased(serial: serial, buyer: recipient)
 
-			let pack: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
-			emit Minted(id: pack.id, recipient: recipient, metadataId: metadataId)
-			return <- pack
+		let pack: @NFT <- create NFT(metadataId: metadataId, serial: serial, recipient: recipient)
+		emit Minted(id: pack.id, recipient: recipient, metadataId: metadataId)
+		return <- pack
 	}
 
 	init(
@@ -631,7 +655,7 @@ pub contract ExampleNFT: NonFungibleToken {
 		self.account.save(<- collection, to: self.CollectionStoragePath)
 
 		// create a public capability for the collection
-		self.account.link<&Collection{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(
+		self.account.link<&Collection{CollectionPublic, NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, MetadataViews.ResolverCollection}>(
 			self.CollectionPublicPath,
 			target: self.CollectionStoragePath
 		)
