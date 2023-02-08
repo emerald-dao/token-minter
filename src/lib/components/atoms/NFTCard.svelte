@@ -15,6 +15,7 @@
   export let ownedByUser = false;
   export let supply = 1;
   export let serial;
+  export let openPack = false;
 </script>
 
 <TransparentCard padding="0.8em" hoverShadow={true} border={true}>
