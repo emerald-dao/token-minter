@@ -42,16 +42,24 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
 
   execute { 
     let payment: @FungibleToken.Vault <- self.PaymentVault.withdraw(amount: price) as! @FungibleToken.Vault
-    let allMetadataIds = ExampleNFT.getNFTMetadatas().keys
-    let boughtMetadataIds = ExampleNFT.getPrimaryBuyers().keys
     var chosenMetadataId: UInt64? = nil
-    for metadataId in allMetadataIds {
-      if !boughtMetadataIds.contains(metadataId) {
-        chosenMetadataId = metadataId
-        break
+    var chosenSerial: UInt64? = nil
+    for nftMetadata in ExampleNFT.getNFTMetadatas().values {
+      if Int(nftMetadata.supply) != nftMetadata.purchasers.length {
+        chosenMetadataId = nftMetadata.metadataId
+        var serial: UInt64 = 0
+        while true {
+          if nftMetadata.purchasers[serial] == nil {
+            chosenSerial = serial
+            break
+          }
+        }
       }
     }
-    let nftId = ExampleNFT.mintNFT(metadataId: chosenMetadataId!, recipient: self.CollectionPublic, payment: <- payment)
+    let boughtMetadataIds = ExampleNFT.getPrimaryBuyers().keys
+   
+
+    let nftId = ExampleNFT.mintNFT(metadataId: chosenMetadataId!, recipient: self.CollectionPublic, payment: <- payment, serial: chosenSerial!)
     let nftMetadata: ExampleNFT.NFTMetadata = ExampleNFT.getNFTMetadata(chosenMetadataId!)!
     let display = MetadataViews.Display(
       name: nftMetadata.name,
@@ -61,3 +69,4 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
     self.Purchases.addPurchase(uuid: nftId, metadataId: chosenMetadataId!, display: display, contractAddress: contractAddress, contractName: contractName)
   }
 }
+ 
