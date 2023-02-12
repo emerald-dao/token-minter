@@ -46,6 +46,7 @@ import claimNFTsTx from './cadence/transactions/v0/claim_nfts.cdc?raw';
 import createMetadatasTxv1 from './cadence/transactions/v1/create_metadatas.cdc?raw';
 import purchaseNFTTxv1 from './cadence/transactions/v1/purchase_nft.cdc?raw';
 import airdropTxv1 from './cadence/transactions/v1/airdrop.cdc?raw';
+import purchaseRandomNFTTxv1 from './cadence/transactions/v1/purchase_random_nft.cdc?raw';
 
 if (browser) {
   // set Svelte $user store to currentUser,
@@ -245,6 +246,8 @@ export const purchaseNFT = async (metadataId, price, serial, contractName, contr
 };
 
 export const purchaseRandomNFT = async (price, contractName, contractAddress, paymentType) => {
+  const version = await getVersion(contractName, contractAddress);
+  const purchaseRandomCode = version == 1 ? purchaseRandomNFTTxv1 : purchaseRandomNFTTx;
   let vaultType = '';
   let storagePath = '';
   if (paymentType == "$FLOW") {
@@ -255,7 +258,7 @@ export const purchaseRandomNFT = async (price, contractName, contractAddress, pa
     storagePath = "fusdVault";
   }
 
-  const transaction = replaceWithProperValues(purchaseRandomNFTTx, contractName, contractAddress)
+  const transaction = replaceWithProperValues(purchaseRandomCode, contractName, contractAddress)
     .replaceAll('FungibleToken.Vault', vaultType)
     .replace('PAYMENT_PATH', storagePath);;
 
