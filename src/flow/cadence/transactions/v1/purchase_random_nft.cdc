@@ -53,6 +53,7 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
             chosenSerial = serial
             break
           }
+          serial = serial + 1
         }
       }
     }
