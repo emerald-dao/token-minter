@@ -6,6 +6,7 @@ import TouchstonePurchases from "../../TouchstonePurchases.cdc"
 import EmeraldPass from "../../utility/EmeraldPass.cdc"
 import FlowToken from "../../utility/FlowToken.cdc"
 import FUSD from "../../utility/FUSD.cdc"
+import PRNG from "../../utility/PRNG.cdc"
 
 transaction(price: UFix64, contractName: String, contractAddress: Address) {
   let PaymentVault: &FungibleToken.Vault
@@ -42,26 +43,33 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
 
   execute { 
     let payment: @FungibleToken.Vault <- self.PaymentVault.withdraw(amount: price) as! @FungibleToken.Vault
+    var chosenMetadata: ExampleNFT.NFTMetadata? = nil
     var chosenMetadataId: UInt64? = nil
     var chosenSerial: UInt64? = nil
-    for nftMetadata in ExampleNFT.getNFTMetadatas().values {
+    let metadatas: [ExampleNFT.NFTMetadata] = ExampleNFT.getNFTMetadatas().values
+
+    // random
+    let generator <- PRNG.createFrom(blockHeight: getCurrentBlock().height, uuid: 100)
+    while true {
+      // call the range function to give you an integer between min and max
+      let answer: UInt256 = generator.range(0, UInt256(metadatas.length - 1))
+
+      let nftMetadata: ExampleNFT.NFTMetadata = metadatas[answer]
+
       if Int(nftMetadata.supply) != nftMetadata.purchasers.length {
         chosenMetadataId = nftMetadata.metadataId
-        var serial: UInt64 = 0
-        while true {
-          if nftMetadata.purchasers[serial] == nil {
-            chosenSerial = serial
-            break
-          }
-          serial = serial + 1
-        }
+        chosenSerial = UInt64(nftMetadata.purchasers.length)
+        chosenMetadata = nftMetadata
+        break
+      } else {
+        metadatas.remove(at: answer)
       }
     }
-    let boughtMetadataIds = ExampleNFT.getPrimaryBuyers().keys
-   
+    // destroy the generator resource
+    destroy generator
 
     let nftId = ExampleNFT.mintNFT(metadataId: chosenMetadataId!, recipient: self.CollectionPublic, payment: <- payment, serial: chosenSerial!)
-    let nftMetadata: ExampleNFT.NFTMetadata = ExampleNFT.getNFTMetadata(chosenMetadataId!)!
+    let nftMetadata: ExampleNFT.NFTMetadata = chosenMetadata!
     let display = MetadataViews.Display(
       name: nftMetadata.name,
       description: nftMetadata.description,

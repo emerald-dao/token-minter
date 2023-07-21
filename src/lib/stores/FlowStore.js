@@ -61,6 +61,9 @@ const contractData = {
   NFTCatalog: {
     testnet: '0x324c34e1c517e4db',
     mainnet: '0x49a7cda3a1eecc29',
+  },
+  PRNG: {
+    mainnet: '0x93615d25d14fa337'
   }
 };
 
@@ -85,6 +88,7 @@ export const addresses = derived([network], ([$network]) => {
     TouchstonePurchases: contractData.TouchstonePurchases[$network],
     EmeraldPass: contractData.EmeraldPass[$network],
     EmeraldID: contractData.EmeraldID[$network],
-    NFTCatalog: contractData.NFTCatalog[$network]
+    NFTCatalog: contractData.NFTCatalog[$network],
+    PRNG: contractData.PRNG[$network]
   };
 });

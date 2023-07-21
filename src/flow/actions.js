@@ -89,6 +89,7 @@ export function replaceWithProperValues(script, contractName = '', contractAddre
     .replace('"../../utility/EmeraldIdentity.cdc"', addressList.EmeraldID)
     .replace('"../../utility/EmeraldIdentityDapper.cdc"', addressList.EmeraldID)
     .replace('"../../utility/EmeraldIdentityLilico.cdc"', addressList.EmeraldID)
+    .replace('"../../utility/PRNG.cdc"', addressList.PRNG)
     .replaceAll('0x5643fd47a29770e7', addressList.ECTreasury)
     .replaceAll('ExampleNFT', contractName);
 }
