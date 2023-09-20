@@ -28,7 +28,7 @@
           <CollectionCard
             name={collection.name}
             url={`/discover/${owner}/${collection.contractName}`}
-            thumbnailURL={`https://nftstorage.link/ipfs/${collection.image.cid}/${collection.image.path}`}
+            thumbnailURL={`https://ifps.io/ipfs/${collection.image.cid}/${collection.image.path}`}
             description={collection.description}
             {owner}
           />

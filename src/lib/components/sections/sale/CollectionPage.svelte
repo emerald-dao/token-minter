@@ -55,7 +55,7 @@
         {#if collectionInfo?.bannerImage}
           <div
             class="banner"
-            style={`background-image: url("https://nftstorage.link/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
+            style={`background-image: url("https://ifps.io/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
         {/if}
         <Container class="width-full">
           <div
@@ -65,7 +65,7 @@
               <div class="presentation-wrapper">
                 <div class="image-wrapper">
                   <NftImage
-                    thumbnailURL={`https://nftstorage.link/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
+                    thumbnailURL={`https://ifps.io/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
                     name={`${collectionInfo.name} main image`} />
                 </div>
                 <Stack
@@ -137,8 +137,8 @@
                             .includes(nameFilter.toUpperCase()))}
                         <NFTCard
                           thumbnailURL={NFT.thumbnail
-                            ? `https://nftstorage.link/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
-                            : `https://nftstorage.link/ipfs/${NFT.image.cid}/${NFT.image.path}`}
+                            ? `https://ifps.io/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+                            : `https://ifps.io/ipfs/${NFT.image.cid}/${NFT.image.path}`}
                           name={NFT.name}
                           description={NFT.description}
                           price={Number(NFT.price ?? collectionInfo.price)}

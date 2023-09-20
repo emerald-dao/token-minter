@@ -10,7 +10,7 @@
       <NFTCard
         name={purchase.display.name}
         description={purchase.display.description}
-        thumbnailURL={`https://nftstorage.link/ipfs/${purchase.display.thumbnail.cid}/${purchase.display.thumbnail.path}`}
+        thumbnailURL={`https://ifps.io/ipfs/${purchase.display.thumbnail.cid}/${purchase.display.thumbnail.path}`}
         url={`/discover/${purchase.contractAddress}/${purchase.contractName}/${purchase.metadataId}`}
         withLink={true} />
     {/each}

@@ -22,7 +22,7 @@
     <h3>Loading...</h3>
   {:then info}
     <NftImage
-      thumbnailURL={`https://nftstorage.link/ipfs/${info.image.cid}/${info.image.path}`}
+      thumbnailURL={`https://ifps.io/ipfs/${info.image.cid}/${info.image.path}`}
       name={`${info.name} main image`} />
     <h3>{info.name}</h3>
   {/await}

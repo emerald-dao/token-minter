@@ -63,7 +63,7 @@
       {#await checkNftInfo then info}
         <div class="image-wrapper left-top">
           <NftImage
-            thumbnailURL={`https://nftstorage.link/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
+            thumbnailURL={`https://ifps.io/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
             name={`${info.nftInfo.name} NFT`} />
         </div>
         <div class="collection-info-wrapper">

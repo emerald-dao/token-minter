@@ -37,7 +37,7 @@
           <NFTCard
             name={NFT.name}
             description={NFT.description}
-            thumbnailURL={`https://nftstorage.link/ipfs/${NFT.thumbnail}`}
+            thumbnailURL={`https://ifps.io/ipfs/${NFT.thumbnail}`}
             price={NFT.price}
             paymentType={$collectionInfo.paymentType}
             supply={NFT.supply} />

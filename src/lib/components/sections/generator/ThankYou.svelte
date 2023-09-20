@@ -17,7 +17,7 @@
     <CollectionCard
       name={$contractInfo.name}
       url={`/discover/${$user.addr}/${$contractInfo.contractName}`}
-      thumbnailURL={`https://nftstorage.link/ipfs/${$resultCID}/${$contractInfo.imageName}`}
+      thumbnailURL={`https://ifps.io/ipfs/${$resultCID}/${$contractInfo.imageName}`}
       description={$contractInfo.description}
       owner={$user.addr} />
   </Stack>
