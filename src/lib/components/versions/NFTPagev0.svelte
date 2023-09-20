@@ -63,8 +63,9 @@
       {#await checkNftInfo then info}
         <div class="image-wrapper left-top">
           <NftImage
-            thumbnailURL={`https://ifps.io/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
-            name={`${info.nftInfo.name} NFT`} />
+            thumbnailURL={`https://ipfs.io/ipfs/${info.nftInfo.image.cid}/${info.nftInfo.image.path}`}
+            name={`${info.nftInfo.name} NFT`}
+          />
         </div>
         <div class="collection-info-wrapper">
           <Stack direction="column" align="flex-start">
@@ -81,12 +82,14 @@
                 width="34px"
                 fontSize="var(--fs-500)"
                 currentPrice={true}
-                paymentType={info.collectionInfo.paymentType} />
+                paymentType={info.collectionInfo.paymentType}
+              />
               <Button
                 leftIcon="wallet"
                 loading={$transactionInProgress}
                 on:click={() =>
-                  buyNft(info.price, info.collectionInfo.paymentType)}>
+                  buyNft(info.price, info.collectionInfo.paymentType)}
+              >
                 {#if $transactionInProgress}
                   Loading Transaction
                 {:else}
@@ -110,7 +113,8 @@
               class="medium transparent"
               leftIcon="arrow-back-circle"
               href="/discover/{$page.params.address}/{$page.params.collection}"
-              >Back to Collection</Button>
+              >Back to Collection</Button
+            >
           </Stack>
         </div>
         <div class="left-bottom">

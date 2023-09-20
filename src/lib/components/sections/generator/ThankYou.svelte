@@ -17,9 +17,10 @@
     <CollectionCard
       name={$contractInfo.name}
       url={`/discover/${$user.addr}/${$contractInfo.contractName}`}
-      thumbnailURL={`https://ifps.io/ipfs/${$resultCID}/${$contractInfo.imageName}`}
+      thumbnailURL={`https://ipfs.io/ipfs/${$resultCID}/${$contractInfo.imageName}`}
       description={$contractInfo.description}
-      owner={$user.addr} />
+      owner={$user.addr}
+    />
   </Stack>
   <Button slot="buttons" on:click={newCollection} leftIcon="add-circle">
     Create new collection

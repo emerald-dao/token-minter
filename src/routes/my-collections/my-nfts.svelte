@@ -10,9 +10,10 @@
       <NFTCard
         name={purchase.display.name}
         description={purchase.display.description}
-        thumbnailURL={`https://ifps.io/ipfs/${purchase.display.thumbnail.cid}/${purchase.display.thumbnail.path}`}
+        thumbnailURL={`https://ipfs.io/ipfs/${purchase.display.thumbnail.cid}/${purchase.display.thumbnail.path}`}
         url={`/discover/${purchase.contractAddress}/${purchase.contractName}/${purchase.metadataId}`}
-        withLink={true} />
+        withLink={true}
+      />
     {/each}
   {/await}
 </AdaptableGrid>

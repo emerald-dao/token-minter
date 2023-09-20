@@ -37,10 +37,11 @@
           <NFTCard
             name={NFT.name}
             description={NFT.description}
-            thumbnailURL={`https://ifps.io/ipfs/${NFT.thumbnail}`}
+            thumbnailURL={`https://ipfs.io/ipfs/${NFT.thumbnail}`}
             price={NFT.price}
             paymentType={$collectionInfo.paymentType}
-            supply={NFT.supply} />
+            supply={NFT.supply}
+          />
         {/if}
       {/each}
       <IntersectionObserver
@@ -48,7 +49,8 @@
         bind:intersecting
         on:observe={() => {
           nftsToDisplay = nftsToDisplay + 20;
-        }}>
+        }}
+      >
         <div bind:this={element} />
       </IntersectionObserver>
     </div>

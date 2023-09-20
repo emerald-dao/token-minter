@@ -55,24 +55,28 @@
         {#if collectionInfo?.bannerImage}
           <div
             class="banner"
-            style={`background-image: url("https://ifps.io/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`} />
+            style={`background-image: url("https://ipfs.io/ipfs/${collectionInfo.bannerImage.cid}/${collectionInfo.bannerImage.path}")`}
+          />
         {/if}
         <Container class="width-full">
           <div
             class="collection-info-wrapper"
-            class:no-banner={!collectionInfo.bannerImage}>
+            class:no-banner={!collectionInfo.bannerImage}
+          >
             <div class="collection-info">
               <div class="presentation-wrapper">
                 <div class="image-wrapper">
                   <NftImage
-                    thumbnailURL={`https://ifps.io/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
-                    name={`${collectionInfo.name} main image`} />
+                    thumbnailURL={`https://ipfs.io/ipfs/${collectionInfo.image.cid}/${collectionInfo.image.path}`}
+                    name={`${collectionInfo.name} main image`}
+                  />
                 </div>
                 <Stack
                   direction="column"
                   gap="0.8em"
                   align="center"
-                  justify="flex-start">
+                  justify="flex-start"
+                >
                   <MadeWithTouchstone />
                   <WalletAddress address={contractAddress}>By</WalletAddress>
                   <Divider space="1px" />
@@ -81,7 +85,8 @@
               {#if collectionInfo.socials}
                 <Stack direction="row" gap="1.5rem">
                   <CollectionSocials
-                    collectionSocials={collectionInfo.socials} />
+                    collectionSocials={collectionInfo.socials}
+                  />
                   <Divider space="1px" />
                 </Stack>
               {/if}
@@ -94,7 +99,8 @@
               </p>
               <CollectionStats
                 {collectionInfo}
-                version={collectionInfo.version} />
+                version={collectionInfo.version}
+              />
 
               {#await checkRequiredVerifiers($page.params.collection, contractAddress, $user?.addr) then verifiers}
                 {#if verifiers.length > 0}
@@ -113,7 +119,8 @@
                     bind:minPrice
                     {contractAddress}
                     contractName={$page.params.collection}
-                    {claimableNFTs} />
+                    {claimableNFTs}
+                  />
                 {/await}
               {/if}
               <AdaptableGrid minWidth="12em" gap="1.2em">
@@ -123,7 +130,8 @@
                     metadatas={collectionInfo.metadatas}
                     primaryBuyers={collectionInfo.primaryBuyers}
                     addr={$user?.addr}
-                    collectionPrice={collectionInfo.price} />
+                    collectionPrice={collectionInfo.price}
+                  />
                 {:else if !collectionInfo.lotteryBuying}
                   {#each Object.values(collectionInfo.metadatas) as NFT, i}
                     <!-- Apply filters -->
@@ -137,8 +145,8 @@
                             .includes(nameFilter.toUpperCase()))}
                         <NFTCard
                           thumbnailURL={NFT.thumbnail
-                            ? `https://ifps.io/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
-                            : `https://ifps.io/ipfs/${NFT.image.cid}/${NFT.image.path}`}
+                            ? `https://ipfs.io/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+                            : `https://ipfs.io/ipfs/${NFT.image.cid}/${NFT.image.path}`}
                           name={NFT.name}
                           description={NFT.description}
                           price={Number(NFT.price ?? collectionInfo.price)}
@@ -153,7 +161,8 @@
                           withLink={true}
                           flowPrice={$flowPrice.price}
                           paymentType={collectionInfo.paymentType}
-                          supply={NFT.supply} />
+                          supply={NFT.supply}
+                        />
                       {/if}
                     {/if}
                   {/each}
@@ -162,7 +171,8 @@
                     bind:intersecting
                     on:observe={() => {
                       nftsToDisplay = nftsToDisplay + 20;
-                    }}>
+                    }}
+                  >
                     <div bind:this={element} />
                   </IntersectionObserver>
                 {:else}
@@ -172,7 +182,8 @@
                     paymentType={collectionInfo.paymentType}
                     address={contractAddress}
                     contractName={$page.params.collection}
-                    number={Object.keys(collectionInfo.metadatas).length} />
+                    number={Object.keys(collectionInfo.metadatas).length}
+                  />
                 {/if}
               </AdaptableGrid>
             </div>

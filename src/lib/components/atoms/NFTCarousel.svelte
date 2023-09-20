@@ -28,8 +28,8 @@
 
 <NFTCard
   thumbnailURL={metadatas[lotteryNumber].thumbnail
-    ? `https://ifps.io/ipfs/${metadatas[lotteryNumber].thumbnail.cid}/${metadatas[lotteryNumber].thumbnail.path}`
-    : `https://ifps.io/ipfs/${metadatas[lotteryNumber].image.cid}/${metadatas[lotteryNumber].image.path}`}
+    ? `https://ipfs.io/ipfs/${metadatas[lotteryNumber].thumbnail.cid}/${metadatas[lotteryNumber].thumbnail.path}`
+    : `https://ipfs.io/ipfs/${metadatas[lotteryNumber].image.cid}/${metadatas[lotteryNumber].image.path}`}
   name={metadatas[lotteryNumber].name}
   description={metadatas[lotteryNumber].description}
   {price}
@@ -37,4 +37,5 @@
   buy={true}
   url={`/discover/${address}/${contractName}/${metadatas[lotteryNumber].metadataId}`}
   purchase={() => purchaseRandomNFT(price, contractName, address, paymentType)}
-  withLink={false} />
+  withLink={false}
+/>

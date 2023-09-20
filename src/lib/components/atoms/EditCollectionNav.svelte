@@ -22,8 +22,9 @@
     <h3>Loading...</h3>
   {:then info}
     <NftImage
-      thumbnailURL={`https://ifps.io/ipfs/${info.image.cid}/${info.image.path}`}
-      name={`${info.name} main image`} />
+      thumbnailURL={`https://ipfs.io/ipfs/${info.image.cid}/${info.image.path}`}
+      name={`${info.name} main image`}
+    />
     <h3>{info.name}</h3>
   {/await}
 </Stack>
@@ -31,32 +32,37 @@
   line={true}
   lineWidth="2px"
   space="1.8rem"
-  lineColor="var(--clr-accent-main-t9)" />
+  lineColor="var(--clr-accent-main-t9)"
+/>
 <Stack direction="column" gap="0rem">
   <BallButton
     active={$page.url.pathname === `/my-collections/${$page.params.collection}`}
     icon="ion:settings"
-    href={`/my-collections/${$page.params.collection}`}>
+    href={`/my-collections/${$page.params.collection}`}
+  >
     General
   </BallButton>
   <BallButton
     active={false}
     icon="ion:eye"
-    href={`/discover/${$user.addr}/${$page.params.collection}`}>
+    href={`/discover/${$user.addr}/${$page.params.collection}`}
+  >
     View Collection
   </BallButton>
   <BallButton
     active={$page.url.pathname ===
       `/my-collections/${$page.params.collection}/upload`}
     icon="ion:upload"
-    href={`/my-collections/${$page.params.collection}/upload`}>
+    href={`/my-collections/${$page.params.collection}/upload`}
+  >
     Upload
   </BallButton>
   <BallButton
     active={$page.url.pathname ===
       `/my-collections/${$page.params.collection}/airdrop`}
     icon="ion:gift"
-    href={`/my-collections/${$page.params.collection}/airdrop`}>
+    href={`/my-collections/${$page.params.collection}/airdrop`}
+  >
     Airdrop
   </BallButton>
   <BallButton
@@ -64,16 +70,19 @@
     danger={true}
     clickable={true}
     on:click={() => removeContractFromBook($page.params.collection)}
-    >Remove</BallButton>
+    >Remove</BallButton
+  >
   <Divider
     line={true}
     lineWidth="2px"
     space="2rem"
-    lineColor="var(--clr-accent-main-t9)" />
+    lineColor="var(--clr-accent-main-t9)"
+  />
   <Button
     class="small transparent"
     leftIcon="arrow-back-circle"
-    href="/my-collections">Back to My Collections</Button>
+    href="/my-collections">Back to My Collections</Button
+  >
   <Divider space="1rem" lineColor="var(--clr-accent-main-t9)" />
   {#await hasEmeraldPass then pass}
     {#if !pass}
@@ -81,7 +90,8 @@
         class="small full-width ghost"
         leftIcon="lock-open"
         target="_blank"
-        href="https://pass.ecdao.org/">Get Emerald Pass</Button>
+        href="https://pass.ecdao.org/">Get Emerald Pass</Button
+      >
     {/if}
   {/await}
 </Stack>

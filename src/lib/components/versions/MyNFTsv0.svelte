@@ -22,8 +22,8 @@
 {#each myNFTs() as NFT}
   <NFTCard
     thumbnailURL={NFT.thumbnail
-      ? `https://ifps.io/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
-      : `https://ifps.io/ipfs/${NFT.image.cid}/${NFT.image.path}`}
+      ? `https://ipfs.io/ipfs/${NFT.thumbnail.cid}/${NFT.thumbnail.path}`
+      : `https://ipfs.io/ipfs/${NFT.image.cid}/${NFT.image.path}`}
     name={NFT.name}
     description={NFT.description}
     price={Number(NFT.price ?? collectionPrice)}
@@ -31,5 +31,6 @@
     withLink={true}
     buy={false}
     ownedByUser={true}
-    supply={NFT.supply} />
+    supply={NFT.supply}
+  />
 {/each}
