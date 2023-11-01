@@ -57,7 +57,7 @@ async function uploadCar(car, IPFSToken) {
   let cars = [];
   let result_cid = null;
 
-  if (car.size <= MaxCarSize1MB) {
+  if (car.size <= MaxCarSize1MB * 2) {
     cars.push(car);
   } else {
     // when size exceeds MaxCarSize1MB, split it into an AsyncIterable<Uint8Array>
