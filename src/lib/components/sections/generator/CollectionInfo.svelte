@@ -1,10 +1,6 @@
 <script>
 	import { createForm } from "felte";
-	import {
-		canMakeReservation,
-		getAllContractNames,
-		hasEmeraldPass,
-	} from "$flow/actions.js";
+	import { canMakeReservation, getAllContractNames } from "$flow/actions.js";
 	import { collectionInfo, collectionImage } from "$stores/ContractStore.js";
 	import { user } from "$stores/FlowStore";
 	import collectionOptions from "$lib/config/collectionOptions.js";
@@ -18,7 +14,9 @@
 		name: string().required("Of course your collection needs a name! 🤷‍♂️"),
 		payment: number()
 			.min(0.0)
-			.required("If your NFTs don't have a price, you can't sell them 🤑"),
+			.required(
+				"If your NFTs don't have a price, you can't sell them 🤑",
+			),
 		description: string().required("Don't be shy, write a description 🤗"),
 		image: mixed().required("We also need an image! 📸"),
 		bannerImage: mixed(),
@@ -38,30 +36,21 @@
 	async function checkContracts() {
 		const contracts = await getAllContractNames($user.addr);
 
-		// CHECK TO SEE IF THEY HAVE EMERALD PASS HERE
-		const activeEmeraldPass = await hasEmeraldPass($user.addr);
-
-		$collectionInfo.contractName = activeEmeraldPass
-			? $collectionInfo.name.replace(/\s+/g, "")
-			: "Touchstone" + $collectionInfo.name.replace(/\s+/g, "");
+		$collectionInfo.contractName = $collectionInfo.name.replace(/\s+/g, "");
 
 		if (contracts.includes($collectionInfo.contractName)) {
 			return {
-				error:
-					"This collection name is already deployed to your account. You cannot use it again.",
+				error: "This collection name is already deployed to your account. You cannot use it again.",
 			};
 		}
 
-		if (activeEmeraldPass) {
-			const userCanMakeReservation = await canMakeReservation(
-				$collectionInfo.contractName
-			);
-			if (!userCanMakeReservation) {
-				return {
-					error:
-						"Someone has already used this Collection Name. Please choose another.",
-				};
-			}
+		const userCanMakeReservation = await canMakeReservation(
+			$collectionInfo.contractName,
+		);
+		if (!userCanMakeReservation) {
+			return {
+				error: "Someone has already used this Collection Name. Please choose another.",
+			};
 		}
 
 		return true;
@@ -87,7 +76,8 @@
 				required={option.required}
 				placeholder={option.placeholder}
 				helperText={option.helperText}
-				radioOptions={option.radioOptions} />
+				radioOptions={option.radioOptions}
+			/>
 		{/each}
 	</form>
 	<Button
@@ -96,7 +86,8 @@
 		form="collection-info"
 		rightIcon="arrow-forward-circle"
 		loading={$activeStep.loading}
-		disabled={!buttonActive}>
+		disabled={!buttonActive}
+	>
 		{#if $activeStep.loading}
 			Checking Collection Availability
 		{:else}

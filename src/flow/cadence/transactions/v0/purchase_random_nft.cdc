@@ -3,7 +3,6 @@ import FungibleToken from "../../utility/FungibleToken.cdc"
 import NonFungibleToken from "../../utility/NonFungibleToken.cdc"
 import MetadataViews from "../../utility/MetadataViews.cdc"
 import TouchstonePurchases from "../../TouchstonePurchases.cdc"
-import EmeraldPass from "../../utility/EmeraldPass.cdc"
 import FlowToken from "../../utility/FlowToken.cdc"
 import FUSD from "../../utility/FUSD.cdc"
 
@@ -21,11 +20,6 @@ transaction(price: UFix64, contractName: String, contractAddress: Address) {
     if signer.borrow<&TouchstonePurchases.Purchases>(from: TouchstonePurchases.PurchasesStoragePath) == nil {
       signer.save(<- TouchstonePurchases.createPurchases(), to: TouchstonePurchases.PurchasesStoragePath)
       signer.link<&TouchstonePurchases.Purchases{TouchstonePurchases.PurchasesPublic}>(TouchstonePurchases.PurchasesPublicPath, target: TouchstonePurchases.PurchasesStoragePath)
-    }
-
-    if signer.borrow<&EmeraldPass.Vault>(from: EmeraldPass.VaultStoragePath) == nil {
-      signer.save(<- EmeraldPass.createVault(), to: EmeraldPass.VaultStoragePath)
-      signer.link<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>(EmeraldPass.VaultPublicPath, target: EmeraldPass.VaultStoragePath)
     }
 
     // Rest of the code

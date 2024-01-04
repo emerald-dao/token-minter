@@ -1,5 +1,3 @@
-import EmeraldPass from "./utility/EmeraldPass.cdc"
-
 // Created by Emerald City DAO for Touchstone (https://touchstone.city/)
 
 pub contract TouchstoneContracts {
@@ -31,10 +29,7 @@ pub contract TouchstoneContracts {
       
       let globalContractsBook = TouchstoneContracts.account.borrow<&GlobalContractsBook>(from: TouchstoneContracts.GlobalContractsBookStoragePath)!
       globalContractsBook.addUser(address: me)
-
-      if EmeraldPass.isActive(user: me) {
-        globalContractsBook.reserve(contractName: contractName, user: me)
-      }
+      globalContractsBook.reserve(contractName: contractName, user: me)
     }
 
     pub fun removeContract(contractName: String) {
@@ -68,7 +63,6 @@ pub contract TouchstoneContracts {
     pub fun reserve(contractName: String, user: Address) {
       pre {
         self.getReservationStatus(contractName: contractName) != ReservationStatus.active: contractName.concat(" is already taken!")
-        EmeraldPass.isActive(user: user): "This user does not have an active Emerald Pass subscription."
       }
       self.reservedContractNames[contractName] = user
     }
@@ -87,14 +81,6 @@ pub contract TouchstoneContracts {
 
     pub fun getReservationStatus(contractName: String): ReservationStatus {
       if let reservedBy = self.reservedContractNames[contractName] {
-        if !EmeraldPass.isActive(user: reservedBy) {
-          let userEmeraldPass: &EmeraldPass.Vault{EmeraldPass.VaultPublic}? = getAccount(reservedBy).getCapability(EmeraldPass.VaultPublicPath).borrow<&EmeraldPass.Vault{EmeraldPass.VaultPublic}>()
-        
-          // If the user's Emerald Pass has been expired for more than a month, allow replacement
-          if userEmeraldPass == nil || userEmeraldPass!.endDate + 2629743.0 < getCurrentBlock().timestamp {
-            return ReservationStatus.expired
-          }
-        }
         return ReservationStatus.active
       }
       return ReservationStatus.notFound

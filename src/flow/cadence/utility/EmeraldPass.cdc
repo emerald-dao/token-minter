@@ -2,9 +2,7 @@ import FungibleToken from "./FungibleToken.cdc"
 import FUSD from "./FUSD.cdc"
 import FlowToken from "./FlowToken.cdc"
 
-// The official Emerald Pass contract. Access premium features across Emerald City tools and education by having an active subscription.
-// Purchase or learn more about Emerald Pass: https://pass.ecdao.org/
-// Created by Emerald City
+// This contract is now deprecated and should no longer be used.
 
 pub contract EmeraldPass {
 
@@ -63,6 +61,9 @@ pub contract EmeraldPass {
     pub var endDate: UFix64
 
     pub fun purchase(payment: @FungibleToken.Vault) {
+      pre {
+        false: "Disabled."
+      }
       let paymentType: Type = payment.getType()
       let pricing: Pricing = EmeraldPass.getPricing(vaultType: paymentType) ?? panic("This is not a supported form of payment.")
       let time: UFix64 = pricing.getTime(cost: payment.balance) ?? panic("The balance of the Vault you sent in does not correlate to any supported amounts of time.")
@@ -75,7 +76,7 @@ pub contract EmeraldPass {
     }
 
     pub fun isActive(): Bool {
-      return getCurrentBlock().timestamp <= self.endDate
+      return true
     }
 
     access(account) fun addTime(time: UFix64) {
@@ -123,6 +124,9 @@ pub contract EmeraldPass {
 
   // A function you can call to donate subscription time to someone else
   pub fun donate(nicePerson: Address, to: Address, payment: @FungibleToken.Vault) {
+    pre {
+        false: "Disabled."
+      }
     let userVault = getAccount(to).getCapability(EmeraldPass.VaultPublicPath)
                       .borrow<&Vault{VaultPublic}>() ?? panic("This receiver has not set up a Vault for Emerald Pass yet.")
     let paymentType: Type = payment.getType()
@@ -132,7 +136,7 @@ pub contract EmeraldPass {
 
   // Checks to see if a user is currently subscribed to Emerald Pass
   pub fun isActive(user: Address): Bool {
-    return getAccount(user).getCapability(EmeraldPass.VaultPublicPath).borrow<&Vault{VaultPublic}>()?.isActive() == true
+    return true
   }
 
   pub fun getAllPricing(): {Type: Pricing} {

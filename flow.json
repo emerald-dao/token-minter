@@ -123,6 +123,20 @@
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "f514a338d87202ff221661646bb7e5b6d982a3b4ad7599e32c3cc344cac171c3"
+		},
+		"emeraldpass-mainnet-account": {
+			"address": "0x6a07dbeb03167a13",
+			"key": {
+				"type": "file",
+				"location": "emeraldpass-mainnet-account.pkey"
+			}
+		},
+		"touchstone-mainnet-account": {
+			"address": "0x7a696d6136e1dce2",
+			"key": {
+				"type": "file",
+				"location": "touchstone-mainnet-account.pkey"
+			}
 		}
 	},
 	"deployments": {
@@ -133,6 +147,12 @@
 				"GrantedAccountAccess",
 				"FLOAT",
 				"MintVerifiers"
+			]
+		},
+		"mainnet": {
+			"touchstone-mainnet-account": [
+				"TouchstonePurchases",
+				"TouchstoneContracts"
 			]
 		}
 	}

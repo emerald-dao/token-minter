@@ -12,7 +12,6 @@
 	import Button from "$lib/components/atoms/Button.svelte";
 
 	const collectionInfo = getContext("collectionInfo");
-	const hasEmeraldPass = getContext("emeraldPass");
 
 	const saveContent = (fileContents, fileName) => {
 		const link = document.createElement("a");
@@ -25,7 +24,9 @@
 		const version = await getVersion(collectionName, $user.addr);
 		if (version == 0) {
 			let csvContent = `data:text/csv;charset=utf-8,nft metadataId,buyer address,discord name\n`;
-			const emeraldIds = await getEmeraldIDBatch(Object.values(primaryBuyers));
+			const emeraldIds = await getEmeraldIDBatch(
+				Object.values(primaryBuyers),
+			);
 			for (const metadataId in primaryBuyers) {
 				const buyer = primaryBuyers[metadataId];
 				csvContent +=
@@ -39,7 +40,9 @@
 			saveContent(csvContent, `${collectionName}-buyers.csv`);
 		} else if (version == 1) {
 			let csvContent = `data:text/csv;charset=utf-8,buyer address,discord name,metadata id,amount purchased\n`;
-			const emeraldIds = await getEmeraldIDBatch(Object.keys(primaryBuyers));
+			const emeraldIds = await getEmeraldIDBatch(
+				Object.keys(primaryBuyers),
+			);
 			console.log(primaryBuyers);
 			for (const buyer in primaryBuyers) {
 				const metadataIdPurchases = primaryBuyers[buyer];
@@ -67,7 +70,8 @@
 		{:then info}
 			<CollectionStat
 				title="Total Items"
-				stat={Object.keys(info.metadatas).length} />
+				stat={Object.keys(info.metadatas).length}
+			/>
 		{/await}
 	</TransparentCard>
 	<TransparentCard accent={true}>
@@ -76,7 +80,8 @@
 		{:then info}
 			<CollectionStat
 				title="NFTs Minted"
-				stat={Object.keys(info.primaryBuyers).length} />
+				stat={Object.keys(info.primaryBuyers).length}
+			/>
 		{/await}
 	</TransparentCard>
 	<TransparentCard accent={true}>
@@ -87,7 +92,8 @@
 				title="Profit"
 				stat={Number(info.profit)}
 				flowLogo={info.paymentType === "$FLOW"}
-				fusdLogo={info.paymentType === "$FUSD"} />
+				fusdLogo={info.paymentType === "$FUSD"}
+			/>
 		{/await}
 	</TransparentCard>
 </div>
@@ -103,29 +109,32 @@
 							type="checkbox"
 							checked={info.minting}
 							on:click={() =>
-								toggleMinting($page.params.collection, $user.addr)} />
+								toggleMinting(
+									$page.params.collection,
+									$user.addr,
+								)}
+						/>
 						Sale Active
 					</label>
 				</Stack>
 			</TransparentCard>
-			{#await hasEmeraldPass then pass}
-				<Button
-					locked={!pass}
-					on:click={() =>
-						downloadBuyers(info.primaryBuyers, $page.params.collection)}
-					>Download Buyers</Button>
-				<Button
-					locked={false}
-					on:click={() =>
-						proposeNFTToCatalog($page.params.collection, $user.addr)}
-					>Add to NFT Catalog</Button>
-				<Button
-					locked={false}
-					on:click={() =>
-						navigator.clipboard.writeText(
-							`/verify touchstone contractaddress:${$user.addr} contractname:${$page.params.collection} amount: role:`
-						)}>Copy Discord Verification</Button>
-			{/await}
+			<Button
+				on:click={() =>
+					downloadBuyers(info.primaryBuyers, $page.params.collection)}
+				>Download Buyers</Button
+			>
+			<Button
+				on:click={() =>
+					proposeNFTToCatalog($page.params.collection, $user.addr)}
+				>Add to NFT Catalog</Button
+			>
+			<Button
+				locked={false}
+				on:click={() =>
+					navigator.clipboard.writeText(
+						`/verify touchstone contractaddress:${$user.addr} contractname:${$page.params.collection} amount: role:`,
+					)}>Copy Discord Verification</Button
+			>
 		{/await}
 	</Stack>
 </div>

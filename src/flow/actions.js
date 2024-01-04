@@ -143,8 +143,6 @@ export async function deployContract() {
         arg(eventOwner, t.Optional(t.Address)),
         arg(eventId, t.Optional(t.UInt64)),
         arg(info.floatLinkText, t.Optional(t.String)),
-        // Has Emerald Pass Verifier
-        arg(info.requireEmeraldPass, t.Bool),
         // Contract Code
         arg(hexCode, t.String),
       ],

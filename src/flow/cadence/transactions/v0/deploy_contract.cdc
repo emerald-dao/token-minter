@@ -28,8 +28,6 @@ transaction(
   eventOwner: Address?,
   eventId: UInt64?,
   eventURL: String?,
-  // Has Emerald Pass Verifier
-  hasEmeraldPass: Bool,
   // Long Contract Code
   contractCode: String
 ) {
@@ -66,12 +64,6 @@ transaction(
         _eventURL: eventURL!
       ))
     }
-
-    // Has Emerald Pass Verifier
-    if hasEmeraldPass {
-      mintVerifiers.append(MintVerifiers.HasEmeraldPass())
-    }
-
 
     var royaltyInfo: MetadataViews.Royalty? =  nil
     if (royalty) {

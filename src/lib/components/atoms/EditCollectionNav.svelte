@@ -13,7 +13,6 @@
   import { removeContractFromBook } from "$flow/actions";
 
   const collectionInfo = getContext("collectionInfo");
-  const hasEmeraldPass = getContext("emeraldPass");
 </script>
 
 <Stack direction="column" gap="0.1rem" align="flex-start" justify="center">
@@ -84,16 +83,6 @@
     href="/my-collections">Back to My Collections</Button
   >
   <Divider space="1rem" lineColor="var(--clr-accent-main-t9)" />
-  {#await hasEmeraldPass then pass}
-    {#if !pass}
-      <Button
-        class="small full-width ghost"
-        leftIcon="lock-open"
-        target="_blank"
-        href="https://pass.ecdao.org/">Get Emerald Pass</Button
-      >
-    {/if}
-  {/await}
 </Stack>
 
 <style type="scss">

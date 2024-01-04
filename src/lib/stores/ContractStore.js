@@ -42,8 +42,7 @@ export const contractOptionsStore = createObjectStore('contractOptionsStore', {
 });
 export const verifiersOptionsStore = createObjectStore('verifiersOptionsStore', {
   floatLink: false,
-  floatLinkText: '',
-  requireEmeraldPass: false,
+  floatLinkText: ''
 });
 
 export const contractInfo = derived(
@@ -89,8 +88,7 @@ export const contractInfo = derived(
       lotteryBuying: $contractOptionsStore.lotteryBuying,
       // Verifier Options
       floatLink: $verifiersOptionsStore.floatLink,
-      floatLinkText: $verifiersOptionsStore.floatLinkText,
-      requireEmeraldPass: $verifiersOptionsStore.requireEmeraldPass,
+      floatLinkText: $verifiersOptionsStore.floatLinkText
     };
   }
 );

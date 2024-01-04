@@ -1,4 +1,3 @@
-import EmeraldPass from "./utility/EmeraldPass.cdc"
 import MetadataViews from "./utility/MetadataViews.cdc"
 
 // Created by Emerald City DAO for Touchstone (https://touchstone.city/)
