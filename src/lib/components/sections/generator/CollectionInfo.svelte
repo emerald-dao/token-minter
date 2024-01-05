@@ -36,7 +36,8 @@
 	async function checkContracts() {
 		const contracts = await getAllContractNames($user.addr);
 
-		$collectionInfo.contractName = $collectionInfo.name.replace(/\s+/g, "");
+		$collectionInfo.contractName =
+			"Touchstone" + $collectionInfo.name.replace(/\s+/g, ""); // $collectionInfo.name.replace(/\s+/g, "");
 
 		if (contracts.includes($collectionInfo.contractName)) {
 			return {
