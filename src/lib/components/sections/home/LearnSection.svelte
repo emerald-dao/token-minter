@@ -19,7 +19,7 @@
 		{
 			title: "Ask in Emerald City",
 			icon: "ion:chatbubbles",
-			description: `Want to join a community filled with developers who are also interested in developing NFT smart contracts on the Flow Blockchain? Join the <a href="https://discord.gg/emeraldcity" target="_blank">Emerald City Discord</a>!`,
+			description: `Want to join a community filled with developers who are also interested in developing NFT smart contracts on the Flow Blockchain? Join the <a href="https://discord.com/invite/emerald-city-906264258189332541" target="_blank">Emerald City Discord</a>!`,
 		},
 		{
 			title: "Emerald Academy",
@@ -40,7 +40,8 @@
 							title={tool.title}
 							description={tool.description}
 							background={true}
-							center={true}>
+							center={true}
+						>
 							<Ball accent={true} icon={tool.icon} size="3rem" />
 						</Feature>
 					{/each}
@@ -54,8 +55,15 @@
 				blur="60px"
 				width="390px"
 				height="430px"
-				color="var(--clr-background-gradient-secondary)" />
-			<Gradient left="48%" top="40%" blur="60px" width="430px" height="410px" />
+				color="var(--clr-background-gradient-secondary)"
+			/>
+			<Gradient
+				left="48%"
+				top="40%"
+				blur="60px"
+				width="430px"
+				height="410px"
+			/>
 		</GradientWrapper>
 	</Section>
 </div>

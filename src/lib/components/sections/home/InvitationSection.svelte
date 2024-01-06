@@ -1,6 +1,6 @@
 <script>
 	import { Section, Container, Button, Stack, Tagline } from "$atoms";
-	import { GradientWrapper, Gradient } from '$components/gradients';
+	import { GradientWrapper, Gradient } from "$components/gradients";
 </script>
 
 <div class="background">
@@ -11,20 +11,51 @@
 					<Tagline>Emerald City DAO</Tagline>
 					<h2>Join the community</h2>
 					<p>
-						We are the first DAO on the Flow Blockchain 
-						<br/>
+						We are the first DAO on the Flow Blockchain
+						<br />
 						<b>Educate, build and govern</b>
 					</p>
-					<Button leftIcon="logo-discord" target="_blank" href="https://discord.com/invite/emeraldcity">Join Discord</Button>
+					<Button
+						leftIcon="logo-discord"
+						target="_blank"
+						href="https://discord.com/invite/emerald-city-906264258189332541"
+						>Join Discord</Button
+					>
 				</Stack>
 			</div>
 		</Container>
 	</Section>
 	<GradientWrapper>
-		<Gradient left="58%" top="23%" blur="70px" width="500px" height="560px"/>
-		<Gradient left="2%" top="10%" blur="70px" width="490px" height="470px"/>
-		<Gradient left="45%" top="58%" blur="70px" width="230px" height="310px" color="var(--clr-background-gradient-secondary)"/>
-		<Gradient left="25%" top="0%" blur="70px" width="150px" height="210px" color="var(--clr-background-gradient-secondary)"/>
+		<Gradient
+			left="58%"
+			top="23%"
+			blur="70px"
+			width="500px"
+			height="560px"
+		/>
+		<Gradient
+			left="2%"
+			top="10%"
+			blur="70px"
+			width="490px"
+			height="470px"
+		/>
+		<Gradient
+			left="45%"
+			top="58%"
+			blur="70px"
+			width="230px"
+			height="310px"
+			color="var(--clr-background-gradient-secondary)"
+		/>
+		<Gradient
+			left="25%"
+			top="0%"
+			blur="70px"
+			width="150px"
+			height="210px"
+			color="var(--clr-background-gradient-secondary)"
+		/>
 	</GradientWrapper>
 </div>
 

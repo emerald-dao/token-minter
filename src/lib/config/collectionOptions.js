@@ -73,7 +73,7 @@ let collectionOptions = [
     name: 'discord',
     type: 'text',
     helperText: 'A link to your Discord community',
-    placeholder: 'https://discord.gg/emeraldcity',
+    placeholder: 'https://discord.com/invite/emerald-city-906264258189332541',
     required: false,
     store: collectionSocials,
   },

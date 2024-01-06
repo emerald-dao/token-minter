@@ -10,7 +10,6 @@
   } from "$atoms";
 </script>
 
-
 <footer>
   <Container class="width-x-large">
     <Stack gap="3.8rem" justify="flex-start" align="flex-start">
@@ -36,8 +35,9 @@
             <Button
               class="small"
               leftIcon="logo-discord"
-              href="https://discord.com/invite/emeraldcity"
-              target="_blank">Emerald City DAO</Button>
+              href="https://discord.com/invite/emerald-city-906264258189332541"
+              target="_blank">Emerald City DAO</Button
+            >
           </div>
         </div>
       </nav>
@@ -47,7 +47,8 @@
 <div class="signature">
   <span
     >Built on <img src="/flow-logo.png" alt="Flow logo" /> Flow by
-    <img src="/ec-logo.png" alt="Emerald logo" /> Emerald City DAO</span>
+    <img src="/ec-logo.png" alt="Emerald logo" /> Emerald City DAO</span
+  >
 </div>
 
 <style type="scss">
